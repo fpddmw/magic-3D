@@ -1,25 +1,39 @@
 {
-  "schema_version": "0.2.1",
+  "schema_version": "0.2.2",
   "spell_id": "case3_conductive_lightning",
   "display_name": "连锁电势传导（Conductive Chain Lightning）",
-  "description": "Case 3：从术者引出高电势分支路径，经 CONDUCTIVE_GRAPH 跨越潮湿水迹与金属残骸传导，并显式声明 LIVE_CONNECTIVITY 快照与缺失原点退回契约。",
+  "description": "Case 3：将正交 PropagationSpec 挂载到 DRIVE(INTENSITY_BURST) 上经 CONDUCTIVE_GRAPH 跨越湿面与金属残骸传导，不再伪造 TRANSFORM(PROPAGATE)；电势幅值与传导半径单调计价。",
   "source_intent_ref": "intent_conductive_lightning",
   "contract": {
     "timing": {
       "windup_s": 0.28,
-      "release_duration_s": 0.9,
+      "full_charge_s": 0.28,
       "recovery_s": 0.32,
       "max_active_duration_s": 2.0
     },
     "combat": {
+      "formation_mode": "INSTANT",
+      "min_deliverable_progress": 0.0,
+      "caster_mobility": "FREE_MOVE",
       "targeting": "DIRECTION",
       "range_m": 20.0,
-      "controller": "AUTONOMOUS",
-      "cancel_policy": "ON_EXPIRE_OR_WITHDRAW",
+      "release_policy": {
+        "on_valid_release": "DELIVER_OR_HANDOFF",
+        "on_under_threshold_release": "NONE"
+      },
+      "interruption_policy": {
+        "on_interrupt": "ABORT_AND_DROP",
+        "dodge_behavior": "ALLOW_DODGE_AFTER_HANDOFF",
+        "interruption_priority": "INTERRUPT_WINS_UNLESS_COMMITTED"
+      },
+      "control_focus": {
+        "owner": "AUTONOMOUS",
+        "exclusive_focus_slot": false
+      },
       "provider": {
-        "energy_source": "POST_RELEASE_RESERVE",
-        "post_release_reserve_mana": 6.0,
-        "max_upfront_mana": 36.0,
+        "energy_source": "CASTER_MANA",
+        "post_release_reserve_mana": 0.0,
+        "max_upfront_mana": 60.0,
         "max_sustain_mana_per_s": 0.0
       }
     }
@@ -33,10 +47,7 @@
       "capacity_mu": 4.0,
       "initial_inventory_mu": 2.0,
       "inherit_world_law": true,
-      "visual_modules": {
-        "contour_module": "BRANCH_TENDRIL",
-        "surface_modules": ["CONDUCTIVE_ARC"],
-        "secondary_modules": ["ARC_SPARKS", "SCORCH_DECAL"],
+      "art_overrides": {
         "tint_palette": {
           "primary_hex": "#A9E4FF",
           "accent_hex": "#FFFFFF",
@@ -51,10 +62,7 @@
       "initial_intensity": 14.0,
       "max_intensity": 40.0,
       "inherit_world_law": true,
-      "visual_modules": {
-        "contour_module": "FIELD_AURA_RING",
-        "surface_modules": ["CONDUCTIVE_ARC"],
-        "secondary_modules": ["ARC_SPARKS"],
+      "art_overrides": {
         "tint_palette": {
           "primary_hex": "#72C7FF",
           "accent_hex": "#DDF6FF",
@@ -83,6 +91,17 @@
       "max_deflect_iterations_per_node": 2,
       "per_segment_phase": false,
       "initial_extent_m": 12.0,
+      "distribution": {
+        "width_m": 0.09,
+        "thickness_m": 0.09,
+        "width_profile": {
+          "curve": "DECAY_OUT",
+          "domain": "PATH_U",
+          "min_val": 0.2,
+          "max_val": 1.0
+        },
+        "on_obstruction": "DEFORM_OR_TRUNCATE"
+      },
       "reference": {
         "spawn_anchor": "CASTER_HAND",
         "spawn_offset_m": [0.0, 0.15, -0.4]
@@ -99,6 +118,10 @@
       "quad_budget": 0,
       "max_deflect_iterations_per_node": 0,
       "initial_extent_m": 8.0,
+      "distribution": {
+        "radial_falloff": "LINEAR_DECAY",
+        "boundary": "SOFT"
+      },
       "reference": {
         "spawn_anchor": "AIM_DIRECTION",
         "spawn_offset_m": [0.0, 0.0, -1.0]
@@ -121,7 +144,7 @@
     "processes": [
       {
         "id": "p_strike_propagate",
-        "role": "TRANSFORM_STAGE",
+        "role": "CARRIER_EXECUTION",
         "on_enter": [
           {
             "op": "ESTABLISH",
@@ -150,18 +173,15 @@
               "mode": "FRAME_RELATIVE",
               "axis": "AIM_FORWARD"
             },
-            "profile": "INSTANT_BURST"
-          },
-          {
-            "op": "TRANSFORM",
-            "target_subject_id": "m_arc_plasma",
-            "transform_id": "PROPAGATE",
-            "preserve": ["MOMENTUM", "HEAT"],
+            "profile": "INSTANT_BURST",
             "propagation": {
-              "medium_mode": "CONDUCTIVE_GRAPH",
+              "domain": "CONDUCTIVE_GRAPH",
+              "origin_ref": "SUBJECT:m_arc_plasma",
+              "speed_m_s": 45.0,
+              "max_reach_m": 16.0,
               "max_hops": 6,
-              "hop_attenuation": 0.72,
-              "graph_snapshot_mode": "LIVE_CONNECTIVITY",
+              "attenuation": 0.72,
+              "connectivity_policy": "LIVE_CONNECTIVITY",
               "on_missing_origin": "FALLBACK_TO_ROOT_NODE"
             }
           }
@@ -179,6 +199,13 @@
           {
             "on_event": "ON_TIMEOUT",
             "event_source_filter": { "scope": "SELF_PROCESS" },
+            "next_process_ids": [],
+            "handoff_handles": [],
+            "action": "STOP_SELF_ONLY"
+          },
+          {
+            "on_event": "ON_INTERRUPT",
+            "event_source_filter": { "scope": "CAST_INSTANCE" },
             "next_process_ids": [],
             "handoff_handles": [],
             "action": "STOP_SELF_ONLY"
@@ -217,9 +244,9 @@
     "peak_path_nodes": 10,
     "peak_surface_quads": 0,
     "peak_point_lights": 2,
-    "derived_upfront_mana": 30.0,
+    "derived_upfront_mana": 50.0,
     "derived_sustain_mana_per_s": 0.0,
-    "derived_reserve_mana": 6.0,
+    "derived_reserve_mana": 0.0,
     "estimated_tick_cost_us": 85
   }
 }

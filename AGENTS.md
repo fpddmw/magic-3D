@@ -21,15 +21,15 @@
    - 若接入本地轻量语义模型，**仅在“法坛构筑 / 世界暂停”阶段输出 `SemanticIntent`**，经确定性编译器降维并静态校验为 `CompiledSpellDSL` 后释放模型算力；**战斗中保持 0 模型开销、0 帧率损耗**。
 5. **严禁空壳 TODO 与丑陋白盒过关**：Wave 1 就必须同时交付废城暴雨石殿氛围、4 层复合视觉栈、4 层动态音频与沉重动作手感门禁。未经实机运行验证的能力一律标为草案/待验证。
 
-## 3. 当前活跃里程碑
+## 3. 当前活跃里程碑与分工边界
 
-- **当前阶段**：**`Magic DSL v0.2.1` 审计收口与 4 阶段验证通过，待 GPT / Claude 联合交叉复审后启动 Wave 1A**。
+- **当前阶段**：**`Magic DSL v0.2.2` 纯规范与实施计划收口完成（Option A 纯设计/数据基线，待锁定最后 3 项细节后进入 Wave 0 施工）**。
+- **规划与施工分离纪律**：本仓现阶段仅维护设计文档、施工计划、Draft 2020-12 Schema、单源声明式规则表（[dsl_rules_v0_2.json](game/data/rules/dsl_rules_v0_2.json)）、共享测试向量（[validator_negative_vectors.json](game/data/tests/validator_negative_vectors.json)）与基准 JSON；**规划/规范会话不得越界预写 `.py` / `.gd` 实现代码**，全部可执行校验器与运行时代码在施工会话中严格由单源规则表统一生成/实现。
 - **主入口**：
-  - 正式规范（v0.2.1）：[docs/02_Magic_DSL_v0.2_正式语法与语义规范.md](docs/02_Magic_DSL_v0.2_正式语法与语义规范.md)
-  - 分波次计划与审阅清单：[docs/06_Magic_Runtime_三波次实施与验收计划.md](docs/06_Magic_Runtime_三波次实施与验收计划.md)
-  - 校验 Schema 与 7 份基准样例：[game/data/schema/magic_dsl_v0_2.schema.json](game/data/schema/magic_dsl_v0_2.schema.json) · [game/data/spells/](game/data/spells/case1_water_weave_freeze.json)
-  - 4 阶段离线自检工具：[game/tools/validate_dsl.py](game/tools/validate_dsl.py)
-  - 契约代码桩与导演仲裁：[game/scripts/dsl/](game/scripts/dsl/magic_dsl_types.gd) · [game/scripts/director/](game/scripts/director/spell_director.gd)
+  - 正式规范（v0.2.2）：[docs/02_Magic_DSL_v0.2_正式语法与语义规范.md](docs/02_Magic_DSL_v0.2_正式语法与语义规范.md)
+  - 分波次施工与验收计划：[docs/06_Magic_Runtime_三波次实施与验收计划.md](docs/06_Magic_Runtime_三波次实施与验收计划.md)
+  - 校验 Schema、单源规则表与 7 份基准样例：[magic_dsl_v0_2.schema.json](game/data/schema/magic_dsl_v0_2.schema.json) · [dsl_rules_v0_2.json](game/data/rules/dsl_rules_v0_2.json) · [game/data/spells/](game/data/spells/case1_water_weave_freeze.json)
+  - 21 条共享负向向量与 50 词示例：[validator_negative_vectors.json](game/data/tests/validator_negative_vectors.json) · [sample_intent_water_weave_freeze.json](game/data/intents/sample_intent_water_weave_freeze.json)
 
 ## 4. 资料同步与协作纪律
 

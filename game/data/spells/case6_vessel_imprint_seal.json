@@ -1,25 +1,39 @@
 {
-  "schema_version": "0.2.1",
+  "schema_version": "0.2.2",
   "spell_id": "case6_vessel_imprint_seal",
   "display_name": "器物烙印延爆（Vessel Imprint & Trigger Seal）",
-  "description": "Case 6：通过 WORLD_REF 查询手中既有容器/抛投物，将潜能封存于容器储备并经 CONTACT_TO_TRIGGER 监测碰撞，接触瞬间激发热冲击与燃烧爆发。",
+  "description": "Case 6：查询手中既有器物并刻下 VESSEL_RESERVE 封存印记，为每个 MATERIAL/FIELD 均绑定合法 spatial[]，并通过 CONTACT_TO_TRIGGER 监测碰撞解除封存引爆热冲击，支持刻画期内 ON_INTERRUPT 中断清理。",
   "source_intent_ref": "intent_vessel_imprint_seal",
   "contract": {
     "timing": {
       "windup_s": 0.45,
-      "release_duration_s": 0.2,
+      "full_charge_s": 0.65,
       "recovery_s": 0.2,
       "max_active_duration_s": 16.0
     },
     "combat": {
+      "formation_mode": "VESSEL_IMPRINT",
+      "min_deliverable_progress": 0.5,
+      "caster_mobility": "SLOW_WALK",
       "targeting": "VESSEL_TOUCH",
       "range_m": 2.5,
-      "controller": "VESSEL_BOUND",
-      "cancel_policy": "ON_EXPIRE_OR_WITHDRAW",
+      "release_policy": {
+        "on_valid_release": "DELIVER_OR_HANDOFF",
+        "on_under_threshold_release": "FIZZLE_PARTIAL_REFUND"
+      },
+      "interruption_policy": {
+        "on_interrupt": "ABORT_AND_DROP",
+        "dodge_behavior": "ALLOW_DODGE_AFTER_HANDOFF",
+        "interruption_priority": "INTERRUPT_WINS_UNLESS_COMMITTED"
+      },
+      "control_focus": {
+        "owner": "VESSEL_BOUND",
+        "exclusive_focus_slot": false
+      },
       "provider": {
         "energy_source": "VESSEL_RESERVE",
-        "post_release_reserve_mana": 10.0,
-        "max_upfront_mana": 22.0,
+        "post_release_reserve_mana": 12.0,
+        "max_upfront_mana": 30.0,
         "max_sustain_mana_per_s": 0.0
       }
     }
@@ -31,10 +45,10 @@
       "query_kind": "VESSEL_IN_HAND",
       "expected_filter": "RUNIC_IMPRINTABLE_SOLID",
       "require_existing": true,
-      "visual_modules": {
-        "contour_module": "PLANAR_SIGIL",
-        "surface_modules": ["RUNIC_BARRIER_GLASS"],
-        "secondary_modules": ["FLOATING_DUST"],
+      "art_overrides": {
+        "contour_override": "PLANAR_SIGIL",
+        "surface_override": "RUNIC_BARRIER_GLASS",
+        "secondary_additions": ["FLOATING_DUST"],
         "tint_palette": {
           "primary_hex": "#FF9E54",
           "accent_hex": "#FFE1A8",
@@ -50,10 +64,8 @@
       "capacity_mu": 8.0,
       "initial_inventory_mu": 0.0,
       "inherit_world_law": true,
-      "visual_modules": {
-        "contour_module": "SCULPTED_CORE",
-        "surface_modules": ["THERMAL_EMBER"],
-        "secondary_modules": ["SCORCH_DECAL", "CRATER_DECAL"],
+      "art_overrides": {
+        "secondary_additions": ["SCORCH_DECAL", "CRATER_DECAL"],
         "tint_palette": {
           "primary_hex": "#FF6B2B",
           "accent_hex": "#FFF0B3",
@@ -68,10 +80,7 @@
       "initial_intensity": 0.0,
       "max_intensity": 30.0,
       "inherit_world_law": true,
-      "visual_modules": {
-        "contour_module": "FIELD_AURA_RING",
-        "surface_modules": ["THERMAL_EMBER"],
-        "secondary_modules": ["SCORCH_DECAL"],
+      "art_overrides": {
         "tint_palette": {
           "primary_hex": "#FF4E1A",
           "accent_hex": "#FFCC80",
@@ -81,6 +90,27 @@
     }
   ],
   "spatial": [
+    {
+      "id": "sp_flame_core",
+      "subject_id": "m_flame",
+      "carrier": "BODY",
+      "dimension": "3D",
+      "generator": "SPHERE_SCULPT",
+      "node_budget": 0,
+      "edge_budget": 0,
+      "quad_budget": 0,
+      "max_deflect_iterations_per_node": 0,
+      "initial_extent_m": 0.6,
+      "distribution": {
+        "cross_section": "CIRCULAR",
+        "aspect_ratio": 1.0,
+        "surface_roughness": 0.4
+      },
+      "reference": {
+        "spawn_anchor": "WORLD_REF",
+        "spawn_subject_id": "wr_vessel"
+      }
+    },
     {
       "id": "sp_blast_region",
       "subject_id": "f_heat_blast",
@@ -92,6 +122,10 @@
       "quad_budget": 0,
       "max_deflect_iterations_per_node": 0,
       "initial_extent_m": 3.5,
+      "distribution": {
+        "radial_falloff": "LINEAR_DECAY",
+        "boundary": "SOFT"
+      },
       "reference": {
         "spawn_anchor": "WORLD_REF",
         "spawn_subject_id": "wr_vessel"
@@ -158,6 +192,13 @@
             "next_process_ids": ["p_armed_watch"],
             "handoff_handles": ["h_vessel", "h_seal_watch", "h_seal_contain"],
             "action": "HANDOFF_TO_RESERVE"
+          },
+          {
+            "on_event": "ON_INTERRUPT",
+            "event_source_filter": { "scope": "CAST_INSTANCE" },
+            "next_process_ids": ["p_fade_seal"],
+            "handoff_handles": ["h_vessel", "h_seal_watch", "h_seal_contain"],
+            "action": "STOP_SELF_START_NEXT"
           }
         ]
       },
@@ -180,7 +221,7 @@
             "on_event": "ON_TIMEOUT",
             "event_source_filter": { "scope": "SELF_PROCESS" },
             "next_process_ids": ["p_fade_seal"],
-            "handoff_handles": [],
+            "handoff_handles": ["h_vessel"],
             "action": "STOP_SELF_START_NEXT"
           }
         ]
@@ -238,7 +279,7 @@
             "on_event": "ON_TIMEOUT",
             "event_source_filter": { "scope": "SELF_PROCESS" },
             "next_process_ids": ["p_fade_seal"],
-            "handoff_handles": [],
+            "handoff_handles": ["h_flame", "h_heat", "h_vessel"],
             "action": "STOP_SELF_START_NEXT"
           }
         ]
@@ -294,13 +335,13 @@
   },
   "budget": {
     "compiler_status": "VALID",
-    "peak_dynamic_bodies": 0,
+    "peak_dynamic_bodies": 1,
     "peak_path_nodes": 0,
     "peak_surface_quads": 0,
     "peak_point_lights": 3,
-    "derived_upfront_mana": 18.0,
+    "derived_upfront_mana": 24.0,
     "derived_sustain_mana_per_s": 0.0,
-    "derived_reserve_mana": 10.0,
+    "derived_reserve_mana": 12.0,
     "estimated_tick_cost_us": 62
   }
 }

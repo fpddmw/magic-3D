@@ -1,0 +1,287 @@
+{
+  "schema_version": "0.2.2",
+  "description": "Single authoritative rule registry for Magic DSL v0.2.2. Wave 0 Python and GDScript validators, budget calculators, ArtKit baseline mappers, and deterministic rune compilers MUST load and enforce this file rather than duplicating magic numbers or enums.",
+  "hard_limits": {
+    "max_subjects": 8,
+    "max_spatials": 8,
+    "max_relations": 12,
+    "max_processes": 8,
+    "max_entry_processes": 4,
+    "max_dynamic_bodies_per_spell": 16,
+    "max_global_dynamic_bodies": 64,
+    "max_path_nodes": 16,
+    "max_path_edges": 24,
+    "max_surface_quads": 64,
+    "max_point_lights": 3,
+    "max_deflect_iterations_per_node": 2,
+    "min_rebind_cooldown_s": 0.05,
+    "max_propagate_hops": 12,
+    "max_propagate_reach_m": 30.0,
+    "max_pre_delivery_silence_ms": 120,
+    "max_hitstop_local_ms": 140,
+    "max_active_duration_s": 30.0,
+    "max_upfront_mana": 300.0,
+    "max_sustain_mana_per_s": 60.0,
+    "max_reserve_mana": 200.0,
+    "max_tick_cost_us": 300
+  },
+  "process_graph_rules": {
+    "require_dag": true,
+    "require_global_unique_handle_ids": true,
+    "require_linear_handle_ownership": true,
+    "forbid_parallel_exclusive_handle_duplication": true,
+    "establish_allowed_phases": ["on_enter"],
+    "impulse_allowed_phases": ["on_enter", "on_exit"],
+    "propagation_allowed_ops": ["TRANSFORM", "DRIVE", "TRANSFER"],
+    "require_spatial_for_subject_kinds": ["MATERIAL", "FIELD"]
+  },
+  "material_valid_initial_phases": {
+    "WATER": ["LIQUID"],
+    "ICE": ["SOLID"],
+    "STONE": ["SOLID"],
+    "METAL": ["SOLID"],
+    "FOG": ["GAS_MIST"],
+    "FLAME": ["PLASMA"],
+    "ASH": ["SOLID", "GAS_MIST"],
+    "LIGHTNING_PLASMA": ["PLASMA"],
+    "VITAL_SPORE": ["SOLID", "GAS_MIST"]
+  },
+  "capability_matrix": {
+    "material_x_carrier": {
+      "WATER|BODY": "SUPPORTED",
+      "WATER|PATH_GRAPH": "SUPPORTED",
+      "WATER|SURFACE": "PLANNED",
+      "WATER|REGION": "LIMITED",
+      "ICE|BODY": "SUPPORTED",
+      "ICE|PATH_GRAPH": "LIMITED",
+      "ICE|SURFACE": "SUPPORTED",
+      "ICE|REGION": "PLANNED",
+      "FOG|BODY": "PLANNED",
+      "FOG|PATH_GRAPH": "LIMITED",
+      "FOG|SURFACE": "PLANNED",
+      "FOG|REGION": "SUPPORTED",
+      "LIGHTNING_PLASMA|BODY": "PLANNED",
+      "LIGHTNING_PLASMA|PATH_GRAPH": "SUPPORTED",
+      "LIGHTNING_PLASMA|SURFACE": "PLANNED",
+      "LIGHTNING_PLASMA|REGION": "LIMITED",
+      "FLAME|BODY": "LIMITED",
+      "FLAME|PATH_GRAPH": "PLANNED",
+      "FLAME|SURFACE": "PLANNED",
+      "FLAME|REGION": "LIMITED",
+      "STONE|BODY": "SUPPORTED",
+      "STONE|PATH_GRAPH": "PLANNED",
+      "STONE|SURFACE": "LIMITED",
+      "STONE|REGION": "PLANNED",
+      "METAL|BODY": "SUPPORTED",
+      "METAL|PATH_GRAPH": "PLANNED",
+      "METAL|SURFACE": "LIMITED",
+      "METAL|REGION": "PLANNED",
+      "ASH|REGION": "LIMITED",
+      "VITAL_SPORE|REGION": "PLANNED"
+    },
+    "field_x_carrier": {
+      "GRAVITY|REGION": "SUPPORTED",
+      "HEAT_EXTRACTION|REGION": "SUPPORTED",
+      "HEAT_INJECTION|REGION": "SUPPORTED",
+      "LIGHT_EMISSION|REGION": "SUPPORTED",
+      "LIGHT_ATTENUATION|REGION": "SUPPORTED",
+      "WIND_FORCE|REGION": "SUPPORTED",
+      "ELECTRIC_POTENTIAL|REGION": "SUPPORTED",
+      "ELECTRIC_POTENTIAL|PATH_GRAPH": "LIMITED",
+      "SPATIAL_BARRIER|SURFACE": "SUPPORTED",
+      "SPATIAL_BARRIER|REGION": "PLANNED",
+      "LOCAL_TIME_RATE|REGION": "PLANNED",
+      "VITAL_FLUX|REGION": "PLANNED"
+    },
+    "limited_conditions": {
+      "WATER_TO_ICE_MAX_OUTPUT_BODIES": 16,
+      "ICE_PATH_GRAPH_MAX_NODES": 16,
+      "SPATIAL_BARRIER_REQUIRED_CARRIER": "SURFACE",
+      "PROPAGATE_MAX_HOPS": 12,
+      "PROPAGATE_MAX_REACH_M": 30.0
+    }
+  },
+  "budget_formula": {
+    "upfront_base": 2.0,
+    "material_base": 3.0,
+    "material_per_initial_mu": 1.25,
+    "field_base": 5.0,
+    "field_per_initial_intensity": 0.15,
+    "field_per_max_intensity": 0.10,
+    "world_ref_base": 2.0,
+    "spatial_body_per_extent_m": 1.2,
+    "spatial_path_per_node": 0.25,
+    "spatial_path_per_edge": 0.15,
+    "spatial_path_per_extent_m": 0.30,
+    "spatial_surface_per_quad": 0.15,
+    "spatial_surface_per_extent_m": 0.40,
+    "spatial_region_per_extent_m": 0.60,
+    "relation_each": 1.5,
+    "impulse_per_magnitude": 0.15,
+    "transfer_upfront_per_max_amount": 0.25,
+    "transfer_sustain_per_rate": 0.15,
+    "continuous_drive_sustain_base": 0.5,
+    "continuous_drive_sustain_per_magnitude": 0.12,
+    "constrain_upfront_per_capacity_lu": 0.02,
+    "constrain_sustain_per_capacity_lu": 0.02,
+    "couple_sustain_perception_or_feed": 1.2,
+    "transform_phase_change_per_capacity_mu": 0.35,
+    "transform_subdivide_per_output_body": 0.80,
+    "transform_other_flat": 1.0,
+    "propagation_per_reach_m": 0.25,
+    "propagation_per_hop": 0.50,
+    "min_reserve_when_reserve_used": 4.0
+  },
+  "artkit_registry": {
+    "contour_modules": [
+      "SCULPTED_CORE",
+      "FACETED_PRISM",
+      "CONTINUOUS_RIBBON",
+      "BRANCH_TENDRIL",
+      "PLANAR_SIGIL",
+      "VOLUMETRIC_MIST",
+      "FIELD_AURA_RING"
+    ],
+    "surface_modules": [
+      "REFRACTIVE_LIQUID",
+      "CRYSTALLINE_ICE",
+      "ROUGH_STONE",
+      "CONDUCTIVE_ARC",
+      "GRAVITY_DISTORTION",
+      "LIGHT_ABSORB_VOID",
+      "THERMAL_FROST",
+      "THERMAL_EMBER",
+      "RUNIC_BARRIER_GLASS"
+    ],
+    "secondary_modules": [
+      "VELOCITY_FOAM",
+      "STRESS_CRACKS",
+      "FROST_CREEP_DECAL",
+      "CRATER_DECAL",
+      "SCORCH_DECAL",
+      "FLOATING_DUST",
+      "ARC_SPARKS",
+      "SONAR_RIPPLES"
+    ],
+    "drone_modules": [
+      "NONE",
+      "CRYSTALLINE_HUM",
+      "SUB_VOID_RUMBLE",
+      "ARC_CRACKLE_HUM",
+      "HOLLOW_WIND",
+      "RESONANT_CHORD"
+    ],
+    "impact_modules": [
+      "NONE",
+      "ICE_LOCK_CRACK",
+      "TECTONIC_SLAM",
+      "THUNDER_CRACK",
+      "HARMONIC_DEFLECT",
+      "FROST_SHATTER",
+      "ETHER_PING"
+    ],
+    "sustain_loop_modules": [
+      "NONE",
+      "TENSE_WATER_STRAIN",
+      "SILENT_PRESSURE_HUM",
+      "SOFT_MIST_AMBIENCE",
+      "BARRIER_STRAIN_CHIME",
+      "ARC_HOLD_BUZZ"
+    ],
+    "artkit_state_defaults": {
+      "WATER|LIQUID|PATH_GRAPH": {
+        "contour_module": "BRANCH_TENDRIL",
+        "surface_module": "REFRACTIVE_LIQUID",
+        "secondary_modules": ["VELOCITY_FOAM"]
+      },
+      "WATER|LIQUID|BODY": {
+        "contour_module": "SCULPTED_CORE",
+        "surface_module": "REFRACTIVE_LIQUID",
+        "secondary_modules": ["VELOCITY_FOAM"]
+      },
+      "ICE|SOLID|BODY": {
+        "contour_module": "FACETED_PRISM",
+        "surface_module": "CRYSTALLINE_ICE",
+        "secondary_modules": ["STRESS_CRACKS", "FROST_CREEP_DECAL"]
+      },
+      "ICE|SOLID|PATH_GRAPH": {
+        "contour_module": "BRANCH_TENDRIL",
+        "surface_module": "CRYSTALLINE_ICE",
+        "secondary_modules": ["FROST_CREEP_DECAL"]
+      },
+      "ICE|SOLID|SURFACE": {
+        "contour_module": "PLANAR_SIGIL",
+        "surface_module": "CRYSTALLINE_ICE",
+        "secondary_modules": ["FROST_CREEP_DECAL"]
+      },
+      "FOG|GAS_MIST|REGION": {
+        "contour_module": "VOLUMETRIC_MIST",
+        "surface_module": "LIGHT_ABSORB_VOID",
+        "secondary_modules": ["FLOATING_DUST", "SONAR_RIPPLES"]
+      },
+      "FLAME|PLASMA|REGION": {
+        "contour_module": "VOLUMETRIC_MIST",
+        "surface_module": "THERMAL_EMBER",
+        "secondary_modules": ["SCORCH_DECAL"]
+      },
+      "FLAME|PLASMA|BODY": {
+        "contour_module": "SCULPTED_CORE",
+        "surface_module": "THERMAL_EMBER",
+        "secondary_modules": ["SCORCH_DECAL"]
+      },
+      "LIGHTNING_PLASMA|PLASMA|PATH_GRAPH": {
+        "contour_module": "BRANCH_TENDRIL",
+        "surface_module": "CONDUCTIVE_ARC",
+        "secondary_modules": ["ARC_SPARKS", "SCORCH_DECAL"]
+      },
+      "GRAVITY|REGION": {
+        "contour_module": "FIELD_AURA_RING",
+        "surface_module": "GRAVITY_DISTORTION",
+        "secondary_modules": ["FLOATING_DUST", "CRATER_DECAL"]
+      },
+      "HEAT_EXTRACTION|REGION": {
+        "contour_module": "FIELD_AURA_RING",
+        "surface_module": "THERMAL_FROST",
+        "secondary_modules": ["FROST_CREEP_DECAL"]
+      },
+      "HEAT_INJECTION|REGION": {
+        "contour_module": "FIELD_AURA_RING",
+        "surface_module": "THERMAL_EMBER",
+        "secondary_modules": ["SCORCH_DECAL"]
+      },
+      "LIGHT_ATTENUATION|REGION": {
+        "contour_module": "VOLUMETRIC_MIST",
+        "surface_module": "LIGHT_ABSORB_VOID",
+        "secondary_modules": ["FLOATING_DUST"]
+      },
+      "ELECTRIC_POTENTIAL|REGION": {
+        "contour_module": "FIELD_AURA_RING",
+        "surface_module": "CONDUCTIVE_ARC",
+        "secondary_modules": ["ARC_SPARKS"]
+      },
+      "SPATIAL_BARRIER|SURFACE": {
+        "contour_module": "PLANAR_SIGIL",
+        "surface_module": "RUNIC_BARRIER_GLASS",
+        "secondary_modules": ["STRESS_CRACKS"]
+      }
+    }
+  },
+  "semantic_lexicon": {
+    "all_50_runes": [
+      "土", "水", "气", "火", "以太",
+      "凝固", "融化", "弥散", "精炼", "分离", "对立", "对称", "调和", "循环", "反转", "离体",
+      "凝聚", "环绕", "铺展", "包覆", "延展", "交织", "联结", "包围",
+      "汇聚", "扩散", "追随", "牵引", "排斥", "回旋", "传递", "穿透",
+      "吸纳", "封存", "释放", "潜伏", "唤醒", "延续", "爆发", "归还",
+      "守护", "寻觅", "束缚", "滋养", "侵蚀", "共鸣", "借用", "回应",
+      "重", "界"
+    ],
+    "wave_1a_core_20": [
+      "水", "气", "火", "土", "以太",
+      "重", "界", "借用", "汇聚", "延展",
+      "交织", "凝固", "弥散", "反转", "守护",
+      "束缚", "封存", "唤醒", "回应", "爆发"
+    ],
+    "abstract_root_additions": ["重", "界"]
+  }
+}

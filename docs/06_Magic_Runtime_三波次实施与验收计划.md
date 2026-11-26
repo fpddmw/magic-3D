@@ -1,117 +1,105 @@
-# Magic Runtime 三波次（Wave 0–3）实施与验收计划（v0.2.1）
+# Magic Runtime 分波次实施与验收计划（v0.2.2 · 纯计划基线）
 
-> **当前定位（2026-11-26）**：面向 **`Magic DSL v0.2.1`** 锁定施工顺序、消除前置依赖倒挂，并明确 **Godot 4.x（Forward+ / Jolt Physics）物理适配器契约**、**非破坏性四级资源守恒策略**与**慢拍厚重动作感生死门禁**。
-> 配套规范：[02 · Magic DSL v0.2.1 正式语法与语义规范](02_Magic_DSL_v0.2_正式语法与语义规范.md) · 离线校验工具：[validate_dsl.py](../game/tools/validate_dsl.py)
-
----
-
-## 一、开发绝对红线（Zero Fake Progress）
-
-1. **严禁 `TODO / stub / hardcoded spell_id` 伪进度**：Wave 1A 起运行时调度中禁止出现 `if spell_id == "case2_gravity_collapse"`。所有行为只能驱动自 `Subject`、`Carrier`、`Relation`、`process_graph` 与 `WorldLaw`。
-2. **绝不轻信任何入参的 `compiler_status`**：运行时加载任何 JSON（哪怕带 `"VALID"`）必经 `MagicDSLDocument.validate_all()` 完整跑通 Stage 1–4 才准入。
-3. **禁止全局修改 `Engine.time_scale` 实现顿帧**：只允许利用局部动作动画停顿 / 打击受力暂停（`hitstop_local_ms <= 140`），避免破坏相机平滑、音频时钟、其余并行法术与联机潜力。
-4. **先厚重动作底盘与闭环质量，后海量素材与 UI 美化**：若主控手感轻飘、视角穿模或法术没有前摇—蓄力—爆发—余韵节拍，严禁扩写下一波功能。
+> **当前定位（2026-11-26）**：面向定稿中的 **`Magic DSL v0.2.2`（Surgical Convergence Revision）** 制定 Godot 4.x（Forward+ / Jolt Physics 3D）无环施工路线、物理帧适配契约、简化的两级资源守恒策略与早期真实词义验证计划。
+> **状态说明**：截至本次修订，仓库保持**纯粹设计规范 ＋ 实施计划 ＋ Schema / 单源规则 / 基准数据 ＋ 废城白盒场景**状态（所有 `game/scripts/` 与 `game/tools/` 将在 Wave 0 起从单源规则文件统一施工生成）。
+> 核心配套：[02 · Magic DSL v0.2.2 正式语法与语义规范](02_Magic_DSL_v0.2_正式语法与语义规范.md) · 单源规则表：[dsl_rules_v0_2.json](../game/data/rules/dsl_rules_v0_2.json) · 21 条共享负向向量：[validator_negative_vectors.json](../game/data/tests/validator_negative_vectors.json)
 
 ---
 
-## 二、Godot 4 目录架构设计（`res://`）
+## 一、施工红线（Zero Fake Progress & Single-Source Rules）
+
+1. **禁止手写两套漂移规则**：Wave 0 落地的 Python 工具（构筑/CI 检查）与 GDScript 校验器（运行期准入）**必须读取同一份 [dsl_rules_v0_2.json](../game/data/rules/dsl_rules_v0_2.json)**，并通过同一组 [validator_negative_vectors.json](../game/data/tests/validator_negative_vectors.json)（21 条全红拦截）回归检验，绝不允许各自硬编码魔法数字。
+2. **禁止法术特判与忽略校验**：运行时严禁出现 `if spell_id == "..."`；载入任意 JSON 时必须完整跑通 4 阶段检验并重算独立预算，忽略入参自带的 `"compiler_status": "VALID"`。
+3. **禁止用 `Engine.time_scale` 做顿帧**：爆发打击仅触发作用目标与施法局部动作停顿（`hitstop_local_ms <= 140`），确保相机、音频、多法术与物理步完全稳定。
+4. **不在早期过度设计物理回收**：阶段一不做动态刚体合并/再拆分与远距静态烘焙；只做创建前预算预检与利用 Jolt 原生刚体休眠。
+
+---
+
+## 二、待施工的 Godot 4 工程目录蓝图（`res://`）
 
 ```text
 game/
-├── data/
-│   ├── schema/        # Draft 2020-12 强约束 Schema（magic_dsl_v0_2 & semantic_intent_v0_2）
-│   ├── spells/        # 7 份通过 4 阶段校验的标准法术（Case 1–6 + 复合暗月；Case 7 留白盲测）
-│   └── intents/       # 组合语义意图与 bound_ids 溯源样例
-├── tools/
-│   └── validate_dsl.py  # 零外部依赖 4 阶段离线验证器 + 12+ 负向非法法术回归套件
-├── scenes/
-│   └── main.tscn      # 废城白盒底座与角色控制器挂载点
-└── scripts/
-    ├── dsl/           # MagicDSLTypes / MagicCapabilityMatrix / MagicDSLDocument（已完成 v0.2.1 契约）
-    ├── world_law/     # [Wave 1A–1B] 物理常数、导电邻接图、热容相变表、非破坏性资源管家
-    ├── runtime/       # [Wave 1A–1B] SubjectInst、4载体引擎、ProcessGraph/RuntimeEvent 总线、7算子执行器
-    ├── director/      # SpellDirector（ArtKitArbitrator 仲裁栈、局部顿帧、应变渲染参数映射）
-    └── player/        # [Wave 0–1A] 第三人称近肩废城移动、举杖蓄力态、长按/松手与锁定控制器
+├── data/                         # 【本阶段已落盘 · 唯一真相源】
+│   ├── schema/                   # Draft 2020-12 Schema（magic_dsl_v0_2 / semantic_intent_v0_2）
+│   ├── rules/dsl_rules_v0_2.json # 能力矩阵、相态矩阵、DAG/句柄规则、预算系数、ArtKit默认表、50词表
+│   ├── tests/                    # validator_negative_vectors.json（21条负向规格）
+│   ├── spells/                   # 7 份 v0.2.2 基准法术 JSON（Case 7 故意留白用于 Wave 2 盲测）
+│   └── intents/                  # 真实 50 词语义意图示例
+├── scenes/main.tscn              # 废城白盒光影场景底座（纯净无悬空脚本）
+├── tools/                        # [Wave 0 待施工] 读取 dsl_rules_v0_2.json 的 CI 校验脚本
+└── scripts/                      # [Wave 0–3 待施工]
+    ├── dsl/                      # 单源规则加载器、4阶段校验器、Compiler（含 Wave 1A 20词原型）
+    ├── world_law/                # 物理常态参数、湿润/导电邻接图、热相变表、创建前预算预检
+    ├── runtime/                  # SubjectInst、4载体引擎、DAG ProcessGraph、RuntimeEvent 与 7算子
+    ├── director/                 # ArtKit（状态驱动模块表 + Arbitrator 仲裁栈 + 局部顿帧/音效）
+    └── player/                   # 第三人称近肩废城移动、举杖蓄力、翻滚/受击产生 ON_INTERRUPT 控制器
 ```
 
 ---
 
-## 三、物理帧契约与四级非破坏性资源守恒策略
+## 三、Godot 4 物理适配器契约与简化资源策略
 
-### 3.1 Godot 4 `_physics_process` 首帧 `Area3D` 适配器契约（消除 Wave 1A 隐蔽时序 Bug）
+### 3.1 Godot 4 `_physics_process` 1-Tick `Area3D` 适配器契约
 
-在 Godot 4（Jolt / GodotPhysics3D）中，新创建的 `Area3D` 或刚刚在 `_physics_process` 里修改 `global_transform` 的查询区域，其 `get_overlapping_bodies()` / `get_overlapping_areas()` **不会在本物理帧立即刷新**，必须经过一次物理步进后才更新。因此 `MagicRuntime` 强制遵循以下 **6 步固定 Tick 序**：
+Godot 4（Jolt / GodotPhysics3D）中，新建或刚通过 `global_transform` 瞬移重定位的 `Area3D`，其 `get_overlapping_bodies()` / `get_overlapping_areas()` 会滞后 1 个物理帧。因此 `MagicRuntime` 在每个物理 Tick 必须严格按 **6 步固定序** 推进：
 
-1. **Tick 序首快照（Read Start-of-Tick Overlap）**：所有已存在超过 1 步的主体，在本 Tick 最开头统一读取上一物理步提交的 `Area3D` 重叠名单与触点法线；
-2. **过程图事件入队与派发（ProcessGraph & RuntimeEvent Queue）**：按 `sim_tick` 消费 `ON_INPUT_RELEASE`、`ON_TIMEOUT`、`ON_COLLIDE` 等事件并执行 `on_exit` / 状态切换 / `on_enter`（确保所有 `ESTABLISH` 只在 `on_enter` 执行）；
-3. **出生 1-Tick 缓冲规则（Spawn-Tick Deferral）**：凡在本帧 `on_enter` 新生成或瞬间瞬移重定位的 `REGION` / `SURFACE` / `PATH_GRAPH`，若需立刻执行范围判定或 `PROPAGATE` 首跳查询，**统一写入单帧挂起队列或执行一次性 `PhysicsDirectSpaceState3D.intersect_shape()` 同步空间查询**，绝不依赖刚创建的 `Area3D.get_overlapping_bodies()` 返回空数组；
-4. **`while_active` 算子结算（Transfer / Continuous Drive / Constrain / Propagate）**：按固定预算计算实际施力与荷载 `realized_load_lu`；
-5. **非破坏性资源上限检查（Budget & 4-Tier Conservation）**；
-6. **只读状态发布给 `SpellDirector`（ArtKit 只读渲染 + 仲裁栈更新）**。
+1. **Tick 初读取重叠缓存**：已存活 `>= 1` Tick 的区域统一读取上帧物理步提交的重叠体与触点法线；
+2. **DAG `ProcessGraph` 与 `RuntimeEvent` 派发**：按 `sim_tick` 消费 `ON_INPUT_RELEASE`、`ON_INTERRUPT`、`ON_COLLIDE`、`ON_TIMEOUT` 等事件，检查 `interruption_policy`，执行 `on_exit` / 线性移交 `handoff_handles` / `on_enter`（`ESTABLISH` 只在 `on_enter` 执行）；
+3. **出生/瞬移帧同步空间查询绕过**：凡本 Tick 在 `on_enter` 刚建立或重定位的 `REGION` / `SURFACE` / `PATH_GRAPH`，若需首帧立即执行吸附支点（Case 1）、触发检测或首跳传导（Case 3 `LIVE_CONNECTIVITY`），**必须调用 `PhysicsDirectSpaceState3D.intersect_shape()` / `intersect_ray()` 进行同步查询**，或将区域监测明确延迟 1 个物理步进队列；
+4. **`while_active` 与 `Propagation` 结算**：更新连续 `DRIVE`、`TRANSFER`、`CONSTRAIN` 与跨步传播前沿，严禁在 `while_active` 出现 `IMPULSE`；
+5. **创建前预算与 Jolt 原生休眠结算**；
+6. **只读发布状态快照至状态驱动 `ArtKitDirector`**。
 
-### 3.2 四级非破坏性资源守恒策略（取代“到 64 刚体直接删除旧物体”）
+### 3.2 简化的阶段一资源守恒策略（两项机制，不过度复杂化）
 
-为解决 `p_limit` 下简单按 FIFO 删除已有法术冰柱/石块导致玩家构筑被静默破坏的重大体验缺陷，运行时对动态刚体（全局硬顶 64、单法术硬顶 16）采用严格的**非破坏性四级守恒降荷**：
+全球活跃魔法动态刚体硬顶 `64`、单法术硬顶 `16`。阶段一不引入破坏身份与热力关系的“多刚体合并与拆解”，仅靠以下两步稳定控成本：
 
-| 层级 | 触发条件 | 运行时动作（绝不凭空抹消有效物质） |
-|---|---|---|
-| **Tier 1 · 施法前预检拒批** | 新法术申请的 `peak_dynamic_bodies` 加上当前活跃刚体将突破可用冗余 | 在起手前提示魔力结构过载/暂缓具现（拒绝新发而非强拆地上已有冰桥或战局结构） |
-| **Tier 2 · 同源临近冻结体合并** | 同一空间簇内存在相邻且静止的同类固体块（如碎冰网块） | 合并碰撞形状进共用 `RigidBody3D` / 静态化集群，**严格守恒总体积与质量 `MU` 账本** |
-| **Tier 3 · 远距静止体休眠固化** | 离交战主视锥外且速度趋零 > 1.5s | 强制进入低成本睡眠态或烘焙进轻量静态障壁层，随时随碰撞或热流冲击唤醒 |
-| **Tier 4 · 超时余烬热力学消退** | 已耗尽 `RESERVE` 或进入 `CLEANUP_DISSIPATE` 的末端残片 | 先行触发粒子/声效热升华回馈、向 `WorldLaw` 留下永久焦痕/湿渍/霜层后再回收刚体 |
+1. **施法前预算预检拒批**：新建刚体类法术或 `SUBDIVIDE` 申请前检查 `当前活跃刚体数 + 申请峰值 <= 64`；若超额则在施法起手提示魔力饱和过载，**宁可拒批或暂缓新法术，绝不静默删掉玩家现场已构筑的冰桥或暗月残骸**；
+2. **复用 Jolt 原生休眠与末端热消退**：静止且无持续外力作用的冰体直接由 Godot/Jolt 物理引擎自动进入低开销休眠态（仍保留完整身份、温度、导通性与碰撞）；仅当进入生命末期或被彻底击碎融尽后，才自然热消退、落下永续地面霜痕/湿迹/焦痕，随后归还刚体槽位。
 
 ---
 
-## 四、修正后的 Wave 0 → 1A → 1B → 2 → 3 无环依赖计划
+## 四、无环五阶段路线：`Wave 0 → 1A → 1B → 2 → 3`
 
-> **P0-8 重排核心原则**：把所有互相咬死的前置依赖拆顺——先过离线校验与动作底座（Wave 0），再以单载体闭环验证两套最清晰的物理法术（Wave 1A），随后扩展路径树、环境吸收、传导图与器物烙印（Wave 1B），再考跨法术涌现与盲测 Case 7（Wave 2），最后接入离线语义编译与性能耐力压测（Wave 3）。
+### Wave 0：单源规则引擎 ＋ 21 条门禁 ＋ 废城慢拍操控底座
 
-### Wave 0：契约门禁与废城动作底座（当前起点）
+- **核心工程**：
+  1. 在安装好 **Godot 4.4+（启用 Jolt Physics）** 后，实现读取 `dsl_rules_v0_2.json` 的唯一校验核心（含 Python CI 与 GDScript 运行期准入）并 **21/21 全部拦截 `validator_negative_vectors.json`** + 7 份基准法术全绿；
+  2. 完成第三人称近肩主角控制器与废城白盒场馆（移速惯性、翻滚/举盾、蓄力慢走与定身、主副手瞄准），确保 **主动松手（`ON_INPUT_RELEASE`）、阈值内取消、翻滚打断与受击强打断（`ON_INTERRUPT`）** 四路输入流物理手感扎实时实落地。
 
-- **交付物**：
-  - `game/tools/validate_dsl.py --self-test` 全绿（7 份正常法术 + 1 份语义溯源 + 12+ 项负向拒批测试）；
-  - `MagicDSLTypes` / `MagicCapabilityMatrix` / `MagicDSLDocument` / `SpellDirector` v0.2.1 GDScript 契约就绪；
-  - `main.tscn` 加载第三人称近肩废城探索操控（重脚步移动、翻滚/闪避、举杖长按与松手输入事件流对齐 `ON_INPUT_RELEASE`）。
-- **硬门禁**：12 项负向测试 100% 在各自准确阶段拒批；操控帧率在 M6 实机跑满 60 FPS 无输入黏滞。
+### Wave 1A：核心过程图 ＋ Case 2 / Case 5 ＋ 早期 20 词编译原型
 
-### Wave 1A：核心过程图引擎 + Case 2 & Case 5 双闭环验证
+- **核心工程**：
+  1. 实现 `BODY` / `REGION` / `SURFACE` 三载体（含各自 `SpatialDistribution` 曲线/衰减参数）、DAG `ProcessGraph` + `RuntimeEvent` 总线、线性句柄所有权移交、`WorldLaw` 基础上界与状态驱动 ArtKit 基线替换；
+  2. **同步交付“Wave 1A 20 词确定性编译器原型”**：直接用 [dsl_rules_v0_2.json](../game/data/rules/dsl_rules_v0_2.json) 中的 20 枚核心真实词（`水、气、火、土、以太、重、界、借用、汇聚、延展、交织、凝固、弥散、反转、守护、束缚、封存、唤醒、回应、爆发`），现场把中文符文回路降低为合法 `CompiledSpellDSL` ＋ `CompileTrace`，早期即实证 Case 2 与 Case 5 可从真实词义自然生成；
+  3. **验收案例**：
+     - **Case 2（引力沉渊）**：双 `DirectionSpec` 垂直抬升＋向内收拢、`ON_INPUT_RELEASE` 触发 `28.0` 往下冲量、`ON_INTERRUPT` 立即中止、局部顿帧 `hitstop_local_ms` 与 `CRATER_DECAL` 留痕；
+     - **Case 5（定界折光壁）**：`SURFACE(BOUNDED_PLANE)` 单向透射（术者穿行无阻、外部弹道 `REFLECT`）、松手精准仅移交保留所需句柄进入 `POST_RELEASE_RESERVE`、过载 `FRACTURE` 并按实测荷载显示裂纹。
 
-- **覆盖原语**：`ProcessGraph`（`on_enter/while_active/on_exit`）+ `RuntimeEvent` 总线 + `_physics_process` 首帧空间查询适配器 + `REGION` / `SURFACE` / 基础 `BODY` 载体 + `ESTABLISH` / `DRIVE(Continuous & Impulse)` / `CONSTRAIN(PRESSURE_WALL)` / `WITHDRAW` + `HANDOFF_TO_RESERVE` + `SpellDirector` 单法术四拍演出。
-- **验收标准**：
-  - **Case 2（引力沉渊）**：长按将废城石块与傀儡靶向上抬起并向中心收拢（验证双正交 `DirectionSpec`），松手触发 `ON_INPUT_RELEASE` 转入 `p_slam_down` 下砸冲量，落地产生 `pre_delivery_silence_ms` + `hitstop_local_ms` 局部顿帧 + `CRATER_DECAL` 留痕，并走完 `p_cleanup`；
-  - **Case 5（定界折光壁）**：面前展开 4 四边有界平面，仅阻挡外部高速投射物（`barrier_policy.response_mode: REFLECT`），施法者自身贴身武器从内侧穿透不受阻，松手后通过 `handoff_handles` 无缝交给 `POST_RELEASE_RESERVE`，超荷载时触发 `FRACTURE` 并经 `Desired vs Realized` 反馈显示裂纹，**全过程零 `spell_id` 特判**。
+### Wave 1B：复原完整 Case 1 / 3 / 4 / 6 与复合暗月
 
-### Wave 1B：PathGraph + 环境汲取 + 传导图 + 器物烙印（补齐 Case 1 / 3 / 4 / 6 / 暗月）
+- **核心工程**：接入 `PATH_GRAPH`（`width_profile`、`on_obstruction`、`per_segment_phase`）、`PropagationSpec`（`PATH_CONNECTIVITY` 与 `CONDUCTIVE_GRAPH`）、`TRANSFER(ENV:WATER)` 与 `WORLD_REF`。
+- **验收案例**：
+  - **Case 1（霜狱织网）**：多支点吸附拉网、受力拉伸 `COHESION/SUPPORT`、主动松手后零发射冲量沿连通冻结为 1 个原位复合可踩/可碎冰体、中途受击触发 `ON_INTERRUPT` 令液态水自然泼落；
+  - **Case 3（连锁电势）**：验证干地/湿地的实时连通分支（`LIVE_CONNECTIVITY`），导通路途打断触发缺失原点退回不崩；
+  - **Case 4（微风感雾障）** 与 **Case 6（器物烙印延爆）**：验证跟随关系、扰动感知回传、手持器物 `VESSEL_RESERVE` 封存与碰撞引爆；
+  - **复合暗月（Case_Compound_Dark_Moon）**：验证 7 句柄全部随 `HANDOFF_TO_RESERVE` 伴随下降、坠地 `ON_COLLIDE` 碎裂成 8 个有界碎块后再逐一撤销 3 个伴随场，以及受击强打断全部消散。
 
-- **覆盖原语**：`PATH_GRAPH`（`per_segment_phase`）+ `TRANSFER(ENV:*)` + `TRANSFORM(PHASE_CHANGE / PROPAGATE / IGNITE_EXOTHERMIC / DISSIPATE)` + `WORLD_REF` + `relations[]` 单一权威跟随与 `DISTURBANCE_TO_PERCEPTION` / `CONTACT_TO_TRIGGER`。
-- **验收标准**：
-  - **Case 1（水网凝结）**：从附近水面槽汲取 `MU`（不突破 `capacity_mu`），编织多分支水流丝络后冻结为单复合刚体（诚实范围 `max_output_bodies=1`）击飞并碎裂成湿渍/冰痕；
-  - **Case 3（连锁电势传导）**：测试 `LIVE_CONNECTIVITY` 现场通路——干石地仅单点灼烧；浇水（来自 Case 1 融化或环境水坑）后电弧沿 `CONDUCTIVE_GRAPH` 自动跃迁 `max_hops <= 6`；途中切碎导电连接即时遵循缺失原点契约退回根节点不崩溃；
-  - **Case 4（微风感雾障）**：迷雾随施法者平滑跟随，外部敌人踏入雾区通过 `DISTURBANCE_TO_PERCEPTION` 回传方向性脉冲涟漪；
-  - **Case 6（器物烙印延爆）**：手持石块注入 `VESSEL_RESERVE` 后脱手投掷，落地碰撞通过 `ON_COLLIDE` 解封 `HEAT_INJECTION` 激发热冲击；
-  - **复合暗月（Case_Compound_Dark_Moon）**：四主体按三组 `SPATIAL_ATTACH` 同步悬停、`capacity_mu` 吸收与 `PIN` 破断坠落一次通过；四级资源守恒确保大场面不静默删物。
+### Wave 2：系统性化学涌现、多法术冲突仲裁与盲测 Case 7
 
-### Wave 2：系统性涌现、多法术仲裁与盲测 Case 7
+- **核心工程**：完整打通跨法术世界交互（Case 1 遗留冰晶/积水导通 Case 3 电流；Case 5 折光壁弹返 Case 6 烙印掷物）；验证 `ArtKitArbitrator` 并行灯光 `<= 3` 与天光收敛 `<= 0.7`；
+- **盲测 Case 7 终极验收**：由外部审阅者现场基于 50 真实词库撰写全仓从未出现过的新构思，直接编译并零特判在游戏里跑出预期现象与余韵。
 
-- **核心任务**：
-  - 开启 **多法术并存物理/光影仲裁**：先放 `Case 1` 冰晶残留融水，再用 `Case 3` 导电击穿同一摊水；用 `Case 5` 折光壁挡住 `Case 6` 抛出的引信石块触发反振自爆；
-  - `ArtKitArbitrator` 验证多法术并行下 `sky_darken <= 0.7`、`peak_point_lights <= 3` 零闪烁平滑交接；
-  - **盲测 Case 7**：由外部审阅者现场撰写一份仓库内此前**从未出现过 JSON** 的合法跨领域新法术（需满足 4 阶段校验），不改一行运行时代码直接放入游戏加载，验证真实泛化能力。
+### Wave 3：全 50 词法坛工坊接入 ＋ Apple M6 实机性能/耐力过检
 
-### Wave 3：离线语义工坊落地与性能耐力门禁
-
-- **核心任务**：
-  - 将玩家符文槽位构筑 / 可选离线大模型编译接入 `SemanticIntent v0.2.1 → CompiledSpellDSL v0.2.1` 下行通道，确保任意合法语义意图经 4 阶段校验后直接开火；战斗全程 `0` 次外部模型等待；
-  - **Apple M6 性能与耐力测试**：同时活跃 3 套复合法术持续 60 秒并连续施法切换 30 分钟，验证单物理步魔法逻辑开销稳定 `<= 1.5 ms`、无场景树对象泄漏、无稳态帧率跌破 60 FPS。
+- **核心工程**：扩展确定性规则库覆盖完整 50 实词及暂停期语义解析辅助接口；Apple M6 1080p 下同时维持多法术并行 60 秒并做 30 分钟切法术耐力压测，保证魔法运行时单帧开销 `<= 1.5 ms`、场景树 0 泄漏、全程稳跑 60 FPS。
 
 ---
 
-## 五、提交 GPT 与 Claude 联合交叉审阅的关键复核清单（v0.2.1）
+## 五、Wave 1A 锁定前的最后 3 项细节确认
 
-请审阅者优先审查以下 5 项设计合同，确认无实质隐患后即宣布 Wave 0 冻结并启动 Wave 1A 编码：
+本次维护已将原 8 项共识全面写入规范与数据表，仅以下 3 项已在规划内采纳并请 GPT / Claude 最终打勾锁定即可直接开始 Wave 0 代码实施：
 
-1. **过程图与句柄移交合同**：以 `process_graph`（`on_enter/while_active/on_exit`）配合 `handoff_handles` 取代 `process.start`，以及 `ESTABLISH` 严格锁定仅在 `on_enter` 出现的约束，是否足以堵死双激活与资源泄漏路径？
-2. **Stage 4 独立法力下界公式**：`compute_independent_budget()` 中的 `min_upfront_mana` 与 `min_sustain_mana_per_s` 系数配比（特别是 `ENVIRONMENT_HARVEST` 减免起手消耗但计入吸收 Sustain、与 `VESSEL_RESERVE` / `POST_RELEASE_RESERVE` 转移至 `reserve_mana`），是否存在漏算高收益白嫖途径？
-3. **`Weave(Freeze(W))` 的阶段一诚实范围**：在 `v0.2.1` 中显式限定阶段一至阶段二仅支持将 `PATH_GRAPH` 水络合成为单个复合刚体（`max_output_bodies: 1`），把可拆解多段冻结刚体铰链留到后续物理扩展，是否在表达力与工程可控之间取得了合适平衡？
-4. **Godot 4 `_physics_process` 1-Tick `Area3D` 适配器与四级非破坏性资源守恒**：采用物理帧初统一读取 + 出生帧同步 `intersect_shape()` 绕开单帧滞后，以及四级降荷替换 FIFO 删除，是否适配 Godot 4 + Jolt 的真实运行机理？
-5. **`SemanticIntent v0.2.1` 组合性重构**：用 10 类原子 `clause_role`、`target_archetype` 与强制 `rune_contributions[].bound_ids[]` 彻底替换旧 12 复合短语枚举，是否能无损表达全部 7+ 类案例以及未知新构筑？
+1. **`PropagationSpec` 作用域锁定**：阶段一明确**只允许挂在 `TRANSFORM / DRIVE / TRANSFER`** 上，严禁挂在 `ESTABLISH` / `WITHDRAW` 上，确保句柄所有权原子化。
+2. **Wave 1A 最小核心词表增补 `重 / 界`**：在 [符文与词义设计](design/符文与词义设计.md) 原有 48 词基础上增补 **`重`**（引力/质量尺度）与 **`界`**（空间屏障/过滤规则），合共 50 词，并先行抽取 20 枚核心词在 Wave 1A 同步做出确定性编译原型验证。
+3. **本仓保持纯粹“规范 ＋ 计划 ＋ 数据源”，施工阶段开启后再写代码**：已清理旧越界原型代码（Option A），后续由单一权威 `dsl_rules_v0_2.json` 驱动生成/实现 Wave 0 校验器，杜绝双套逻辑漂移。

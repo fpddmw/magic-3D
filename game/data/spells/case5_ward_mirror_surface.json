@@ -1,25 +1,39 @@
 {
-  "schema_version": "0.2.1",
+  "schema_version": "0.2.2",
   "spell_id": "case5_ward_mirror_surface",
   "display_name": "定界折光壁（Bounded Mirror Ward）",
-  "description": "在身前形成受限面积与四边预算约束的 2D 有界结界平面（BOUNDED_PLANE），仅针对 SPATIAL_BARRIER 通道配置单向透射与反射策略；松手后按 HANDOFF_TO_RESERVE 显式移交残余承载。",
+  "description": "在身前展开受限 4 四边有界平面结界（SURFACE），仅对 SPATIAL_BARRIER 赋予单向透射与反射策略；显式区分松手移交后备储备（HANDOFF_TO_RESERVE）与受击强打断立即崩解（ON_INTERRUPT）。",
   "source_intent_ref": "intent_ward_mirror_surface",
   "contract": {
     "timing": {
       "windup_s": 0.25,
-      "release_duration_s": 4.5,
+      "full_charge_s": 0.25,
       "recovery_s": 0.25,
       "max_active_duration_s": 8.0
     },
     "combat": {
+      "formation_mode": "SUSTAINED_CHANNEL",
+      "min_deliverable_progress": 0.0,
+      "caster_mobility": "SLOW_WALK",
       "targeting": "DIRECTION",
       "range_m": 4.0,
-      "controller": "AUTONOMOUS",
-      "cancel_policy": "ON_EXPIRE_OR_WITHDRAW",
+      "release_policy": {
+        "on_valid_release": "DELIVER_OR_HANDOFF",
+        "on_under_threshold_release": "NONE"
+      },
+      "interruption_policy": {
+        "on_interrupt": "ABORT_AND_DROP",
+        "dodge_behavior": "ALLOW_DODGE_AFTER_HANDOFF",
+        "interruption_priority": "INTERRUPT_WINS_UNLESS_COMMITTED"
+      },
+      "control_focus": {
+        "owner": "AUTONOMOUS",
+        "exclusive_focus_slot": false
+      },
       "provider": {
         "energy_source": "POST_RELEASE_RESERVE",
         "post_release_reserve_mana": 12.0,
-        "max_upfront_mana": 18.0,
+        "max_upfront_mana": 22.0,
         "max_sustain_mana_per_s": 0.0
       }
     }
@@ -37,10 +51,7 @@
         "response_mode": "REFLECT",
         "deflect_angle_deg": 0.0
       },
-      "visual_modules": {
-        "contour_module": "PLANAR_SIGIL",
-        "surface_modules": ["RUNIC_BARRIER_GLASS"],
-        "secondary_modules": ["STRESS_CRACKS"],
+      "art_overrides": {
         "tint_palette": {
           "primary_hex": "#F4D37A",
           "accent_hex": "#FFF5CE",
@@ -61,6 +72,16 @@
       "quad_budget": 4,
       "max_deflect_iterations_per_node": 0,
       "initial_extent_m": 2.6,
+      "distribution": {
+        "thickness_m": 0.06,
+        "boundary_falloff": "SHARP",
+        "edge_profile": {
+          "curve": "CONSTANT",
+          "domain": "SURFACE_UV",
+          "min_val": 1.0,
+          "max_val": 1.0
+        }
+      },
       "reference": {
         "spawn_anchor": "CASTER_HAND",
         "spawn_offset_m": [0.0, 0.2, -1.3]
@@ -121,29 +142,29 @@
             "on_event": "ON_INPUT_RELEASE",
             "event_source_filter": { "scope": "CAST_INSTANCE" },
             "next_process_ids": ["p_reserve_hold"],
-            "handoff_handles": ["h_ward", "h_ward_wall"],
+            "handoff_handles": ["h_ward"],
             "action": "HANDOFF_TO_RESERVE"
           },
           {
             "on_event": "ON_TIMEOUT",
             "event_source_filter": { "scope": "SELF_PROCESS" },
             "next_process_ids": ["p_reserve_hold"],
-            "handoff_handles": ["h_ward", "h_ward_wall"],
+            "handoff_handles": ["h_ward"],
             "action": "HANDOFF_TO_RESERVE"
+          },
+          {
+            "on_event": "ON_INTERRUPT",
+            "event_source_filter": { "scope": "CAST_INSTANCE" },
+            "next_process_ids": ["p_shatter_abort"],
+            "handoff_handles": ["h_ward", "h_ward_follow", "h_ward_wall"],
+            "action": "STOP_SELF_START_NEXT"
           }
         ]
       },
       {
         "id": "p_reserve_hold",
         "role": "CONSTRAINT_HOLD",
-        "on_enter": [
-          {
-            "op": "WITHDRAW",
-            "target_scope": "HANDLE",
-            "target_id": "h_ward_follow",
-            "mode": "NATURAL_RELEASE"
-          }
-        ],
+        "on_enter": [],
         "while_active": [
           {
             "op": "CONSTRAIN",
@@ -174,6 +195,29 @@
             "handoff_handles": [],
             "action": "STOP_SELF_ONLY"
           },
+          {
+            "on_event": "ON_TIMEOUT",
+            "event_source_filter": { "scope": "SELF_PROCESS" },
+            "next_process_ids": [],
+            "handoff_handles": [],
+            "action": "STOP_SELF_ONLY"
+          }
+        ]
+      },
+      {
+        "id": "p_shatter_abort",
+        "role": "CLEANUP_DISSIPATE",
+        "on_enter": [
+          {
+            "op": "WITHDRAW",
+            "target_scope": "ALL_SPELL_SUPPORTS",
+            "mode": "DISSIPATE"
+          }
+        ],
+        "while_active": [],
+        "on_exit": [],
+        "max_duration_s": 0.15,
+        "transitions": [
           {
             "on_event": "ON_TIMEOUT",
             "event_source_filter": { "scope": "SELF_PROCESS" },
@@ -215,7 +259,7 @@
     "peak_path_nodes": 0,
     "peak_surface_quads": 4,
     "peak_point_lights": 1,
-    "derived_upfront_mana": 14.0,
+    "derived_upfront_mana": 16.0,
     "derived_sustain_mana_per_s": 0.0,
     "derived_reserve_mana": 12.0,
     "estimated_tick_cost_us": 64

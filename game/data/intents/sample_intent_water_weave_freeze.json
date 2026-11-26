@@ -1,69 +1,86 @@
 {
-  "schema_version": "0.2.1",
+  "schema_version": "0.2.2",
   "intent_id": "intent_water_weave_freeze",
-  "display_title": "水网凝结（组合语义示例）",
+  "display_title": "霜狱织网（真实词义组合示例）",
   "clauses": [
     {
-      "clause_id": "c_harvest_weave",
-      "clause_role": "SHAPE_AND_ROUTE",
-      "target_archetype": "WATER_MEDIUM",
-      "spatial_topology": "FILAMENT_GRAPH",
-      "semantic_polarity": "STANDARD",
-      "directional_intent": "FORWARD",
-      "temporal_phase": "WHILE_HELD",
-      "qualifiers": ["HARVEST_NEARBY"]
+      "id": "cl_water_seed",
+      "meaning": "水",
+      "input_refs": [],
+      "timing": "ON_CAST"
     },
     {
-      "clause_id": "c_chill_lock",
-      "clause_role": "TRANSFORM_STATE",
-      "target_archetype": "ICE_CRYSTAL",
-      "spatial_topology": "FILAMENT_GRAPH",
-      "semantic_polarity": "STANDARD",
-      "directional_intent": "NONE",
-      "temporal_phase": "ON_RELEASE",
-      "qualifiers": ["SOLIDIFY_PHASE"]
+      "id": "cl_borrow_env",
+      "meaning": "借用",
+      "subject_ref": "cl_water_seed",
+      "input_refs": ["ENV:WATER"],
+      "timing": "WHILE_HELD"
     },
     {
-      "clause_id": "c_launch_shard",
-      "clause_role": "APPLY_FORCE",
-      "target_archetype": "ICE_CRYSTAL",
-      "spatial_topology": "POINT_OR_BODY",
-      "semantic_polarity": "STANDARD",
-      "directional_intent": "FORWARD",
-      "temporal_phase": "ON_RELEASE",
-      "qualifiers": []
+      "id": "cl_weave_extend",
+      "meaning": "延展",
+      "subject_ref": "cl_water_seed",
+      "input_refs": ["cl_borrow_env"],
+      "timing": "WHILE_HELD"
+    },
+    {
+      "id": "cl_weave_interlace",
+      "meaning": "交织",
+      "subject_ref": "cl_water_seed",
+      "input_refs": ["cl_weave_extend"],
+      "timing": "WHILE_HELD"
+    },
+    {
+      "id": "cl_bind_supports",
+      "meaning": "束缚",
+      "subject_ref": "cl_water_seed",
+      "input_refs": ["TARGET:SURFACE"],
+      "timing": "WHILE_HELD"
+    },
+    {
+      "id": "cl_freeze_solid",
+      "meaning": "凝固",
+      "subject_ref": "cl_water_seed",
+      "input_refs": ["cl_weave_interlace", "cl_bind_supports"],
+      "timing": "ON_RELEASE"
     }
   ],
   "rune_contributions": [
     {
-      "rune_token": "RUNE_AQUA_SOURCE",
-      "rune_category": "SUBJECT_SEED",
-      "target_clause_ids": ["c_harvest_weave"],
-      "bound_ids": ["s_water"]
+      "rune_id": "水",
+      "role_in_circuit": "SUBJECT",
+      "clause_ids": ["cl_water_seed"]
     },
     {
-      "rune_token": "RUNE_LATTICE_FILAMENT",
-      "rune_category": "TOPOLOGY_GLYPH",
-      "target_clause_ids": ["c_harvest_weave"],
-      "bound_ids": ["sp_water_web", "p_weave_water"]
+      "rune_id": "借用",
+      "role_in_circuit": "ACTION",
+      "clause_ids": ["cl_borrow_env"]
     },
     {
-      "rune_token": "RUNE_HEAT_SIPHON",
-      "rune_category": "FIELD_SIGN",
-      "target_clause_ids": ["c_chill_lock"],
-      "bound_ids": ["f_freeze", "p_freeze_launch"]
+      "rune_id": "延展",
+      "role_in_circuit": "FORM",
+      "clause_ids": ["cl_weave_extend"]
     },
     {
-      "rune_token": "RUNE_IMPULSE_DRIVE",
-      "rune_category": "VECTOR_GLYPH",
-      "target_clause_ids": ["c_launch_shard"],
-      "bound_ids": ["p_freeze_launch"]
+      "rune_id": "交织",
+      "role_in_circuit": "FORM",
+      "clause_ids": ["cl_weave_interlace"]
+    },
+    {
+      "rune_id": "束缚",
+      "role_in_circuit": "RELATION",
+      "clause_ids": ["cl_bind_supports"]
+    },
+    {
+      "rune_id": "凝固",
+      "role_in_circuit": "ACTION",
+      "clause_ids": ["cl_freeze_solid"]
     }
   ],
   "caster_context": {
     "requested_targeting": "DIRECTION",
-    "max_desired_range_m": 16.0,
-    "allow_post_release_persist": false
+    "max_desired_range_m": 14.0,
+    "allow_post_release_persist": true
   },
   "expected_omen_tone": "CRYSTAL_CLARITY"
 }

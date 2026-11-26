@@ -1,25 +1,43 @@
 {
-  "schema_version": "0.2.1",
+  "schema_version": "0.2.2",
   "spell_id": "case1_water_weave_freeze",
-  "display_name": "水网凝结（Water Weave & Freeze）",
-  "description": "将流水织成多分支 1D 晶络并在保持拓扑与连续性的前提下施加负热流场凝固；诚实限定阶段一由路径拓扑降低为单个有界复合晶格刚体（<=16节点），再沿前向脉冲击出。",
+  "display_name": "霜狱织网（水网塑形→沿连通原位冻冰）",
+  "description": "复原完整现象：引借附近水源在实景多支点（AUTO_SUPPORT_SURFACE）支撑下织成动态受力水网；主动释放时以预付储备经 PATH_CONNECTIVITY 从接触支点沿连通晶络冻成原位可承重复合冰体（阶段一限 1 个复合刚体、绝不附带发射冲量）；遭强打断则触发 ON_INTERRUPT 撤去支撑令水自然坠落。",
   "source_intent_ref": "intent_water_weave_freeze",
   "contract": {
     "timing": {
-      "windup_s": 0.42,
-      "release_duration_s": 4.0,
-      "recovery_s": 0.35,
-      "max_active_duration_s": 8.0
+      "windup_s": 0.35,
+      "full_charge_s": 2.0,
+      "recovery_s": 0.4,
+      "max_active_duration_s": 10.0
     },
     "combat": {
+      "formation_mode": "GRADUAL_CHARGE",
+      "min_deliverable_progress": 0.35,
+      "charge_tiers": [
+        { "min_progress": 0.35, "scale_mul": 0.65, "intensity_mul": 0.75, "cost_mul": 0.7 },
+        { "min_progress": 1.0, "scale_mul": 1.0, "intensity_mul": 1.0, "cost_mul": 1.0 }
+      ],
+      "caster_mobility": "SLOW_WALK",
       "targeting": "DIRECTION",
-      "range_m": 16.0,
-      "controller": "CASTER_FOCUS",
-      "cancel_policy": "ON_RELEASE_KEY",
+      "range_m": 14.0,
+      "release_policy": {
+        "on_valid_release": "DELIVER_OR_HANDOFF",
+        "on_under_threshold_release": "FIZZLE_PARTIAL_REFUND"
+      },
+      "interruption_policy": {
+        "on_interrupt": "ABORT_AND_DROP",
+        "dodge_behavior": "TRIGGER_INTERRUPT",
+        "interruption_priority": "INTERRUPT_WINS_UNLESS_COMMITTED"
+      },
+      "control_focus": {
+        "owner": "CASTER_FOCUS",
+        "exclusive_focus_slot": true
+      },
       "provider": {
-        "energy_source": "CASTER_MANA",
-        "post_release_reserve_mana": 0.0,
-        "max_upfront_mana": 28.0,
+        "energy_source": "POST_RELEASE_RESERVE",
+        "post_release_reserve_mana": 10.0,
+        "max_upfront_mana": 42.0,
         "max_sustain_mana_per_s": 8.0
       }
     }
@@ -30,23 +48,21 @@
       "kind": "MATERIAL",
       "material_id": "WATER",
       "initial_phase": "LIQUID",
-      "capacity_mu": 12.0,
-      "initial_inventory_mu": 4.0,
+      "capacity_mu": 8.0,
+      "initial_inventory_mu": 3.0,
       "inherit_world_law": true,
       "interaction_profile": {
         "accepts_world_thermal": true,
         "accepts_world_conduction": true,
-        "structural_fragility": 0.32,
+        "structural_fragility": 0.3,
         "buoyancy_class": "NEUTRAL"
       },
-      "visual_modules": {
-        "contour_module": "BRANCH_TENDRIL",
-        "surface_modules": ["REFRACTIVE_LIQUID", "CRYSTALLINE_ICE"],
-        "secondary_modules": ["VELOCITY_FOAM", "FROST_CREEP_DECAL"],
+      "art_overrides": {
+        "secondary_additions": ["FROST_CREEP_DECAL", "STRESS_CRACKS"],
         "tint_palette": {
           "primary_hex": "#7AD8F0",
           "accent_hex": "#D8F6FF",
-          "emissive_boost": 0.65
+          "emissive_boost": 0.6
         }
       }
     },
@@ -55,12 +71,9 @@
       "kind": "FIELD",
       "field_channel": "HEAT_EXTRACTION",
       "initial_intensity": 0.0,
-      "max_intensity": 24.0,
+      "max_intensity": 20.0,
       "inherit_world_law": true,
-      "visual_modules": {
-        "contour_module": "FIELD_AURA_RING",
-        "surface_modules": ["THERMAL_FROST"],
-        "secondary_modules": ["FROST_CREEP_DECAL"],
+      "art_overrides": {
         "tint_palette": {
           "primary_hex": "#A6E9FF",
           "accent_hex": "#FFFFFF",
@@ -76,19 +89,35 @@
       "carrier": "PATH_GRAPH",
       "dimension": "1D",
       "generator": "BRANCH_WEB",
-      "node_budget": 8,
-      "edge_budget": 10,
+      "node_budget": 14,
+      "edge_budget": 20,
       "quad_budget": 0,
       "max_deflect_iterations_per_node": 2,
       "per_segment_phase": true,
-      "initial_extent_m": 4.5,
+      "initial_extent_m": 5.5,
+      "distribution": {
+        "width_m": 0.16,
+        "thickness_m": 0.14,
+        "width_profile": {
+          "curve": "BELL_CONCENTRATED",
+          "domain": "PATH_U",
+          "min_val": 0.45,
+          "max_val": 1.0
+        },
+        "on_obstruction": "DEFORM_OR_TRUNCATE"
+      },
       "reference": {
-        "spawn_anchor": "CASTER_HAND",
-        "spawn_offset_m": [0.0, 0.2, -0.8]
+        "spawn_anchor": "AUTO_SUPPORT_SURFACE",
+        "spawn_offset_m": [0.0, 0.2, -1.0],
+        "auto_support_rule": {
+          "max_count": 4,
+          "max_distance_m": 6.0,
+          "surface_filter": "SOLID_WORLD_SUPPORT"
+        }
       }
     },
     {
-      "id": "sp_cold_field",
+      "id": "sp_cold_aura",
       "subject_id": "f_freeze",
       "carrier": "REGION",
       "dimension": "3D",
@@ -97,7 +126,11 @@
       "edge_budget": 0,
       "quad_budget": 0,
       "max_deflect_iterations_per_node": 0,
-      "initial_extent_m": 3.2,
+      "initial_extent_m": 4.5,
+      "distribution": {
+        "radial_falloff": "BELL_CONCENTRATED",
+        "boundary": "SOFT"
+      },
       "reference": {
         "spawn_anchor": "SUBJECT_ORIGIN",
         "spawn_subject_id": "s_water"
@@ -114,6 +147,15 @@
       "attach_mode": "SOFT_FOLLOW",
       "local_offset_m": [0.0, 0.0, 0.0],
       "max_distance_m": 6.0
+    },
+    {
+      "id": "rel_web_support",
+      "kind": "CONSTRAINT_LINK",
+      "source_ref": "SUBJECT:s_water",
+      "target_ref": "TARGET:SURFACE",
+      "channel": "GRAPH_SUPPORT",
+      "attach_mode": "MULTI_SUPPORT_ATTACH",
+      "max_distance_m": 6.0
     }
   ],
   "process_graph": {
@@ -128,6 +170,12 @@
             "target_kind": "SUBJECT",
             "target_id": "s_water",
             "handle_id": "h_water"
+          },
+          {
+            "op": "ESTABLISH",
+            "target_kind": "RELATION",
+            "target_id": "rel_web_support",
+            "handle_id": "h_rel_support"
           }
         ],
         "while_active": [
@@ -136,8 +184,8 @@
             "source_ref": "ENV:WATER",
             "target_subject_id": "s_water",
             "resource_kind": "MU",
-            "rate_per_s": 4.0,
-            "max_amount": 6.0,
+            "rate_per_s": 2.4,
+            "max_amount": 5.0,
             "on_insufficient_source": "CLAMP_TO_AVAILABLE"
           },
           {
@@ -145,36 +193,69 @@
             "handle_id": "h_drive_ext",
             "target_subject_id": "s_water",
             "channel": "EXTENT",
-            "mode": "RATE",
-            "magnitude": 3.2,
+            "mode": "TARGET",
+            "magnitude": 1.0,
+            "target_ref": "TARGET:ANCHOR",
             "direction": {
               "mode": "FRAME_RELATIVE",
               "axis": "AIM_FORWARD"
             },
             "profile": "EASE_IN_OUT"
+          },
+          {
+            "op": "CONSTRAIN",
+            "handle_id": "h_cohesion",
+            "target_subject_id": "s_water",
+            "constraint_family": "COHESION",
+            "desired_value": 1.0,
+            "tolerance": 0.15,
+            "capacity_lu": 85.0,
+            "rebind_cooldown_s": 0.1,
+            "on_exceed": "DEFORM",
+            "provider_ref": "CASTER_MANA"
+          },
+          {
+            "op": "CONSTRAIN",
+            "handle_id": "h_support",
+            "target_subject_id": "s_water",
+            "constraint_family": "SUPPORT",
+            "anchor_ref": "TARGET:SURFACE",
+            "desired_value": 1.0,
+            "tolerance": 0.2,
+            "capacity_lu": 72.0,
+            "rebind_cooldown_s": 0.12,
+            "on_exceed": "YIELD",
+            "provider_ref": "CASTER_MANA"
           }
         ],
         "on_exit": [],
-        "max_duration_s": 2.4,
+        "max_duration_s": 5.0,
         "transitions": [
           {
             "on_event": "ON_INPUT_RELEASE",
             "event_source_filter": { "scope": "CAST_INSTANCE" },
-            "next_process_ids": ["p_freeze_launch"],
-            "handoff_handles": ["h_water"],
+            "next_process_ids": ["p_freeze_propagate"],
+            "handoff_handles": ["h_water", "h_rel_support"],
+            "action": "HANDOFF_TO_RESERVE"
+          },
+          {
+            "on_event": "ON_INTERRUPT",
+            "event_source_filter": { "scope": "CAST_INSTANCE" },
+            "next_process_ids": ["p_abort_drop"],
+            "handoff_handles": ["h_water", "h_rel_support"],
             "action": "STOP_SELF_START_NEXT"
           },
           {
             "on_event": "ON_TIMEOUT",
             "event_source_filter": { "scope": "SELF_PROCESS" },
-            "next_process_ids": ["p_freeze_launch"],
-            "handoff_handles": ["h_water"],
+            "next_process_ids": ["p_abort_drop"],
+            "handoff_handles": ["h_water", "h_rel_support"],
             "action": "STOP_SELF_START_NEXT"
           }
         ]
       },
       {
-        "id": "p_freeze_launch",
+        "id": "p_freeze_propagate",
         "role": "TRANSFORM_STAGE",
         "on_enter": [
           {
@@ -194,33 +275,31 @@
             "target_subject_id": "f_freeze",
             "channel": "INTENSITY_BURST",
             "mode": "IMPULSE",
-            "magnitude": 18.0,
+            "magnitude": 16.0,
             "direction": {
               "mode": "RADIAL",
               "center_ref": "SUBJECT:s_water",
               "polarity": "INWARD"
             },
-            "profile": "INSTANT_BURST"
+            "profile": "DECAY_BURST"
           },
           {
             "op": "TRANSFORM",
             "target_subject_id": "s_water",
             "transform_id": "PHASE_CHANGE",
             "target_phase": "SOLID",
-            "preserve": ["MASS", "TOPOLOGY", "MOMENTUM"],
-            "max_output_bodies": 1
-          },
-          {
-            "op": "DRIVE",
-            "target_subject_id": "s_water",
-            "channel": "VELOCITY_IMPULSE",
-            "mode": "IMPULSE",
-            "magnitude": 14.0,
-            "direction": {
-              "mode": "FRAME_RELATIVE",
-              "axis": "AIM_FORWARD"
-            },
-            "profile": "INSTANT_BURST"
+            "preserve": ["MASS", "TOPOLOGY", "POSITION"],
+            "max_output_bodies": 1,
+            "propagation": {
+              "domain": "PATH_CONNECTIVITY",
+              "origin_ref": "TARGET:SURFACE",
+              "speed_m_s": 10.0,
+              "max_reach_m": 6.0,
+              "max_hops": 6,
+              "attenuation": 0.1,
+              "connectivity_policy": "LIVE_CONNECTIVITY",
+              "on_missing_origin": "FALLBACK_TO_ROOT_NODE"
+            }
           }
         ],
         "while_active": [],
@@ -238,7 +317,30 @@
             "mode": "NATURAL_RELEASE"
           }
         ],
-        "max_duration_s": 3.5,
+        "max_duration_s": 1.6,
+        "transitions": [
+          {
+            "on_event": "ON_TIMEOUT",
+            "event_source_filter": { "scope": "SELF_PROCESS" },
+            "next_process_ids": [],
+            "handoff_handles": [],
+            "action": "STOP_SELF_ONLY"
+          }
+        ]
+      },
+      {
+        "id": "p_abort_drop",
+        "role": "CLEANUP_DISSIPATE",
+        "on_enter": [
+          {
+            "op": "WITHDRAW",
+            "target_scope": "ALL_SPELL_SUPPORTS",
+            "mode": "NATURAL_RELEASE"
+          }
+        ],
+        "while_active": [],
+        "on_exit": [],
+        "max_duration_s": 0.25,
         "transitions": [
           {
             "on_event": "ON_TIMEOUT",
@@ -254,7 +356,7 @@
   "expression": {
     "caster_cue": {
       "pose_tag": "STAFF_SWEEP",
-      "cast_focus_ms": 380
+      "cast_focus_ms": 420
     },
     "omen_profile": {
       "sky_darken": 0.18,
@@ -269,21 +371,21 @@
       "pre_delivery_silence_ms": 55
     },
     "aftermath_profile": {
-      "light_decay_s": 1.1,
+      "light_decay_s": 1.2,
       "leave_world_scars": true,
-      "hitstop_local_ms": 65
+      "hitstop_local_ms": 60
     },
-    "camera_impulse_level": 0.45
+    "camera_impulse_level": 0.4
   },
   "budget": {
     "compiler_status": "VALID",
     "peak_dynamic_bodies": 1,
-    "peak_path_nodes": 8,
+    "peak_path_nodes": 14,
     "peak_surface_quads": 0,
     "peak_point_lights": 2,
-    "derived_upfront_mana": 24.0,
-    "derived_sustain_mana_per_s": 2.4,
-    "derived_reserve_mana": 0.0,
-    "estimated_tick_cost_us": 95
+    "derived_upfront_mana": 36.0,
+    "derived_sustain_mana_per_s": 4.5,
+    "derived_reserve_mana": 10.0,
+    "estimated_tick_cost_us": 105
   }
 }

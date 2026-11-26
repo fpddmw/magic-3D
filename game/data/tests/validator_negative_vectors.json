@@ -1,0 +1,195 @@
+{
+  "schema_version": "0.2.2",
+  "description": "Mandatory 21 negative test vectors (12 baseline + 9 GPT audit stress cases) shared identically by Wave 0 Python and GDScript validators.",
+  "vectors": [
+    {
+      "id": "material_subject_missing_material_and_phase",
+      "source_group": "baseline_v0_2_1",
+      "target_kind": "spell",
+      "base_file": "game/data/spells/case1_water_weave_freeze.json",
+      "mutation_description": "Delete material_id and initial_phase from subjects[0]",
+      "expected_stage": "STAGE_1_STRUCTURE",
+      "rationale": "MaterialSubject requires material_id and initial_phase"
+    },
+    {
+      "id": "region_carrier_using_path_generator",
+      "source_group": "baseline_v0_2_1",
+      "target_kind": "spell",
+      "base_file": "game/data/spells/case4_fog_disturbance_sense.json",
+      "mutation_description": "Set spatial[0].generator = 'BRANCH_WEB' on carrier == 'REGION'",
+      "expected_stage": "STAGE_1_STRUCTURE",
+      "rationale": "RegionSpatialSpec strictly rejects PATH_GRAPH generators"
+    },
+    {
+      "id": "op_targeting_nonexistent_subject",
+      "source_group": "baseline_v0_2_1",
+      "target_kind": "spell",
+      "base_file": "game/data/spells/case1_water_weave_freeze.json",
+      "mutation_description": "Set while_active DRIVE target_subject_id = 's_ghost_water'",
+      "expected_stage": "STAGE_2_SEMANTIC",
+      "rationale": "Operations may not target undeclared subject IDs"
+    },
+    {
+      "id": "transition_to_nonexistent_process",
+      "source_group": "baseline_v0_2_1",
+      "target_kind": "spell",
+      "base_file": "game/data/spells/case2_gravity_collapse.json",
+      "mutation_description": "Set transitions[0].next_process_ids = ['p_void_missing']",
+      "expected_stage": "STAGE_2_SEMANTIC",
+      "rationale": "ProcessGraph transitions cannot target nonexistent process IDs"
+    },
+    {
+      "id": "duplicate_subject_ids",
+      "source_group": "baseline_v0_2_1",
+      "target_kind": "spell",
+      "base_file": "game/data/spells/case1_water_weave_freeze.json",
+      "mutation_description": "Rename subjects[1].id to duplicate 's_water'",
+      "expected_stage": "STAGE_2_SEMANTIC",
+      "rationale": "Subject IDs must be globally unique within a spell"
+    },
+    {
+      "id": "unregistered_override_field",
+      "source_group": "baseline_v0_2_1",
+      "target_kind": "spell",
+      "base_file": "game/data/spells/case1_water_weave_freeze.json",
+      "mutation_description": "Inject subjects[0].overrides = {'density': 9999.0}",
+      "expected_stage": "STAGE_1_STRUCTURE",
+      "rationale": "Subjects forbid overriding WorldLaw properties"
+    },
+    {
+      "id": "forged_zero_mana_budget",
+      "source_group": "baseline_v0_2_1",
+      "target_kind": "spell",
+      "base_file": "game/data/spells/case1_water_weave_freeze.json",
+      "mutation_description": "Keep compiler_status='VALID' while setting budget.derived_upfront_mana = 0.0",
+      "expected_stage": "STAGE_1_STRUCTURE",
+      "rationale": "Schema rejects zero upfront mana even with forged compiler_status"
+    },
+    {
+      "id": "nonexistent_art_module",
+      "source_group": "baseline_v0_2_1",
+      "target_kind": "spell",
+      "base_file": "game/data/spells/case1_water_weave_freeze.json",
+      "mutation_description": "Set subjects[0].art_overrides.contour_override = 'MYTHIC_GALAXY_DRAGON'",
+      "expected_stage": "STAGE_1_STRUCTURE",
+      "rationale": "ArtKit modules must come from the registered ArtKit registry"
+    },
+    {
+      "id": "impulse_channel_in_target_drive_mode",
+      "source_group": "baseline_v0_2_1",
+      "target_kind": "spell",
+      "base_file": "game/data/spells/case2_gravity_collapse.json",
+      "mutation_description": "Set p_slam_down VELOCITY_IMPULSE DRIVE mode = 'TARGET'",
+      "expected_stage": "STAGE_1_STRUCTURE",
+      "rationale": "OpDriveImpulse locks VELOCITY_IMPULSE strictly to mode == 'IMPULSE'"
+    },
+    {
+      "id": "inventory_exceeds_capacity",
+      "source_group": "baseline_v0_2_1",
+      "target_kind": "spell",
+      "base_file": "game/data/spells/case1_water_weave_freeze.json",
+      "mutation_description": "Set subjects[0].initial_inventory_mu = 99.0 (> capacity_mu)",
+      "expected_stage": "STAGE_2_SEMANTIC",
+      "rationale": "Single-account inventory invariant forbids initial_inventory_mu > capacity_mu"
+    },
+    {
+      "id": "establish_in_while_active",
+      "source_group": "baseline_v0_2_1",
+      "target_kind": "spell",
+      "base_file": "game/data/spells/case1_water_weave_freeze.json",
+      "mutation_description": "Place OpEstablish inside p_weave_water.while_active",
+      "expected_stage": "STAGE_1_STRUCTURE",
+      "rationale": "v0.2.2 WhileActiveOpSpec strictly forbids ESTABLISH inside while_active"
+    },
+    {
+      "id": "unreachable_orphan_process",
+      "source_group": "baseline_v0_2_1",
+      "target_kind": "spell",
+      "base_file": "game/data/spells/case2_gravity_collapse.json",
+      "mutation_description": "Append unreferenced process 'p_orphan' with no incoming transition",
+      "expected_stage": "STAGE_2_SEMANTIC",
+      "rationale": "Every declared process must be reachable from entry_processes"
+    },
+    {
+      "id": "gravity_impulse_500_unchanged_budget",
+      "source_group": "gpt_stress_v0_2_2",
+      "target_kind": "spell",
+      "base_file": "game/data/spells/case2_gravity_collapse.json",
+      "mutation_description": "Increase VELOCITY_IMPULSE magnitude from 28.0 to 500.0 without increasing budget.derived_upfront_mana or max_upfront_mana",
+      "expected_stage": "STAGE_4_BUDGET_ARTKIT",
+      "rationale": "Monotonic budget floor must grow with impulse magnitude (28 -> 500 adds +70.8 mana)"
+    },
+    {
+      "id": "delete_all_spatial_for_field",
+      "source_group": "gpt_stress_v0_2_2",
+      "target_kind": "spell",
+      "base_file": "game/data/spells/case2_gravity_collapse.json",
+      "mutation_description": "Set spatial = [] while subject f_grav (kind=FIELD) is established",
+      "expected_stage": "STAGE_2_SEMANTIC",
+      "rationale": "Every established MATERIAL or FIELD subject requires at least one bound spatial carrier"
+    },
+    {
+      "id": "duplicate_op_handle_id",
+      "source_group": "gpt_stress_v0_2_2",
+      "target_kind": "spell",
+      "base_file": "game/data/spells/case2_gravity_collapse.json",
+      "mutation_description": "Set second while_active DRIVE op handle_id equal to first ('h_lift_up')",
+      "expected_stage": "STAGE_2_SEMANTIC",
+      "rationale": "Global declared handle_id values must be unique across the entire DSL document"
+    },
+    {
+      "id": "handoff_future_uncreated_handle",
+      "source_group": "gpt_stress_v0_2_2",
+      "target_kind": "spell",
+      "base_file": "game/data/spells/case1_water_weave_freeze.json",
+      "mutation_description": "Add 'h_freeze' (created later in p_freeze_propagate) to p_weave_water.transitions[0].handoff_handles",
+      "expected_stage": "STAGE_2_SEMANTIC",
+      "rationale": "Linear handle ownership forbids handing off handles not currently owned by the exiting process"
+    },
+    {
+      "id": "process_graph_cycle_cleanup_to_entry",
+      "source_group": "gpt_stress_v0_2_2",
+      "target_kind": "spell",
+      "base_file": "game/data/spells/case2_gravity_collapse.json",
+      "mutation_description": "Redirect p_cleanup timeout transition back to ['p_lift_gather']",
+      "expected_stage": "STAGE_2_SEMANTIC",
+      "rationale": "v0.2.2 restricts process_graph to an acyclic DAG (topological sort must succeed)"
+    },
+    {
+      "id": "water_initial_phase_plasma",
+      "source_group": "gpt_stress_v0_2_2",
+      "target_kind": "spell",
+      "base_file": "game/data/spells/case1_water_weave_freeze.json",
+      "mutation_description": "Set WATER MaterialSubject initial_phase = 'PLASMA'",
+      "expected_stage": "STAGE_1_STRUCTURE",
+      "rationale": "Material x initial_phase compatibility matrix restricts WATER strictly to LIQUID"
+    },
+    {
+      "id": "impulse_op_inside_while_active",
+      "source_group": "gpt_stress_v0_2_2",
+      "target_kind": "spell",
+      "base_file": "game/data/spells/case2_gravity_collapse.json",
+      "mutation_description": "Append OpDriveImpulse into p_lift_gather.while_active even if sustain budget is raised",
+      "expected_stage": "STAGE_1_STRUCTURE",
+      "rationale": "OpDriveImpulse is strictly disallowed inside while_active (use on_enter / on_exit)"
+    },
+    {
+      "id": "nonexistent_rune_token_in_intent",
+      "source_group": "gpt_stress_v0_2_2",
+      "target_kind": "intent",
+      "base_file": "game/data/intents/sample_intent_water_weave_freeze.json",
+      "mutation_description": "Set rune_contributions[0].rune_id = 'RUNE_FAKE_VOID_DRAGON_999'",
+      "expected_stage": "STAGE_1_STRUCTURE",
+      "rationale": "SemanticIntent rune_id and clause.meaning must belong to the registered 50-rune lexicon"
+    },
+    {
+      "id": "invert_clause_missing_scope_target",
+      "source_group": "gpt_stress_v0_2_2",
+      "target_kind": "intent",
+      "base_file": "game/data/intents/sample_intent_water_weave_freeze.json",
+      "mutation_description": "Append clause with meaning = '反转' and omit scope_target_clause_id",
+      "expected_stage": "STAGE_1_STRUCTURE",
+      "rationale": "Any inversion clause ('反转') requires explicit scope_target_clause_id"
+    }
+  ]
+}

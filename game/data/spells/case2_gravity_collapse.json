@@ -1,25 +1,39 @@
 {
-  "schema_version": "0.2.1",
+  "schema_version": "0.2.2",
   "spell_id": "case2_gravity_collapse",
   "display_name": "引力沉渊（Gravity Lift & Slam）",
-  "description": "将复合方向拆分为垂直抬升与径向收拢两个原子 DirectionSpec 驱动，松手即沿重力下坠猛砸；所有状态流转全部经显式 process_graph 收尾。",
+  "description": "垂直抬升与径向收拢拆分为两个原子 DirectionSpec 驱动；补回持续引导战斗契约与 ON_INTERRUPT 清理分支；预算随冲量幅值单调放缩。",
   "source_intent_ref": "intent_gravity_collapse",
   "contract": {
     "timing": {
       "windup_s": 0.55,
-      "release_duration_s": 3.0,
+      "full_charge_s": 2.5,
       "recovery_s": 0.45,
       "max_active_duration_s": 6.0
     },
     "combat": {
+      "formation_mode": "SUSTAINED_CHANNEL",
+      "min_deliverable_progress": 0.25,
+      "caster_mobility": "SLOW_WALK",
       "targeting": "POINT",
       "range_m": 18.0,
-      "controller": "CASTER_FOCUS",
-      "cancel_policy": "ON_RELEASE_KEY",
+      "release_policy": {
+        "on_valid_release": "DELIVER_OR_HANDOFF",
+        "on_under_threshold_release": "FIZZLE_PARTIAL_REFUND"
+      },
+      "interruption_policy": {
+        "on_interrupt": "ABORT_AND_DROP",
+        "dodge_behavior": "TRIGGER_INTERRUPT",
+        "interruption_priority": "INTERRUPT_ALWAYS_WINS"
+      },
+      "control_focus": {
+        "owner": "CASTER_FOCUS",
+        "exclusive_focus_slot": true
+      },
       "provider": {
         "energy_source": "CASTER_MANA",
         "post_release_reserve_mana": 0.0,
-        "max_upfront_mana": 20.0,
+        "max_upfront_mana": 26.0,
         "max_sustain_mana_per_s": 10.0
       }
     }
@@ -32,10 +46,7 @@
       "initial_intensity": 6.0,
       "max_intensity": 25.0,
       "inherit_world_law": true,
-      "visual_modules": {
-        "contour_module": "FIELD_AURA_RING",
-        "surface_modules": ["GRAVITY_DISTORTION"],
-        "secondary_modules": ["FLOATING_DUST", "CRATER_DECAL"],
+      "art_overrides": {
         "tint_palette": {
           "primary_hex": "#3C2A6E",
           "accent_hex": "#B58BFF",
@@ -56,6 +67,10 @@
       "quad_budget": 0,
       "max_deflect_iterations_per_node": 0,
       "initial_extent_m": 3.8,
+      "distribution": {
+        "radial_falloff": "BELL_CONCENTRATED",
+        "boundary": "SOFT"
+      },
       "reference": {
         "spawn_anchor": "AIM_POINT",
         "spawn_offset_m": [0.0, 0.0, 0.0]
@@ -120,6 +135,13 @@
             "on_event": "ON_TIMEOUT",
             "event_source_filter": { "scope": "SELF_PROCESS" },
             "next_process_ids": ["p_slam_down"],
+            "handoff_handles": ["h_grav"],
+            "action": "STOP_SELF_START_NEXT"
+          },
+          {
+            "on_event": "ON_INTERRUPT",
+            "event_source_filter": { "scope": "CAST_INSTANCE" },
+            "next_process_ids": ["p_cleanup"],
             "handoff_handles": ["h_grav"],
             "action": "STOP_SELF_START_NEXT"
           }
@@ -210,8 +232,8 @@
     "peak_path_nodes": 0,
     "peak_surface_quads": 0,
     "peak_point_lights": 1,
-    "derived_upfront_mana": 14.0,
-    "derived_sustain_mana_per_s": 3.0,
+    "derived_upfront_mana": 20.0,
+    "derived_sustain_mana_per_s": 3.5,
     "derived_reserve_mana": 0.0,
     "estimated_tick_cost_us": 58
   }

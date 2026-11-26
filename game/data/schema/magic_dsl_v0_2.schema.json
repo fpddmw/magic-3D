@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://fpddmw.github.io/magic-3D/schema/magic_dsl_v0_2.schema.json",
-  "title": "CompiledSpellDSL v0.2.1",
-  "description": "Strict structural contract for Magic DSL v0.2.1 covering single-authority subjects, 4 geometric carriers, passive relations, event-driven process_graph, DirectionSpec, composable ArtKit modules, and deterministic budgets.",
+  "title": "CompiledSpellDSL v0.2.2",
+  "description": "Strict structural contract for Magic DSL v0.2.2: full combat ContractSpec with ON_INTERRUPT, state-driven ArtKit art_overrides, carrier-scoped SpatialDistribution, orthogonal PropagationSpec, material x initial_phase compatibility, and phase-restricted process_graph operations.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -18,64 +18,38 @@
     "budget"
   ],
   "properties": {
-    "schema_version": {
-      "const": "0.2.1"
-    },
+    "schema_version": { "const": "0.2.2" },
     "spell_id": {
       "type": "string",
       "pattern": "^[a-z0-9_]+$",
       "minLength": 2,
       "maxLength": 64
     },
-    "display_name": {
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 64
-    },
-    "description": {
-      "type": "string",
-      "maxLength": 320
-    },
-    "source_intent_ref": {
-      "type": "string",
-      "pattern": "^[a-z0-9_]+$"
-    },
-    "contract": {
-      "$ref": "#/$defs/ContractSpec"
-    },
+    "display_name": { "type": "string", "minLength": 1, "maxLength": 64 },
+    "description": { "type": "string", "maxLength": 400 },
+    "source_intent_ref": { "type": "string", "pattern": "^[a-z0-9_]+$" },
+    "contract": { "$ref": "#/$defs/ContractSpec" },
     "subjects": {
       "type": "array",
       "minItems": 1,
       "maxItems": 8,
-      "items": {
-        "$ref": "#/$defs/SubjectSpec"
-      }
+      "items": { "$ref": "#/$defs/SubjectSpec" }
     },
     "spatial": {
       "type": "array",
       "minItems": 0,
       "maxItems": 8,
-      "items": {
-        "$ref": "#/$defs/SpatialSpec"
-      }
+      "items": { "$ref": "#/$defs/SpatialSpec" }
     },
     "relations": {
       "type": "array",
       "minItems": 0,
       "maxItems": 12,
-      "items": {
-        "$ref": "#/$defs/RelationSpec"
-      }
+      "items": { "$ref": "#/$defs/RelationSpec" }
     },
-    "process_graph": {
-      "$ref": "#/$defs/ProcessGraphSpec"
-    },
-    "expression": {
-      "$ref": "#/$defs/ExpressionSpec"
-    },
-    "budget": {
-      "$ref": "#/$defs/BudgetSpec"
-    }
+    "process_graph": { "$ref": "#/$defs/ProcessGraphSpec" },
+    "expression": { "$ref": "#/$defs/ExpressionSpec" },
+    "budget": { "$ref": "#/$defs/BudgetSpec" }
   },
   "$defs": {
     "ContractSpec": {
@@ -88,13 +62,13 @@
           "additionalProperties": false,
           "required": [
             "windup_s",
-            "release_duration_s",
+            "full_charge_s",
             "recovery_s",
             "max_active_duration_s"
           ],
           "properties": {
             "windup_s": { "type": "number", "minimum": 0.0, "maximum": 3.0 },
-            "release_duration_s": { "type": "number", "minimum": 0.0, "maximum": 20.0 },
+            "full_charge_s": { "type": "number", "minimum": 0.0, "maximum": 10.0 },
             "recovery_s": { "type": "number", "minimum": 0.0, "maximum": 3.0 },
             "max_active_duration_s": { "type": "number", "exclusiveMinimum": 0.0, "maximum": 30.0 }
           }
@@ -103,30 +77,92 @@
           "type": "object",
           "additionalProperties": false,
           "required": [
+            "formation_mode",
+            "min_deliverable_progress",
+            "caster_mobility",
             "targeting",
             "range_m",
-            "controller",
-            "cancel_policy",
+            "release_policy",
+            "interruption_policy",
+            "control_focus",
             "provider"
           ],
           "properties": {
+            "formation_mode": {
+              "type": "string",
+              "enum": ["INSTANT", "GRADUAL_CHARGE", "SUSTAINED_CHANNEL", "VESSEL_IMPRINT"]
+            },
+            "min_deliverable_progress": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+            "charge_tiers": {
+              "type": "array",
+              "minItems": 0,
+              "maxItems": 3,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["min_progress", "scale_mul", "intensity_mul", "cost_mul"],
+                "properties": {
+                  "min_progress": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+                  "scale_mul": { "type": "number", "exclusiveMinimum": 0.0, "maximum": 3.0 },
+                  "intensity_mul": { "type": "number", "exclusiveMinimum": 0.0, "maximum": 3.0 },
+                  "cost_mul": { "type": "number", "exclusiveMinimum": 0.0, "maximum": 3.0 }
+                }
+              }
+            },
+            "caster_mobility": {
+              "type": "string",
+              "enum": ["FREE_MOVE", "SLOW_WALK", "ROOTED"]
+            },
             "targeting": {
               "type": "string",
               "enum": ["POINT", "DIRECTION", "SELF_OR_ANCHOR", "LOCKED_ACTOR", "VESSEL_TOUCH"]
             },
             "range_m": { "type": "number", "minimum": 0.0, "maximum": 40.0 },
-            "controller": {
-              "type": "string",
-              "enum": ["CASTER_FOCUS", "AUTONOMOUS", "VESSEL_BOUND"]
+            "release_policy": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["on_valid_release", "on_under_threshold_release"],
+              "properties": {
+                "on_valid_release": {
+                  "type": "string",
+                  "enum": ["DELIVER_OR_HANDOFF", "DISSIPATE"]
+                },
+                "on_under_threshold_release": {
+                  "type": "string",
+                  "enum": ["FIZZLE_PARTIAL_REFUND", "CONVERT_TO_SMALL_INSTANT", "NONE"]
+                }
+              }
             },
-            "cancel_policy": {
-              "type": "string",
-              "enum": [
-                "ON_RELEASE_KEY",
-                "ON_CASTER_INTERRUPT",
-                "ON_EXPIRE_OR_WITHDRAW",
-                "PERSIST_UNTIL_DEPLETED"
-              ]
+            "interruption_policy": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["on_interrupt", "dodge_behavior", "interruption_priority"],
+              "properties": {
+                "on_interrupt": {
+                  "type": "string",
+                  "enum": ["ABORT_AND_DROP", "COLLAPSE_IN_PLACE", "COMMIT_IF_PAST_THRESHOLD"]
+                },
+                "dodge_behavior": {
+                  "type": "string",
+                  "enum": ["TRIGGER_INTERRUPT", "ALLOW_DODGE_AFTER_HANDOFF"]
+                },
+                "interruption_priority": {
+                  "type": "string",
+                  "enum": ["INTERRUPT_WINS_UNLESS_COMMITTED", "INTERRUPT_ALWAYS_WINS"]
+                }
+              }
+            },
+            "control_focus": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["owner", "exclusive_focus_slot"],
+              "properties": {
+                "owner": {
+                  "type": "string",
+                  "enum": ["CASTER_FOCUS", "AUTONOMOUS", "VESSEL_BOUND"]
+                },
+                "exclusive_focus_slot": { "type": "boolean" }
+              }
             },
             "provider": {
               "type": "object",
@@ -157,17 +193,12 @@
       }
     },
 
-    "VisualModulesSpec": {
+    "ArtOverridesSpec": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "contour_module",
-        "surface_modules",
-        "secondary_modules",
-        "tint_palette"
-      ],
+      "required": ["tint_palette"],
       "properties": {
-        "contour_module": {
+        "contour_override": {
           "type": "string",
           "enum": [
             "SCULPTED_CORE",
@@ -179,26 +210,21 @@
             "FIELD_AURA_RING"
           ]
         },
-        "surface_modules": {
-          "type": "array",
-          "minItems": 1,
-          "maxItems": 3,
-          "items": {
-            "type": "string",
-            "enum": [
-              "REFRACTIVE_LIQUID",
-              "CRYSTALLINE_ICE",
-              "ROUGH_STONE",
-              "CONDUCTIVE_ARC",
-              "GRAVITY_DISTORTION",
-              "LIGHT_ABSORB_VOID",
-              "THERMAL_FROST",
-              "THERMAL_EMBER",
-              "RUNIC_BARRIER_GLASS"
-            ]
-          }
+        "surface_override": {
+          "type": "string",
+          "enum": [
+            "REFRACTIVE_LIQUID",
+            "CRYSTALLINE_ICE",
+            "ROUGH_STONE",
+            "CONDUCTIVE_ARC",
+            "GRAVITY_DISTORTION",
+            "LIGHT_ABSORB_VOID",
+            "THERMAL_FROST",
+            "THERMAL_EMBER",
+            "RUNIC_BARRIER_GLASS"
+          ]
         },
-        "secondary_modules": {
+        "secondary_additions": {
           "type": "array",
           "minItems": 0,
           "maxItems": 3,
@@ -262,7 +288,7 @@
         "capacity_mu",
         "initial_inventory_mu",
         "inherit_world_law",
-        "visual_modules"
+        "art_overrides"
       ],
       "properties": {
         "id": { "type": "string", "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$" },
@@ -288,9 +314,47 @@
         "capacity_mu": { "type": "number", "exclusiveMinimum": 0.0, "maximum": 1000.0 },
         "initial_inventory_mu": { "type": "number", "minimum": 0.0, "maximum": 1000.0 },
         "inherit_world_law": { "const": true },
-        "visual_modules": { "$ref": "#/$defs/VisualModulesSpec" },
+        "art_overrides": { "$ref": "#/$defs/ArtOverridesSpec" },
         "interaction_profile": { "$ref": "#/$defs/InteractionProfile" }
-      }
+      },
+      "allOf": [
+        {
+          "if": { "required": ["material_id"], "properties": { "material_id": { "const": "WATER" } } },
+          "then": { "properties": { "initial_phase": { "const": "LIQUID" } } }
+        },
+        {
+          "if": { "required": ["material_id"], "properties": { "material_id": { "const": "ICE" } } },
+          "then": { "properties": { "initial_phase": { "const": "SOLID" } } }
+        },
+        {
+          "if": { "required": ["material_id"], "properties": { "material_id": { "const": "STONE" } } },
+          "then": { "properties": { "initial_phase": { "const": "SOLID" } } }
+        },
+        {
+          "if": { "required": ["material_id"], "properties": { "material_id": { "const": "METAL" } } },
+          "then": { "properties": { "initial_phase": { "const": "SOLID" } } }
+        },
+        {
+          "if": { "required": ["material_id"], "properties": { "material_id": { "const": "FOG" } } },
+          "then": { "properties": { "initial_phase": { "const": "GAS_MIST" } } }
+        },
+        {
+          "if": { "required": ["material_id"], "properties": { "material_id": { "const": "FLAME" } } },
+          "then": { "properties": { "initial_phase": { "const": "PLASMA" } } }
+        },
+        {
+          "if": { "required": ["material_id"], "properties": { "material_id": { "const": "LIGHTNING_PLASMA" } } },
+          "then": { "properties": { "initial_phase": { "const": "PLASMA" } } }
+        },
+        {
+          "if": { "required": ["material_id"], "properties": { "material_id": { "const": "ASH" } } },
+          "then": { "properties": { "initial_phase": { "enum": ["SOLID", "GAS_MIST"] } } }
+        },
+        {
+          "if": { "required": ["material_id"], "properties": { "material_id": { "const": "VITAL_SPORE" } } },
+          "then": { "properties": { "initial_phase": { "enum": ["SOLID", "GAS_MIST"] } } }
+        }
+      ]
     },
 
     "FieldSubject": {
@@ -303,7 +367,7 @@
         "initial_intensity",
         "max_intensity",
         "inherit_world_law",
-        "visual_modules"
+        "art_overrides"
       ],
       "properties": {
         "id": { "type": "string", "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$" },
@@ -326,7 +390,7 @@
         "initial_intensity": { "type": "number", "minimum": 0.0, "maximum": 500.0 },
         "max_intensity": { "type": "number", "exclusiveMinimum": 0.0, "maximum": 500.0 },
         "inherit_world_law": { "const": true },
-        "visual_modules": { "$ref": "#/$defs/VisualModulesSpec" },
+        "art_overrides": { "$ref": "#/$defs/ArtOverridesSpec" },
         "interaction_profile": { "$ref": "#/$defs/InteractionProfile" },
         "barrier_policy": { "$ref": "#/$defs/BarrierPolicy" }
       },
@@ -334,12 +398,8 @@
         "required": ["field_channel"],
         "properties": { "field_channel": { "const": "SPATIAL_BARRIER" } }
       },
-      "then": {
-        "required": ["barrier_policy"]
-      },
-      "else": {
-        "not": { "required": ["barrier_policy"] }
-      }
+      "then": { "required": ["barrier_policy"] },
+      "else": { "not": { "required": ["barrier_policy"] } }
     },
 
     "WorldRefSubject": {
@@ -361,7 +421,7 @@
         },
         "expected_filter": { "type": "string", "minLength": 1, "maxLength": 64 },
         "require_existing": { "type": "boolean" },
-        "visual_modules": { "$ref": "#/$defs/VisualModulesSpec" }
+        "art_overrides": { "$ref": "#/$defs/ArtOverridesSpec" }
       }
     },
 
@@ -371,6 +431,31 @@
         { "$ref": "#/$defs/FieldSubject" },
         { "$ref": "#/$defs/WorldRefSubject" }
       ]
+    },
+
+    "CurveProfileSpec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["curve", "domain", "min_val", "max_val"],
+      "properties": {
+        "curve": {
+          "type": "string",
+          "enum": [
+            "CONSTANT",
+            "LINEAR",
+            "SLOW_BUILD",
+            "FAST_ESTABLISH",
+            "BELL_CONCENTRATED",
+            "DECAY_OUT"
+          ]
+        },
+        "domain": {
+          "type": "string",
+          "enum": ["PATH_U", "RADIAL_R", "SURFACE_UV"]
+        },
+        "min_val": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+        "max_val": { "type": "number", "minimum": 0.0, "maximum": 2.0 }
+      }
     },
 
     "SpawnReferenceSpec": {
@@ -426,6 +511,7 @@
         "quad_budget",
         "max_deflect_iterations_per_node",
         "initial_extent_m",
+        "distribution",
         "reference"
       ],
       "properties": {
@@ -442,6 +528,16 @@
         "quad_budget": { "const": 0 },
         "max_deflect_iterations_per_node": { "const": 0 },
         "initial_extent_m": { "type": "number", "minimum": 0.1, "maximum": 12.0 },
+        "distribution": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["cross_section", "aspect_ratio", "surface_roughness"],
+          "properties": {
+            "cross_section": { "type": "string", "enum": ["CIRCULAR", "PRISM", "SLAB"] },
+            "aspect_ratio": { "type": "number", "minimum": 0.2, "maximum": 5.0 },
+            "surface_roughness": { "type": "number", "minimum": 0.0, "maximum": 1.0 }
+          }
+        },
         "reference": { "$ref": "#/$defs/SpawnReferenceSpec" }
       }
     },
@@ -461,6 +557,7 @@
         "max_deflect_iterations_per_node",
         "per_segment_phase",
         "initial_extent_m",
+        "distribution",
         "reference"
       ],
       "properties": {
@@ -478,6 +575,20 @@
         "max_deflect_iterations_per_node": { "type": "integer", "minimum": 0, "maximum": 2 },
         "per_segment_phase": { "type": "boolean" },
         "initial_extent_m": { "type": "number", "minimum": 0.2, "maximum": 20.0 },
+        "distribution": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["width_m", "thickness_m", "width_profile", "on_obstruction"],
+          "properties": {
+            "width_m": { "type": "number", "minimum": 0.02, "maximum": 3.0 },
+            "thickness_m": { "type": "number", "minimum": 0.02, "maximum": 3.0 },
+            "width_profile": { "$ref": "#/$defs/CurveProfileSpec" },
+            "on_obstruction": {
+              "type": "string",
+              "enum": ["DEFORM_OR_TRUNCATE", "SLIDE_BOUNDARY", "HALT"]
+            }
+          }
+        },
         "reference": { "$ref": "#/$defs/SpawnReferenceSpec" }
       }
     },
@@ -496,6 +607,7 @@
         "quad_budget",
         "max_deflect_iterations_per_node",
         "initial_extent_m",
+        "distribution",
         "reference"
       ],
       "properties": {
@@ -512,6 +624,16 @@
         "quad_budget": { "type": "integer", "minimum": 1, "maximum": 64 },
         "max_deflect_iterations_per_node": { "type": "integer", "minimum": 0, "maximum": 1 },
         "initial_extent_m": { "type": "number", "minimum": 0.2, "maximum": 12.0 },
+        "distribution": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["thickness_m", "boundary_falloff", "edge_profile"],
+          "properties": {
+            "thickness_m": { "type": "number", "minimum": 0.01, "maximum": 1.5 },
+            "boundary_falloff": { "type": "string", "enum": ["SHARP", "FEATHERED"] },
+            "edge_profile": { "$ref": "#/$defs/CurveProfileSpec" }
+          }
+        },
         "reference": { "$ref": "#/$defs/SpawnReferenceSpec" }
       }
     },
@@ -530,6 +652,7 @@
         "quad_budget",
         "max_deflect_iterations_per_node",
         "initial_extent_m",
+        "distribution",
         "reference"
       ],
       "properties": {
@@ -546,6 +669,18 @@
         "quad_budget": { "const": 0 },
         "max_deflect_iterations_per_node": { "const": 0 },
         "initial_extent_m": { "type": "number", "minimum": 0.2, "maximum": 16.0 },
+        "distribution": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["radial_falloff", "boundary"],
+          "properties": {
+            "radial_falloff": {
+              "type": "string",
+              "enum": ["CONSTANT", "LINEAR_DECAY", "BELL_CONCENTRATED", "INVERSE_EDGE"]
+            },
+            "boundary": { "type": "string", "enum": ["SHARP", "SOFT"] }
+          }
+        },
         "reference": { "$ref": "#/$defs/SpawnReferenceSpec" }
       }
     },
@@ -583,7 +718,7 @@
         },
         "attach_mode": {
           "type": "string",
-          "enum": ["RIGID_OFFSET", "SOFT_FOLLOW", "ORBIT_ANCHOR", "HAND_SOCKET"]
+          "enum": ["RIGID_OFFSET", "SOFT_FOLLOW", "ORBIT_ANCHOR", "HAND_SOCKET", "MULTI_SUPPORT_ATTACH"]
         },
         "local_offset_m": {
           "type": "array",
@@ -638,6 +773,39 @@
       ]
     },
 
+    "PropagationSpec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "domain",
+        "origin_ref",
+        "speed_m_s",
+        "max_reach_m",
+        "attenuation",
+        "connectivity_policy",
+        "on_missing_origin"
+      ],
+      "properties": {
+        "domain": {
+          "type": "string",
+          "enum": ["SPATIAL_RADIUS", "PATH_CONNECTIVITY", "SURFACE_SPREAD", "CONDUCTIVE_GRAPH"]
+        },
+        "origin_ref": { "type": "string", "minLength": 3, "maxLength": 64 },
+        "speed_m_s": { "type": "number", "exclusiveMinimum": 0.0, "maximum": 120.0 },
+        "max_reach_m": { "type": "number", "exclusiveMinimum": 0.0, "maximum": 30.0 },
+        "max_hops": { "type": "integer", "minimum": 1, "maximum": 12 },
+        "attenuation": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+        "connectivity_policy": {
+          "type": "string",
+          "enum": ["LIVE_CONNECTIVITY", "INITIAL_SNAPSHOT"]
+        },
+        "on_missing_origin": {
+          "type": "string",
+          "enum": ["FALLBACK_TO_ROOT_NODE", "ABORT_NO_COST"]
+        }
+      }
+    },
+
     "OpEstablish": {
       "type": "object",
       "additionalProperties": false,
@@ -669,7 +837,8 @@
         "profile": {
           "type": "string",
           "enum": ["CONSTANT", "LINEAR_RAMP", "EASE_IN_OUT", "PULSE"]
-        }
+        },
+        "propagation": { "$ref": "#/$defs/PropagationSpec" }
       }
     },
 
@@ -698,7 +867,8 @@
         "profile": {
           "type": "string",
           "enum": ["INSTANT_BURST", "DECAY_BURST"]
-        }
+        },
+        "propagation": { "$ref": "#/$defs/PropagationSpec" }
       }
     },
 
@@ -723,7 +893,7 @@
         "target_subject_id": { "type": "string", "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$" },
         "constraint_family": {
           "type": "string",
-          "enum": ["PIN", "TETHER", "CONTAIN", "AXIS_LOCK", "PRESSURE_WALL"]
+          "enum": ["PIN", "TETHER", "CONTAIN", "AXIS_LOCK", "PRESSURE_WALL", "COHESION", "SUPPORT"]
         },
         "anchor_ref": { "type": "string", "minLength": 3, "maxLength": 64 },
         "desired_value": { "type": "number", "minimum": -100.0, "maximum": 500.0 },
@@ -732,7 +902,7 @@
         "rebind_cooldown_s": { "type": "number", "minimum": 0.05, "maximum": 10.0 },
         "on_exceed": {
           "type": "string",
-          "enum": ["DETACH", "FRACTURE", "VENT", "STALL_NOTIFY"]
+          "enum": ["DETACH", "FRACTURE", "VENT", "STALL_NOTIFY", "DEFORM", "YIELD"]
         },
         "provider_ref": {
           "type": "string",
@@ -757,7 +927,6 @@
             "MERGE",
             "IONIZE_OR_IGNITE",
             "IGNITE_EXOTHERMIC",
-            "PROPAGATE",
             "DISSIPATE"
           ]
         },
@@ -775,30 +944,7 @@
           "enum": ["SOLID", "LIQUID", "GAS_MIST", "PLASMA"]
         },
         "max_output_bodies": { "type": "integer", "minimum": 1, "maximum": 16 },
-        "propagation": {
-          "type": "object",
-          "additionalProperties": false,
-          "required": [
-            "medium_mode",
-            "max_hops",
-            "hop_attenuation",
-            "graph_snapshot_mode",
-            "on_missing_origin"
-          ],
-          "properties": {
-            "medium_mode": { "type": "string", "enum": ["CONDUCTIVE_GRAPH", "VOLUME_OVERLAP"] },
-            "max_hops": { "type": "integer", "minimum": 1, "maximum": 12 },
-            "hop_attenuation": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
-            "graph_snapshot_mode": {
-              "type": "string",
-              "enum": ["LIVE_CONNECTIVITY", "INITIAL_SNAPSHOT"]
-            },
-            "on_missing_origin": {
-              "type": "string",
-              "enum": ["FALLBACK_TO_ROOT_NODE", "ABORT_NO_COST"]
-            }
-          }
-        }
+        "propagation": { "$ref": "#/$defs/PropagationSpec" }
       }
     },
 
@@ -824,7 +970,8 @@
         "on_insufficient_source": {
           "type": "string",
           "enum": ["CLAMP_TO_AVAILABLE", "PAUSE_PROCESS", "ABORT_OP"]
-        }
+        },
+        "propagation": { "$ref": "#/$defs/PropagationSpec" }
       }
     },
 
@@ -857,7 +1004,7 @@
       }
     },
 
-    "OperationSpec": {
+    "OnEnterOpSpec": {
       "oneOf": [
         { "$ref": "#/$defs/OpEstablish" },
         { "$ref": "#/$defs/OpDriveContinuous" },
@@ -866,6 +1013,25 @@
         { "$ref": "#/$defs/OpTransform" },
         { "$ref": "#/$defs/OpTransfer" },
         { "$ref": "#/$defs/OpCouple" },
+        { "$ref": "#/$defs/OpWithdraw" }
+      ]
+    },
+
+    "WhileActiveOpSpec": {
+      "oneOf": [
+        { "$ref": "#/$defs/OpDriveContinuous" },
+        { "$ref": "#/$defs/OpConstrain" },
+        { "$ref": "#/$defs/OpTransfer" },
+        { "$ref": "#/$defs/OpCouple" },
+        { "$ref": "#/$defs/OpWithdraw" }
+      ]
+    },
+
+    "OnExitOpSpec": {
+      "oneOf": [
+        { "$ref": "#/$defs/OpDriveImpulse" },
+        { "$ref": "#/$defs/OpTransform" },
+        { "$ref": "#/$defs/OpTransfer" },
         { "$ref": "#/$defs/OpWithdraw" }
       ]
     },
@@ -887,6 +1053,7 @@
             "ON_SPAWN",
             "ON_INPUT_RELEASE",
             "ON_INPUT_HOLD_EXPIRE",
+            "ON_INTERRUPT",
             "ON_TIMEOUT",
             "ON_COLLIDE",
             "ON_CONSTRAINT_EXCEEDED",
@@ -958,17 +1125,17 @@
         "on_enter": {
           "type": "array",
           "maxItems": 12,
-          "items": { "$ref": "#/$defs/OperationSpec" }
+          "items": { "$ref": "#/$defs/OnEnterOpSpec" }
         },
         "while_active": {
           "type": "array",
           "maxItems": 12,
-          "items": { "$ref": "#/$defs/OperationSpec" }
+          "items": { "$ref": "#/$defs/WhileActiveOpSpec" }
         },
         "on_exit": {
           "type": "array",
           "maxItems": 12,
-          "items": { "$ref": "#/$defs/OperationSpec" }
+          "items": { "$ref": "#/$defs/OnExitOpSpec" }
         },
         "max_duration_s": { "type": "number", "exclusiveMinimum": 0.0, "maximum": 30.0 },
         "transitions": {

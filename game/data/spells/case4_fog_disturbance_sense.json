@@ -1,26 +1,40 @@
 {
-  "schema_version": "0.2.1",
+  "schema_version": "0.2.2",
   "spell_id": "case4_fog_disturbance_sense",
   "display_name": "微风感雾障（Fog Veil & Disturbance Sense）",
-  "description": "释放覆盖身周与通道的迷雾遮蔽视界，并将外界穿过雾体产生的扰动流向单一权威地通过 relations[] 回传给施法者感知。",
+  "description": "释放覆盖身周的迷雾遮蔽视界并通过 relations[] 回传扰动；显式处理 ON_INTERRUPT 全句柄归还与自然消散。",
   "source_intent_ref": "intent_fog_disturbance_sense",
   "contract": {
     "timing": {
       "windup_s": 0.35,
-      "release_duration_s": 8.0,
+      "full_charge_s": 0.35,
       "recovery_s": 0.25,
       "max_active_duration_s": 12.0
     },
     "combat": {
+      "formation_mode": "SUSTAINED_CHANNEL",
+      "min_deliverable_progress": 0.0,
+      "caster_mobility": "FREE_MOVE",
       "targeting": "SELF_OR_ANCHOR",
       "range_m": 8.0,
-      "controller": "CASTER_FOCUS",
-      "cancel_policy": "ON_EXPIRE_OR_WITHDRAW",
+      "release_policy": {
+        "on_valid_release": "DISSIPATE",
+        "on_under_threshold_release": "NONE"
+      },
+      "interruption_policy": {
+        "on_interrupt": "ABORT_AND_DROP",
+        "dodge_behavior": "ALLOW_DODGE_AFTER_HANDOFF",
+        "interruption_priority": "INTERRUPT_WINS_UNLESS_COMMITTED"
+      },
+      "control_focus": {
+        "owner": "CASTER_FOCUS",
+        "exclusive_focus_slot": true
+      },
       "provider": {
         "energy_source": "CASTER_MANA",
         "post_release_reserve_mana": 0.0,
-        "max_upfront_mana": 36.0,
-        "max_sustain_mana_per_s": 5.0
+        "max_upfront_mana": 40.0,
+        "max_sustain_mana_per_s": 6.0
       }
     }
   },
@@ -33,10 +47,7 @@
       "capacity_mu": 16.0,
       "initial_inventory_mu": 8.0,
       "inherit_world_law": true,
-      "visual_modules": {
-        "contour_module": "VOLUMETRIC_MIST",
-        "surface_modules": ["LIGHT_ABSORB_VOID"],
-        "secondary_modules": ["SONAR_RIPPLES", "FLOATING_DUST"],
+      "art_overrides": {
         "tint_palette": {
           "primary_hex": "#8FA3B3",
           "accent_hex": "#D2E4F0",
@@ -51,10 +62,7 @@
       "initial_intensity": 0.65,
       "max_intensity": 1.0,
       "inherit_world_law": true,
-      "visual_modules": {
-        "contour_module": "VOLUMETRIC_MIST",
-        "surface_modules": ["LIGHT_ABSORB_VOID"],
-        "secondary_modules": [],
+      "art_overrides": {
         "tint_palette": {
           "primary_hex": "#4B5866",
           "accent_hex": "#92A4B5",
@@ -75,6 +83,10 @@
       "quad_budget": 0,
       "max_deflect_iterations_per_node": 0,
       "initial_extent_m": 6.0,
+      "distribution": {
+        "radial_falloff": "BELL_CONCENTRATED",
+        "boundary": "SOFT"
+      },
       "reference": {
         "spawn_anchor": "CASTER_BODY",
         "spawn_offset_m": [0.0, 0.0, 0.0]
@@ -91,6 +103,10 @@
       "quad_budget": 0,
       "max_deflect_iterations_per_node": 0,
       "initial_extent_m": 6.0,
+      "distribution": {
+        "radial_falloff": "CONSTANT",
+        "boundary": "SOFT"
+      },
       "reference": {
         "spawn_anchor": "SUBJECT_ORIGIN",
         "spawn_subject_id": "m_fog"
@@ -172,14 +188,21 @@
             "on_event": "ON_INPUT_RELEASE",
             "event_source_filter": { "scope": "CAST_INSTANCE" },
             "next_process_ids": ["p_dissipate_fog"],
-            "handoff_handles": ["h_fog"],
+            "handoff_handles": ["h_fog", "h_obscure", "h_fog_follow", "h_sense_couple"],
+            "action": "STOP_SELF_START_NEXT"
+          },
+          {
+            "on_event": "ON_INTERRUPT",
+            "event_source_filter": { "scope": "CAST_INSTANCE" },
+            "next_process_ids": ["p_dissipate_fog"],
+            "handoff_handles": ["h_fog", "h_obscure", "h_fog_follow", "h_sense_couple"],
             "action": "STOP_SELF_START_NEXT"
           },
           {
             "on_event": "ON_TIMEOUT",
             "event_source_filter": { "scope": "SELF_PROCESS" },
             "next_process_ids": ["p_dissipate_fog"],
-            "handoff_handles": ["h_fog"],
+            "handoff_handles": ["h_fog", "h_obscure", "h_fog_follow", "h_sense_couple"],
             "action": "STOP_SELF_START_NEXT"
           }
         ]
@@ -245,8 +268,8 @@
     "peak_path_nodes": 0,
     "peak_surface_quads": 0,
     "peak_point_lights": 0,
-    "derived_upfront_mana": 32.0,
-    "derived_sustain_mana_per_s": 3.0,
+    "derived_upfront_mana": 34.0,
+    "derived_sustain_mana_per_s": 2.8,
     "derived_reserve_mana": 0.0,
     "estimated_tick_cost_us": 72
   }
