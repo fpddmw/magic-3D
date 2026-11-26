@@ -1,269 +1,207 @@
-# 02 · Magic DSL v0.2 正式语法与语义规范
+# Magic DSL v0.2.1 正式语法与语义规范（Semantic & Execution Contract Revision）
 
-> **状态**：**Converged Spec v0.2（联合收敛候选正式版）**——综合项目核心诉求、多轮架构审计与跨大模型评审收束而成，替代并冻结原 v0.1 扁平枚举草案。
-> **机器校验契约**：[magic_dsl_v0_2.schema.json](../game/data/schema/magic_dsl_v0_2.schema.json) ｜ [semantic_intent_v0_2.schema.json](../game/data/schema/semantic_intent_v0_2.schema.json)
-> **工程对照桩**：[magic_dsl_types.gd](../game/scripts/dsl/magic_dsl_types.gd) ｜ [magic_capability_matrix.gd](../game/scripts/dsl/magic_capability_matrix.gd) ｜ [magic_dsl_document.gd](../game/scripts/dsl/magic_dsl_document.gd)
+> **版本状态**：`v0.2.1`（2026-11-26）—— 在 `v0.2` 经 GPT 工程审计后完成全部 **P0 / P1 收口修订**，现与 [magic_dsl_v0_2.schema.json](../game/data/schema/magic_dsl_v0_2.schema.json)、[semantic_intent_v0_2.schema.json](../game/data/schema/semantic_intent_v0_2.schema.json)、4 阶段离线校验器 [validate_dsl.py](../game/tools/validate_dsl.py) 及 GDScript 契约桩完全同源。
+> **核心理念**：不靠“预设法术枚举 + 数值滑块”，而是以**语义意图层 → 编译执行层（主体 · 四载体 · 关系 · 过程图 · 七算子） → 物理/演出运行时**三层分离架构，用有限原语在空间、结构、因果时序上自然生长出近乎无限的 3D 魔法。
 
 ---
 
-## 1. 架构定位、三层原语分离与四条工程宪章
+## 0. v0.2.1 关键修订总览（回应交叉审计 P0/P1）
 
-本规范设计的不是“技能参数表”，也不是“科研级通用物理模拟脚本”，而是一门**在奇幻世界规则允许范围内具有组合闭包、且可被 Godot 4 稳定高效执行的现象构造语言**。
+| 编号 | 原 v0.2 缺陷 | v0.2.1 硬性收口方案 |
+|---|---|---|
+| **P0-1** | GDScript 校验盲信 `budget.compiler_status == "VALID"`；缺可执行负向测试 | 离线 Python 与 GDScript 同步强制 **4 阶段校验**（结构 → 语义 → 能力/限定条件 → 独立预算与 ArtKit 注册表），彻底忽略伪造 `compiler_status` |
+| **P0-2** | `process.start` 导致二重激活语义歧义；事件缺少作用域 | 删除 `process.start`，改为 **`process_graph`（`entry_processes` + 有向 `transitions` + 作用域 `RuntimeEvent`）** |
+| **P0-3** | 过程内操作混杂单次初始化与每帧持续驱动；`HANDOFF` 交接对象不明 | 每个进程强制拆分为 **`on_enter`（仅允许 `ESTABLISH`）/ `while_active`（每 Tick）/ `on_exit`**；转移显式声明 `handoff_handles` |
+| **P0-4** | 操作签名、单位制、`IMPULSE` 与 `TARGET` 混用、复合方向 `UPWARD_AND_INWARD` | 统一单位（`m, s, MU, EU, LU`）；Schema 层面拆分 **`OpDriveContinuous`（TARGET/RATE）** 与 **`OpDriveImpulse`（仅 IMPULSE）**；强制 **`DirectionSpec`** 三态正交 |
+| **P0-5** | 空间附着在 `spatial.reference.binding` / `relations[]` / `COUPLE` 三处重复定义 | **`spatial[].reference` 仅负责出生点锚定**；`relations[]` 为唯一被动关系声明；`ESTABLISH(RELATION)` / `COUPLE` 唯一激活 |
+| **P0-6** | `MATERIAL` 初始量与上限混淆；`PathGraph` 缺少逐段相态与断链快照策略；诚实界定 `Weave(Freeze)` | 分离 **`capacity_mu` 与 `initial_inventory_mu`（≤ capacity）**；新增 `per_segment_phase` 与 `PropagationSpec`；诚实限定阶段一 `Weave(Freeze)` 降阶为有界复合刚体（≤16 节点） |
+| **P0-7** | `SemanticIntent` 使用 12 个复合法术短语枚举 | 重构为 **原子语义从句 `clauses[]`** + `INVERT` 目标索引 `scope_target_clause_id` + 强制 **`rune_contributions[].bound_ids[]` 溯源** |
+| **P0-8** | 实施波次存在前置依赖倒挂、Godot 4 `Area3D` 单帧延迟未写明 | 重排为 **`Wave 0 → 1A → 1B → 2 → 3`**，在实施计划补齐 `_physics_process` 首帧适配器契约 |
+| **P1** | 单字符串样式、`Engine.time_scale` 全局顿帧、不可预测音频前置静音、破坏性 64 刚体驱逐、样例缺口 | 拆分为可组合 **ArtKit 视觉/音频模块 + `ArtKitArbitrator` 仲裁栈**；改用**局部顿帧 `hitstop_local_ms`** 与 **`pre_delivery_silence_ms`**；四级非破坏性资源守恒；补齐 **Case 3 / Case 6** 共 7 份通过校验样例（Case 7 留白盲测） |
 
-### 1.1 三层原语严格分离
+---
+
+## 一、三层架构与边界红线
+
+1. **Semantic Intent Layer（语义意图层 · 玩家构筑与符文工坊）**
+   - 对应 Schema：[semantic_intent_v0_2.schema.json](../game/data/schema/semantic_intent_v0_2.schema.json)
+   - 只描述“**想实现什么语义目的、由哪些符文/子句共同贡献**”，不包含碰撞体、节点数、Godot 节点名或底层力学系数。
+   - **禁止**再次退化为 `WEAVE_AND_FREEZE` 这类复合技能名称枚举；必须拆分为原子 `IntentClause`（如 `SHAPE_AND_ROUTE`、`TRANSFORM_STATE`、`APPLY_FORCE`、`INVERT_OR_REDIRECT`）及显式 `rune_contributions[].bound_ids[]`。
+2. **Compiled Execution DSL Layer（静态执行契约层 · 运行时唯一输入）**
+   - 对应 Schema：[magic_dsl_v0_2.schema.json](../game/data/schema/magic_dsl_v0_2.schema.json)
+   - 本身是一份**确定性、自洽、有硬预算上限、零运行期 AI 推理**的纯数据契约，供 GDScript/Godot 运行时零歧义加载。
+   - 所有样例存放在 [game/data/spells/](../game/data/spells/case1_water_weave_freeze.json)。
+3. **Runtime + WorldLaw + ArtKit Layer（物理/世界法则/演出运行时）**
+   - **`WorldLaw`** 负责物理材质密度、导热、比热、相变阈值、导电率、浮力与碎裂判定。**任何 DSL 主体强制 `"inherit_world_law": true`，严禁声明 `overrides` 篡改世界法则。**
+   - **`ArtKitDirector` 与 `ArtKitArbitrator`** 以只读方式消费 `ExpressionSpec`、受控 `SubjectRuntimeState` 快照及 `RuntimeEvent` 流，通过“轮廓模块 × 表面材质模块 × 附着细节模块”渲染并仲裁环境光雾音。
+
+---
+
+## 二、规范单位制与硬预算上限
+
+| 物理/游戏量 | 单位 | 定义与全局上限（见 [magic_dsl_types.gd](../game/scripts/dsl/magic_dsl_types.gd)） |
+|---|---|---|
+| 空间尺度 | `m`（米） | `range_m <= 40.0`，`initial_extent_m <= 20.0` |
+| 时间 | `s`（秒）/ `ms` | `windup_s <= 3.0`，`max_active_duration_s <= 30.0`，`rebind_cooldown_s >= 0.05` |
+| 物质储量 | `MU`（Matter Unit） | 单主体 `capacity_mu <= 1000.0`，`0 <= initial_inventory_mu <= capacity_mu` |
+| 能量/法力 | `EU` / Mana | `max_upfront_mana <= 300.0`，`max_sustain_mana_per_s <= 60.0`，`post_release_reserve_mana <= 200.0` |
+| 结构承载荷载 | `LU`（Load Unit） | 单约束 `capacity_lu <= 500.0`，运行期通过 `realized_load / capacity_lu` 触发应变反馈或破断 |
+| 结构实体硬上限 | 数量 | 单法术 `subjects <= 8`, `spatial <= 8`, `relations <= 12`, `processes <= 8`, `peak_dynamic_bodies <= 16`, `peak_path_nodes <= 16`, `peak_surface_quads <= 64`, `peak_point_lights <= 3` |
+
+---
+
+## 三、正交原语全集
+
+### 3.1 主体 `subjects[]`（严格 `oneOf` 三选一，禁止 `RELATION` 冒充主体）
+
+1. **`MATERIAL`（物质主体）**
+   - 必填：`id`, `kind: "MATERIAL"`, `material_id`, `initial_phase`, `capacity_mu`, `initial_inventory_mu`, `inherit_world_law: true`, `visual_modules`。
+   - **单账本不变量**：`capacity_mu` 为该主体允许承载的最大物质量；`initial_inventory_mu` 为起手凭空具现的初始存量（必须满足 `<= capacity_mu`）。从环境吸收的物质量（如 `TRANSFER(source="ENV:WATER")`）必须消耗同一 `capacity_mu` 剩余空间，绝不重复记账或无中生有超额叠加。
+   - 支持材料枚举：`WATER`, `ICE`, `STONE`, `METAL`, `FOG`, `FLAME`, `ASH`, `LIGHTNING_PLASMA`, `VITAL_SPORE`。
+   - 支持相态：`SOLID`, `LIQUID`, `GAS_MIST`, `PLASMA`。
+2. **`FIELD`（物理/奥术场主体）**
+   - 必填：`id`, `kind: "FIELD"`, `field_channel`, `initial_intensity`, `max_intensity` (`initial_intensity <= max_intensity`), `inherit_world_law: true`, `visual_modules`。
+   - 支持场通道：`GRAVITY`, `HEAT_EXTRACTION`, `HEAT_INJECTION`, `LIGHT_EMISSION`, `LIGHT_ATTENUATION`, `WIND_FORCE`, `ELECTRIC_POTENTIAL`, `SPATIAL_BARRIER`, `LOCAL_TIME_RATE`, `VITAL_FLUX`。
+   - **条件约束（Schema `if/then/else` 强制）**：`barrier_policy`（`{ directional_one_way, response_mode: BLOCK|REFLECT|DEFLECT, deflect_angle_deg }`）**有且仅当 `field_channel == "SPATIAL_BARRIER"` 时必填且合法**，其他任何场通道禁止出现该字段。
+3. **`WORLD_REF`（既有世界参照主体）**
+   - 必填：`id`, `kind: "WORLD_REF"`, `query_kind` (`VESSEL_IN_HAND | TARGET_SURFACE | NEARBY_MEDIUM | LOCKED_ACTOR`), `expected_filter`, `require_existing`；可选 `visual_modules`（如器物烙印印记）。
+
+### 3.2 四大有限几何载体 `spatial[]`（载体决定生成器与维度）
+
+| `carrier` | 锁定 `dimension` | 合法 `generator` | 预算限制 | 说明 |
+|---|---|---|---|---|
+| `BODY` | `3D` | `SPHERE_SCULPT`, `LANCE_PRISM`, `SLAB_MONOLITH`, `COMPOUND_FROM_PATH` | `node/edge/quad = 0` | 受限 3D 实体/冰棱/石块（单法术 ≤ 16 个刚体） |
+| `PATH_GRAPH` | `1D` | `LINE_SEGMENT`, `ARC_CURVE`, `BRANCH_WEB`, `CLOSED_RING` | `2 <= node_budget <= 16`, `1 <= edge_budget <= 24`, `deflect <= 2`, **必填 `per_segment_phase`** | 水流丝络、电弧分支、晶脉连线 |
+| `SURFACE` | `2D` | `BOUNDED_PLANE`, `SWEPT_STRIP`, `CONFORMAL_SHELL` | `1 <= quad_budget <= 64`, `deflect <= 1` | 平面折光壁、结界薄片、贴面冰霜层 |
+| `REGION` | `3D` | `RADIAL_SPHERE`, `CYLINDER_COLUMN`, `CONE_SECTOR`, `ALIGNED_BOX` | `node/edge/quad = 0` | 雾团区域、重力场/热抽离场域 |
+
+> **P0-5 空间引用单一权威**：`spatial[].reference` 仅声明出生时刻的一次性摆放位置：
+> `spawn_anchor` ∈ `{ WORLD_POINT, CASTER_BODY, CASTER_HAND, AIM_POINT, AIM_DIRECTION, LOCKED_TARGET, AUTO_SUPPORT_SURFACE, SUBJECT_ORIGIN, WORLD_REF }`，加上可选 `spawn_subject_id` / `spawn_offset_m` / `auto_support_rule`。**完全移除 `binding: FOLLOW | ATTACH`**；持续跟随一律通过 `relations[]` 声明并在 `on_enter` 中激活。
+
+### 3.3 单一权威关系 `relations[]`
+
+- 仅作静态拓扑与功能耦合声明，除非被过程 `ESTABLISH(RELATION)` 或 `COUPLE(relation_id)` 激活，否则不产生每帧效果；`WITHDRAW` 后立刻解除：
+  - `kind`: `SPATIAL_ATTACH | FUNCTIONAL_COUPLE | CONSTRAINT_LINK`
+  - `channel`: `FOLLOW_TRANSFORM | DISTURBANCE_TO_PERCEPTION | ENERGY_FEED | CONTACT_TO_TRIGGER | GRAPH_SUPPORT`
+  - 引用格式统一检查：`SUBJECT:<id>`, `WORLD_REF:<id>`, `CASTER:BODY`, `CASTER:HAND`, `CASTER:MANA`, `CASTER:RESERVE`, `TARGET:ANCHOR`, `TARGET:SURFACE`, `TARGET:ACTOR`（`TRANSFER.source_ref` 另允许 `ENV:WATER | ENV:MOISTURE | ENV:STONE | ENV:HEAT | ENV:CONDUCTOR`）。
+
+---
+
+## 四、事件驱动过程图 `process_graph` 与 `RuntimeEvent`
+
+### 4.1 `process_graph` 结构与三段式生命周期
+
+- 顶层 `process_graph` 包含 `entry_processes`（`1..4` 个起始过程 ID）与 `processes[]`（`1..8` 个）。**严禁孤立不可达过程（Stage 2 BFS 自动拒批）**。
+- 每个 `ProcessSpec` **删除旧 `start` 字段**，强制包含：
+  - `id`, `role` (`GENESIS | CARRIER_EXECUTION | CONSTRAINT_HOLD | TRANSFORM_STAGE | TRIGGER_WATCH | CLEANUP_DISSIPATE`)
+  - **`on_enter[]`**：进入该过程时执行 **1 次**。**全 DSL 唯一允许放置 `ESTABLISH` 的阶段**（防止每帧重复实例化主体/关系）。
+  - **`while_active[]`**：过程存活期间**每个物理 Tick 执行**，用于连续 `DRIVE`、`TRANSFER` 与 `CONSTRAIN` 维持。
+  - **`on_exit[]`**：过程停止或转移退出时执行 **1 次**，负责 `WITHDRAW` 回收句柄、脉冲收尾或散热/消散。
+  - `max_duration_s` (`0.0 < max_duration_s <= 30.0`)：任何过程都有明确寿命上限，超时触发 `ON_TIMEOUT`。
+
+### 4.2 `RuntimeEvent` 作用域与转移 `transitions[]`
+
+运行时发送的每条事件必须带有完整上下文作用域：
+
 ```text
-[Layer 1 · Semantic Primitives（玩家语义原语）]
-  48+ 稳定词义符文 · 上下文多义 · 回路连接（概念依赖 / 结构依附 / 运行因果）
-        │  （构筑期：由确定性规则或暂停期本地小模型解释为 SemanticIntent）
-        ▼
-[Layer 2 · Magic DSL v0.2（现象构造原语）]
-  Subject · Spatial · Relation · Process(Operation × Profile × Propagate) · Contract · Expression
-        │  （确定性编译器：补全 WorldLaw 默认行为、展开能力映射、核算 Budget、校验能力矩阵）
-        ▼
-[Layer 3 · Runtime Kernels + 三大共享库（Godot 4 有界执行层）]
-  四大空间载体（BODY / PATH_GRAPH / SURFACE / REGION）＋ 共享基础设施（Reference / Relation / Process / Resource）
-  WorldLaw（世界法则库） · RuntimeKernel（有限求解器） · ArtKit（4层视觉栈＋4层音频＋导演相机）
+RuntimeEvent {
+  type:              ON_SPAWN | ON_INPUT_RELEASE | ON_INPUT_HOLD_EXPIRE | ON_TIMEOUT |
+                     ON_COLLIDE | ON_CONSTRAINT_EXCEEDED | ON_GRAPH_COMPLETED |
+                     ON_PHASE_CHANGED | ON_DEPLETED | ON_DISTURBANCE_PING
+  cast_instance_id:  String   // 当前施法实例 ID
+  source_subject_id: String   // 触发主体 ID（可为空）
+  source_process_id: String   // 触发过程 ID
+  payload:           Dict     // 碰撞法线/冲量/剩余MU等只读负载
+  sim_tick:          int      // 确定性物理步编号
+}
 ```
 
-### 1.2 三种关系与三种终止（绝不混同）
-1. **三种连接关系**：
-   - **概念推导关系**（构筑期）：如 `火+以太+分离→光`，`光+反转→暗`——施放暗域时绝不先放火再放光；
-   - **结构依附关系**（共存期）：如暗月实体同时承载引力场与抽热场；
-   - **运行因果关系**（时变期）：如液态水网在 `RELEASE` 事件到来时原地冻成刚体冰网。
-2. **三种生命周期终止**：
-   - **支撑终止（Support End）**：魔法撤去人为托举、聚拢或感应句柄，但已具现的物质不消失；
-   - **存在终止（Existence End）**：物质因融化/破碎/耗尽或场域能量枯竭而停止作为当前主体存在；
-   - **表现终止（Presentation End）**：纯视听余韵（残光、烟尘散尽、石殿混响）淡出并回收表现节点。
-
-### 1.3 四条工程宪章
-1. **语义可以丰富，执行能力必须有限且明确**（能力矩阵未声明的能力直接静态拒绝，禁止悄悄降级欺骗）；
-2. **空间可以组合，几何实现不必任意通用**（拒绝 3D CSG 布尔与任意网格切割）；
-3. **世界可以高度交互，物理模拟不必科学精确**（以**因果真实、感知真实、规则真实**取代微距流体守恒）；
-4. **艺术必须深度打磨，但不必逐个法术手工制作**（依托 `ArtKit` 四层复合视听协议同源派生）。
+每条 `TransitionSpec` 显式声明：
+- `event_source_filter`: `{ scope: "SELF_PROCESS" | "SUBJECT" | "CAST_INSTANCE", subject_id? }`
+- `next_process_ids`: 转移目标进程列表
+- `handoff_handles`: **必须显式列明要移交生命周期所有权给目标进程或后备池的句柄 ID**；凡未列出的本进程私有句柄在退出时自动释放，当 `action == "HANDOFF_TO_RESERVE"` 时，`handoff_handles` 严禁为空且 `provider.energy_source` 必须是 `POST_RELEASE_RESERVE` 或 `VESSEL_RESERVE`。
 
 ---
 
-## 2. 形式类型系统与语义内核
+## 五、七大原子操作、Split `DRIVE` 与 `DirectionSpec`
 
-### 2.1 三类主体（`Subject.kind`）
-严格区分“固有性质 / 动态瞬时状态 / 主动作用规律”，绝不将其混为一张万能属性表：
-
-| `Subject.kind` | 本质含义 | 必填锚定字段 | 可挂载的世界通道 |
-|---|---|---|---|
-| `MATERIAL` | 拥有宏观数量与物质构成的实体或介质 | `material_id`（引用 `WorldLaw` 材料表，如 `WATER`, `ICE`, `STONE`, `FOG`, `FLAME`, `LIGHTNING_PLASMA`）、`initial_phase`（`SOLID`/`LIQUID`/`GAS_MIST`/`PLASMA`）、`initial_quantity` | `MECHANICAL`, `MATERIAL`, `THERMAL`, `CONDUCTIVE`, `OPTICAL`, `INFORMATIONAL`, `SPATIAL` |
-| `FIELD` | 定义空间范围内的作用法则分布，不一定拥有物质质量 | `field_channel`（`GRAVITY` \| `HEAT_EXTRACTION` \| `HEAT_INJECTION` \| `LIGHT_EMISSION` \| `LIGHT_ATTENUATION` \| `WIND_FORCE` \| `ELECTRIC_POTENTIAL` \| `SPATIAL_BARRIER` \| `LOCAL_TIME_RATE` \| `VITAL_FLUX`） | 依通道分别接入 `MECHANICAL` / `THERMAL` / `OPTICAL` / `CONDUCTIVE` / `SPATIAL` / `TEMPORAL` |
-| `RELATION` | 显式具名关系主体（感应连接、供能锚定、映射通道） | 端点 `source_ref` / `target_ref` 与耦合或约束规范 | `INFORMATIONAL`, `CONDUCTIVE`, `SPATIAL`, `MATERIAL` |
-
-> **关键规则**：每个 `MATERIAL` 必须显式指定 `inherit_world_law: true`（由世界库提供默认密度、电阻、相变温区与默认重力响应），法术仅在需要偏离常态时声明 `overrides` 或施加 `CONSTRAIN` / `DRIVE`。
-
-### 2.2 作用句柄（Handles）与状态通道（`StateChannel`）
-- **`EffectHandle` / `RelationHandle`**：每当 `ESTABLISH`、`DRIVE`、`CONSTRAIN`、`COUPLE` 启动持续作用时，运行时生成不可伪造的句柄；`WITHDRAW` 仅通过句柄撤除人为施加的支撑或控制，绝不回滚已提交的碰撞、碎裂与地形改变。
-- **6 个连续 `StateChannel`**（供 `DRIVE` 连续/增量驱动，离散相变与断裂禁止混入）：
-  - `POSE`（整体位姿）、`EXTENT`（空间尺度与延伸范围）、`DISTRIBUTION`（截面/密度分布）、`FLOW`（内容沿骨架坐标 `u` 的内部运动）、`INTENSITY`（场或作用强度）、`DIRECTION`（主导作用方向）。
-  - 离散瞬时加速使用独立通道 `VELOCITY_IMPULSE`（仅当 `mode == IMPULSE` 时合法）。
-
----
-
-## 3. 空间组织与四类工程载体契约
-
-空间组织满足：**`空间组织 = Reference（参照） + Geometry（骨架） + Distribution（分布） + Connectivity（连接）`**，且必须在运行时严格区分 **`Desired Structure`（期望结构）** 与 **`Realized Structure`（实际受阻变形后结构）**。
-
-### 3.1 四类空间执行载体（`Spatial.carrier`）与非几何基础设施
-- **4 个空间执行载体**：`BODY`（有限凝聚实体与 Jolt 碰撞代理）、`PATH_GRAPH`（有限节点边图与连续介质链）、`SURFACE`（有限平面与曲面片）、`REGION`（空间体积查询与场强分布区）。
-- **4 项共享非几何基础设施**（严禁归类为第 5 种几何载体）：`Reference`（锚点与参考系）、`Relation`（功能关系）、`Process`（有限过程调度）、`Resource`（材料/魔力/冷却/耐久账本）。
-
-### 3.2 空间参照、有界几何生成器与战斗自动选支点
-- **`anchor.source`**：`WORLD_POINT` | `CASTER_BODY` | `CASTER_HAND` | `AIM_POINT` | `AIM_DIRECTION` | `LOCKED_TARGET` | `AUTO_SUPPORT_SURFACE` | `NEARBY_MEDIUM` | `SUBJECT_REF` | `ACTUAL_CONTACT_POINT`
-- **`anchor.binding`**：`CAPTURE`（创建瞬间取位置） | `FOLLOW`（持续追随目标位置，受自身动力上限约束） | `ATTACH`（刚性附着局部坐标） | `CONTROL`（受玩家单操控焦点实时引导）
-- **战斗自动选支点规则（`AUTO_SUPPORT_SURFACE`）**：玩家不需要在战斗中手工逐点点击多个锚点。运行时按“瞄准方向锥角 $\le 35^\circ$、距锚定中心 $\le \text{max\_distance\_m}$、优先静态承重墙柱面再选大型刚体”的确定性顺序自动提取最多 `max_count` 个支点；找不到合法支点时，退化为自由悬浮端（若无 `SUPPORT` 约束则在重力下自然下坠）。
-- **有界几何生成器（`geometry.generator`）**：
-  - `BODY`: `SPHERE_SCULPT` | `LANCE_PRISM` | `SLAB_MONOLITH` | `COMPOUND_FROM_PATH`
-  - `PATH_GRAPH`: `LINE_SEGMENT` | `ARC_CURVE` | `BRANCH_WEB` | `CLOSED_RING`
-  - `SURFACE`: `BOUNDED_PLANE` | `SWEPT_STRIP` | `CONFORMAL_SHELL`
-  - `REGION`: `RADIAL_SPHERE` | `CYLINDER_COLUMN` | `CONE_SECTOR` | `ALIGNED_BOX`
-- **受阻局部形变红线**：`PATH_GRAPH` 与 `SURFACE` 遇障碍时每物理步每节点最多执行 `max_deflect_iterations_per_node <= 2` 次切向偏移；仍无法通过则按 `on_obstruction`（`DEFORM_OR_TRUNCATE` / `SLIDE_BOUNDARY` / `HALT`）截断或停止延伸，**严禁编写无界通用流体绕障求解器**。
-
-### 3.3 v0.2 有限能力矩阵（Capability Matrix — 核心硬约束）
-
-编译器在语义展开后**必须查表校验**；任何落在 `UNSUPPORTED` 上的组合直接拒绝并给出可读理由：
-
-| 能力项 | `BODY` | `PATH_GRAPH` | `SURFACE` | `REGION` | 说明 |
-|---|---|---|---|---|---|
-| 整体位姿移动（`POSE`） | `SUPPORTED` | `SUPPORTED` | `SUPPORTED` | `SUPPORTED` | 按载体物理/场域规则移动 |
-| 尺度与延伸（`EXTENT`） | `LIMITED`（成比例缩放/生长阶段） | `SUPPORTED` | `SUPPORTED` | `SUPPORTED` | 禁止对已冻结实体无限自由拉伸 |
-| 局部受阻形变 | `UNSUPPORTED` | `LIMITED`（节点≤2次切向偏移） | `LIMITED`（条带沿边界微偏） | `UNSUPPORTED` | 刚体不实时弯折；场域穿墙受 `OPTICAL/BARRIER` 判定 |
-| 结构断裂 / 离散分裂 | `LIMITED`（预设/程序裂解≤12块） | `SUPPORTED`（边超限断开） | `LIMITED`（整面破损撤除） | `UNSUPPORTED` | 拒绝任意 3D 网格切割 |
-| 真实实体碰撞阻挡 | `SUPPORTED`（Jolt 刚体/静态体） | `LIMITED`（段扫掠接触＋力传递） | `LIMITED`（单/双向屏障拦截） | `UNSUPPORTED` | `REGION` 不得假装成阻挡墙体 |
-| 沿骨架结构传播（`Propagate`） | `UNSUPPORTED` | `SUPPORTED`（沿节点连通边） | `LIMITED`（沿中心径向面） | `UNSUPPORTED` | 需结合 `SPATIAL_RADIUS` 或 `CONDUCTIVE_GRAPH` |
-| 分布剖面（`Profile`）与衰减 | `LIMITED`（核心-外壳强度） | `SUPPORTED`（沿 `PATH_U` 变截面） | `SUPPORTED`（边缘衰减/厚度） | `SUPPORTED`（沿 `RADIAL_R` 衰减） | `MATERIAL` 体积增长需同步核对质量守恒 |
-| 空间查询与区域影响 | `LIMITED`（接触与质心） | `SUPPORTED`（接触集合） | `SUPPORTED`（穿越射线/平面） | `SUPPORTED`（`Area3D` 重叠与遮蔽） | — |
-
-### 3.4 v0.2 严格注册的 `Transform` 合法转换路径
-
-仅允许以下 5 条 `TransformId` 转换；任何未注册跨载体强转一律拒绝：
-
-| `transform_id` | 源载体/状态 | 目标载体/状态 | 保留资产与失败语义 |
-|---|---|---|---|
-| `PATH_LIQUID_TO_BODY_SOLID` | `PATH_GRAPH`（液态材料） | `BODY`（多个分段简单碰撞代理组合体 `COMPOUND_FROM_PATH`） | 保留当前 `realized_geometry` 节点/连接/材料量；跳过非法自穿插段；仅当支点或预付冻结储备充足时成立 |
-| `BODY_SOLID_TO_SHARDS` | `BODY`（固态实体） | $\le 12$ 个离散 `BODY` 碎片＋视觉微屑 | 继承剩余质量与当前线/角动量；超限碎屑仅进 `ArtKit` 表现层 |
-| `BODY_SOLID_TO_LIQUID_REGION` | `BODY`（如冰体受热） | `REGION` / 地表湿润积水分布 | 保留材料量并注入地表面潮湿状态与导电图，撤销原碰撞刚体 |
-| `FOG_REGION_TO_ICE_SHARDS` | `REGION`（`GAS_MIST` 雾） | 有限离散 `BODY` 冰砂弹片（$\le 12$） | 严格从雾场真实质量扣除并同步消除对应区域的视线遮蔽 |
-| `FIELD_RECONFIGURE` | `FIELD`（同主体） | 修改极性/方向或强度映射的同 `FIELD` | 保持主体身份与 `EffectHandle`，按新预算复算消耗 |
+1. **`ESTABLISH`** (`on_enter` 专用): 激活声明中的 `SUBJECT` 或 `RELATION`，可绑 `handle_id`。
+2. **`DRIVE`**（Schema 严格拆分为两支，禁止冲量混入持续通道）：
+   - **`OpDriveContinuous`**: `channel` ∈ `{ POSE, EXTENT, DISTRIBUTION, FLOW, INTENSITY, DIRECTION }`，严格搭配 `mode` ∈ `{ TARGET, RATE }`。
+   - **`OpDriveImpulse`**: `channel` ∈ `{ VELOCITY_IMPULSE, INTENSITY_BURST }`，**严格锁定 `mode: "IMPULSE"`**。
+   - 统一使用正交 **`DirectionSpec`**（禁止复合字符串）：
+     - `WORLD_AXIS`: `{ mode: "WORLD_AXIS", axis: POS_X|NEG_X|POS_Y|NEG_Y|POS_Z|NEG_Z|UP|DOWN }`
+     - `FRAME_RELATIVE`: `{ mode: "FRAME_RELATIVE", axis: AIM_FORWARD|CASTER_FORWARD|SURFACE_NORMAL|SURFACE_TANGENT }`
+     - `RADIAL`: `{ mode: "RADIAL", center_ref, polarity: INWARD|OUTWARD }`
+     - 如需同时向上抬升并向内聚拢（如 Case 2 引力沉渊），在 `while_active` 中并发两条原子 `DRIVE` 即可。
+3. **`CONSTRAIN`**: `PIN | TETHER | CONTAIN | AXIS_LOCK | PRESSURE_WALL`，带 `desired_value`、`tolerance`、`capacity_lu`、`rebind_cooldown_s >= 0.05`、`on_exceed`（`DETACH | FRACTURE | VENT | STALL_NOTIFY`）与 `provider_ref`（`CASTER_MANA | POST_RELEASE_RESERVE | VESSEL_RESERVE | PASSIVE_STRUCTURE`）。
+4. **`TRANSFORM`**: `PHASE_CHANGE | STRUCTURAL_CRYSTALLIZE | SUBDIVIDE | MERGE | IONIZE_OR_IGNITE | IGNITE_EXOTHERMIC | PROPAGATE | DISSIPATE`，强制声明 `preserve[]`。
+   - **`PropagationSpec`**（当 `transform_id == "PROPAGATE"` 时必填）：
+     - `medium_mode`: `CONDUCTIVE_GRAPH | VOLUME_OVERLAP`
+     - `max_hops`: `1..12`, `hop_attenuation`: `0.0..1.0`
+     - `graph_snapshot_mode`: `LIVE_CONNECTIVITY | INITIAL_SNAPSHOT`
+     - `on_missing_origin`: `FALLBACK_TO_ROOT_NODE | ABORT_NO_COST`
+   - **关于 `Weave(Freeze(W))` 与 `Freeze(Weave(W))` 的诚实边界**：
+     - `Freeze(Weave(W))`：先以 `PATH_GRAPH(per_segment_phase=true)` 织就水流拓扑并维持动态流通，待蓄力/释放节点触发 `PHASE_CHANGE -> SOLID` 时，阶段一/二将其烘焙为单个受界复合晶格刚体（`max_output_bodies: 1`，总节点 `<= 16`）并可整体施压击飞。
+     - `Weave(Freeze(W))`（先分别冻结离散冰珠再用连续铰链在运行期重编织刚体运动链）：当前四载体合同**不支持**无界多刚体铰链实时再编织，任何把 `WATER/ICE PHASE_CHANGE` 设置超出 `max_output_bodies > 16` 或把 `STONE PATH_GRAPH` 设为多段柔体链的请求都会在 **Stage 3 能力矩阵**被直接拦截。
+5. **`TRANSFER`**: 将 `MU | EU | LU | HEAT` 从 `source_ref`（含 `ENV:*` / `CASTER:RESERVE`）以 `rate_per_s`、`max_amount` 传入目标主体，支持 `CLAMP_TO_AVAILABLE | PAUSE_PROCESS | ABORT_OP`。
+6. **`COUPLE`**: 激活功能耦合类 `relation_id` 并生成具名 `handle_id`（如迷雾扰动感知回传或器物碰撞引信）。
+7. **`WITHDRAW`**: 按 `HANDLE | SUBJECT_SUPPORTS | ALL_SPELL_SUPPORTS` 执行 `DISSIPATE | NATURAL_RELEASE | RECLAIM_TO_CASTER`。
 
 ---
 
-## 4. 七类变化原语、有限 `Profile` 与 `Propagate`
+## 六、可组合 ArtKit 模块表与独立预算公式
 
-### 4.1 七类不可再分操作原语（`op.family`）
-1. **`ESTABLISH`**：实例化声明的 `Subject` 或 `Relation`，返回持久化 `SubjectRef` / `RelationHandle`。
-2. **`DRIVE`**：向合法 `StateChannel` 提交变化意图（`TARGET` 目标趋近 / `RATE` 持续速率 / `IMPULSE` 瞬时冲量）。绝不直接暴力写死坐标绕过碰撞，所有请求交由第 6 步统一裁决。
-3. **`CONSTRAIN`**：维护必须持续成立的关系（`POSITION | DISTANCE | ATTACH | COHESION | SUPPORT | CONFORM | CONTAIN | BOUND`）。必须声明 `capacity`（抗干扰上限）、`on_exceed`（`YIELD` 屈服 / `DEFORM` 形变 / `BREAK` 崩断）与 `provider_ref`。
-4. **`TRANSFORM`**：执行 3.4 节注册的离散相态或载体结构转换，支持挂载 `Propagate` 沿时间与结构逐步推进。
-5. **`TRANSFER`**：在真实来源（`ENV:NEARBY_WATER`、载体储量、已有主体）与目标主体之间按守恒量纲转移 `MATERIAL | ENERGY | HEAT | VITALITY`，并规定来源不足时的确定性回退（`FAIL_ESTABLISH | CLAMP_TO_AVAILABLE | FALLBACK_TO_MANA_GEN`）。
-6. **`COUPLE`**：在已注册的强类型通道间建立联动（`DISTURBANCE_TO_PERCEPTION | SUBJECT_POSE_TO_FIELD_ORIGIN | CONTACT_TO_TRIGGER | CONTACT_TO_CONDUCTION | HEAT_FLUX_TO_PHASE`）。其中 `DISTURBANCE_TO_PERCEPTION` 明确限制 `signal_granularity`（如 `DIRECTION_AND_INTENSITY_ONLY`，禁止附赠透视全知）。
-7. **`WITHDRAW`**：撤销指定 `Subject / Relation / Process / ALL_SPELL_SUPPORTS` 的魔法支撑与操控（`STOP_SUPPORT | DETACH_CONTROL`），将主体交还 `WorldLaw` 自然演化。
+### 6.1 唯一合法的已注册 ArtKit 模块词汇
 
-### 4.2 有限剖面（`Profile`）
-拒绝开放任意数学表达式解析，仅支持 **8 种有限曲线 × 5 种坐标域 × `min_val / max_val / inverted`**（其中 `PIECEWISE_4PT` 提供 4 个固定控制点以支持“缓慢悬置→骤然爆发”等宏观戏剧曲线）：
-- **`curve`**：`CONSTANT | LINEAR | SLOW_BUILD | FAST_ESTABLISH | BELL_CONCENTRATED | IMPULSE_SPIKE | DECAY_OUT | PIECEWISE_4PT`
-- **`domain`**：`TIME_NORM | PATH_U | RADIAL_R | CHARGE_PROGRESS | LOAD_RATIO`
+- **`contour_module`**（轮廓形态）：`SCULPTED_CORE`, `FACETED_PRISM`, `CONTINUOUS_RIBBON`, `BRANCH_TENDRIL`, `PLANAR_SIGIL`, `VOLUMETRIC_MIST`, `FIELD_AURA_RING`
+- **`surface_modules`**（1–3 项叠加表面材质）：`REFRACTIVE_LIQUID`, `CRYSTALLINE_ICE`, `ROUGH_STONE`, `CONDUCTIVE_ARC`, `GRAVITY_DISTORTION`, `LIGHT_ABSORB_VOID`, `THERMAL_FROST`, `THERMAL_EMBER`, `RUNIC_BARRIER_GLASS`
+- **`secondary_modules`**（0–3 项细节与世界留痕）：`VELOCITY_FOAM`, `STRESS_CRACKS`, `FROST_CREEP_DECAL`, `CRATER_DECAL`, `SCORCH_DECAL`, `FLOATING_DUST`, `ARC_SPARKS`, `SONAR_RIPPLES`
+- **音频模块**：
+  - `drone_module`: `NONE | CRYSTALLINE_HUM | SUB_VOID_RUMBLE | ARC_CRACKLE_HUM | HOLLOW_WIND | RESONANT_CHORD`
+  - `impact_module`: `NONE | ICE_LOCK_CRACK | TECTONIC_SLAM | THUNDER_CRACK | HARMONIC_DEFLECT | FROST_SHATTER | ETHER_PING`
+  - `sustain_loop_module`: `NONE | TENSE_WATER_STRAIN | SILENT_PRESSURE_HUM | SOFT_MIST_AMBIENCE | BARRIER_STRAIN_CHIME | ARC_HOLD_BUZZ`
+  - `pre_delivery_silence_ms`: `0..120`（固定在起势转降临发招边界前触发的可预测静音窗）
+- **局部打击顿帧**：`aftermath_profile.hitstop_local_ms`（`0..140`），仅作用于受击者与施法局部动作，**严禁改动 `Engine.time_scale`**。
 
-### 4.3 空间传播（`Propagate`）
-将操作沿指定传播域逐步作用于局部（如冻冰从实际接触点沿网蔓延、电流沿湿润连接击穿）：
-- **`domain`**：`SPATIAL_RADIUS | PATH_CONNECTIVITY | CONDUCTIVE_GRAPH`
-- **硬契约**：必须显式绑定 `origin_ref`、`speed_m_s`、`max_reach_m`，以及在玩家脱手后支撑传播继续完成的 **`reserve_ref`（预付储备）**——绝不允许停止吟唱后免费白嫖传播！
+### 6.2 Stage 4 确定性法力下界公式（与代码 100% 一致）
 
----
+校验器完全忽略 `budget.compiler_status == "VALID"`，按以下公式独立验算并拒绝偷渡或白嫖法术：
 
-## 5. 有限过程图、闭合事件与 6 步固定结算协议（60 Hz）
-
-### 5.1 有限过程与 9 类闭合事件
-不开放通用脚本与无限递归。每项法术最多包含 8 个并发/串行 `Process`，每个 `Process` 声明 `start`、`operations[]`、`end` 与有限 `transitions[]`。
-允许触发的 **9 类闭合事件（`event.type`）**：
-`RELEASE`（玩家主动释放/收束）、`INTERRUPT`（受击失衡或闪避强制打断）、`DEPLETED`（魔力或预付储备耗尽）、`CONTACT_ENTER`（实际接触发生）、`OBSTRUCTION`（主结构受阻超限）、`BROKEN`（主体或支点断裂）、`COMPLETED`（过程自然或传播完成）、`TIMER`（非周期性有界计时到达）、`DISTURBANCE`（受支持介质出现超越阈值的扰动）。
-
-### 5.2 60 Hz 固定逻辑步结算协议（单一权威状态来源）
-1. **Step 1 · 输入与事件汇集**：读取玩家输入（瞄准/蓄力/释放/翻滚打断）与上一帧提交生成的世界事件，裁决过程激活、跳转与终止。
-   - **同帧冲突铁律**：若同一固定步内同时出现 `RELEASE` 与 `INTERRUPT`，默认 **`INTERRUPT` 优先**（除非该术式已进入 `LOCKED_ON_COMMIT` 不可逆交付窗口）。
-2. **Step 2 · 意图生成（Intent Generation）**：活跃过程的 `DRIVE` / `CONSTRAIN` / `TRANSFORM` / `TRANSFER` 生成强类型 `ChangeIntent`，同时 `WorldLaw` 为场中全部主体生成默认自然演化意图（重力、热量散失、松弛）。
-3. **Step 3 · 预算、权限与通道仲裁**：
-   - 核对魔力/预付储备扣减（不足触发 `DEPLETED`）；
-   - 同通道多意图合并规则：力学作用按矢量叠加；同一主体互斥 `POSE` 控制按独占地位优先；`CONSTRAIN` 与外力冲突时对比 `capacity`（未超限由约束胜出并输出“挣扎应变值”给 `ArtKit`，超限触发 `on_exceed`）；`TRANSFORM` 严格按注册顺序与库存核准。
-4. **Step 4 · 物理步进与有限形变反馈**：Jolt 3D 步进刚体碰撞；`PATH_GRAPH` / `SURFACE` 执行最多 2 次/节点的切向局部避障并刷新 `realized_geometry`；结算 `REGION` 重叠与射线遮挡。
-5. **Step 5 · 唯一权威提交**：提交所有实体的实际位置、残余库存、相态与断裂后拓扑，更新局部身份映射表。**铁律：已提交到世界的材质与破坏绝不因后续施法失败而回滚。**
-6. **Step 6 · 事件广播与表现读取**：向下一帧过程队列发布实际世界事件，并由 `ArtKit` 只读消费提交后状态与 `Desired vs Realized` 差值。
+1. **起步法力下界 `min_upfront_mana`**：
+   $$\text{min\_upfront\_mana} = 2.0 + \sum_{s \in \text{subjects}} C_{\text{subj}}(s) + \sum_{g \in \text{spatial}} C_{\text{carrier}}(g) + 1.5 \times |\text{relations}|$$
+   - 主体项 $C_{\text{subj}}$：`MATERIAL = 3.0 + 1.25 * initial_inventory_mu`；`FIELD = 6.0 + 0.20 * initial_intensity`；`WORLD_REF = 2.0`
+   - 载体项 $C_{\text{carrier}}$：`BODY = 1.5`；`PATH_GRAPH = 0.25 * node_budget + 0.15 * edge_budget`；`SURFACE = 0.15 * quad_budget`；`REGION = 0.50 * initial_extent_m`
+   - 必须满足：`min_upfront_mana <= derived_upfront_mana <= contract.combat.provider.max_upfront_mana` 且 `derived_upfront_mana > 0`。
+2. **持续维持下界 `min_sustain_mana_per_s`**：
+   - 遍历 `while_active`：当 `controller == CASTER_FOCUS` 时每条连续 `DRIVE` `+1.2`；每条 `TRANSFER` `+0.5`；每条 `provider_ref == CASTER_MANA` 的 `CONSTRAIN` `+max(0.5, 0.02 * capacity_lu)`；
+   - 遍历 `on_enter/on_exit`：当 `controller == CASTER_FOCUS` 时每条感知/馈能 `COUPLE` `+1.2`。
+   - 若使用 `POST_RELEASE_RESERVE` / `VESSEL_RESERVE` 供能，不计入施法者每秒维持费，但要求 `derived_reserve_mana == provider.post_release_reserve_mana >= 4.0`。
 
 ---
 
-## 6. 世界规则库 `WorldLaw` 与力学四分离
+## 七、4 阶段校验门禁与现有已验证样例矩阵
 
-严禁在代码里写“水+火→蒸汽、水+雷→感电”的硬编码元素配对表！世界通过 **7 个活跃作用通道 ＋ 1 个预留时间接口** 对所有材料与场统一结算：
+执行入口：[`python3 game/tools/validate_dsl.py --self-test`](../game/tools/validate_dsl.py)
 
-| 通道 ID | 职责与统一规则 | 自然演化与退场（魔法 `WITHDRAW` 之后） |
+| 阶段 | 负责模块 | 拦截典型错误 |
 |---|---|---|
-| `MECHANICAL` | 接触、阻挡、支撑与结构负荷。**强制拆分为四项独立输出**：`hp_damage`（生命伤害）、`poise_damage`（架势/削韧）、`impulse_displacement`（物理冲量推退）、`mobility_constraint`（移动限制：`NONE/SLOW/ROOT_TETHER/ENCUMBER`） | 液态失去托举后依重力坠落与扩散；刚体保留真实碰撞、受力与摩擦 |
-| `MATERIAL` | 材料数量、转移、地表潮湿留存、混合与离散分离 | 地表积水按有限时长蒸发吸收；碎片保留至清理预算线 |
-| `THERMAL` | 热量传导与跨越临界温区的状态变化 | 冻结冰体在常温下极慢融化或在火焰附近快速融回水洼 |
-| `CONDUCTIVE` | **沿真实空间接触与导电率图传播电势差**（湿润表面/金属/水网自动入图） | 脉冲瞬时释放；湿润与金属通路持续参与后续任何电性法术 |
-| `OPTICAL` | 照明强度（正发光）与吸光/雾遮蔽（负遮蔽），**真实影响敌人视线射线与锁定距离** | 雾场在无凝聚约束时逐步扩散衰减；暗域随储备耗尽消散 |
-| `INFORMATIONAL` | 介质位移/速度扰动向绑定 `Observe/Couple` 通道反馈有限方向与强度信号 | 解除耦合即切断反馈，绝不删除场中雾或水体 |
-| `SPATIAL` | 锚点追踪、支点绑定、单/双向屏障截流与折射 | 锚点或支点破坏触发 `BROKEN` 事件并令依赖约束失效 |
-| `TEMPORAL`（预留） | 定义局部区域对区域内 `Body` 动作速率、`Projectile` 速度及本地 `Process` 计时器的 `local_time_scale` 缩放接口 | **明确不实现全局世界时间倒流**；支持终端退出时恢复 `1.0` |
+| **Stage 1 · Structure** | Draft 2020-12 JSON Schema 严格校验 | 缺字段、额外 `overrides`、载体与生成器跨界、`IMPULSE` 误配 `TARGET`、`upfront_mana == 0`、非法 ArtKit 模块名 |
+| **Stage 2 · Semantic** | 引用图 + 过程图可达性 + 句柄所有权 | 重复 ID、错指不存在主体/过程、`initial_inventory > capacity`、`ESTABLISH` 放进 `while_active`、孤立不可达过程、`HANDOFF` 无明确句柄 |
+| **Stage 3 · Capability** | 能力矩阵 + `validate_limited_conditions` | 未规划组合、超 16 节点/16 刚体/64 四边、`SPATIAL_BARRIER` 缺策略或错用非 `SURFACE`、`Water->Ice` 无上界 |
+| **Stage 4 · Budget & ArtKit** | 独立预算核算 + ArtKit 注册表 | 伪造 `"compiler_status": "VALID"` 的低价法术（如 `derived_upfront_mana: 1.0`）、超出合同峰值上限、未注册音画模块 |
 
----
+当前已通过 4 阶段实机脚本全量校验的 7 份基准法术与 1 份语义样例：
 
-## 7. 施法契约与 3D 慢拍动作战斗耦合
+| 文件 | 覆盖核心验证能力 |
+|---|---|
+| [case1_water_weave_freeze.json](../game/data/spells/case1_water_weave_freeze.json) | `PATH_GRAPH(per_segment_phase=true)` + `ENV:WATER` 吸收 + `HEAT_EXTRACTION` + `PHASE_CHANGE(max_output_bodies=1)` + `IMPULSE` 发射 |
+| [case2_gravity_collapse.json](../game/data/spells/case2_gravity_collapse.json) | `DirectionSpec` 垂直抬升 + 径向向内拉扯拆分、`OpDriveImpulse` 砸地、`p_cleanup` 全程 `process_graph` 闭环 |
+| [case3_conductive_lightning.json](../game/data/spells/case3_conductive_lightning.json) | **新增 Case 3**：`ELECTRIC_POTENTIAL` + `LIGHTNING_PLASMA` + `PROPAGATE(CONDUCTIVE_GRAPH, max_hops=6, LIVE_CONNECTIVITY, FALLBACK_TO_ROOT_NODE)` |
+| [case4_fog_disturbance_sense.json](../game/data/spells/case4_fog_disturbance_sense.json) | `FOG` + `LIGHT_ATTENUATION` + `relations[]` 单一权威跟随与 `DISTURBANCE_TO_PERCEPTION` 扰动回传 |
+| [case5_ward_mirror_surface.json](../game/data/spells/case5_ward_mirror_surface.json) | `SPATIAL_BARRIER` 专属 `barrier_policy` + `SURFACE(BOUNDED_PLANE)` + `HANDOFF_TO_RESERVE` 显式移交 `handoff_handles` |
+| [case6_vessel_imprint_seal.json](../game/data/spells/case6_vessel_imprint_seal.json) | **新增 Case 6**：`WORLD_REF(VESSEL_IN_HAND)` + `CONTAIN(VESSEL_RESERVE)` + `CONTACT_TO_TRIGGER` 碰撞延迟引爆 |
+| [case_compound_dark_moon.json](../game/data/spells/case_compound_dark_moon.json) | 四主体组合 + 三条显式 `SPATIAL_ATTACH` 关系 + `capacity_mu` / `initial_inventory_mu` 账本分离 |
+| [sample_intent_water_weave_freeze.json](../game/data/intents/sample_intent_water_weave_freeze.json) | 组合语义从句 `clauses[]` + `rune_contributions[].bound_ids[]` 对接 `case1` 全链路溯源 |
 
-为了彻底避免魔法设计与《法环》式慢拍 3D 战斗手感割裂，所有 `Contract` 必须显式填写 `combat` 块：
-
-1. **蓄力门槛与阶梯收益**：
-   - `formation == GRADUAL_CHARGE` 必须配置 `min_deliverable_progress`（例如 `0.25`）和 1–3 档 `charge_tiers`。
-   - 低于门槛松手按 `on_under_threshold_release` 处理（`FIZZLE_PARTIAL_REFUND` 消散返还部分魔力，或 `DELIVER_MIN_TIER` 交付基础短促版），杜绝“0.1 秒鬼畜连发神罚”或“蓄了 1 秒白挨打”。
-2. **施法期身体动作约束**：
-   - `caster_movement`：`FULL_MOVE`（轻瞬发）/ `SLOW_SOLEMN_WALK`（沉重仪式感踱步，可转朝向）/ `ROOTED`（重型吟唱定身）。
-   - `dodge_cancel_policy`：在战斗危急时刻玩家按翻滚键时，决定是立即 `TRIGGER_INTERRUPT`（保命撤出、放弃未成型魔力）、还是 `TRIGGER_RELEASE`（把当前已蓄好的半成品瞬间打出去换位），或大招末段 `LOCKED_ON_COMMIT`。
-3. **严格受限的 7 项战场实时输入**：
-   `AIM_POINT`, `AIM_DIRECTION`, `LOCKED_TARGET`, `CAST_HOLD`, `VOLUNTARY_RELEASE`, `INTERRUPT_SIGNAL`, `SINGLE_FOCUS_RAY`（同一时刻至多 1 个精细操控焦点）。
-4. **载体寄托与预付储备交接**：
-   - 脱离施法者维持的过程（如松手后继续沿路径蔓延凝固的冰网、或留在门框的触发印记），必须显式声明 `post_release_reserve_mana` 并在交付瞬间从施法者法力预先划拨托管，储备耗尽即触发 `DEPLETED`。
-
----
-
-## 8. `ArtKit` 四层爆炸级视听映射契约
-
-严禁把 `Expression` 写成只能靠口头解释的形容词。下表规定 `Expression` 高层意图与物理世界观测量如何**确定性驱动 Godot 4 的 4 层视觉栈、4 层音频栈与安全导演机位**：
-
-### 8.1 视觉 4 层复合渲染栈（所有载体通用）
-| 层级 | Godot 4 驱动源 | 具体渲染职责（拒绝“1网格+1色块”） |
-|---|---|---|
-| **L1 · 主轮廓与结构层** | `realized_geometry` + `Expression.composition / symmetry` + `Profile` | 生成雕塑感断面与剪影（`STRUCTURAL` 呈锐利棱面与对称法环刻度；`CONCENTRATED` 呈厚重核体；`STREAMING` 呈有厚度变化的连续带） |
-| **L2 · 材质光学与细节层** | `Subject.material_id / field_channel` + `velocity` + `Desired-Realized 应变差` | 水：法线流动＋屏幕空间折射＋高曲率边缘白沫；冰：棱面折射＋内部应力裂纹（随应变/受损度增强）；引力/暗域：空间透镜畸变或负光照吸光黑边＋边缘噪波侵蚀 |
-| **L3 · 动态光源与体积雾层** | `Expression.contrast` + `formation.progress` + `WorldEnvironment` | 蓄力进度与 `contrast == HIGH` 联动微压天光与环境雾色温；同时生成真实 `OmniLight3D / FogVolume` 照亮或吞噬废墟石柱与积水反光 |
-| **L4 · 次级微粒与持久贴花层** | 真实碰撞冲量 `J` + `CONTACT_ENTER` + `WorldLaw` 状态留存 | 高冲量撞击喷溅纯装饰 `GPUParticles3D` 飞沫/碎屑；同时向地面/墙面投射持久化 `Decal`（潮湿积水、霜晶结壳、焦痕、重力碎裂纹） |
-
-### 8.2 音频 4 层动态混音协议（厚重与浪漫的核心一半在声音）
-1. **蓄力张力层（`drone_family`）**：音量与低通滤波随 `formation.progress` 连续拉升，并与环境风声形成对比；
-2. **爆发前抽声留白（`silence_pre_impact_ms`）**：高冲量/高对比法术（`tension == GRADUAL_ACCUMULATION && contrast == HIGH`）在释放或命中前 40–100 ms 瞬时压低其它高频环境音轨，制造“万籁俱寂”的呼吸感；
-3. **冲量分层重击与殿堂混响（`impact_family`）**：严禁一刀切顿帧！顿帧时长与低频 Sub-bass 权重**严格正比于实际结算冲量 `J` 与 `hp/poise_damage`**（如纯感知法术 `case4` 冲量为 0，自然无顿帧、仅留清越风铃/微颤提示音）；音效统一送入带空间大小的 Godot `AudioEffectReverb`（废城室外短回声 vs 石殿长混响）；
-4. **持续与受阻挣扎循环音（`sustain_loop_family`）**：持续维系或遇到高压阻挡（`Desired vs Realized` 偏差增大）时自动叠加紧绷摩擦/震颤泛音。
-
-### 8.3 导演相机安全边界
-蓄力期相机平滑微移（俯仰偏移限定 $\pm 8^\circ$，拉远限定 $+2.5\,\text{m}$），且全程经 `SpringArm3D` 碰撞体安全裁剪，**绝不允许在挑高或狭窄废墟室内穿墙卡死视角**。
-
----
-
-## 9. 三段式语义编译边界（`SemanticIntent` → `CompiledSpellDSL`）
-
-为了保证后续接回 48 枚符文词库与本地 3B–4B 小模型时不出现幻觉崩溃，明确划分上下游责任：
-
-- **上游 `SemanticIntent`（[semantic_intent_v0_2.schema.json](../game/data/schema/semantic_intent_v0_2.schema.json)）只填这 6 项**：
-  1. `runes_used` 与 `intent_summary`（每枚符文在本次构思中的角色依据）；
-  2. `subjects` 的高层材料/场域意图（不填质量/电阻/碰撞代理细节）；
-  3. `spatial_intent`（锚点目标、希望的组织形态如线性延伸/分支交织/球形区域/平面阻挡、连续还是弥散）；
-  4. `causal_steps`（时序流程：如“蓄力阶段向锚点引水并拉扯 → 主动释放时沿连接凝固”）；
-  5. `combat_contract_intent`（瞬发/蓄力/维持/寄托，以及移动/打断倾向）；
-  6. `art_intent`（`Expression` 6 个高层质感枚举）。
-- **下游确定性编译器负责补全与裁决**：
-  - 自动查 `WorldLaw` 填充材料属性、四分离力学基础权重、默认演化和退场；
-  - 自动分配工程载体（`BODY / PATH_GRAPH / SURFACE / REGION`）和节点/面片预算，**查能力矩阵验证合法性**；
-  - 自动按守恒做功量核算 `budget`（初始魔力、持续消耗、预付储备）；**小模型绝对无权自定法力消耗与伤害倍率**；
-  - 输出并通过 [magic_dsl_v0_2.schema.json](../game/data/schema/magic_dsl_v0_2.schema.json) 校验后，固化存盘供战斗零开销执行。
-
----
-
-## 10. 硬工程预算上限与 v0.2 明确砍单清单
-
-### 10.1 双层工程预算上限（初始约束基准）
-| 维度 | 单法术上限 | 场景并发总上限 |
-|---|---:|---:|
-| 具名主体数 | $\le 8$ | 活跃魔法主体 $\le 32$ |
-| `PATH_GRAPH` 节点 / 边 | $\le 16$ 节点 / $\le 24$ 边 | 并发活跃路径图 $\le 4$ |
-| `SURFACE` 网格面片 | $\le 64$ Quads | 并发活跃魔法曲面 $\le 6$ |
-| 并发 `Process` 数量 | $\le 8$ | 场景活跃 `Process` $\le 24$ |
-| 单次破碎衍生 `BODY` 刚体 | $\le 12$ | 场景活跃魔法生成刚体 $\le 64$（超出按最早闲置/最低重要度淘汰退场） |
-| `REGION` 作用场 | 包含在 8 主体内 | 场景活跃作用场 $\le 8$ |
-| 实时精细操控焦点 | 1 个（全局唯一） | 1 个 |
-| 模拟步频 / 运行平台预算 | 60 Hz 固定逻辑步 | Apple M6 / 中端独显 1080p 稳 60 FPS；战斗显存 $\le 2.5\text{ GB}$；战斗期模型开销 $= 0$ |
-
-### 10.2 v0.2 明确暂不实现清单（Anti-Scope-Creep）
-1. 通用 3D CSG 布尔与任意网格实时切割；
-2. 科研级连续介质 CFD / 逐滴守恒流体 / 全面电磁场模拟；
-3. 任意自由度数学约束求解器；
-4. 图灵完备脚本虚拟机、无限循环与无界递归事件；
-5. 未在 3.4 节注册的任意主体自由互相转换；
-6. 全局世界时间倒流（仅保留局部 `TEMPORAL` 速率缩放语义接口）；
-7. 由大模型在构筑期或战斗期直接生成 GDScript、Shader 或任意物理数值；
-8. 为单个法术/组合手写特判逻辑或独立专属美术动画资源；
-9. 纯粹以“凑满全部 48 枚符文与全城关卡”替代底层能力验证。
-
----
-
-## 11. 已落盘可校验跨领域 JSON 样例索引
-
-全部 5 份样例均严格通过 `magic_dsl_v0_2.schema.json` 校验，分别对应不同物理/抽象/信息领域与组合方式：
-
-1. [case1_water_weave_freeze.json](../game/data/spells/case1_water_weave_freeze.json)：`PATH_GRAPH` 活水网借水塑形、受阻变形、`RELEASE` 沿 `PATH_CONNECTIVITY` 传播冻结为 `COMPOUND_FROM_PATH` 刚体冰网；
-2. [case2_gravity_collapse.json](../game/data/spells/case2_gravity_collapse.json)：`REGION` 引力场蓄力 `SLOW_BUILD` 向上悬浮聚拢，释放 `IMPULSE_SPIKE` 骤然向下崩落重击；
-3. [case4_fog_disturbance_sense.json](../game/data/spells/case4_fog_disturbance_sense.json)：`REGION` 弥散雾场＋`COUPLE(DISTURBANCE_TO_PERCEPTION)`，验证纯非暴力信息反馈与无假顿帧演出；
-4. [case5_ward_mirror_surface.json](../game/data/spells/case5_ward_mirror_surface.json)：`SURFACE` 有限平面结界，验证 `SPATIAL_BARRIER` 方向性阻挡/偏折与 `SUSTAINED` 受阻张力声效；
-5. [case_compound_dark_moon.json](../game/data/spells/case_compound_dark_moon.json)：多主体复合组合——`BODY[ICE]` 主体挂载 `GRAVITY + HEAT_EXTRACTION + LIGHT_ATTENUATION` 三个随行 `REGION` 场，撞击触发 `BODY_SOLID_TO_SHARDS` 并撤去临时场域。
+> **故意留白说明**：**Case 7（未预设跨领域组合盲测）不预先写入仓库 JSON**，留待 Wave 2 由独立组合或 GPT/Claude 现场给定，直接检验零法术特化硬编码下的涌现上限。

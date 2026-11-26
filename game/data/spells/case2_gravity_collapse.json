@@ -1,298 +1,218 @@
 {
-  "schema_version": "0.2",
-  "meta": {
-    "id": "case2_gravity_collapse",
-    "display_name": "引力沉渊（蓄力悬浮聚拢→骤然重压崩落）",
-    "rune_signature": [
-      "土",
-      "以太",
-      "凝聚",
-      "汇聚",
-      "牵引",
-      "爆发"
-    ],
-    "intent_summary": "在目标区域建立局部引力场：蓄力阶段逐步反转竖直重力使真实碎石与轻敌离地死寂悬空，同时向中心轻微聚拢；主动释放后短促蓄势骤然施加十倍向下重压冲量，结束时撤去作用场由世界法则承接真实下落与受击。",
-    "world_law_version": "0.2"
+  "schema_version": "0.2.1",
+  "spell_id": "case2_gravity_collapse",
+  "display_name": "引力沉渊（Gravity Lift & Slam）",
+  "description": "将复合方向拆分为垂直抬升与径向收拢两个原子 DirectionSpec 驱动，松手即沿重力下坠猛砸；所有状态流转全部经显式 process_graph 收尾。",
+  "source_intent_ref": "intent_gravity_collapse",
+  "contract": {
+    "timing": {
+      "windup_s": 0.55,
+      "release_duration_s": 3.0,
+      "recovery_s": 0.45,
+      "max_active_duration_s": 6.0
+    },
+    "combat": {
+      "targeting": "POINT",
+      "range_m": 18.0,
+      "controller": "CASTER_FOCUS",
+      "cancel_policy": "ON_RELEASE_KEY",
+      "provider": {
+        "energy_source": "CASTER_MANA",
+        "post_release_reserve_mana": 0.0,
+        "max_upfront_mana": 20.0,
+        "max_sustain_mana_per_s": 10.0
+      }
+    }
   },
   "subjects": [
     {
-      "id": "gravity_well",
+      "id": "f_grav",
       "kind": "FIELD",
-      "material_id": null,
-      "initial_phase": null,
       "field_channel": "GRAVITY",
-      "initial_quantity": 0.0,
+      "initial_intensity": 6.0,
+      "max_intensity": 25.0,
       "inherit_world_law": true,
-      "interaction_profile": {
-        "hp_weight": 0.85,
-        "poise_weight": 1.85,
-        "impulse_weight": 2.2,
-        "mobility_constraint": "ENCUMBER"
-      },
-      "overrides": {}
+      "visual_modules": {
+        "contour_module": "FIELD_AURA_RING",
+        "surface_modules": ["GRAVITY_DISTORTION"],
+        "secondary_modules": ["FLOATING_DUST", "CRATER_DECAL"],
+        "tint_palette": {
+          "primary_hex": "#3C2A6E",
+          "accent_hex": "#B58BFF",
+          "emissive_boost": 0.7
+        }
+      }
     }
   ],
   "spatial": [
     {
-      "subject_id": "gravity_well",
+      "id": "sp_grav_column",
+      "subject_id": "f_grav",
       "carrier": "REGION",
+      "dimension": "3D",
+      "generator": "CYLINDER_COLUMN",
+      "node_budget": 0,
+      "edge_budget": 0,
+      "quad_budget": 0,
+      "max_deflect_iterations_per_node": 0,
+      "initial_extent_m": 3.8,
       "reference": {
-        "anchor_source": "AIM_POINT",
-        "binding": "CAPTURE",
-        "secondary_anchors": [],
-        "frame": "WORLD_FIXED"
-      },
-      "geometry": {
-        "generator": "RADIAL_SPHERE",
-        "dimension": "3D",
-        "extent_m": 6.5,
-        "thickness_m": 0.0,
-        "node_budget": 0,
-        "edge_budget": 0,
-        "quad_budget": 0
-      },
-      "distribution": {
-        "sampling": "CONTINUOUS",
-        "boundary": "FALLOFF",
-        "extent_profile": {
-          "curve": "BELL_CONCENTRATED",
-          "domain": "RADIAL_R",
-          "min_val": 0.15,
-          "max_val": 1.0,
-          "inverted": false
-        },
-        "density": 1.0
-      },
-      "connectivity": {
-        "allow_branching": false,
-        "allow_loop_close": false,
-        "allow_local_deformation": false,
-        "max_deflect_iterations_per_node": 0,
-        "on_obstruction": "PASS_THROUGH"
+        "spawn_anchor": "AIM_POINT",
+        "spawn_offset_m": [0.0, 0.0, 0.0]
       }
     }
   ],
   "relations": [],
-  "processes": [
-    {
-      "id": "proc_lift_charge",
-      "role": "OMEN_BUILDUP",
-      "start": {
-        "type": "ON_CAST_START"
-      },
-      "operations": [
-        {
-          "family": "ESTABLISH",
-          "subject_id": "gravity_well",
-          "initial_scale": 0.45
-        },
-        {
-          "family": "DRIVE",
-          "target_subject_id": "gravity_well",
-          "channel": "DIRECTION",
-          "mode": "TARGET",
-          "target_ref": "DIR:UPWARD_AND_INWARD",
-          "strength": 1.0,
-          "profile": {
-            "curve": "CONSTANT",
-            "domain": "TIME_NORM",
-            "min_val": 1.0,
-            "max_val": 1.0,
-            "inverted": false
+  "process_graph": {
+    "entry_processes": ["p_lift_gather"],
+    "processes": [
+      {
+        "id": "p_lift_gather",
+        "role": "CARRIER_EXECUTION",
+        "on_enter": [
+          {
+            "op": "ESTABLISH",
+            "target_kind": "SUBJECT",
+            "target_id": "f_grav",
+            "handle_id": "h_grav"
           }
-        },
-        {
-          "family": "DRIVE",
-          "target_subject_id": "gravity_well",
-          "channel": "INTENSITY",
-          "mode": "RATE",
-          "strength": 16.0,
-          "profile": {
-            "curve": "SLOW_BUILD",
-            "domain": "CHARGE_PROGRESS",
-            "min_val": 0.2,
-            "max_val": 1.0,
-            "inverted": false
+        ],
+        "while_active": [
+          {
+            "op": "DRIVE",
+            "handle_id": "h_lift_up",
+            "target_subject_id": "f_grav",
+            "channel": "DIRECTION",
+            "mode": "RATE",
+            "magnitude": 9.5,
+            "direction": {
+              "mode": "WORLD_AXIS",
+              "axis": "UP"
+            },
+            "profile": "EASE_IN_OUT"
+          },
+          {
+            "op": "DRIVE",
+            "handle_id": "h_pull_in",
+            "target_subject_id": "f_grav",
+            "channel": "FLOW",
+            "mode": "RATE",
+            "magnitude": 5.0,
+            "direction": {
+              "mode": "RADIAL",
+              "center_ref": "SUBJECT:f_grav",
+              "polarity": "INWARD"
+            },
+            "profile": "CONSTANT"
           }
-        },
-        {
-          "family": "DRIVE",
-          "target_subject_id": "gravity_well",
-          "channel": "EXTENT",
-          "mode": "TARGET",
-          "target_ref": "RADIUS:6.5",
-          "strength": 1.0,
-          "profile": {
-            "curve": "SLOW_BUILD",
-            "domain": "CHARGE_PROGRESS",
-            "min_val": 0.45,
-            "max_val": 1.0,
-            "inverted": false
+        ],
+        "on_exit": [],
+        "max_duration_s": 2.5,
+        "transitions": [
+          {
+            "on_event": "ON_INPUT_RELEASE",
+            "event_source_filter": { "scope": "CAST_INSTANCE" },
+            "next_process_ids": ["p_slam_down"],
+            "handoff_handles": ["h_grav"],
+            "action": "STOP_SELF_START_NEXT"
+          },
+          {
+            "on_event": "ON_TIMEOUT",
+            "event_source_filter": { "scope": "SELF_PROCESS" },
+            "next_process_ids": ["p_slam_down"],
+            "handoff_handles": ["h_grav"],
+            "action": "STOP_SELF_START_NEXT"
           }
-        }
-      ],
-      "end": {
-        "events": ["RELEASE", "INTERRUPT", "DEPLETED"],
-        "max_duration_s": 3.5
+        ]
       },
-      "transitions": [
-        {
-          "on_event": "RELEASE",
-          "next_process_id": "proc_gravity_slam",
-          "action": "HANDOFF_TO_RESERVE"
-        },
-        {
-          "on_event": "INTERRUPT",
-          "next_process_id": "proc_gravity_cancel",
-          "action": "START_NEXT"
-        }
-      ]
-    },
-    {
-      "id": "proc_gravity_slam",
-      "role": "PAYOFF",
-      "start": {
-        "type": "ON_EVENT",
-        "event": "RELEASE"
-      },
-      "operations": [
-        {
-          "family": "DRIVE",
-          "target_subject_id": "gravity_well",
-          "channel": "DIRECTION",
-          "mode": "TARGET",
-          "target_ref": "DIR:DOWNWARD",
-          "strength": 1.0,
-          "profile": {
-            "curve": "CONSTANT",
-            "domain": "TIME_NORM",
-            "min_val": 1.0,
-            "max_val": 1.0,
-            "inverted": false
+      {
+        "id": "p_slam_down",
+        "role": "CARRIER_EXECUTION",
+        "on_enter": [
+          {
+            "op": "DRIVE",
+            "target_subject_id": "f_grav",
+            "channel": "VELOCITY_IMPULSE",
+            "mode": "IMPULSE",
+            "magnitude": 28.0,
+            "direction": {
+              "mode": "WORLD_AXIS",
+              "axis": "DOWN"
+            },
+            "profile": "INSTANT_BURST"
           }
-        },
-        {
-          "family": "DRIVE",
-          "target_subject_id": "gravity_well",
-          "channel": "INTENSITY",
-          "mode": "IMPULSE",
-          "strength": 95.0,
-          "profile": {
-            "curve": "IMPULSE_SPIKE",
-            "domain": "TIME_NORM",
-            "min_val": 0.0,
-            "max_val": 1.0,
-            "inverted": false
+        ],
+        "while_active": [],
+        "on_exit": [],
+        "max_duration_s": 0.45,
+        "transitions": [
+          {
+            "on_event": "ON_TIMEOUT",
+            "event_source_filter": { "scope": "SELF_PROCESS" },
+            "next_process_ids": ["p_cleanup"],
+            "handoff_handles": ["h_grav"],
+            "action": "STOP_SELF_START_NEXT"
           }
-        }
-      ],
-      "end": {
-        "events": ["TIMER"],
-        "max_duration_s": 0.32
+        ]
       },
-      "transitions": [
-        {
-          "on_event": "TIMER",
-          "next_process_id": "proc_gravity_cancel",
-          "action": "START_NEXT"
-        }
-      ]
-    },
-    {
-      "id": "proc_gravity_cancel",
-      "role": "ACTIVE_EFFECT",
-      "start": {
-        "type": "ON_EVENT",
-        "event": "TIMER"
-      },
-      "operations": [
-        {
-          "family": "WITHDRAW",
-          "target_scope": "SUBJECT",
-          "target_id": "gravity_well",
-          "mode": "STOP_SUPPORT"
-        }
-      ],
-      "end": {
-        "events": ["COMPLETED"],
-        "max_duration_s": 0.05
-      },
-      "transitions": []
-    }
-  ],
-  "contract": {
-    "combat": {
-      "formation": "GRADUAL_CHARGE",
-      "min_deliverable_progress": 0.3,
-      "full_charge_s": 1.8,
-      "charge_tiers": [
-        {
-          "min_progress": 0.3,
-          "scale_mul": 0.55,
-          "intensity_mul": 0.5,
-          "cost_mul": 0.65
-        },
-        {
-          "min_progress": 0.7,
-          "scale_mul": 0.85,
-          "intensity_mul": 0.85,
-          "cost_mul": 0.9
-        },
-        {
-          "min_progress": 1.0,
-          "scale_mul": 1.0,
-          "intensity_mul": 1.0,
-          "cost_mul": 1.0
-        }
-      ],
-      "on_under_threshold_release": "FIZZLE_PARTIAL_REFUND",
-      "caster_movement": "SLOW_SOLEMN_WALK",
-      "dodge_cancel_policy": "TRIGGER_RELEASE",
-      "inputs_used": [
-        "AIM_POINT",
-        "CAST_HOLD",
-        "VOLUNTARY_RELEASE",
-        "INTERRUPT_SIGNAL"
-      ],
-      "controller": "CASTER_FOCUS",
-      "anchor_owner": "WORLD_FIXED",
-      "provider": {
-        "material_source": "NONE",
-        "energy_source": "CASTER_MANA",
-        "post_release_reserve_mana": 10.0
+      {
+        "id": "p_cleanup",
+        "role": "CLEANUP_DISSIPATE",
+        "on_enter": [
+          {
+            "op": "WITHDRAW",
+            "target_scope": "ALL_SPELL_SUPPORTS",
+            "mode": "DISSIPATE"
+          }
+        ],
+        "while_active": [],
+        "on_exit": [],
+        "max_duration_s": 0.25,
+        "transitions": [
+          {
+            "on_event": "ON_TIMEOUT",
+            "event_source_filter": { "scope": "SELF_PROCESS" },
+            "next_process_ids": [],
+            "handoff_handles": [],
+            "action": "STOP_SELF_ONLY"
+          }
+        ]
       }
-    },
-    "interruption_priority": "INTERRUPT_WINS_UNLESS_COMMITTED"
+    ]
   },
   "expression": {
-    "composition": "CONCENTRATED",
-    "symmetry": "RADIAL",
-    "tension": "GRADUAL_ACCUMULATION",
-    "contrast": "HIGH",
-    "delivery": "BURST",
-    "aftermath_style": "MONUMENTAL_RESIDUE",
-    "visual_hints": {
-      "material_style": "GRAVITIC_LENS_DISTORTION_VIOLET",
-      "accent_color_hex": "#8b6eff"
+    "caster_cue": {
+      "pose_tag": "PALM_PLANT",
+      "cast_focus_ms": 500
+    },
+    "omen_profile": {
+      "sky_darken": 0.35,
+      "ambient_fog_tint_strength": 0.35,
+      "environment_resonates": true,
+      "omitted_during_instant_cast": false
     },
     "audio_profile": {
-      "drone_family": "SUB_VOID_RUMBLE",
-      "silence_pre_impact_ms": 75,
-      "impact_family": "TECTONIC_GRAVITY_SLAM",
-      "sustain_loop_family": "SILENT_PRESSURE_HUM"
-    }
+      "drone_module": "SUB_VOID_RUMBLE",
+      "impact_module": "TECTONIC_SLAM",
+      "sustain_loop_module": "SILENT_PRESSURE_HUM",
+      "pre_delivery_silence_ms": 75
+    },
+    "aftermath_profile": {
+      "light_decay_s": 1.3,
+      "leave_world_scars": true,
+      "hitstop_local_ms": 95
+    },
+    "camera_impulse_level": 0.78
   },
   "budget": {
-    "derived_upfront_mana": 28.0,
-    "derived_sustain_mana_per_s": 4.0,
-    "derived_reserve_mana": 10.0,
-    "environment_discount_applied": false,
-    "subject_count": 1,
-    "process_count": 3,
-    "peak_nodes": 0,
-    "peak_edges": 0,
+    "compiler_status": "VALID",
+    "peak_dynamic_bodies": 0,
+    "peak_path_nodes": 0,
     "peak_surface_quads": 0,
-    "peak_fracture_bodies": 0,
-    "compiler_status": "VALID"
+    "peak_point_lights": 1,
+    "derived_upfront_mana": 14.0,
+    "derived_sustain_mana_per_s": 3.0,
+    "derived_reserve_mana": 0.0,
+    "estimated_tick_cost_us": 58
   }
 }

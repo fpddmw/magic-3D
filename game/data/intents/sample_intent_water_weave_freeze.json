@@ -1,0 +1,69 @@
+{
+  "schema_version": "0.2.1",
+  "intent_id": "intent_water_weave_freeze",
+  "display_title": "水网凝结（组合语义示例）",
+  "clauses": [
+    {
+      "clause_id": "c_harvest_weave",
+      "clause_role": "SHAPE_AND_ROUTE",
+      "target_archetype": "WATER_MEDIUM",
+      "spatial_topology": "FILAMENT_GRAPH",
+      "semantic_polarity": "STANDARD",
+      "directional_intent": "FORWARD",
+      "temporal_phase": "WHILE_HELD",
+      "qualifiers": ["HARVEST_NEARBY"]
+    },
+    {
+      "clause_id": "c_chill_lock",
+      "clause_role": "TRANSFORM_STATE",
+      "target_archetype": "ICE_CRYSTAL",
+      "spatial_topology": "FILAMENT_GRAPH",
+      "semantic_polarity": "STANDARD",
+      "directional_intent": "NONE",
+      "temporal_phase": "ON_RELEASE",
+      "qualifiers": ["SOLIDIFY_PHASE"]
+    },
+    {
+      "clause_id": "c_launch_shard",
+      "clause_role": "APPLY_FORCE",
+      "target_archetype": "ICE_CRYSTAL",
+      "spatial_topology": "POINT_OR_BODY",
+      "semantic_polarity": "STANDARD",
+      "directional_intent": "FORWARD",
+      "temporal_phase": "ON_RELEASE",
+      "qualifiers": []
+    }
+  ],
+  "rune_contributions": [
+    {
+      "rune_token": "RUNE_AQUA_SOURCE",
+      "rune_category": "SUBJECT_SEED",
+      "target_clause_ids": ["c_harvest_weave"],
+      "bound_ids": ["s_water"]
+    },
+    {
+      "rune_token": "RUNE_LATTICE_FILAMENT",
+      "rune_category": "TOPOLOGY_GLYPH",
+      "target_clause_ids": ["c_harvest_weave"],
+      "bound_ids": ["sp_water_web", "p_weave_water"]
+    },
+    {
+      "rune_token": "RUNE_HEAT_SIPHON",
+      "rune_category": "FIELD_SIGN",
+      "target_clause_ids": ["c_chill_lock"],
+      "bound_ids": ["f_freeze", "p_freeze_launch"]
+    },
+    {
+      "rune_token": "RUNE_IMPULSE_DRIVE",
+      "rune_category": "VECTOR_GLYPH",
+      "target_clause_ids": ["c_launch_shard"],
+      "bound_ids": ["p_freeze_launch"]
+    }
+  ],
+  "caster_context": {
+    "requested_targeting": "DIRECTION",
+    "max_desired_range_m": 16.0,
+    "allow_post_release_persist": false
+  },
+  "expected_omen_tone": "CRYSTAL_CLARITY"
+}

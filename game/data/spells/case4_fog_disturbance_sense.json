@@ -1,230 +1,253 @@
 {
-  "schema_version": "0.2",
-  "meta": {
-    "id": "case4_fog_disturbance_sense",
-    "display_name": "雾织感应（弥散体积雾遮蔽＋方向性扰动反馈）",
-    "rune_signature": [
-      "水",
-      "气",
-      "弥散",
-      "铺展",
-      "以太",
-      "联结",
-      "回应"
-    ],
-    "intent_summary": "建立围绕自身的弥散体积雾介质遮蔽视线，同时在雾场扰动通道与施法者感知间建立有限关系耦合；只反馈入侵扰动方向与强度，不附赠透视或伤害，结束维系后撤去感应连结，雾气依自然规律扩散消散。",
-    "world_law_version": "0.2"
+  "schema_version": "0.2.1",
+  "spell_id": "case4_fog_disturbance_sense",
+  "display_name": "微风感雾障（Fog Veil & Disturbance Sense）",
+  "description": "释放覆盖身周与通道的迷雾遮蔽视界，并将外界穿过雾体产生的扰动流向单一权威地通过 relations[] 回传给施法者感知。",
+  "source_intent_ref": "intent_fog_disturbance_sense",
+  "contract": {
+    "timing": {
+      "windup_s": 0.35,
+      "release_duration_s": 8.0,
+      "recovery_s": 0.25,
+      "max_active_duration_s": 12.0
+    },
+    "combat": {
+      "targeting": "SELF_OR_ANCHOR",
+      "range_m": 8.0,
+      "controller": "CASTER_FOCUS",
+      "cancel_policy": "ON_EXPIRE_OR_WITHDRAW",
+      "provider": {
+        "energy_source": "CASTER_MANA",
+        "post_release_reserve_mana": 0.0,
+        "max_upfront_mana": 36.0,
+        "max_sustain_mana_per_s": 5.0
+      }
+    }
   },
   "subjects": [
     {
-      "id": "sensing_fog",
+      "id": "m_fog",
       "kind": "MATERIAL",
       "material_id": "FOG",
       "initial_phase": "GAS_MIST",
-      "field_channel": null,
-      "initial_quantity": 4.0,
+      "capacity_mu": 16.0,
+      "initial_inventory_mu": 8.0,
       "inherit_world_law": true,
-      "interaction_profile": {
-        "hp_weight": 0.0,
-        "poise_weight": 0.0,
-        "impulse_weight": 0.0,
-        "mobility_constraint": "NONE"
-      },
-      "overrides": {}
+      "visual_modules": {
+        "contour_module": "VOLUMETRIC_MIST",
+        "surface_modules": ["LIGHT_ABSORB_VOID"],
+        "secondary_modules": ["SONAR_RIPPLES", "FLOATING_DUST"],
+        "tint_palette": {
+          "primary_hex": "#8FA3B3",
+          "accent_hex": "#D2E4F0",
+          "emissive_boost": 0.15
+        }
+      }
+    },
+    {
+      "id": "f_obscure",
+      "kind": "FIELD",
+      "field_channel": "LIGHT_ATTENUATION",
+      "initial_intensity": 0.65,
+      "max_intensity": 1.0,
+      "inherit_world_law": true,
+      "visual_modules": {
+        "contour_module": "VOLUMETRIC_MIST",
+        "surface_modules": ["LIGHT_ABSORB_VOID"],
+        "secondary_modules": [],
+        "tint_palette": {
+          "primary_hex": "#4B5866",
+          "accent_hex": "#92A4B5",
+          "emissive_boost": 0.0
+        }
+      }
     }
   ],
   "spatial": [
     {
-      "subject_id": "sensing_fog",
+      "id": "sp_fog_cloud",
+      "subject_id": "m_fog",
       "carrier": "REGION",
+      "dimension": "3D",
+      "generator": "CYLINDER_COLUMN",
+      "node_budget": 0,
+      "edge_budget": 0,
+      "quad_budget": 0,
+      "max_deflect_iterations_per_node": 0,
+      "initial_extent_m": 6.0,
       "reference": {
-        "anchor_source": "CASTER_BODY",
-        "binding": "FOLLOW",
-        "secondary_anchors": [],
-        "frame": "FOLLOW_CASTER"
-      },
-      "geometry": {
-        "generator": "RADIAL_SPHERE",
-        "dimension": "3D",
-        "extent_m": 11.0,
-        "thickness_m": 0.0,
-        "node_budget": 0,
-        "edge_budget": 0,
-        "quad_budget": 0
-      },
-      "distribution": {
-        "sampling": "DIFFUSE",
-        "boundary": "FALLOFF",
-        "extent_profile": {
-          "curve": "DECAY_OUT",
-          "domain": "RADIAL_R",
-          "min_val": 0.2,
-          "max_val": 1.0,
-          "inverted": false
-        },
-        "density": 0.55
-      },
-      "connectivity": {
-        "allow_branching": false,
-        "allow_loop_close": false,
-        "allow_local_deformation": false,
-        "max_deflect_iterations_per_node": 0,
-        "on_obstruction": "SLIDE_BOUNDARY"
+        "spawn_anchor": "CASTER_BODY",
+        "spawn_offset_m": [0.0, 0.0, 0.0]
+      }
+    },
+    {
+      "id": "sp_veil_region",
+      "subject_id": "f_obscure",
+      "carrier": "REGION",
+      "dimension": "3D",
+      "generator": "RADIAL_SPHERE",
+      "node_budget": 0,
+      "edge_budget": 0,
+      "quad_budget": 0,
+      "max_deflect_iterations_per_node": 0,
+      "initial_extent_m": 6.0,
+      "reference": {
+        "spawn_anchor": "SUBJECT_ORIGIN",
+        "spawn_subject_id": "m_fog"
       }
     }
   ],
   "relations": [
     {
-      "id": "rel_fog_perception",
-      "kind": "FUNCTIONAL_LINK",
-      "source_subject_id": "sensing_fog",
-      "target_ref": "CASTER_PERCEPTION",
-      "channel": "INFORMATIONAL",
-      "mode": "DISTURBANCE_PULSE",
-      "max_distance_m": 12.0
-    }
-  ],
-  "processes": [
-    {
-      "id": "proc_fog_sustain",
-      "role": "ACTIVE_EFFECT",
-      "start": {
-        "type": "ON_CAST_START"
-      },
-      "operations": [
-        {
-          "family": "ESTABLISH",
-          "subject_id": "sensing_fog",
-          "initial_scale": 1.0
-        },
-        {
-          "family": "CONSTRAIN",
-          "target_subject_id": "sensing_fog",
-          "constraint_family": "CONTAIN",
-          "anchor_ref": "CASTER_BODY",
-          "desired_value": 11.0,
-          "tolerance": 1.5,
-          "capacity": 45.0,
-          "on_exceed": "YIELD",
-          "provider_ref": "CASTER_MANA"
-        },
-        {
-          "family": "COUPLE",
-          "coupling_id": "DISTURBANCE_TO_PERCEPTION",
-          "source_ref": "sensing_fog.disturbance",
-          "target_ref": "CASTER_PERCEPTION",
-          "signal_granularity": "DIRECTION_AND_INTENSITY_ONLY"
-        }
-      ],
-      "end": {
-        "events": ["RELEASE", "INTERRUPT", "DEPLETED"],
-        "max_duration_s": 18.0
-      },
-      "transitions": [
-        {
-          "on_event": "RELEASE",
-          "next_process_id": "proc_fog_release",
-          "action": "START_NEXT"
-        },
-        {
-          "on_event": "INTERRUPT",
-          "next_process_id": "proc_fog_release",
-          "action": "START_NEXT"
-        },
-        {
-          "on_event": "DEPLETED",
-          "next_process_id": "proc_fog_release",
-          "action": "START_NEXT"
-        }
-      ]
+      "id": "rel_fog_follow",
+      "kind": "SPATIAL_ATTACH",
+      "source_ref": "CASTER:BODY",
+      "target_ref": "SUBJECT:m_fog",
+      "channel": "FOLLOW_TRANSFORM",
+      "attach_mode": "SOFT_FOLLOW",
+      "local_offset_m": [0.0, 0.0, 0.0],
+      "max_distance_m": 10.0
     },
     {
-      "id": "proc_fog_release",
-      "role": "PAYOFF",
-      "start": {
-        "type": "ON_EVENT",
-        "event": "RELEASE"
-      },
-      "operations": [
-        {
-          "family": "WITHDRAW",
-          "target_scope": "RELATION",
-          "target_id": "rel_fog_perception",
-          "mode": "STOP_SUPPORT"
-        },
-        {
-          "family": "WITHDRAW",
-          "target_scope": "ALL_SPELL_SUPPORTS",
-          "mode": "STOP_SUPPORT"
-        }
-      ],
-      "end": {
-        "events": ["COMPLETED"],
-        "max_duration_s": 0.05
-      },
-      "transitions": []
+      "id": "rel_disturb_sense",
+      "kind": "FUNCTIONAL_COUPLE",
+      "source_ref": "SUBJECT:m_fog",
+      "target_ref": "CASTER:BODY",
+      "channel": "DISTURBANCE_TO_PERCEPTION",
+      "signal_granularity": "DIRECTIONAL_IMPULSE",
+      "max_distance_m": 8.0
     }
   ],
-  "contract": {
-    "combat": {
-      "formation": "INSTANT",
-      "min_deliverable_progress": 0.0,
-      "full_charge_s": 0.35,
-      "charge_tiers": [
-        {
-          "min_progress": 0.0,
-          "scale_mul": 1.0,
-          "intensity_mul": 1.0,
-          "cost_mul": 1.0
-        }
-      ],
-      "on_under_threshold_release": "DELIVER_MIN_TIER",
-      "caster_movement": "FULL_MOVE",
-      "dodge_cancel_policy": "TRIGGER_RELEASE",
-      "inputs_used": [
-        "CAST_HOLD",
-        "VOLUNTARY_RELEASE",
-        "INTERRUPT_SIGNAL"
-      ],
-      "controller": "CASTER_FOCUS",
-      "anchor_owner": "CASTER",
-      "provider": {
-        "material_source": "ENVIRONMENT_WITH_MANA_FALLBACK",
-        "energy_source": "CASTER_MANA",
-        "post_release_reserve_mana": 0.0
+  "process_graph": {
+    "entry_processes": ["p_fog_veil"],
+    "processes": [
+      {
+        "id": "p_fog_veil",
+        "role": "CARRIER_EXECUTION",
+        "on_enter": [
+          {
+            "op": "ESTABLISH",
+            "target_kind": "SUBJECT",
+            "target_id": "m_fog",
+            "handle_id": "h_fog"
+          },
+          {
+            "op": "ESTABLISH",
+            "target_kind": "SUBJECT",
+            "target_id": "f_obscure",
+            "handle_id": "h_obscure"
+          },
+          {
+            "op": "ESTABLISH",
+            "target_kind": "RELATION",
+            "target_id": "rel_fog_follow",
+            "handle_id": "h_fog_follow"
+          },
+          {
+            "op": "COUPLE",
+            "handle_id": "h_sense_couple",
+            "relation_id": "rel_disturb_sense"
+          }
+        ],
+        "while_active": [
+          {
+            "op": "DRIVE",
+            "handle_id": "h_fog_swirl",
+            "target_subject_id": "m_fog",
+            "channel": "FLOW",
+            "mode": "RATE",
+            "magnitude": 1.6,
+            "direction": {
+              "mode": "RADIAL",
+              "center_ref": "SUBJECT:m_fog",
+              "polarity": "OUTWARD"
+            },
+            "profile": "EASE_IN_OUT"
+          }
+        ],
+        "on_exit": [],
+        "max_duration_s": 8.0,
+        "transitions": [
+          {
+            "on_event": "ON_INPUT_RELEASE",
+            "event_source_filter": { "scope": "CAST_INSTANCE" },
+            "next_process_ids": ["p_dissipate_fog"],
+            "handoff_handles": ["h_fog"],
+            "action": "STOP_SELF_START_NEXT"
+          },
+          {
+            "on_event": "ON_TIMEOUT",
+            "event_source_filter": { "scope": "SELF_PROCESS" },
+            "next_process_ids": ["p_dissipate_fog"],
+            "handoff_handles": ["h_fog"],
+            "action": "STOP_SELF_START_NEXT"
+          }
+        ]
+      },
+      {
+        "id": "p_dissipate_fog",
+        "role": "CLEANUP_DISSIPATE",
+        "on_enter": [
+          {
+            "op": "WITHDRAW",
+            "target_scope": "ALL_SPELL_SUPPORTS",
+            "mode": "NATURAL_RELEASE"
+          },
+          {
+            "op": "TRANSFORM",
+            "target_subject_id": "m_fog",
+            "transform_id": "DISSIPATE",
+            "preserve": ["MASS", "TEMPERATURE"]
+          }
+        ],
+        "while_active": [],
+        "on_exit": [],
+        "max_duration_s": 0.4,
+        "transitions": [
+          {
+            "on_event": "ON_TIMEOUT",
+            "event_source_filter": { "scope": "SELF_PROCESS" },
+            "next_process_ids": [],
+            "handoff_handles": [],
+            "action": "STOP_SELF_ONLY"
+          }
+        ]
       }
-    },
-    "interruption_priority": "INTERRUPT_WINS_UNLESS_COMMITTED"
+    ]
   },
   "expression": {
-    "composition": "DIFFUSE",
-    "symmetry": "NONE",
-    "tension": "NONE",
-    "contrast": "LOW",
-    "delivery": "PASSIVE",
-    "aftermath_style": "LINGERING_DECAY",
-    "visual_hints": {
-      "material_style": "VOLUMETRIC_MIST_WITH_SONAR_RIPPLES",
-      "accent_color_hex": "#9dd8e6"
+    "caster_cue": {
+      "pose_tag": "STAFF_RAISE",
+      "cast_focus_ms": 300
+    },
+    "omen_profile": {
+      "sky_darken": 0.12,
+      "ambient_fog_tint_strength": 0.65,
+      "environment_resonates": false,
+      "omitted_during_instant_cast": false
     },
     "audio_profile": {
-      "drone_family": "HOLLOW_WIND_WHISPER",
-      "silence_pre_impact_ms": 0,
-      "impact_family": "ETHEREAL_SONAR_PING",
-      "sustain_loop_family": "SOFT_MIST_AMBIENCE"
-    }
+      "drone_module": "HOLLOW_WIND",
+      "impact_module": "ETHER_PING",
+      "sustain_loop_module": "SOFT_MIST_AMBIENCE",
+      "pre_delivery_silence_ms": 0
+    },
+    "aftermath_profile": {
+      "light_decay_s": 1.5,
+      "leave_world_scars": false,
+      "hitstop_local_ms": 0
+    },
+    "camera_impulse_level": 0.1
   },
   "budget": {
-    "derived_upfront_mana": 14.0,
-    "derived_sustain_mana_per_s": 3.5,
-    "derived_reserve_mana": 0.0,
-    "environment_discount_applied": true,
-    "subject_count": 1,
-    "process_count": 2,
-    "peak_nodes": 0,
-    "peak_edges": 0,
+    "compiler_status": "VALID",
+    "peak_dynamic_bodies": 0,
+    "peak_path_nodes": 0,
     "peak_surface_quads": 0,
-    "peak_fracture_bodies": 0,
-    "compiler_status": "VALID"
+    "peak_point_lights": 0,
+    "derived_upfront_mana": 32.0,
+    "derived_sustain_mana_per_s": 3.0,
+    "derived_reserve_mana": 0.0,
+    "estimated_tick_cost_us": 72
   }
 }

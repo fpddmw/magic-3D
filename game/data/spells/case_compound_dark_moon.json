@@ -1,546 +1,392 @@
 {
-  "schema_version": "0.2",
-  "meta": {
-    "id": "case_compound_dark_moon",
-    "display_name": "暗月缓降（冰月实体＋三随行场域复合构造）",
-    "rune_signature": [
-      "火",
-      "以太",
-      "分离",
-      "反转",
-      "水",
-      "凝固",
-      "凝聚",
-      "延续"
-    ],
-    "intent_summary": "不通过技能枚举实现复合魔法：建立寒冷冰质月体，将吸光暗域、抽热寒场与微弱向心引力场通过位置耦合附着于月体；蓄力成长并压暗天光后，月体向目标缓步沉降推进，撞击时碎裂为真实残留冰块并撤去随行场域。",
-    "world_law_version": "0.2"
+  "schema_version": "0.2.1",
+  "spell_id": "case_compound_dark_moon",
+  "display_name": "苍白寒月·复合暗月（Compound Frost-Void Moon）",
+  "description": "多主体组合回归样本：冷核凝水成球、微弱吸光暗幕与低强引力场各自作为独立主体声明，全部空间附着严格仅经 relations[] 声明并在 p_condense.on_enter 中显式 ESTABLISH(RELATION)；容量 capacity_mu 与初态 initial_inventory_mu 严格分离不重复记账。",
+  "source_intent_ref": "intent_compound_dark_moon",
+  "contract": {
+    "timing": {
+      "windup_s": 0.85,
+      "release_duration_s": 7.5,
+      "recovery_s": 0.5,
+      "max_active_duration_s": 12.0
+    },
+    "combat": {
+      "targeting": "POINT",
+      "range_m": 22.0,
+      "controller": "CASTER_FOCUS",
+      "cancel_policy": "ON_RELEASE_KEY",
+      "provider": {
+        "energy_source": "CASTER_MANA",
+        "post_release_reserve_mana": 0.0,
+        "max_upfront_mana": 60.0,
+        "max_sustain_mana_per_s": 8.0
+      }
+    }
   },
   "subjects": [
     {
-      "id": "moon_core",
+      "id": "m_moon_core",
       "kind": "MATERIAL",
       "material_id": "ICE",
       "initial_phase": "SOLID",
-      "field_channel": null,
-      "initial_quantity": 8.0,
+      "capacity_mu": 16.0,
+      "initial_inventory_mu": 6.0,
       "inherit_world_law": true,
       "interaction_profile": {
-        "hp_weight": 1.65,
-        "poise_weight": 2.1,
-        "impulse_weight": 1.6,
-        "mobility_constraint": "SLOW"
+        "accepts_world_thermal": true,
+        "accepts_world_conduction": true,
+        "structural_fragility": 0.4,
+        "buoyancy_class": "HEAVY"
       },
-      "overrides": {}
+      "visual_modules": {
+        "contour_module": "SCULPTED_CORE",
+        "surface_modules": ["CRYSTALLINE_ICE", "LIGHT_ABSORB_VOID"],
+        "secondary_modules": ["STRESS_CRACKS", "FROST_CREEP_DECAL"],
+        "tint_palette": {
+          "primary_hex": "#283655",
+          "accent_hex": "#B7E3FF",
+          "emissive_boost": 0.45
+        }
+      }
     },
     {
-      "id": "moon_dark_aura",
+      "id": "f_cold_aura",
       "kind": "FIELD",
-      "material_id": null,
-      "initial_phase": null,
-      "field_channel": "LIGHT_ATTENUATION",
-      "initial_quantity": 0.0,
-      "inherit_world_law": true,
-      "overrides": {}
-    },
-    {
-      "id": "moon_cold_aura",
-      "kind": "FIELD",
-      "material_id": null,
-      "initial_phase": null,
       "field_channel": "HEAT_EXTRACTION",
-      "initial_quantity": 0.0,
+      "initial_intensity": 8.0,
+      "max_intensity": 28.0,
       "inherit_world_law": true,
-      "overrides": {}
+      "visual_modules": {
+        "contour_module": "FIELD_AURA_RING",
+        "surface_modules": ["THERMAL_FROST"],
+        "secondary_modules": ["FROST_CREEP_DECAL"],
+        "tint_palette": {
+          "primary_hex": "#7FCBFF",
+          "accent_hex": "#EBF7FF",
+          "emissive_boost": 0.35
+        }
+      }
     },
     {
-      "id": "moon_gravity_aura",
+      "id": "f_void_shroud",
       "kind": "FIELD",
-      "material_id": null,
-      "initial_phase": null,
-      "field_channel": "GRAVITY",
-      "initial_quantity": 0.0,
+      "field_channel": "LIGHT_ATTENUATION",
+      "initial_intensity": 0.8,
+      "max_intensity": 1.0,
       "inherit_world_law": true,
-      "overrides": {}
+      "visual_modules": {
+        "contour_module": "VOLUMETRIC_MIST",
+        "surface_modules": ["LIGHT_ABSORB_VOID"],
+        "secondary_modules": ["FLOATING_DUST"],
+        "tint_palette": {
+          "primary_hex": "#181926",
+          "accent_hex": "#444A6E",
+          "emissive_boost": 0.0
+        }
+      }
+    },
+    {
+      "id": "f_moon_grav",
+      "kind": "FIELD",
+      "field_channel": "GRAVITY",
+      "initial_intensity": 10.0,
+      "max_intensity": 24.0,
+      "inherit_world_law": true,
+      "visual_modules": {
+        "contour_module": "FIELD_AURA_RING",
+        "surface_modules": ["GRAVITY_DISTORTION"],
+        "secondary_modules": ["CRATER_DECAL"],
+        "tint_palette": {
+          "primary_hex": "#30284F",
+          "accent_hex": "#9C84E8",
+          "emissive_boost": 0.3
+        }
+      }
     }
   ],
   "spatial": [
     {
-      "subject_id": "moon_core",
+      "id": "sp_moon_body",
+      "subject_id": "m_moon_core",
       "carrier": "BODY",
+      "dimension": "3D",
+      "generator": "SPHERE_SCULPT",
+      "node_budget": 0,
+      "edge_budget": 0,
+      "quad_budget": 0,
+      "max_deflect_iterations_per_node": 0,
+      "initial_extent_m": 1.4,
       "reference": {
-        "anchor_source": "CASTER_HAND",
-        "binding": "CAPTURE",
-        "secondary_anchors": [],
-        "frame": "WORLD_FIXED"
-      },
-      "geometry": {
-        "generator": "SPHERE_SCULPT",
-        "dimension": "3D",
-        "extent_m": 2.6,
-        "thickness_m": 0.0,
-        "node_budget": 0,
-        "edge_budget": 0,
-        "quad_budget": 0
-      },
-      "distribution": {
-        "sampling": "CONTINUOUS",
-        "boundary": "SHARP",
-        "extent_profile": {
-          "curve": "CONSTANT",
-          "domain": "RADIAL_R",
-          "min_val": 1.0,
-          "max_val": 1.0,
-          "inverted": false
-        },
-        "density": 1.0
-      },
-      "connectivity": {
-        "allow_branching": false,
-        "allow_loop_close": false,
-        "allow_local_deformation": false,
-        "max_deflect_iterations_per_node": 0,
-        "on_obstruction": "HALT"
+        "spawn_anchor": "AIM_POINT",
+        "spawn_offset_m": [0.0, 2.2, 0.0]
       }
     },
     {
-      "subject_id": "moon_dark_aura",
+      "id": "sp_moon_cold",
+      "subject_id": "f_cold_aura",
       "carrier": "REGION",
+      "dimension": "3D",
+      "generator": "RADIAL_SPHERE",
+      "node_budget": 0,
+      "edge_budget": 0,
+      "quad_budget": 0,
+      "max_deflect_iterations_per_node": 0,
+      "initial_extent_m": 5.0,
       "reference": {
-        "anchor_source": "SUBJECT_REF",
-        "binding": "FOLLOW",
-        "anchor_subject_id": "moon_core",
-        "secondary_anchors": [],
-        "frame": "ATTACHED_SUBJECT"
-      },
-      "geometry": {
-        "generator": "RADIAL_SPHERE",
-        "dimension": "3D",
-        "extent_m": 7.0,
-        "thickness_m": 0.0,
-        "node_budget": 0,
-        "edge_budget": 0,
-        "quad_budget": 0
-      },
-      "distribution": {
-        "sampling": "CONTINUOUS",
-        "boundary": "FALLOFF",
-        "extent_profile": {
-          "curve": "DECAY_OUT",
-          "domain": "RADIAL_R",
-          "min_val": 0.1,
-          "max_val": 1.0,
-          "inverted": false
-        },
-        "density": 1.0
-      },
-      "connectivity": {
-        "allow_branching": false,
-        "allow_loop_close": false,
-        "allow_local_deformation": false,
-        "max_deflect_iterations_per_node": 0,
-        "on_obstruction": "PASS_THROUGH"
+        "spawn_anchor": "SUBJECT_ORIGIN",
+        "spawn_subject_id": "m_moon_core"
       }
     },
     {
-      "subject_id": "moon_cold_aura",
+      "id": "sp_moon_void",
+      "subject_id": "f_void_shroud",
       "carrier": "REGION",
+      "dimension": "3D",
+      "generator": "RADIAL_SPHERE",
+      "node_budget": 0,
+      "edge_budget": 0,
+      "quad_budget": 0,
+      "max_deflect_iterations_per_node": 0,
+      "initial_extent_m": 5.5,
       "reference": {
-        "anchor_source": "SUBJECT_REF",
-        "binding": "FOLLOW",
-        "anchor_subject_id": "moon_core",
-        "secondary_anchors": [],
-        "frame": "ATTACHED_SUBJECT"
-      },
-      "geometry": {
-        "generator": "RADIAL_SPHERE",
-        "dimension": "3D",
-        "extent_m": 5.5,
-        "thickness_m": 0.0,
-        "node_budget": 0,
-        "edge_budget": 0,
-        "quad_budget": 0
-      },
-      "distribution": {
-        "sampling": "CONTINUOUS",
-        "boundary": "FALLOFF",
-        "extent_profile": {
-          "curve": "DECAY_OUT",
-          "domain": "RADIAL_R",
-          "min_val": 0.1,
-          "max_val": 1.0,
-          "inverted": false
-        },
-        "density": 1.0
-      },
-      "connectivity": {
-        "allow_branching": false,
-        "allow_loop_close": false,
-        "allow_local_deformation": false,
-        "max_deflect_iterations_per_node": 0,
-        "on_obstruction": "PASS_THROUGH"
+        "spawn_anchor": "SUBJECT_ORIGIN",
+        "spawn_subject_id": "m_moon_core"
       }
     },
     {
-      "subject_id": "moon_gravity_aura",
+      "id": "sp_moon_grav",
+      "subject_id": "f_moon_grav",
       "carrier": "REGION",
+      "dimension": "3D",
+      "generator": "RADIAL_SPHERE",
+      "node_budget": 0,
+      "edge_budget": 0,
+      "quad_budget": 0,
+      "max_deflect_iterations_per_node": 0,
+      "initial_extent_m": 6.0,
       "reference": {
-        "anchor_source": "SUBJECT_REF",
-        "binding": "FOLLOW",
-        "anchor_subject_id": "moon_core",
-        "secondary_anchors": [],
-        "frame": "ATTACHED_SUBJECT"
-      },
-      "geometry": {
-        "generator": "RADIAL_SPHERE",
-        "dimension": "3D",
-        "extent_m": 6.0,
-        "thickness_m": 0.0,
-        "node_budget": 0,
-        "edge_budget": 0,
-        "quad_budget": 0
-      },
-      "distribution": {
-        "sampling": "CONTINUOUS",
-        "boundary": "FALLOFF",
-        "extent_profile": {
-          "curve": "DECAY_OUT",
-          "domain": "RADIAL_R",
-          "min_val": 0.1,
-          "max_val": 1.0,
-          "inverted": false
-        },
-        "density": 1.0
-      },
-      "connectivity": {
-        "allow_branching": false,
-        "allow_loop_close": false,
-        "allow_local_deformation": false,
-        "max_deflect_iterations_per_node": 0,
-        "on_obstruction": "PASS_THROUGH"
+        "spawn_anchor": "SUBJECT_ORIGIN",
+        "spawn_subject_id": "m_moon_core"
       }
     }
   ],
   "relations": [
     {
-      "id": "rel_dark_follow",
-      "kind": "SPATIAL_ATTACHMENT",
-      "source_subject_id": "moon_dark_aura",
-      "target_ref": "moon_core",
-      "channel": "SPATIAL",
-      "mode": "FOLLOW_CENTER",
-      "max_distance_m": 0.2
+      "id": "rel_cold_to_core",
+      "kind": "SPATIAL_ATTACH",
+      "source_ref": "SUBJECT:m_moon_core",
+      "target_ref": "SUBJECT:f_cold_aura",
+      "channel": "FOLLOW_TRANSFORM",
+      "attach_mode": "RIGID_OFFSET",
+      "local_offset_m": [0.0, 0.0, 0.0],
+      "max_distance_m": 4.0
     },
     {
-      "id": "rel_cold_follow",
-      "kind": "SPATIAL_ATTACHMENT",
-      "source_subject_id": "moon_cold_aura",
-      "target_ref": "moon_core",
-      "channel": "SPATIAL",
-      "mode": "FOLLOW_CENTER",
-      "max_distance_m": 0.2
+      "id": "rel_void_to_core",
+      "kind": "SPATIAL_ATTACH",
+      "source_ref": "SUBJECT:m_moon_core",
+      "target_ref": "SUBJECT:f_void_shroud",
+      "channel": "FOLLOW_TRANSFORM",
+      "attach_mode": "RIGID_OFFSET",
+      "local_offset_m": [0.0, 0.0, 0.0],
+      "max_distance_m": 4.0
     },
     {
-      "id": "rel_grav_follow",
-      "kind": "SPATIAL_ATTACHMENT",
-      "source_subject_id": "moon_gravity_aura",
-      "target_ref": "moon_core",
-      "channel": "SPATIAL",
-      "mode": "FOLLOW_CENTER",
-      "max_distance_m": 0.2
+      "id": "rel_grav_to_core",
+      "kind": "SPATIAL_ATTACH",
+      "source_ref": "SUBJECT:m_moon_core",
+      "target_ref": "SUBJECT:f_moon_grav",
+      "channel": "FOLLOW_TRANSFORM",
+      "attach_mode": "RIGID_OFFSET",
+      "local_offset_m": [0.0, 0.0, 0.0],
+      "max_distance_m": 4.0
     }
   ],
-  "processes": [
-    {
-      "id": "proc_moon_charge",
-      "role": "OMEN_BUILDUP",
-      "start": {
-        "type": "ON_CAST_START"
-      },
-      "operations": [
-        {
-          "family": "ESTABLISH",
-          "subject_id": "moon_core",
-          "initial_scale": 0.35
-        },
-        {
-          "family": "ESTABLISH",
-          "subject_id": "moon_dark_aura",
-          "initial_scale": 0.4
-        },
-        {
-          "family": "ESTABLISH",
-          "subject_id": "moon_cold_aura",
-          "initial_scale": 0.4
-        },
-        {
-          "family": "ESTABLISH",
-          "subject_id": "moon_gravity_aura",
-          "initial_scale": 0.4
-        },
-        {
-          "family": "COUPLE",
-          "coupling_id": "SUBJECT_POSE_TO_FIELD_ORIGIN",
-          "source_ref": "moon_core.pose",
-          "target_ref": "moon_dark_aura.origin"
-        },
-        {
-          "family": "COUPLE",
-          "coupling_id": "SUBJECT_POSE_TO_FIELD_ORIGIN",
-          "source_ref": "moon_core.pose",
-          "target_ref": "moon_cold_aura.origin"
-        },
-        {
-          "family": "COUPLE",
-          "coupling_id": "SUBJECT_POSE_TO_FIELD_ORIGIN",
-          "source_ref": "moon_core.pose",
-          "target_ref": "moon_gravity_aura.origin"
-        },
-        {
-          "family": "CONSTRAIN",
-          "target_subject_id": "moon_core",
-          "constraint_family": "SUPPORT",
-          "desired_value": 4.2,
-          "tolerance": 0.25,
-          "capacity": 140.0,
-          "on_exceed": "YIELD",
-          "provider_ref": "CASTER_MANA"
-        },
-        {
-          "family": "DRIVE",
-          "target_subject_id": "moon_core",
-          "channel": "EXTENT",
-          "mode": "TARGET",
-          "strength": 1.0,
-          "profile": {
-            "curve": "SLOW_BUILD",
-            "domain": "CHARGE_PROGRESS",
-            "min_val": 0.35,
-            "max_val": 1.0,
-            "inverted": false
+  "process_graph": {
+    "entry_processes": ["p_condense_orbit"],
+    "processes": [
+      {
+        "id": "p_condense_orbit",
+        "role": "CARRIER_EXECUTION",
+        "on_enter": [
+          {
+            "op": "ESTABLISH",
+            "target_kind": "SUBJECT",
+            "target_id": "m_moon_core",
+            "handle_id": "h_core"
+          },
+          {
+            "op": "ESTABLISH",
+            "target_kind": "SUBJECT",
+            "target_id": "f_cold_aura",
+            "handle_id": "h_cold"
+          },
+          {
+            "op": "ESTABLISH",
+            "target_kind": "SUBJECT",
+            "target_id": "f_void_shroud",
+            "handle_id": "h_void"
+          },
+          {
+            "op": "ESTABLISH",
+            "target_kind": "SUBJECT",
+            "target_id": "f_moon_grav",
+            "handle_id": "h_grav"
+          },
+          {
+            "op": "ESTABLISH",
+            "target_kind": "RELATION",
+            "target_id": "rel_cold_to_core",
+            "handle_id": "h_rel_cold"
+          },
+          {
+            "op": "ESTABLISH",
+            "target_kind": "RELATION",
+            "target_id": "rel_void_to_core",
+            "handle_id": "h_rel_void"
+          },
+          {
+            "op": "ESTABLISH",
+            "target_kind": "RELATION",
+            "target_id": "rel_grav_to_core",
+            "handle_id": "h_rel_grav"
           }
-        },
-        {
-          "family": "DRIVE",
-          "target_subject_id": "moon_dark_aura",
-          "channel": "INTENSITY",
-          "mode": "RATE",
-          "strength": 1.0,
-          "profile": {
-            "curve": "SLOW_BUILD",
-            "domain": "CHARGE_PROGRESS",
-            "min_val": 0.2,
-            "max_val": 1.0,
-            "inverted": false
+        ],
+        "while_active": [
+          {
+            "op": "TRANSFER",
+            "source_ref": "ENV:WATER",
+            "target_subject_id": "m_moon_core",
+            "resource_kind": "MU",
+            "rate_per_s": 2.5,
+            "max_amount": 8.0,
+            "on_insufficient_source": "CLAMP_TO_AVAILABLE"
+          },
+          {
+            "op": "DRIVE",
+            "handle_id": "h_pull_orbit",
+            "target_subject_id": "f_moon_grav",
+            "channel": "FLOW",
+            "mode": "RATE",
+            "magnitude": 6.5,
+            "direction": {
+              "mode": "RADIAL",
+              "center_ref": "SUBJECT:m_moon_core",
+              "polarity": "INWARD"
+            },
+            "profile": "EASE_IN_OUT"
+          },
+          {
+            "op": "CONSTRAIN",
+            "handle_id": "h_pin_moon",
+            "target_subject_id": "m_moon_core",
+            "constraint_family": "PIN",
+            "anchor_ref": "TARGET:ANCHOR",
+            "desired_value": 2.2,
+            "tolerance": 0.45,
+            "capacity_lu": 40.0,
+            "rebind_cooldown_s": 0.12,
+            "on_exceed": "DETACH",
+            "provider_ref": "CASTER_MANA"
           }
-        }
-      ],
-      "end": {
-        "events": ["RELEASE", "INTERRUPT", "DEPLETED"],
-        "max_duration_s": 3.8
-      },
-      "transitions": [
-        {
-          "on_event": "RELEASE",
-          "next_process_id": "proc_moon_descent",
-          "action": "HANDOFF_TO_RESERVE"
-        },
-        {
-          "on_event": "INTERRUPT",
-          "next_process_id": "proc_moon_abort",
-          "action": "START_NEXT"
-        }
-      ]
-    },
-    {
-      "id": "proc_moon_descent",
-      "role": "ACTIVE_EFFECT",
-      "start": {
-        "type": "ON_EVENT",
-        "event": "RELEASE"
-      },
-      "operations": [
-        {
-          "family": "DRIVE",
-          "target_subject_id": "moon_core",
-          "channel": "POSE",
-          "mode": "TARGET",
-          "target_ref": "INPUT:LOCKED_TARGET",
-          "strength": 5.2,
-          "profile": {
-            "curve": "PIECEWISE_4PT",
-            "domain": "TIME_NORM",
-            "min_val": 0.15,
-            "max_val": 1.0,
-            "inverted": false,
-            "control_points": [0.15, 0.25, 0.6, 1.0]
+        ],
+        "on_exit": [],
+        "max_duration_s": 6.0,
+        "transitions": [
+          {
+            "on_event": "ON_INPUT_RELEASE",
+            "event_source_filter": { "scope": "CAST_INSTANCE" },
+            "next_process_ids": ["p_shatter_fall"],
+            "handoff_handles": ["h_core"],
+            "action": "STOP_SELF_START_NEXT"
+          },
+          {
+            "on_event": "ON_TIMEOUT",
+            "event_source_filter": { "scope": "SELF_PROCESS" },
+            "next_process_ids": ["p_shatter_fall"],
+            "handoff_handles": ["h_core"],
+            "action": "STOP_SELF_START_NEXT"
           }
-        },
-        {
-          "family": "DRIVE",
-          "target_subject_id": "moon_gravity_aura",
-          "channel": "DIRECTION",
-          "mode": "TARGET",
-          "target_ref": "DIR:INWARD",
-          "strength": 12.0,
-          "profile": {
-            "curve": "CONSTANT",
-            "domain": "TIME_NORM",
-            "min_val": 1.0,
-            "max_val": 1.0,
-            "inverted": false
+        ]
+      },
+      {
+        "id": "p_shatter_fall",
+        "role": "CLEANUP_DISSIPATE",
+        "on_enter": [
+          {
+            "op": "WITHDRAW",
+            "target_scope": "HANDLE",
+            "target_id": "h_pin_moon",
+            "mode": "NATURAL_RELEASE"
+          },
+          {
+            "op": "DRIVE",
+            "target_subject_id": "m_moon_core",
+            "channel": "VELOCITY_IMPULSE",
+            "mode": "IMPULSE",
+            "magnitude": 16.0,
+            "direction": {
+              "mode": "WORLD_AXIS",
+              "axis": "DOWN"
+            },
+            "profile": "INSTANT_BURST"
           }
-        }
-      ],
-      "end": {
-        "events": ["CONTACT_ENTER", "DEPLETED", "TIMER"],
-        "max_duration_s": 3.5
-      },
-      "transitions": [
-        {
-          "on_event": "CONTACT_ENTER",
-          "next_process_id": "proc_moon_fracture",
-          "action": "START_NEXT"
-        },
-        {
-          "on_event": "TIMER",
-          "next_process_id": "proc_moon_fracture",
-          "action": "START_NEXT"
-        }
-      ]
-    },
-    {
-      "id": "proc_moon_fracture",
-      "role": "PAYOFF",
-      "start": {
-        "type": "ON_EVENT",
-        "event": "CONTACT_ENTER"
-      },
-      "operations": [
-        {
-          "family": "TRANSFORM",
-          "target_subject_id": "moon_core",
-          "transform_id": "BODY_SOLID_TO_SHARDS",
-          "preserve": [
-            "MATERIAL_QUANTITY",
-            "CURRENT_MOMENTUM"
-          ],
-          "max_output_bodies": 10
-        },
-        {
-          "family": "WITHDRAW",
-          "target_scope": "SUBJECT",
-          "target_id": "moon_dark_aura",
-          "mode": "STOP_SUPPORT"
-        },
-        {
-          "family": "WITHDRAW",
-          "target_scope": "SUBJECT",
-          "target_id": "moon_cold_aura",
-          "mode": "STOP_SUPPORT"
-        },
-        {
-          "family": "WITHDRAW",
-          "target_scope": "SUBJECT",
-          "target_id": "moon_gravity_aura",
-          "mode": "STOP_SUPPORT"
-        }
-      ],
-      "end": {
-        "events": ["COMPLETED"],
-        "max_duration_s": 0.1
-      },
-      "transitions": []
-    },
-    {
-      "id": "proc_moon_abort",
-      "role": "PAYOFF",
-      "start": {
-        "type": "ON_EVENT",
-        "event": "INTERRUPT"
-      },
-      "operations": [
-        {
-          "family": "WITHDRAW",
-          "target_scope": "ALL_SPELL_SUPPORTS",
-          "mode": "STOP_SUPPORT"
-        }
-      ],
-      "end": {
-        "events": ["COMPLETED"],
-        "max_duration_s": 0.05
-      },
-      "transitions": []
-    }
-  ],
-  "contract": {
-    "combat": {
-      "formation": "GRADUAL_CHARGE",
-      "min_deliverable_progress": 0.45,
-      "full_charge_s": 2.2,
-      "charge_tiers": [
-        {
-          "min_progress": 0.45,
-          "scale_mul": 0.65,
-          "intensity_mul": 0.7,
-          "cost_mul": 0.75
-        },
-        {
-          "min_progress": 1.0,
-          "scale_mul": 1.0,
-          "intensity_mul": 1.0,
-          "cost_mul": 1.0
-        }
-      ],
-      "on_under_threshold_release": "FIZZLE_PARTIAL_REFUND",
-      "caster_movement": "ROOTED",
-      "dodge_cancel_policy": "TRIGGER_INTERRUPT",
-      "inputs_used": [
-        "LOCKED_TARGET",
-        "AIM_POINT",
-        "CAST_HOLD",
-        "VOLUNTARY_RELEASE",
-        "INTERRUPT_SIGNAL"
-      ],
-      "controller": "AUTONOMOUS",
-      "anchor_owner": "WORLD_FIXED",
-      "provider": {
-        "material_source": "CASTER_MANA_GEN",
-        "energy_source": "CASTER_MANA",
-        "post_release_reserve_mana": 20.0
+        ],
+        "while_active": [],
+        "on_exit": [
+          {
+            "op": "WITHDRAW",
+            "target_scope": "ALL_SPELL_SUPPORTS",
+            "mode": "DISSIPATE"
+          }
+        ],
+        "max_duration_s": 1.8,
+        "transitions": [
+          {
+            "on_event": "ON_TIMEOUT",
+            "event_source_filter": { "scope": "SELF_PROCESS" },
+            "next_process_ids": [],
+            "handoff_handles": [],
+            "action": "STOP_SELF_ONLY"
+          }
+        ]
       }
-    },
-    "interruption_priority": "INTERRUPT_WINS_UNLESS_COMMITTED"
+    ]
   },
   "expression": {
-    "composition": "CONCENTRATED",
-    "symmetry": "RADIAL",
-    "tension": "GRADUAL_ACCUMULATION",
-    "contrast": "HIGH",
-    "delivery": "BURST",
-    "aftermath_style": "MONUMENTAL_RESIDUE",
-    "visual_hints": {
-      "material_style": "DARK_FROST_MOON_WITH_LIGHT_VOID",
-      "accent_color_hex": "#4d6fff"
+    "caster_cue": {
+      "pose_tag": "TWO_HAND_CONDENSE",
+      "cast_focus_ms": 680
+    },
+    "omen_profile": {
+      "sky_darken": 0.48,
+      "ambient_fog_tint_strength": 0.55,
+      "environment_resonates": true,
+      "omitted_during_instant_cast": false
     },
     "audio_profile": {
-      "drone_family": "CELESTIAL_ABYSS_CHOIR",
-      "silence_pre_impact_ms": 90,
-      "impact_family": "MOON_SHATTER_RESONANCE",
-      "sustain_loop_family": "COLD_ECLIPSE_HUM"
-    }
+      "drone_module": "SUB_VOID_RUMBLE",
+      "impact_module": "TECTONIC_SLAM",
+      "sustain_loop_module": "SILENT_PRESSURE_HUM",
+      "pre_delivery_silence_ms": 90
+    },
+    "aftermath_profile": {
+      "light_decay_s": 2.4,
+      "leave_world_scars": true,
+      "hitstop_local_ms": 115
+    },
+    "camera_impulse_level": 0.88
   },
   "budget": {
-    "derived_upfront_mana": 34.0,
-    "derived_sustain_mana_per_s": 6.0,
-    "derived_reserve_mana": 20.0,
-    "environment_discount_applied": false,
-    "subject_count": 4,
-    "process_count": 4,
-    "peak_nodes": 0,
-    "peak_edges": 0,
+    "compiler_status": "VALID",
+    "peak_dynamic_bodies": 1,
+    "peak_path_nodes": 0,
     "peak_surface_quads": 0,
-    "peak_fracture_bodies": 10,
-    "compiler_status": "VALID"
+    "peak_point_lights": 3,
+    "derived_upfront_mana": 52.0,
+    "derived_sustain_mana_per_s": 4.5,
+    "derived_reserve_mana": 0.0,
+    "estimated_tick_cost_us": 145
   }
 }

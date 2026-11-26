@@ -1,146 +1,257 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/fpddmw/magic-3D/schemas/magic_dsl_v0_2.schema.json",
-  "title": "CompiledSpellDSL v0.2",
-  "description": "Strict machine-verifiable schema for Magic DSL v0.2 compiled spell definitions.",
+  "$id": "https://fpddmw.github.io/magic-3D/schema/magic_dsl_v0_2.schema.json",
+  "title": "CompiledSpellDSL v0.2.1",
+  "description": "Strict structural contract for Magic DSL v0.2.1 covering single-authority subjects, 4 geometric carriers, passive relations, event-driven process_graph, DirectionSpec, composable ArtKit modules, and deterministic budgets.",
   "type": "object",
   "additionalProperties": false,
   "required": [
     "schema_version",
-    "meta",
+    "spell_id",
+    "display_name",
+    "contract",
     "subjects",
     "spatial",
     "relations",
-    "processes",
-    "contract",
+    "process_graph",
     "expression",
     "budget"
   ],
   "properties": {
-    "schema_version": { "const": "0.2" },
-    "meta": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["id", "display_name", "rune_signature", "intent_summary", "world_law_version"],
-      "properties": {
-        "id": { "type": "string", "minLength": 1 },
-        "display_name": { "type": "string", "minLength": 1 },
-        "rune_signature": {
-          "type": "array",
-          "minItems": 1,
-          "items": { "type": "string", "minLength": 1 }
-        },
-        "intent_summary": { "type": "string", "minLength": 1 },
-        "world_law_version": { "const": "0.2" }
-      }
+    "schema_version": {
+      "const": "0.2.1"
+    },
+    "spell_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9_]+$",
+      "minLength": 2,
+      "maxLength": 64
+    },
+    "display_name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 320
+    },
+    "source_intent_ref": {
+      "type": "string",
+      "pattern": "^[a-z0-9_]+$"
+    },
+    "contract": {
+      "$ref": "#/$defs/ContractSpec"
     },
     "subjects": {
       "type": "array",
       "minItems": 1,
       "maxItems": 8,
-      "items": { "$ref": "#/$defs/SubjectSpec" }
+      "items": {
+        "$ref": "#/$defs/SubjectSpec"
+      }
     },
     "spatial": {
       "type": "array",
-      "minItems": 1,
+      "minItems": 0,
       "maxItems": 8,
-      "items": { "$ref": "#/$defs/SpatialSpec" }
+      "items": {
+        "$ref": "#/$defs/SpatialSpec"
+      }
     },
     "relations": {
       "type": "array",
-      "maxItems": 16,
-      "items": { "$ref": "#/$defs/RelationSpec" }
+      "minItems": 0,
+      "maxItems": 12,
+      "items": {
+        "$ref": "#/$defs/RelationSpec"
+      }
     },
-    "processes": {
-      "type": "array",
-      "minItems": 1,
-      "maxItems": 8,
-      "items": { "$ref": "#/$defs/ProcessSpec" }
+    "process_graph": {
+      "$ref": "#/$defs/ProcessGraphSpec"
     },
-    "contract": { "$ref": "#/$defs/ContractSpec" },
-    "expression": { "$ref": "#/$defs/ExpressionSpec" },
-    "budget": { "$ref": "#/$defs/BudgetSpec" }
+    "expression": {
+      "$ref": "#/$defs/ExpressionSpec"
+    },
+    "budget": {
+      "$ref": "#/$defs/BudgetSpec"
+    }
   },
   "$defs": {
-    "EventType": {
-      "type": "string",
-      "enum": [
-        "RELEASE",
-        "INTERRUPT",
-        "DEPLETED",
-        "CONTACT_ENTER",
-        "OBSTRUCTION",
-        "BROKEN",
-        "COMPLETED",
-        "TIMER",
-        "DISTURBANCE"
-      ]
-    },
-    "InteractionChannel": {
-      "type": "string",
-      "enum": [
-        "MECHANICAL",
-        "MATERIAL",
-        "THERMAL",
-        "CONDUCTIVE",
-        "OPTICAL",
-        "INFORMATIONAL",
-        "SPATIAL",
-        "TEMPORAL"
-      ]
-    },
-    "ProfileSpec": {
+    "ContractSpec": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["curve", "domain", "min_val", "max_val", "inverted"],
+      "required": ["timing", "combat"],
       "properties": {
-        "curve": {
+        "timing": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "windup_s",
+            "release_duration_s",
+            "recovery_s",
+            "max_active_duration_s"
+          ],
+          "properties": {
+            "windup_s": { "type": "number", "minimum": 0.0, "maximum": 3.0 },
+            "release_duration_s": { "type": "number", "minimum": 0.0, "maximum": 20.0 },
+            "recovery_s": { "type": "number", "minimum": 0.0, "maximum": 3.0 },
+            "max_active_duration_s": { "type": "number", "exclusiveMinimum": 0.0, "maximum": 30.0 }
+          }
+        },
+        "combat": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "targeting",
+            "range_m",
+            "controller",
+            "cancel_policy",
+            "provider"
+          ],
+          "properties": {
+            "targeting": {
+              "type": "string",
+              "enum": ["POINT", "DIRECTION", "SELF_OR_ANCHOR", "LOCKED_ACTOR", "VESSEL_TOUCH"]
+            },
+            "range_m": { "type": "number", "minimum": 0.0, "maximum": 40.0 },
+            "controller": {
+              "type": "string",
+              "enum": ["CASTER_FOCUS", "AUTONOMOUS", "VESSEL_BOUND"]
+            },
+            "cancel_policy": {
+              "type": "string",
+              "enum": [
+                "ON_RELEASE_KEY",
+                "ON_CASTER_INTERRUPT",
+                "ON_EXPIRE_OR_WITHDRAW",
+                "PERSIST_UNTIL_DEPLETED"
+              ]
+            },
+            "provider": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "energy_source",
+                "post_release_reserve_mana",
+                "max_upfront_mana",
+                "max_sustain_mana_per_s"
+              ],
+              "properties": {
+                "energy_source": {
+                  "type": "string",
+                  "enum": [
+                    "CASTER_MANA",
+                    "POST_RELEASE_RESERVE",
+                    "ENVIRONMENT_HARVEST",
+                    "VESSEL_RESERVE"
+                  ]
+                },
+                "post_release_reserve_mana": { "type": "number", "minimum": 0.0, "maximum": 200.0 },
+                "max_upfront_mana": { "type": "number", "exclusiveMinimum": 0.0, "maximum": 300.0 },
+                "max_sustain_mana_per_s": { "type": "number", "minimum": 0.0, "maximum": 60.0 }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "VisualModulesSpec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contour_module",
+        "surface_modules",
+        "secondary_modules",
+        "tint_palette"
+      ],
+      "properties": {
+        "contour_module": {
           "type": "string",
           "enum": [
-            "CONSTANT",
-            "LINEAR",
-            "SLOW_BUILD",
-            "FAST_ESTABLISH",
-            "BELL_CONCENTRATED",
-            "IMPULSE_SPIKE",
-            "DECAY_OUT",
-            "PIECEWISE_4PT"
+            "SCULPTED_CORE",
+            "FACETED_PRISM",
+            "CONTINUOUS_RIBBON",
+            "BRANCH_TENDRIL",
+            "PLANAR_SIGIL",
+            "VOLUMETRIC_MIST",
+            "FIELD_AURA_RING"
           ]
         },
-        "domain": {
-          "type": "string",
-          "enum": ["TIME_NORM", "PATH_U", "RADIAL_R", "CHARGE_PROGRESS", "LOAD_RATIO"]
-        },
-        "min_val": { "type": "number" },
-        "max_val": { "type": "number" },
-        "inverted": { "type": "boolean" },
-        "control_points": {
+        "surface_modules": {
           "type": "array",
-          "minItems": 4,
-          "maxItems": 4,
-          "items": { "type": "number", "minimum": 0.0, "maximum": 1.0 }
+          "minItems": 1,
+          "maxItems": 3,
+          "items": {
+            "type": "string",
+            "enum": [
+              "REFRACTIVE_LIQUID",
+              "CRYSTALLINE_ICE",
+              "ROUGH_STONE",
+              "CONDUCTIVE_ARC",
+              "GRAVITY_DISTORTION",
+              "LIGHT_ABSORB_VOID",
+              "THERMAL_FROST",
+              "THERMAL_EMBER",
+              "RUNIC_BARRIER_GLASS"
+            ]
+          }
+        },
+        "secondary_modules": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 3,
+          "items": {
+            "type": "string",
+            "enum": [
+              "VELOCITY_FOAM",
+              "STRESS_CRACKS",
+              "FROST_CREEP_DECAL",
+              "CRATER_DECAL",
+              "SCORCH_DECAL",
+              "FLOATING_DUST",
+              "ARC_SPARKS",
+              "SONAR_RIPPLES"
+            ]
+          }
+        },
+        "tint_palette": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["primary_hex", "accent_hex", "emissive_boost"],
+          "properties": {
+            "primary_hex": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" },
+            "accent_hex": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" },
+            "emissive_boost": { "type": "number", "minimum": 0.0, "maximum": 5.0 }
+          }
         }
       }
     },
-    "PropagationSpec": {
+
+    "InteractionProfile": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["domain", "origin_ref", "speed_m_s", "max_reach_m", "reserve_ref"],
       "properties": {
-        "domain": {
-          "type": "string",
-          "enum": ["SPATIAL_RADIUS", "PATH_CONNECTIVITY", "CONDUCTIVE_GRAPH"]
-        },
-        "origin_ref": { "type": "string", "minLength": 1 },
-        "speed_m_s": { "type": "number", "exclusiveMinimum": 0.0 },
-        "max_reach_m": { "type": "number", "exclusiveMinimum": 0.0 },
-        "reserve_ref": {
-          "type": "string",
-          "enum": ["CASTER_MANA", "POST_RELEASE_RESERVE", "VESSEL_RESERVE"]
-        }
+        "accepts_world_thermal": { "const": true },
+        "accepts_world_conduction": { "const": true },
+        "structural_fragility": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+        "buoyancy_class": { "type": "string", "enum": ["NEUTRAL", "HEAVY", "LIGHT"] }
       }
     },
-    "SubjectSpec": {
+
+    "BarrierPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["directional_one_way", "response_mode", "deflect_angle_deg"],
+      "properties": {
+        "directional_one_way": { "type": "boolean" },
+        "response_mode": { "type": "string", "enum": ["BLOCK", "REFLECT", "DEFLECT"] },
+        "deflect_angle_deg": { "type": "number", "minimum": 0.0, "maximum": 90.0 }
+      }
+    },
+
+    "MaterialSubject": {
       "type": "object",
       "additionalProperties": false,
       "required": [
@@ -148,18 +259,17 @@
         "kind",
         "material_id",
         "initial_phase",
-        "field_channel",
-        "initial_quantity",
+        "capacity_mu",
+        "initial_inventory_mu",
         "inherit_world_law",
-        "overrides"
+        "visual_modules"
       ],
       "properties": {
-        "id": { "type": "string", "minLength": 1 },
-        "kind": { "type": "string", "enum": ["MATERIAL", "FIELD", "RELATION"] },
+        "id": { "type": "string", "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$" },
+        "kind": { "const": "MATERIAL" },
         "material_id": {
-          "type": ["string", "null"],
+          "type": "string",
           "enum": [
-            null,
             "WATER",
             "ICE",
             "STONE",
@@ -172,13 +282,35 @@
           ]
         },
         "initial_phase": {
-          "type": ["string", "null"],
-          "enum": [null, "SOLID", "LIQUID", "GAS_MIST", "PLASMA"]
+          "type": "string",
+          "enum": ["SOLID", "LIQUID", "GAS_MIST", "PLASMA"]
         },
+        "capacity_mu": { "type": "number", "exclusiveMinimum": 0.0, "maximum": 1000.0 },
+        "initial_inventory_mu": { "type": "number", "minimum": 0.0, "maximum": 1000.0 },
+        "inherit_world_law": { "const": true },
+        "visual_modules": { "$ref": "#/$defs/VisualModulesSpec" },
+        "interaction_profile": { "$ref": "#/$defs/InteractionProfile" }
+      }
+    },
+
+    "FieldSubject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "field_channel",
+        "initial_intensity",
+        "max_intensity",
+        "inherit_world_law",
+        "visual_modules"
+      ],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$" },
+        "kind": { "const": "FIELD" },
         "field_channel": {
-          "type": ["string", "null"],
+          "type": "string",
           "enum": [
-            null,
             "GRAVITY",
             "HEAT_EXTRACTION",
             "HEAT_INJECTION",
@@ -191,31 +323,62 @@
             "VITAL_FLUX"
           ]
         },
-        "initial_quantity": { "type": "number", "minimum": 0.0 },
-        "inherit_world_law": { "type": "boolean" },
-        "interaction_profile": {
-          "type": "object",
-          "additionalProperties": false,
-          "required": ["hp_weight", "poise_weight", "impulse_weight", "mobility_constraint"],
-          "properties": {
-            "hp_weight": { "type": "number", "minimum": 0.0 },
-            "poise_weight": { "type": "number", "minimum": 0.0 },
-            "impulse_weight": { "type": "number", "minimum": 0.0 },
-            "mobility_constraint": {
-              "type": "string",
-              "enum": ["NONE", "SLOW", "ROOT_TETHER", "ENCUMBER"]
-            }
-          }
-        },
-        "overrides": { "type": "object" }
+        "initial_intensity": { "type": "number", "minimum": 0.0, "maximum": 500.0 },
+        "max_intensity": { "type": "number", "exclusiveMinimum": 0.0, "maximum": 500.0 },
+        "inherit_world_law": { "const": true },
+        "visual_modules": { "$ref": "#/$defs/VisualModulesSpec" },
+        "interaction_profile": { "$ref": "#/$defs/InteractionProfile" },
+        "barrier_policy": { "$ref": "#/$defs/BarrierPolicy" }
+      },
+      "if": {
+        "required": ["field_channel"],
+        "properties": { "field_channel": { "const": "SPATIAL_BARRIER" } }
+      },
+      "then": {
+        "required": ["barrier_policy"]
+      },
+      "else": {
+        "not": { "required": ["barrier_policy"] }
       }
     },
-    "AnchorRef": {
+
+    "WorldRefSubject": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["source", "binding", "max_count", "max_distance_m"],
+      "required": [
+        "id",
+        "kind",
+        "query_kind",
+        "expected_filter",
+        "require_existing"
+      ],
       "properties": {
-        "source": {
+        "id": { "type": "string", "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$" },
+        "kind": { "const": "WORLD_REF" },
+        "query_kind": {
+          "type": "string",
+          "enum": ["VESSEL_IN_HAND", "TARGET_SURFACE", "NEARBY_MEDIUM", "LOCKED_ACTOR"]
+        },
+        "expected_filter": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "require_existing": { "type": "boolean" },
+        "visual_modules": { "$ref": "#/$defs/VisualModulesSpec" }
+      }
+    },
+
+    "SubjectSpec": {
+      "oneOf": [
+        { "$ref": "#/$defs/MaterialSubject" },
+        { "$ref": "#/$defs/FieldSubject" },
+        { "$ref": "#/$defs/WorldRefSubject" }
+      ]
+    },
+
+    "SpawnReferenceSpec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["spawn_anchor"],
+      "properties": {
+        "spawn_anchor": {
           "type": "string",
           "enum": [
             "WORLD_POINT",
@@ -225,304 +388,480 @@
             "AIM_DIRECTION",
             "LOCKED_TARGET",
             "AUTO_SUPPORT_SURFACE",
-            "NEARBY_MEDIUM",
-            "SUBJECT_REF",
-            "ACTUAL_CONTACT_POINT"
+            "SUBJECT_ORIGIN",
+            "WORLD_REF"
           ]
         },
-        "binding": { "type": "string", "enum": ["CAPTURE", "FOLLOW", "ATTACH", "CONTROL"] },
-        "max_count": { "type": "integer", "minimum": 1, "maximum": 8 },
-        "max_distance_m": { "type": "number", "minimum": 0.0 },
-        "subject_ref": { "type": "string" }
-      }
-    },
-    "SpatialSpec": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["subject_id", "carrier", "reference", "geometry", "distribution", "connectivity"],
-      "properties": {
-        "subject_id": { "type": "string", "minLength": 1 },
-        "carrier": { "type": "string", "enum": ["BODY", "PATH_GRAPH", "SURFACE", "REGION"] },
-        "reference": {
-          "type": "object",
-          "additionalProperties": false,
-          "required": ["anchor_source", "binding", "secondary_anchors", "frame"],
-          "properties": {
-            "anchor_source": {
-              "type": "string",
-              "enum": [
-                "WORLD_POINT",
-                "CASTER_BODY",
-                "CASTER_HAND",
-                "AIM_POINT",
-                "AIM_DIRECTION",
-                "LOCKED_TARGET",
-                "AUTO_SUPPORT_SURFACE",
-                "NEARBY_MEDIUM",
-                "SUBJECT_REF",
-                "ACTUAL_CONTACT_POINT"
-              ]
-            },
-            "binding": { "type": "string", "enum": ["CAPTURE", "FOLLOW", "ATTACH", "CONTROL"] },
-            "anchor_subject_id": { "type": "string" },
-            "secondary_anchors": {
-              "type": "array",
-              "maxItems": 4,
-              "items": { "$ref": "#/$defs/AnchorRef" }
-            },
-            "frame": {
-              "type": "string",
-              "enum": ["WORLD_FIXED", "FOLLOW_CASTER", "FOLLOW_TARGET", "ATTACHED_SUBJECT"]
-            }
-          }
+        "spawn_subject_id": { "type": "string", "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$" },
+        "spawn_offset_m": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": { "type": "number", "minimum": -30.0, "maximum": 30.0 }
         },
-        "geometry": {
+        "auto_support_rule": {
           "type": "object",
           "additionalProperties": false,
-          "required": [
-            "generator",
-            "dimension",
-            "extent_m",
-            "thickness_m",
-            "node_budget",
-            "edge_budget",
-            "quad_budget"
-          ],
+          "required": ["max_count", "max_distance_m", "surface_filter"],
           "properties": {
-            "generator": {
-              "type": "string",
-              "enum": [
-                "SPHERE_SCULPT",
-                "LANCE_PRISM",
-                "SLAB_MONOLITH",
-                "COMPOUND_FROM_PATH",
-                "LINE_SEGMENT",
-                "ARC_CURVE",
-                "BRANCH_WEB",
-                "CLOSED_RING",
-                "BOUNDED_PLANE",
-                "SWEPT_STRIP",
-                "CONFORMAL_SHELL",
-                "RADIAL_SPHERE",
-                "CYLINDER_COLUMN",
-                "CONE_SECTOR",
-                "ALIGNED_BOX"
-              ]
-            },
-            "dimension": { "type": "string", "enum": ["0D", "1D", "2D", "3D"] },
-            "extent_m": { "type": "number", "exclusiveMinimum": 0.0 },
-            "thickness_m": { "type": "number", "minimum": 0.0 },
-            "node_budget": { "type": "integer", "minimum": 0, "maximum": 16 },
-            "edge_budget": { "type": "integer", "minimum": 0, "maximum": 24 },
-            "quad_budget": { "type": "integer", "minimum": 0, "maximum": 64 }
-          }
-        },
-        "distribution": {
-          "type": "object",
-          "additionalProperties": false,
-          "required": ["sampling", "boundary", "extent_profile", "density"],
-          "properties": {
-            "sampling": { "type": "string", "enum": ["CONTINUOUS", "DISCRETE", "DIFFUSE"] },
-            "boundary": { "type": "string", "enum": ["SHARP", "FALLOFF"] },
-            "extent_profile": { "$ref": "#/$defs/ProfileSpec" },
-            "density": { "type": "number", "minimum": 0.0 }
-          }
-        },
-        "connectivity": {
-          "type": "object",
-          "additionalProperties": false,
-          "required": [
-            "allow_branching",
-            "allow_loop_close",
-            "allow_local_deformation",
-            "max_deflect_iterations_per_node",
-            "on_obstruction"
-          ],
-          "properties": {
-            "allow_branching": { "type": "boolean" },
-            "allow_loop_close": { "type": "boolean" },
-            "allow_local_deformation": { "type": "boolean" },
-            "max_deflect_iterations_per_node": { "type": "integer", "minimum": 0, "maximum": 2 },
-            "on_obstruction": {
-              "type": "string",
-              "enum": ["DEFORM_OR_TRUNCATE", "SLIDE_BOUNDARY", "HALT", "PASS_THROUGH"]
-            }
+            "max_count": { "type": "integer", "minimum": 1, "maximum": 8 },
+            "max_distance_m": { "type": "number", "exclusiveMinimum": 0.0, "maximum": 20.0 },
+            "surface_filter": { "type": "string", "minLength": 1, "maxLength": 64 }
           }
         }
       }
     },
+
+    "BodySpatialSpec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "subject_id",
+        "carrier",
+        "dimension",
+        "generator",
+        "node_budget",
+        "edge_budget",
+        "quad_budget",
+        "max_deflect_iterations_per_node",
+        "initial_extent_m",
+        "reference"
+      ],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$" },
+        "subject_id": { "type": "string", "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$" },
+        "carrier": { "const": "BODY" },
+        "dimension": { "const": "3D" },
+        "generator": {
+          "type": "string",
+          "enum": ["SPHERE_SCULPT", "LANCE_PRISM", "SLAB_MONOLITH", "COMPOUND_FROM_PATH"]
+        },
+        "node_budget": { "const": 0 },
+        "edge_budget": { "const": 0 },
+        "quad_budget": { "const": 0 },
+        "max_deflect_iterations_per_node": { "const": 0 },
+        "initial_extent_m": { "type": "number", "minimum": 0.1, "maximum": 12.0 },
+        "reference": { "$ref": "#/$defs/SpawnReferenceSpec" }
+      }
+    },
+
+    "PathGraphSpatialSpec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "subject_id",
+        "carrier",
+        "dimension",
+        "generator",
+        "node_budget",
+        "edge_budget",
+        "quad_budget",
+        "max_deflect_iterations_per_node",
+        "per_segment_phase",
+        "initial_extent_m",
+        "reference"
+      ],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$" },
+        "subject_id": { "type": "string", "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$" },
+        "carrier": { "const": "PATH_GRAPH" },
+        "dimension": { "const": "1D" },
+        "generator": {
+          "type": "string",
+          "enum": ["LINE_SEGMENT", "ARC_CURVE", "BRANCH_WEB", "CLOSED_RING"]
+        },
+        "node_budget": { "type": "integer", "minimum": 2, "maximum": 16 },
+        "edge_budget": { "type": "integer", "minimum": 1, "maximum": 24 },
+        "quad_budget": { "const": 0 },
+        "max_deflect_iterations_per_node": { "type": "integer", "minimum": 0, "maximum": 2 },
+        "per_segment_phase": { "type": "boolean" },
+        "initial_extent_m": { "type": "number", "minimum": 0.2, "maximum": 20.0 },
+        "reference": { "$ref": "#/$defs/SpawnReferenceSpec" }
+      }
+    },
+
+    "SurfaceSpatialSpec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "subject_id",
+        "carrier",
+        "dimension",
+        "generator",
+        "node_budget",
+        "edge_budget",
+        "quad_budget",
+        "max_deflect_iterations_per_node",
+        "initial_extent_m",
+        "reference"
+      ],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$" },
+        "subject_id": { "type": "string", "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$" },
+        "carrier": { "const": "SURFACE" },
+        "dimension": { "const": "2D" },
+        "generator": {
+          "type": "string",
+          "enum": ["BOUNDED_PLANE", "SWEPT_STRIP", "CONFORMAL_SHELL"]
+        },
+        "node_budget": { "const": 0 },
+        "edge_budget": { "const": 0 },
+        "quad_budget": { "type": "integer", "minimum": 1, "maximum": 64 },
+        "max_deflect_iterations_per_node": { "type": "integer", "minimum": 0, "maximum": 1 },
+        "initial_extent_m": { "type": "number", "minimum": 0.2, "maximum": 12.0 },
+        "reference": { "$ref": "#/$defs/SpawnReferenceSpec" }
+      }
+    },
+
+    "RegionSpatialSpec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "subject_id",
+        "carrier",
+        "dimension",
+        "generator",
+        "node_budget",
+        "edge_budget",
+        "quad_budget",
+        "max_deflect_iterations_per_node",
+        "initial_extent_m",
+        "reference"
+      ],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$" },
+        "subject_id": { "type": "string", "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$" },
+        "carrier": { "const": "REGION" },
+        "dimension": { "const": "3D" },
+        "generator": {
+          "type": "string",
+          "enum": ["RADIAL_SPHERE", "CYLINDER_COLUMN", "CONE_SECTOR", "ALIGNED_BOX"]
+        },
+        "node_budget": { "const": 0 },
+        "edge_budget": { "const": 0 },
+        "quad_budget": { "const": 0 },
+        "max_deflect_iterations_per_node": { "const": 0 },
+        "initial_extent_m": { "type": "number", "minimum": 0.2, "maximum": 16.0 },
+        "reference": { "$ref": "#/$defs/SpawnReferenceSpec" }
+      }
+    },
+
+    "SpatialSpec": {
+      "oneOf": [
+        { "$ref": "#/$defs/BodySpatialSpec" },
+        { "$ref": "#/$defs/PathGraphSpatialSpec" },
+        { "$ref": "#/$defs/SurfaceSpatialSpec" },
+        { "$ref": "#/$defs/RegionSpatialSpec" }
+      ]
+    },
+
     "RelationSpec": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "kind", "source_subject_id", "target_ref", "channel", "mode", "max_distance_m"],
+      "required": ["id", "kind", "source_ref", "target_ref", "channel"],
       "properties": {
-        "id": { "type": "string", "minLength": 1 },
+        "id": { "type": "string", "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$" },
         "kind": {
           "type": "string",
-          "enum": ["CONSTRAINT_RELATION", "FUNCTIONAL_LINK", "SPATIAL_ATTACHMENT"]
+          "enum": ["SPATIAL_ATTACH", "FUNCTIONAL_COUPLE", "CONSTRAINT_LINK"]
         },
-        "source_subject_id": { "type": "string", "minLength": 1 },
-        "target_ref": { "type": "string", "minLength": 1 },
-        "channel": { "$ref": "#/$defs/InteractionChannel" },
-        "mode": { "type": "string", "minLength": 1 },
-        "max_distance_m": { "type": "number", "minimum": 0.0 }
+        "source_ref": { "type": "string", "minLength": 3, "maxLength": 64 },
+        "target_ref": { "type": "string", "minLength": 3, "maxLength": 64 },
+        "channel": {
+          "type": "string",
+          "enum": [
+            "FOLLOW_TRANSFORM",
+            "DISTURBANCE_TO_PERCEPTION",
+            "ENERGY_FEED",
+            "CONTACT_TO_TRIGGER",
+            "GRAPH_SUPPORT"
+          ]
+        },
+        "attach_mode": {
+          "type": "string",
+          "enum": ["RIGID_OFFSET", "SOFT_FOLLOW", "ORBIT_ANCHOR", "HAND_SOCKET"]
+        },
+        "local_offset_m": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": { "type": "number", "minimum": -15.0, "maximum": 15.0 }
+        },
+        "signal_granularity": {
+          "type": "string",
+          "enum": ["BINARY_PING", "DIRECTIONAL_IMPULSE", "INTENSITY_SAMPLE"]
+        },
+        "max_distance_m": { "type": "number", "exclusiveMinimum": 0.0, "maximum": 30.0 }
       }
     },
+
+    "DirectionSpec": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode", "axis"],
+          "properties": {
+            "mode": { "const": "WORLD_AXIS" },
+            "axis": {
+              "type": "string",
+              "enum": ["POS_X", "NEG_X", "POS_Y", "NEG_Y", "POS_Z", "NEG_Z", "UP", "DOWN"]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode", "axis"],
+          "properties": {
+            "mode": { "const": "FRAME_RELATIVE" },
+            "axis": {
+              "type": "string",
+              "enum": ["AIM_FORWARD", "CASTER_FORWARD", "SURFACE_NORMAL", "SURFACE_TANGENT"]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode", "center_ref", "polarity"],
+          "properties": {
+            "mode": { "const": "RADIAL" },
+            "center_ref": { "type": "string", "minLength": 3, "maxLength": 64 },
+            "polarity": { "type": "string", "enum": ["INWARD", "OUTWARD"] }
+          }
+        }
+      ]
+    },
+
     "OpEstablish": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["family", "subject_id"],
+      "required": ["op", "target_kind", "target_id"],
       "properties": {
-        "family": { "const": "ESTABLISH" },
-        "subject_id": { "type": "string", "minLength": 1 },
-        "initial_scale": { "type": "number", "exclusiveMinimum": 0.0 },
-        "propagation": { "$ref": "#/$defs/PropagationSpec" }
+        "op": { "const": "ESTABLISH" },
+        "target_kind": { "type": "string", "enum": ["SUBJECT", "RELATION"] },
+        "target_id": { "type": "string", "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$" },
+        "handle_id": { "type": "string", "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$" }
       }
     },
-    "OpDrive": {
+
+    "OpDriveContinuous": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["family", "target_subject_id", "channel", "mode", "strength", "profile"],
+      "required": ["op", "target_subject_id", "channel", "mode", "magnitude", "profile"],
       "properties": {
-        "family": { "const": "DRIVE" },
-        "target_subject_id": { "type": "string", "minLength": 1 },
+        "op": { "const": "DRIVE" },
+        "handle_id": { "type": "string", "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$" },
+        "target_subject_id": { "type": "string", "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$" },
         "channel": {
           "type": "string",
-          "enum": ["POSE", "EXTENT", "DISTRIBUTION", "FLOW", "INTENSITY", "DIRECTION", "VELOCITY_IMPULSE"]
+          "enum": ["POSE", "EXTENT", "DISTRIBUTION", "FLOW", "INTENSITY", "DIRECTION"]
         },
-        "mode": { "type": "string", "enum": ["TARGET", "RATE", "IMPULSE"] },
-        "target_ref": { "type": "string" },
-        "strength": { "type": "number" },
-        "profile": { "$ref": "#/$defs/ProfileSpec" },
-        "propagation": { "$ref": "#/$defs/PropagationSpec" }
+        "mode": { "type": "string", "enum": ["TARGET", "RATE"] },
+        "magnitude": { "type": "number", "minimum": -500.0, "maximum": 500.0 },
+        "direction": { "$ref": "#/$defs/DirectionSpec" },
+        "target_ref": { "type": "string", "minLength": 3, "maxLength": 64 },
+        "profile": {
+          "type": "string",
+          "enum": ["CONSTANT", "LINEAR_RAMP", "EASE_IN_OUT", "PULSE"]
+        }
       }
     },
+
+    "OpDriveImpulse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "op",
+        "target_subject_id",
+        "channel",
+        "mode",
+        "magnitude",
+        "direction",
+        "profile"
+      ],
+      "properties": {
+        "op": { "const": "DRIVE" },
+        "target_subject_id": { "type": "string", "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$" },
+        "channel": {
+          "type": "string",
+          "enum": ["VELOCITY_IMPULSE", "INTENSITY_BURST"]
+        },
+        "mode": { "const": "IMPULSE" },
+        "magnitude": { "type": "number", "exclusiveMinimum": 0.0, "maximum": 500.0 },
+        "direction": { "$ref": "#/$defs/DirectionSpec" },
+        "profile": {
+          "type": "string",
+          "enum": ["INSTANT_BURST", "DECAY_BURST"]
+        }
+      }
+    },
+
     "OpConstrain": {
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "family",
+        "op",
+        "handle_id",
         "target_subject_id",
         "constraint_family",
         "desired_value",
         "tolerance",
-        "capacity",
+        "capacity_lu",
+        "rebind_cooldown_s",
         "on_exceed",
         "provider_ref"
       ],
       "properties": {
-        "family": { "const": "CONSTRAIN" },
-        "target_subject_id": { "type": "string", "minLength": 1 },
+        "op": { "const": "CONSTRAIN" },
+        "handle_id": { "type": "string", "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$" },
+        "target_subject_id": { "type": "string", "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$" },
         "constraint_family": {
           "type": "string",
-          "enum": ["POSITION", "DISTANCE", "ATTACH", "COHESION", "SUPPORT", "CONFORM", "CONTAIN", "BOUND"]
+          "enum": ["PIN", "TETHER", "CONTAIN", "AXIS_LOCK", "PRESSURE_WALL"]
         },
-        "anchor_ref": { "type": "string" },
-        "desired_value": { "type": "number" },
-        "tolerance": { "type": "number", "minimum": 0.0 },
-        "capacity": { "type": "number", "minimum": 0.0 },
-        "on_exceed": { "type": "string", "enum": ["YIELD", "DEFORM", "BREAK"] },
+        "anchor_ref": { "type": "string", "minLength": 3, "maxLength": 64 },
+        "desired_value": { "type": "number", "minimum": -100.0, "maximum": 500.0 },
+        "tolerance": { "type": "number", "minimum": 0.0, "maximum": 100.0 },
+        "capacity_lu": { "type": "number", "exclusiveMinimum": 0.0, "maximum": 500.0 },
+        "rebind_cooldown_s": { "type": "number", "minimum": 0.05, "maximum": 10.0 },
+        "on_exceed": {
+          "type": "string",
+          "enum": ["DETACH", "FRACTURE", "VENT", "STALL_NOTIFY"]
+        },
         "provider_ref": {
           "type": "string",
-          "enum": ["CASTER_MANA", "POST_RELEASE_RESERVE", "VESSEL_RESERVE", "WORLD_ANCHOR"]
+          "enum": ["CASTER_MANA", "POST_RELEASE_RESERVE", "VESSEL_RESERVE", "PASSIVE_STRUCTURE"]
         }
       }
     },
+
     "OpTransform": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["family", "target_subject_id", "transform_id", "preserve"],
+      "required": ["op", "target_subject_id", "transform_id", "preserve"],
       "properties": {
-        "family": { "const": "TRANSFORM" },
-        "target_subject_id": { "type": "string", "minLength": 1 },
+        "op": { "const": "TRANSFORM" },
+        "target_subject_id": { "type": "string", "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$" },
         "transform_id": {
           "type": "string",
           "enum": [
-            "PATH_LIQUID_TO_BODY_SOLID",
-            "BODY_SOLID_TO_SHARDS",
-            "BODY_SOLID_TO_LIQUID_REGION",
-            "FOG_REGION_TO_ICE_SHARDS",
-            "FIELD_RECONFIGURE"
+            "PHASE_CHANGE",
+            "STRUCTURAL_CRYSTALLIZE",
+            "SUBDIVIDE",
+            "MERGE",
+            "IONIZE_OR_IGNITE",
+            "IGNITE_EXOTHERMIC",
+            "PROPAGATE",
+            "DISSIPATE"
           ]
         },
         "preserve": {
           "type": "array",
+          "minItems": 1,
+          "maxItems": 6,
           "items": {
             "type": "string",
-            "enum": ["MATERIAL_QUANTITY", "CURRENT_GEOMETRY", "VALID_CONNECTIONS", "CURRENT_MOMENTUM"]
+            "enum": ["MASS", "TOPOLOGY", "MOMENTUM", "TEMPERATURE", "HEAT", "POSITION"]
           }
         },
-        "max_output_bodies": { "type": "integer", "minimum": 1, "maximum": 12 },
-        "propagation": { "$ref": "#/$defs/PropagationSpec" }
+        "target_phase": {
+          "type": "string",
+          "enum": ["SOLID", "LIQUID", "GAS_MIST", "PLASMA"]
+        },
+        "max_output_bodies": { "type": "integer", "minimum": 1, "maximum": 16 },
+        "propagation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "medium_mode",
+            "max_hops",
+            "hop_attenuation",
+            "graph_snapshot_mode",
+            "on_missing_origin"
+          ],
+          "properties": {
+            "medium_mode": { "type": "string", "enum": ["CONDUCTIVE_GRAPH", "VOLUME_OVERLAP"] },
+            "max_hops": { "type": "integer", "minimum": 1, "maximum": 12 },
+            "hop_attenuation": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+            "graph_snapshot_mode": {
+              "type": "string",
+              "enum": ["LIVE_CONNECTIVITY", "INITIAL_SNAPSHOT"]
+            },
+            "on_missing_origin": {
+              "type": "string",
+              "enum": ["FALLBACK_TO_ROOT_NODE", "ABORT_NO_COST"]
+            }
+          }
+        }
       }
     },
+
     "OpTransfer": {
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "family",
+        "op",
         "source_ref",
         "target_subject_id",
         "resource_kind",
-        "rate",
+        "rate_per_s",
         "max_amount",
         "on_insufficient_source"
       ],
       "properties": {
-        "family": { "const": "TRANSFER" },
-        "source_ref": { "type": "string", "minLength": 1 },
-        "target_subject_id": { "type": "string", "minLength": 1 },
-        "resource_kind": { "type": "string", "enum": ["MATERIAL", "ENERGY", "HEAT", "VITALITY"] },
-        "rate": { "type": "number", "minimum": 0.0 },
-        "max_amount": { "type": "number", "minimum": 0.0 },
+        "op": { "const": "TRANSFER" },
+        "source_ref": { "type": "string", "minLength": 3, "maxLength": 64 },
+        "target_subject_id": { "type": "string", "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$" },
+        "resource_kind": { "type": "string", "enum": ["MU", "EU", "LU", "HEAT"] },
+        "rate_per_s": { "type": "number", "exclusiveMinimum": 0.0, "maximum": 500.0 },
+        "max_amount": { "type": "number", "exclusiveMinimum": 0.0, "maximum": 1000.0 },
         "on_insufficient_source": {
           "type": "string",
-          "enum": ["FAIL_ESTABLISH", "CLAMP_TO_AVAILABLE", "FALLBACK_TO_MANA_GEN"]
+          "enum": ["CLAMP_TO_AVAILABLE", "PAUSE_PROCESS", "ABORT_OP"]
         }
       }
     },
+
     "OpCouple": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["family", "coupling_id", "source_ref", "target_ref"],
+      "required": ["op", "handle_id", "relation_id"],
       "properties": {
-        "family": { "const": "COUPLE" },
-        "coupling_id": {
-          "type": "string",
-          "enum": [
-            "DISTURBANCE_TO_PERCEPTION",
-            "SUBJECT_POSE_TO_FIELD_ORIGIN",
-            "CONTACT_TO_TRIGGER",
-            "CONTACT_TO_CONDUCTION",
-            "HEAT_FLUX_TO_PHASE"
-          ]
-        },
-        "source_ref": { "type": "string", "minLength": 1 },
-        "target_ref": { "type": "string", "minLength": 1 },
-        "signal_granularity": {
-          "type": "string",
-          "enum": ["NONE", "BINARY_PING", "DIRECTION_AND_INTENSITY_ONLY"]
-        }
+        "op": { "const": "COUPLE" },
+        "handle_id": { "type": "string", "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$" },
+        "relation_id": { "type": "string", "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$" }
       }
     },
+
     "OpWithdraw": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["family", "target_scope", "mode"],
+      "required": ["op", "target_scope", "mode"],
       "properties": {
-        "family": { "const": "WITHDRAW" },
+        "op": { "const": "WITHDRAW" },
         "target_scope": {
           "type": "string",
-          "enum": ["SUBJECT", "RELATION", "PROCESS", "ALL_SPELL_SUPPORTS"]
+          "enum": ["HANDLE", "SUBJECT_SUPPORTS", "ALL_SPELL_SUPPORTS"]
         },
-        "target_id": { "type": "string" },
-        "mode": { "type": "string", "enum": ["STOP_SUPPORT", "DETACH_CONTROL"] }
+        "target_id": { "type": "string", "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$" },
+        "mode": {
+          "type": "string",
+          "enum": ["DISSIPATE", "NATURAL_RELEASE", "RECLAIM_TO_CASTER"]
+        }
       }
     },
+
     "OperationSpec": {
       "oneOf": [
         { "$ref": "#/$defs/OpEstablish" },
-        { "$ref": "#/$defs/OpDrive" },
+        { "$ref": "#/$defs/OpDriveContinuous" },
+        { "$ref": "#/$defs/OpDriveImpulse" },
         { "$ref": "#/$defs/OpConstrain" },
         { "$ref": "#/$defs/OpTransform" },
         { "$ref": "#/$defs/OpTransfer" },
@@ -530,247 +869,268 @@
         { "$ref": "#/$defs/OpWithdraw" }
       ]
     },
+
+    "TransitionSpec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "on_event",
+        "event_source_filter",
+        "next_process_ids",
+        "handoff_handles",
+        "action"
+      ],
+      "properties": {
+        "on_event": {
+          "type": "string",
+          "enum": [
+            "ON_SPAWN",
+            "ON_INPUT_RELEASE",
+            "ON_INPUT_HOLD_EXPIRE",
+            "ON_TIMEOUT",
+            "ON_COLLIDE",
+            "ON_CONSTRAINT_EXCEEDED",
+            "ON_GRAPH_COMPLETED",
+            "ON_PHASE_CHANGED",
+            "ON_DEPLETED",
+            "ON_DISTURBANCE_PING"
+          ]
+        },
+        "event_source_filter": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["scope"],
+          "properties": {
+            "scope": {
+              "type": "string",
+              "enum": ["SELF_PROCESS", "SUBJECT", "CAST_INSTANCE"]
+            },
+            "subject_id": { "type": "string", "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$" }
+          }
+        },
+        "next_process_ids": {
+          "type": "array",
+          "maxItems": 4,
+          "items": { "type": "string", "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$" }
+        },
+        "handoff_handles": {
+          "type": "array",
+          "maxItems": 8,
+          "items": { "type": "string", "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$" }
+        },
+        "action": {
+          "type": "string",
+          "enum": [
+            "STOP_SELF_START_NEXT",
+            "KEEP_SELF_START_NEXT",
+            "STOP_SELF_ONLY",
+            "HANDOFF_TO_RESERVE"
+          ]
+        }
+      }
+    },
+
     "ProcessSpec": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "role", "start", "operations", "end", "transitions"],
+      "required": [
+        "id",
+        "role",
+        "on_enter",
+        "while_active",
+        "on_exit",
+        "max_duration_s",
+        "transitions"
+      ],
       "properties": {
-        "id": { "type": "string", "minLength": 1 },
+        "id": { "type": "string", "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$" },
         "role": {
           "type": "string",
-          "enum": ["OMEN_BUILDUP", "FORMATION", "ACTIVE_EFFECT", "PHASE_TRANSITION", "PAYOFF"]
+          "enum": [
+            "GENESIS",
+            "CARRIER_EXECUTION",
+            "CONSTRAINT_HOLD",
+            "TRANSFORM_STAGE",
+            "TRIGGER_WATCH",
+            "CLEANUP_DISSIPATE"
+          ]
         },
-        "start": {
-          "type": "object",
-          "additionalProperties": false,
-          "required": ["type"],
-          "properties": {
-            "type": { "type": "string", "enum": ["ON_CAST_START", "ON_EVENT"] },
-            "event": { "$ref": "#/$defs/EventType" }
-          }
-        },
-        "operations": {
+        "on_enter": {
           "type": "array",
-          "minItems": 1,
+          "maxItems": 12,
           "items": { "$ref": "#/$defs/OperationSpec" }
         },
-        "end": {
-          "type": "object",
-          "additionalProperties": false,
-          "required": ["events", "max_duration_s"],
-          "properties": {
-            "events": {
-              "type": "array",
-              "minItems": 1,
-              "items": { "$ref": "#/$defs/EventType" }
-            },
-            "max_duration_s": { "type": "number", "minimum": 0.0 }
-          }
+        "while_active": {
+          "type": "array",
+          "maxItems": 12,
+          "items": { "$ref": "#/$defs/OperationSpec" }
         },
+        "on_exit": {
+          "type": "array",
+          "maxItems": 12,
+          "items": { "$ref": "#/$defs/OperationSpec" }
+        },
+        "max_duration_s": { "type": "number", "exclusiveMinimum": 0.0, "maximum": 30.0 },
         "transitions": {
           "type": "array",
-          "items": {
-            "type": "object",
-            "additionalProperties": false,
-            "required": ["on_event", "next_process_id", "action"],
-            "properties": {
-              "on_event": { "$ref": "#/$defs/EventType" },
-              "next_process_id": { "type": ["string", "null"] },
-              "action": {
-                "type": "string",
-                "enum": [
-                  "HANDOFF_TO_RESERVE",
-                  "DETACH_CONTROL",
-                  "WITHDRAW_ALL_HANDLES",
-                  "START_NEXT",
-                  "COMPLETE"
-                ]
-              }
-            }
-          }
+          "maxItems": 8,
+          "items": { "$ref": "#/$defs/TransitionSpec" }
         }
       }
     },
-    "ContractSpec": {
+
+    "ProcessGraphSpec": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["combat", "interruption_priority"],
+      "required": ["entry_processes", "processes"],
       "properties": {
-        "combat": {
-          "type": "object",
-          "additionalProperties": false,
-          "required": [
-            "formation",
-            "min_deliverable_progress",
-            "full_charge_s",
-            "charge_tiers",
-            "on_under_threshold_release",
-            "caster_movement",
-            "dodge_cancel_policy",
-            "inputs_used",
-            "controller",
-            "anchor_owner",
-            "provider"
-          ],
-          "properties": {
-            "formation": { "type": "string", "enum": ["INSTANT", "GRADUAL_CHARGE"] },
-            "min_deliverable_progress": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
-            "full_charge_s": { "type": "number", "minimum": 0.0 },
-            "charge_tiers": {
-              "type": "array",
-              "minItems": 1,
-              "maxItems": 3,
-              "items": {
-                "type": "object",
-                "additionalProperties": false,
-                "required": ["min_progress", "scale_mul", "intensity_mul", "cost_mul"],
-                "properties": {
-                  "min_progress": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
-                  "scale_mul": { "type": "number", "exclusiveMinimum": 0.0 },
-                  "intensity_mul": { "type": "number", "exclusiveMinimum": 0.0 },
-                  "cost_mul": { "type": "number", "exclusiveMinimum": 0.0 }
-                }
-              }
-            },
-            "on_under_threshold_release": {
-              "type": "string",
-              "enum": ["FIZZLE_PARTIAL_REFUND", "DELIVER_MIN_TIER"]
-            },
-            "caster_movement": {
-              "type": "string",
-              "enum": ["FULL_MOVE", "SLOW_SOLEMN_WALK", "ROOTED"]
-            },
-            "dodge_cancel_policy": {
-              "type": "string",
-              "enum": ["TRIGGER_INTERRUPT", "TRIGGER_RELEASE", "LOCKED_ON_COMMIT"]
-            },
-            "inputs_used": {
-              "type": "array",
-              "minItems": 1,
-              "items": {
-                "type": "string",
-                "enum": [
-                  "AIM_POINT",
-                  "AIM_DIRECTION",
-                  "LOCKED_TARGET",
-                  "CAST_HOLD",
-                  "VOLUNTARY_RELEASE",
-                  "INTERRUPT_SIGNAL",
-                  "SINGLE_FOCUS_RAY"
-                ]
-              }
-            },
-            "controller": {
-              "type": "string",
-              "enum": ["CASTER_FOCUS", "AUTONOMOUS", "ANCHOR_TRIGGER"]
-            },
-            "anchor_owner": {
-              "type": "string",
-              "enum": ["WORLD_FIXED", "CASTER", "TARGET", "VESSEL_OBJECT"]
-            },
-            "provider": {
-              "type": "object",
-              "additionalProperties": false,
-              "required": ["material_source", "energy_source", "post_release_reserve_mana"],
-              "properties": {
-                "material_source": {
-                  "type": "string",
-                  "enum": ["NONE", "CASTER_MANA_GEN", "ENVIRONMENT_ONLY", "ENVIRONMENT_WITH_MANA_FALLBACK", "VESSEL_RESERVE"]
-                },
-                "energy_source": { "type": "string", "enum": ["CASTER_MANA", "VESSEL_RESERVE", "WORLD_SOURCE"] },
-                "post_release_reserve_mana": { "type": "number", "minimum": 0.0 }
-              }
-            }
-          }
+        "entry_processes": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 4,
+          "items": { "type": "string", "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$" }
         },
-        "interruption_priority": {
-          "type": "string",
-          "enum": ["INTERRUPT_WINS_UNLESS_COMMITTED", "RELEASE_WINS_IF_DELIVERABLE"]
+        "processes": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8,
+          "items": { "$ref": "#/$defs/ProcessSpec" }
         }
       }
     },
+
     "ExpressionSpec": {
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "composition",
-        "symmetry",
-        "tension",
-        "contrast",
-        "delivery",
-        "aftermath_style",
-        "visual_hints",
-        "audio_profile"
+        "caster_cue",
+        "omen_profile",
+        "audio_profile",
+        "aftermath_profile",
+        "camera_impulse_level"
       ],
       "properties": {
-        "composition": {
-          "type": "string",
-          "enum": ["CONCENTRATED", "STREAMING", "ENVELOPING", "STRUCTURAL", "DIFFUSE"]
-        },
-        "symmetry": { "type": "string", "enum": ["NONE", "AXIAL", "RADIAL", "PLANAR"] },
-        "tension": {
-          "type": "string",
-          "enum": ["NONE", "GRADUAL_ACCUMULATION", "SUSTAINED_STRAIN", "INSTANT_SNAP"]
-        },
-        "contrast": { "type": "string", "enum": ["LOW", "MEDIUM", "HIGH"] },
-        "delivery": {
-          "type": "string",
-          "enum": ["CONTINUOUS", "CONCENTRATED", "BURST", "PASSIVE"]
-        },
-        "aftermath_style": {
-          "type": "string",
-          "enum": ["NONE", "RESTRAINED", "LINGERING_DECAY", "MONUMENTAL_RESIDUE"]
-        },
-        "visual_hints": {
+        "caster_cue": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["material_style", "accent_color_hex"],
+          "required": ["pose_tag", "cast_focus_ms"],
           "properties": {
-            "material_style": { "type": "string", "minLength": 1 },
-            "accent_color_hex": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" }
+            "pose_tag": {
+              "type": "string",
+              "enum": [
+                "STAFF_RAISE",
+                "STAFF_SWEEP",
+                "PALM_PLANT",
+                "TWO_HAND_CONDENSE",
+                "VESSEL_ETCH",
+                "FINGER_SNAP",
+                "NONE"
+              ]
+            },
+            "cast_focus_ms": { "type": "integer", "minimum": 0, "maximum": 2000 }
+          }
+        },
+        "omen_profile": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "sky_darken",
+            "ambient_fog_tint_strength",
+            "environment_resonates",
+            "omitted_during_instant_cast"
+          ],
+          "properties": {
+            "sky_darken": { "type": "number", "minimum": 0.0, "maximum": 0.7 },
+            "ambient_fog_tint_strength": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+            "environment_resonates": { "type": "boolean" },
+            "omitted_during_instant_cast": { "type": "boolean" }
           }
         },
         "audio_profile": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["drone_family", "silence_pre_impact_ms", "impact_family", "sustain_loop_family"],
+          "required": [
+            "drone_module",
+            "impact_module",
+            "sustain_loop_module",
+            "pre_delivery_silence_ms"
+          ],
           "properties": {
-            "drone_family": { "type": "string", "minLength": 1 },
-            "silence_pre_impact_ms": { "type": "integer", "minimum": 0, "maximum": 120 },
-            "impact_family": { "type": "string", "minLength": 1 },
-            "sustain_loop_family": { "type": "string", "minLength": 1 }
+            "drone_module": {
+              "type": "string",
+              "enum": [
+                "NONE",
+                "CRYSTALLINE_HUM",
+                "SUB_VOID_RUMBLE",
+                "ARC_CRACKLE_HUM",
+                "HOLLOW_WIND",
+                "RESONANT_CHORD"
+              ]
+            },
+            "impact_module": {
+              "type": "string",
+              "enum": [
+                "NONE",
+                "ICE_LOCK_CRACK",
+                "TECTONIC_SLAM",
+                "THUNDER_CRACK",
+                "HARMONIC_DEFLECT",
+                "FROST_SHATTER",
+                "ETHER_PING"
+              ]
+            },
+            "sustain_loop_module": {
+              "type": "string",
+              "enum": [
+                "NONE",
+                "TENSE_WATER_STRAIN",
+                "SILENT_PRESSURE_HUM",
+                "SOFT_MIST_AMBIENCE",
+                "BARRIER_STRAIN_CHIME",
+                "ARC_HOLD_BUZZ"
+              ]
+            },
+            "pre_delivery_silence_ms": { "type": "integer", "minimum": 0, "maximum": 120 }
           }
-        }
+        },
+        "aftermath_profile": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["light_decay_s", "leave_world_scars", "hitstop_local_ms"],
+          "properties": {
+            "light_decay_s": { "type": "number", "minimum": 0.0, "maximum": 5.0 },
+            "leave_world_scars": { "type": "boolean" },
+            "hitstop_local_ms": { "type": "integer", "minimum": 0, "maximum": 140 }
+          }
+        },
+        "camera_impulse_level": { "type": "number", "minimum": 0.0, "maximum": 1.0 }
       }
     },
+
     "BudgetSpec": {
       "type": "object",
       "additionalProperties": false,
       "required": [
+        "compiler_status",
+        "peak_dynamic_bodies",
+        "peak_path_nodes",
+        "peak_surface_quads",
+        "peak_point_lights",
         "derived_upfront_mana",
         "derived_sustain_mana_per_s",
         "derived_reserve_mana",
-        "environment_discount_applied",
-        "subject_count",
-        "process_count",
-        "peak_nodes",
-        "peak_edges",
-        "peak_surface_quads",
-        "peak_fracture_bodies",
-        "compiler_status"
+        "estimated_tick_cost_us"
       ],
       "properties": {
-        "derived_upfront_mana": { "type": "number", "minimum": 0.0 },
-        "derived_sustain_mana_per_s": { "type": "number", "minimum": 0.0 },
-        "derived_reserve_mana": { "type": "number", "minimum": 0.0 },
-        "environment_discount_applied": { "type": "boolean" },
-        "subject_count": { "type": "integer", "minimum": 1, "maximum": 8 },
-        "process_count": { "type": "integer", "minimum": 1, "maximum": 8 },
-        "peak_nodes": { "type": "integer", "minimum": 0, "maximum": 16 },
-        "peak_edges": { "type": "integer", "minimum": 0, "maximum": 24 },
+        "compiler_status": { "const": "VALID" },
+        "peak_dynamic_bodies": { "type": "integer", "minimum": 0, "maximum": 16 },
+        "peak_path_nodes": { "type": "integer", "minimum": 0, "maximum": 16 },
         "peak_surface_quads": { "type": "integer", "minimum": 0, "maximum": 64 },
-        "peak_fracture_bodies": { "type": "integer", "minimum": 0, "maximum": 12 },
-        "compiler_status": { "type": "string", "enum": ["VALID", "REJECTED"] }
+        "peak_point_lights": { "type": "integer", "minimum": 0, "maximum": 3 },
+        "derived_upfront_mana": { "type": "number", "exclusiveMinimum": 0.0, "maximum": 300.0 },
+        "derived_sustain_mana_per_s": { "type": "number", "minimum": 0.0, "maximum": 60.0 },
+        "derived_reserve_mana": { "type": "number", "minimum": 0.0, "maximum": 200.0 },
+        "estimated_tick_cost_us": { "type": "integer", "minimum": 1, "maximum": 300 }
       }
     }
   }

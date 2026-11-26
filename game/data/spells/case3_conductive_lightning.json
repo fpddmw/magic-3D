@@ -1,0 +1,225 @@
+{
+  "schema_version": "0.2.1",
+  "spell_id": "case3_conductive_lightning",
+  "display_name": "连锁电势传导（Conductive Chain Lightning）",
+  "description": "Case 3：从术者引出高电势分支路径，经 CONDUCTIVE_GRAPH 跨越潮湿水迹与金属残骸传导，并显式声明 LIVE_CONNECTIVITY 快照与缺失原点退回契约。",
+  "source_intent_ref": "intent_conductive_lightning",
+  "contract": {
+    "timing": {
+      "windup_s": 0.28,
+      "release_duration_s": 0.9,
+      "recovery_s": 0.32,
+      "max_active_duration_s": 2.0
+    },
+    "combat": {
+      "targeting": "DIRECTION",
+      "range_m": 20.0,
+      "controller": "AUTONOMOUS",
+      "cancel_policy": "ON_EXPIRE_OR_WITHDRAW",
+      "provider": {
+        "energy_source": "POST_RELEASE_RESERVE",
+        "post_release_reserve_mana": 6.0,
+        "max_upfront_mana": 36.0,
+        "max_sustain_mana_per_s": 0.0
+      }
+    }
+  },
+  "subjects": [
+    {
+      "id": "m_arc_plasma",
+      "kind": "MATERIAL",
+      "material_id": "LIGHTNING_PLASMA",
+      "initial_phase": "PLASMA",
+      "capacity_mu": 4.0,
+      "initial_inventory_mu": 2.0,
+      "inherit_world_law": true,
+      "visual_modules": {
+        "contour_module": "BRANCH_TENDRIL",
+        "surface_modules": ["CONDUCTIVE_ARC"],
+        "secondary_modules": ["ARC_SPARKS", "SCORCH_DECAL"],
+        "tint_palette": {
+          "primary_hex": "#A9E4FF",
+          "accent_hex": "#FFFFFF",
+          "emissive_boost": 3.4
+        }
+      }
+    },
+    {
+      "id": "f_potential",
+      "kind": "FIELD",
+      "field_channel": "ELECTRIC_POTENTIAL",
+      "initial_intensity": 14.0,
+      "max_intensity": 40.0,
+      "inherit_world_law": true,
+      "visual_modules": {
+        "contour_module": "FIELD_AURA_RING",
+        "surface_modules": ["CONDUCTIVE_ARC"],
+        "secondary_modules": ["ARC_SPARKS"],
+        "tint_palette": {
+          "primary_hex": "#72C7FF",
+          "accent_hex": "#DDF6FF",
+          "emissive_boost": 2.2
+        }
+      }
+    },
+    {
+      "id": "wr_medium",
+      "kind": "WORLD_REF",
+      "query_kind": "NEARBY_MEDIUM",
+      "expected_filter": "WET_OR_METAL_SURFACE",
+      "require_existing": false
+    }
+  ],
+  "spatial": [
+    {
+      "id": "sp_arc_path",
+      "subject_id": "m_arc_plasma",
+      "carrier": "PATH_GRAPH",
+      "dimension": "1D",
+      "generator": "BRANCH_WEB",
+      "node_budget": 10,
+      "edge_budget": 12,
+      "quad_budget": 0,
+      "max_deflect_iterations_per_node": 2,
+      "per_segment_phase": false,
+      "initial_extent_m": 12.0,
+      "reference": {
+        "spawn_anchor": "CASTER_HAND",
+        "spawn_offset_m": [0.0, 0.15, -0.4]
+      }
+    },
+    {
+      "id": "sp_arc_field",
+      "subject_id": "f_potential",
+      "carrier": "REGION",
+      "dimension": "3D",
+      "generator": "CONE_SECTOR",
+      "node_budget": 0,
+      "edge_budget": 0,
+      "quad_budget": 0,
+      "max_deflect_iterations_per_node": 0,
+      "initial_extent_m": 8.0,
+      "reference": {
+        "spawn_anchor": "AIM_DIRECTION",
+        "spawn_offset_m": [0.0, 0.0, -1.0]
+      }
+    }
+  ],
+  "relations": [
+    {
+      "id": "rel_arc_conduit",
+      "kind": "FUNCTIONAL_COUPLE",
+      "source_ref": "SUBJECT:f_potential",
+      "target_ref": "SUBJECT:m_arc_plasma",
+      "channel": "ENERGY_FEED",
+      "signal_granularity": "DIRECTIONAL_IMPULSE",
+      "max_distance_m": 16.0
+    }
+  ],
+  "process_graph": {
+    "entry_processes": ["p_strike_propagate"],
+    "processes": [
+      {
+        "id": "p_strike_propagate",
+        "role": "TRANSFORM_STAGE",
+        "on_enter": [
+          {
+            "op": "ESTABLISH",
+            "target_kind": "SUBJECT",
+            "target_id": "m_arc_plasma",
+            "handle_id": "h_arc"
+          },
+          {
+            "op": "ESTABLISH",
+            "target_kind": "SUBJECT",
+            "target_id": "f_potential",
+            "handle_id": "h_potential"
+          },
+          {
+            "op": "COUPLE",
+            "handle_id": "h_arc_couple",
+            "relation_id": "rel_arc_conduit"
+          },
+          {
+            "op": "DRIVE",
+            "target_subject_id": "f_potential",
+            "channel": "INTENSITY_BURST",
+            "mode": "IMPULSE",
+            "magnitude": 32.0,
+            "direction": {
+              "mode": "FRAME_RELATIVE",
+              "axis": "AIM_FORWARD"
+            },
+            "profile": "INSTANT_BURST"
+          },
+          {
+            "op": "TRANSFORM",
+            "target_subject_id": "m_arc_plasma",
+            "transform_id": "PROPAGATE",
+            "preserve": ["MOMENTUM", "HEAT"],
+            "propagation": {
+              "medium_mode": "CONDUCTIVE_GRAPH",
+              "max_hops": 6,
+              "hop_attenuation": 0.72,
+              "graph_snapshot_mode": "LIVE_CONNECTIVITY",
+              "on_missing_origin": "FALLBACK_TO_ROOT_NODE"
+            }
+          }
+        ],
+        "while_active": [],
+        "on_exit": [
+          {
+            "op": "WITHDRAW",
+            "target_scope": "ALL_SPELL_SUPPORTS",
+            "mode": "DISSIPATE"
+          }
+        ],
+        "max_duration_s": 0.85,
+        "transitions": [
+          {
+            "on_event": "ON_TIMEOUT",
+            "event_source_filter": { "scope": "SELF_PROCESS" },
+            "next_process_ids": [],
+            "handoff_handles": [],
+            "action": "STOP_SELF_ONLY"
+          }
+        ]
+      }
+    ]
+  },
+  "expression": {
+    "caster_cue": {
+      "pose_tag": "FINGER_SNAP",
+      "cast_focus_ms": 220
+    },
+    "omen_profile": {
+      "sky_darken": 0.25,
+      "ambient_fog_tint_strength": 0.15,
+      "environment_resonates": true,
+      "omitted_during_instant_cast": true
+    },
+    "audio_profile": {
+      "drone_module": "ARC_CRACKLE_HUM",
+      "impact_module": "THUNDER_CRACK",
+      "sustain_loop_module": "ARC_HOLD_BUZZ",
+      "pre_delivery_silence_ms": 40
+    },
+    "aftermath_profile": {
+      "light_decay_s": 0.9,
+      "leave_world_scars": true,
+      "hitstop_local_ms": 55
+    },
+    "camera_impulse_level": 0.62
+  },
+  "budget": {
+    "compiler_status": "VALID",
+    "peak_dynamic_bodies": 0,
+    "peak_path_nodes": 10,
+    "peak_surface_quads": 0,
+    "peak_point_lights": 2,
+    "derived_upfront_mana": 30.0,
+    "derived_sustain_mana_per_s": 0.0,
+    "derived_reserve_mana": 6.0,
+    "estimated_tick_cost_us": 85
+  }
+}

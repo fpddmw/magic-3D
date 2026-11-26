@@ -1,0 +1,306 @@
+{
+  "schema_version": "0.2.1",
+  "spell_id": "case6_vessel_imprint_seal",
+  "display_name": "器物烙印延爆（Vessel Imprint & Trigger Seal）",
+  "description": "Case 6：通过 WORLD_REF 查询手中既有容器/抛投物，将潜能封存于容器储备并经 CONTACT_TO_TRIGGER 监测碰撞，接触瞬间激发热冲击与燃烧爆发。",
+  "source_intent_ref": "intent_vessel_imprint_seal",
+  "contract": {
+    "timing": {
+      "windup_s": 0.45,
+      "release_duration_s": 0.2,
+      "recovery_s": 0.2,
+      "max_active_duration_s": 16.0
+    },
+    "combat": {
+      "targeting": "VESSEL_TOUCH",
+      "range_m": 2.5,
+      "controller": "VESSEL_BOUND",
+      "cancel_policy": "ON_EXPIRE_OR_WITHDRAW",
+      "provider": {
+        "energy_source": "VESSEL_RESERVE",
+        "post_release_reserve_mana": 10.0,
+        "max_upfront_mana": 22.0,
+        "max_sustain_mana_per_s": 0.0
+      }
+    }
+  },
+  "subjects": [
+    {
+      "id": "wr_vessel",
+      "kind": "WORLD_REF",
+      "query_kind": "VESSEL_IN_HAND",
+      "expected_filter": "RUNIC_IMPRINTABLE_SOLID",
+      "require_existing": true,
+      "visual_modules": {
+        "contour_module": "PLANAR_SIGIL",
+        "surface_modules": ["RUNIC_BARRIER_GLASS"],
+        "secondary_modules": ["FLOATING_DUST"],
+        "tint_palette": {
+          "primary_hex": "#FF9E54",
+          "accent_hex": "#FFE1A8",
+          "emissive_boost": 0.75
+        }
+      }
+    },
+    {
+      "id": "m_flame",
+      "kind": "MATERIAL",
+      "material_id": "FLAME",
+      "initial_phase": "PLASMA",
+      "capacity_mu": 8.0,
+      "initial_inventory_mu": 0.0,
+      "inherit_world_law": true,
+      "visual_modules": {
+        "contour_module": "SCULPTED_CORE",
+        "surface_modules": ["THERMAL_EMBER"],
+        "secondary_modules": ["SCORCH_DECAL", "CRATER_DECAL"],
+        "tint_palette": {
+          "primary_hex": "#FF6B2B",
+          "accent_hex": "#FFF0B3",
+          "emissive_boost": 3.0
+        }
+      }
+    },
+    {
+      "id": "f_heat_blast",
+      "kind": "FIELD",
+      "field_channel": "HEAT_INJECTION",
+      "initial_intensity": 0.0,
+      "max_intensity": 30.0,
+      "inherit_world_law": true,
+      "visual_modules": {
+        "contour_module": "FIELD_AURA_RING",
+        "surface_modules": ["THERMAL_EMBER"],
+        "secondary_modules": ["SCORCH_DECAL"],
+        "tint_palette": {
+          "primary_hex": "#FF4E1A",
+          "accent_hex": "#FFCC80",
+          "emissive_boost": 1.8
+        }
+      }
+    }
+  ],
+  "spatial": [
+    {
+      "id": "sp_blast_region",
+      "subject_id": "f_heat_blast",
+      "carrier": "REGION",
+      "dimension": "3D",
+      "generator": "RADIAL_SPHERE",
+      "node_budget": 0,
+      "edge_budget": 0,
+      "quad_budget": 0,
+      "max_deflect_iterations_per_node": 0,
+      "initial_extent_m": 3.5,
+      "reference": {
+        "spawn_anchor": "WORLD_REF",
+        "spawn_subject_id": "wr_vessel"
+      }
+    }
+  ],
+  "relations": [
+    {
+      "id": "rel_seal_contact",
+      "kind": "FUNCTIONAL_COUPLE",
+      "source_ref": "SUBJECT:wr_vessel",
+      "target_ref": "SUBJECT:m_flame",
+      "channel": "CONTACT_TO_TRIGGER",
+      "signal_granularity": "BINARY_PING",
+      "max_distance_m": 2.5
+    }
+  ],
+  "process_graph": {
+    "entry_processes": ["p_etch_seal"],
+    "processes": [
+      {
+        "id": "p_etch_seal",
+        "role": "GENESIS",
+        "on_enter": [
+          {
+            "op": "ESTABLISH",
+            "target_kind": "SUBJECT",
+            "target_id": "wr_vessel",
+            "handle_id": "h_vessel"
+          },
+          {
+            "op": "COUPLE",
+            "handle_id": "h_seal_watch",
+            "relation_id": "rel_seal_contact"
+          }
+        ],
+        "while_active": [
+          {
+            "op": "CONSTRAIN",
+            "handle_id": "h_seal_contain",
+            "target_subject_id": "wr_vessel",
+            "constraint_family": "CONTAIN",
+            "desired_value": 10.0,
+            "tolerance": 1.0,
+            "capacity_lu": 45.0,
+            "rebind_cooldown_s": 0.2,
+            "on_exceed": "VENT",
+            "provider_ref": "VESSEL_RESERVE"
+          }
+        ],
+        "on_exit": [],
+        "max_duration_s": 1.0,
+        "transitions": [
+          {
+            "on_event": "ON_INPUT_RELEASE",
+            "event_source_filter": { "scope": "CAST_INSTANCE" },
+            "next_process_ids": ["p_armed_watch"],
+            "handoff_handles": ["h_vessel", "h_seal_watch", "h_seal_contain"],
+            "action": "HANDOFF_TO_RESERVE"
+          },
+          {
+            "on_event": "ON_TIMEOUT",
+            "event_source_filter": { "scope": "SELF_PROCESS" },
+            "next_process_ids": ["p_armed_watch"],
+            "handoff_handles": ["h_vessel", "h_seal_watch", "h_seal_contain"],
+            "action": "HANDOFF_TO_RESERVE"
+          }
+        ]
+      },
+      {
+        "id": "p_armed_watch",
+        "role": "TRIGGER_WATCH",
+        "on_enter": [],
+        "while_active": [],
+        "on_exit": [],
+        "max_duration_s": 14.0,
+        "transitions": [
+          {
+            "on_event": "ON_COLLIDE",
+            "event_source_filter": { "scope": "SUBJECT", "subject_id": "wr_vessel" },
+            "next_process_ids": ["p_detonate"],
+            "handoff_handles": ["h_vessel"],
+            "action": "STOP_SELF_START_NEXT"
+          },
+          {
+            "on_event": "ON_TIMEOUT",
+            "event_source_filter": { "scope": "SELF_PROCESS" },
+            "next_process_ids": ["p_fade_seal"],
+            "handoff_handles": [],
+            "action": "STOP_SELF_START_NEXT"
+          }
+        ]
+      },
+      {
+        "id": "p_detonate",
+        "role": "TRANSFORM_STAGE",
+        "on_enter": [
+          {
+            "op": "ESTABLISH",
+            "target_kind": "SUBJECT",
+            "target_id": "m_flame",
+            "handle_id": "h_flame"
+          },
+          {
+            "op": "ESTABLISH",
+            "target_kind": "SUBJECT",
+            "target_id": "f_heat_blast",
+            "handle_id": "h_heat"
+          },
+          {
+            "op": "TRANSFER",
+            "source_ref": "CASTER:RESERVE",
+            "target_subject_id": "m_flame",
+            "resource_kind": "MU",
+            "rate_per_s": 40.0,
+            "max_amount": 6.0,
+            "on_insufficient_source": "CLAMP_TO_AVAILABLE"
+          },
+          {
+            "op": "DRIVE",
+            "target_subject_id": "f_heat_blast",
+            "channel": "INTENSITY_BURST",
+            "mode": "IMPULSE",
+            "magnitude": 28.0,
+            "direction": {
+              "mode": "RADIAL",
+              "center_ref": "SUBJECT:wr_vessel",
+              "polarity": "OUTWARD"
+            },
+            "profile": "INSTANT_BURST"
+          },
+          {
+            "op": "TRANSFORM",
+            "target_subject_id": "m_flame",
+            "transform_id": "IGNITE_EXOTHERMIC",
+            "preserve": ["POSITION", "HEAT"]
+          }
+        ],
+        "while_active": [],
+        "on_exit": [],
+        "max_duration_s": 0.8,
+        "transitions": [
+          {
+            "on_event": "ON_TIMEOUT",
+            "event_source_filter": { "scope": "SELF_PROCESS" },
+            "next_process_ids": ["p_fade_seal"],
+            "handoff_handles": [],
+            "action": "STOP_SELF_START_NEXT"
+          }
+        ]
+      },
+      {
+        "id": "p_fade_seal",
+        "role": "CLEANUP_DISSIPATE",
+        "on_enter": [
+          {
+            "op": "WITHDRAW",
+            "target_scope": "ALL_SPELL_SUPPORTS",
+            "mode": "DISSIPATE"
+          }
+        ],
+        "while_active": [],
+        "on_exit": [],
+        "max_duration_s": 0.25,
+        "transitions": [
+          {
+            "on_event": "ON_TIMEOUT",
+            "event_source_filter": { "scope": "SELF_PROCESS" },
+            "next_process_ids": [],
+            "handoff_handles": [],
+            "action": "STOP_SELF_ONLY"
+          }
+        ]
+      }
+    ]
+  },
+  "expression": {
+    "caster_cue": {
+      "pose_tag": "VESSEL_ETCH",
+      "cast_focus_ms": 420
+    },
+    "omen_profile": {
+      "sky_darken": 0.05,
+      "ambient_fog_tint_strength": 0.12,
+      "environment_resonates": false,
+      "omitted_during_instant_cast": true
+    },
+    "audio_profile": {
+      "drone_module": "NONE",
+      "impact_module": "THUNDER_CRACK",
+      "sustain_loop_module": "NONE",
+      "pre_delivery_silence_ms": 35
+    },
+    "aftermath_profile": {
+      "light_decay_s": 1.2,
+      "leave_world_scars": true,
+      "hitstop_local_ms": 70
+    },
+    "camera_impulse_level": 0.68
+  },
+  "budget": {
+    "compiler_status": "VALID",
+    "peak_dynamic_bodies": 0,
+    "peak_path_nodes": 0,
+    "peak_surface_quads": 0,
+    "peak_point_lights": 3,
+    "derived_upfront_mana": 18.0,
+    "derived_sustain_mana_per_s": 0.0,
+    "derived_reserve_mana": 10.0,
+    "estimated_tick_cost_us": 62
+  }
+}

@@ -23,12 +23,13 @@
 
 ## 3. 当前活跃里程碑
 
-- **当前阶段**：**`Magic DSL v0.2` 收敛完成，待 GPT / Claude 联合交叉终审**。
+- **当前阶段**：**`Magic DSL v0.2.1` 审计收口与 4 阶段验证通过，待 GPT / Claude 联合交叉复审后启动 Wave 1A**。
 - **主入口**：
-  - 正式规范：[docs/02_Magic_DSL_v0.2_正式语法与语义规范.md](docs/02_Magic_DSL_v0.2_正式语法与语义规范.md)
-  - 三波次计划与 7+1 验收标准：[docs/06_Magic_Runtime_三波次实施与验收计划.md](docs/06_Magic_Runtime_三波次实施与验收计划.md)
-  - 校验 Schema 与跨领域样例：[game/data/schema/magic_dsl_v0_2.schema.json](game/data/schema/magic_dsl_v0_2.schema.json) · [game/data/spells/](game/data/spells/case1_water_weave_freeze.json)
-  - 契约代码桩：[game/scripts/dsl/](game/scripts/dsl/magic_dsl_types.gd)
+  - 正式规范（v0.2.1）：[docs/02_Magic_DSL_v0.2_正式语法与语义规范.md](docs/02_Magic_DSL_v0.2_正式语法与语义规范.md)
+  - 分波次计划与审阅清单：[docs/06_Magic_Runtime_三波次实施与验收计划.md](docs/06_Magic_Runtime_三波次实施与验收计划.md)
+  - 校验 Schema 与 7 份基准样例：[game/data/schema/magic_dsl_v0_2.schema.json](game/data/schema/magic_dsl_v0_2.schema.json) · [game/data/spells/](game/data/spells/case1_water_weave_freeze.json)
+  - 4 阶段离线自检工具：[game/tools/validate_dsl.py](game/tools/validate_dsl.py)
+  - 契约代码桩与导演仲裁：[game/scripts/dsl/](game/scripts/dsl/magic_dsl_types.gd) · [game/scripts/director/](game/scripts/director/spell_director.gd)
 
 ## 4. 资料同步与协作纪律
 
