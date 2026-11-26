@@ -1,0 +1,54 @@
+{
+  "id": "gravity_abyss",
+  "display_name": "引力沉渊",
+  "rune_signature": [
+    "土",
+    "以太",
+    "凝聚",
+    "汇聚",
+    "牵引",
+    "爆发"
+  ],
+  "contract": {
+    "formation": "CHANNEL_SCULPT",
+    "ownership": "DETACHED",
+    "charge_window_s": 1.6,
+    "mana_cost": 36.0,
+    "sustain_mana_per_s": 0.0,
+    "interruption_rule": "RELEASE_PARTIAL"
+  },
+  "manifold": {
+    "dimension": "FIELD_3D",
+    "scale_m": 6.5,
+    "branch_count": 1,
+    "anchor_target": "WORLD_SURFACE"
+  },
+  "essence": {
+    "primary_domain": "STAR_GRAVITY",
+    "secondary_domain": "FIRE_STONE",
+    "phase_shift_target": "NONE",
+    "mass_weight": 4.5,
+    "rigidity": 0.0,
+    "conductivity": 0.0,
+    "thermal_polarity": 0.0,
+    "gravity_polarity": 3.0,
+    "time_scale": 1.0,
+    "luminance_polarity": -0.35,
+    "opacity": 0.35,
+    "leaves_persistent_state": true
+  },
+  "four_beat": {
+    "charge_duration_s": 1.6,
+    "charge_omen": "FLOAT_DEBRIS",
+    "genesis_source": "GROUND_ERUPTION",
+    "motion_law": "IMPLODE_TO_SLAM",
+    "block_response": "PASS_THROUGH",
+    "hit_stop_s": 0.11,
+    "camera_pitch_shift_deg": -3.5,
+    "camera_zoom_bias": 1.8,
+    "ambient_dim_factor": 0.55,
+    "audio_impact_weight": 0.95,
+    "aftermath_kind": "GRAVITY_CRATER",
+    "aftermath_duration_s": 18.0
+  }
+}

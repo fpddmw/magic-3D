@@ -1,0 +1,19 @@
+# Godot 4 cache & generated files
+.godot/
+game/.godot/
+*.translation
+*.tmp
+*.bak
+
+# OS & editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Local builds, toolchains, and model weights
+build/
+.local/
+*.gguf
+*.onnx
+*.bin
