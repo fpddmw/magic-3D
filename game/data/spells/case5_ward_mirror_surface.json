@@ -1,0 +1,224 @@
+{
+  "schema_version": "0.2",
+  "meta": {
+    "id": "case5_ward_mirror_surface",
+    "display_name": "秩序星障面（有限平面结界阻挡与偏折）",
+    "rune_signature": [
+      "以太",
+      "对称",
+      "铺展",
+      "守护",
+      "排斥"
+    ],
+    "intent_summary": "在施法者前方立起一面有限尺寸的刚性秩序平面结界，严格依据平面几何范围拦截、反弹或偏折穿行弹道并承受冲击负荷；绕过平面侧边即可绕开拦截，超限负荷时发生真实破损事件。",
+    "world_law_version": "0.2"
+  },
+  "subjects": [
+    {
+      "id": "ward_plane",
+      "kind": "FIELD",
+      "material_id": null,
+      "initial_phase": null,
+      "field_channel": "SPATIAL_BARRIER",
+      "initial_quantity": 0.0,
+      "inherit_world_law": true,
+      "interaction_profile": {
+        "hp_weight": 0.1,
+        "poise_weight": 0.9,
+        "impulse_weight": 1.35,
+        "mobility_constraint": "NONE"
+      },
+      "overrides": {
+        "deflect_angle_bias": 0.65,
+        "directional_one_way": true
+      }
+    }
+  ],
+  "spatial": [
+    {
+      "subject_id": "ward_plane",
+      "carrier": "SURFACE",
+      "reference": {
+        "anchor_source": "AIM_POINT",
+        "binding": "CAPTURE",
+        "secondary_anchors": [
+          {
+            "source": "AUTO_SUPPORT_SURFACE",
+            "binding": "ATTACH",
+            "max_count": 2,
+            "max_distance_m": 4.5
+          }
+        ],
+        "frame": "WORLD_FIXED"
+      },
+      "geometry": {
+        "generator": "BOUNDED_PLANE",
+        "dimension": "2D",
+        "extent_m": 4.2,
+        "thickness_m": 0.12,
+        "node_budget": 0,
+        "edge_budget": 0,
+        "quad_budget": 24
+      },
+      "distribution": {
+        "sampling": "CONTINUOUS",
+        "boundary": "SHARP",
+        "extent_profile": {
+          "curve": "CONSTANT",
+          "domain": "RADIAL_R",
+          "min_val": 0.85,
+          "max_val": 1.0,
+          "inverted": false
+        },
+        "density": 1.0
+      },
+      "connectivity": {
+        "allow_branching": false,
+        "allow_loop_close": false,
+        "allow_local_deformation": true,
+        "max_deflect_iterations_per_node": 1,
+        "on_obstruction": "HALT"
+      }
+    }
+  ],
+  "relations": [
+    {
+      "id": "rel_ward_ground_seat",
+      "kind": "SPATIAL_ATTACHMENT",
+      "source_subject_id": "ward_plane",
+      "target_ref": "AUTO_SUPPORT_SURFACE",
+      "channel": "SPATIAL",
+      "mode": "BASE_ANCHOR",
+      "max_distance_m": 4.5
+    }
+  ],
+  "processes": [
+    {
+      "id": "proc_ward_uphold",
+      "role": "ACTIVE_EFFECT",
+      "start": {
+        "type": "ON_CAST_START"
+      },
+      "operations": [
+        {
+          "family": "ESTABLISH",
+          "subject_id": "ward_plane",
+          "initial_scale": 1.0
+        },
+        {
+          "family": "CONSTRAIN",
+          "target_subject_id": "ward_plane",
+          "constraint_family": "BOUND",
+          "anchor_ref": "AIM_POINT",
+          "desired_value": 1.0,
+          "tolerance": 0.05,
+          "capacity": 120.0,
+          "on_exceed": "BREAK",
+          "provider_ref": "POST_RELEASE_RESERVE"
+        }
+      ],
+      "end": {
+        "events": ["BROKEN", "DEPLETED", "TIMER"],
+        "max_duration_s": 8.0
+      },
+      "transitions": [
+        {
+          "on_event": "BROKEN",
+          "next_process_id": "proc_ward_shatter",
+          "action": "START_NEXT"
+        },
+        {
+          "on_event": "DEPLETED",
+          "next_process_id": "proc_ward_shatter",
+          "action": "START_NEXT"
+        },
+        {
+          "on_event": "TIMER",
+          "next_process_id": "proc_ward_shatter",
+          "action": "START_NEXT"
+        }
+      ]
+    },
+    {
+      "id": "proc_ward_shatter",
+      "role": "PAYOFF",
+      "start": {
+        "type": "ON_EVENT",
+        "event": "BROKEN"
+      },
+      "operations": [
+        {
+          "family": "WITHDRAW",
+          "target_scope": "ALL_SPELL_SUPPORTS",
+          "mode": "STOP_SUPPORT"
+        }
+      ],
+      "end": {
+        "events": ["COMPLETED"],
+        "max_duration_s": 0.05
+      },
+      "transitions": []
+    }
+  ],
+  "contract": {
+    "combat": {
+      "formation": "INSTANT",
+      "min_deliverable_progress": 0.0,
+      "full_charge_s": 0.45,
+      "charge_tiers": [
+        {
+          "min_progress": 0.0,
+          "scale_mul": 1.0,
+          "intensity_mul": 1.0,
+          "cost_mul": 1.0
+        }
+      ],
+      "on_under_threshold_release": "DELIVER_MIN_TIER",
+      "caster_movement": "FULL_MOVE",
+      "dodge_cancel_policy": "LOCKED_ON_COMMIT",
+      "inputs_used": [
+        "AIM_POINT",
+        "AIM_DIRECTION"
+      ],
+      "controller": "AUTONOMOUS",
+      "anchor_owner": "WORLD_FIXED",
+      "provider": {
+        "material_source": "NONE",
+        "energy_source": "CASTER_MANA",
+        "post_release_reserve_mana": 22.0
+      }
+    },
+    "interruption_priority": "RELEASE_WINS_IF_DELIVERABLE"
+  },
+  "expression": {
+    "composition": "STRUCTURAL",
+    "symmetry": "PLANAR",
+    "tension": "SUSTAINED_STRAIN",
+    "contrast": "HIGH",
+    "delivery": "CONTINUOUS",
+    "aftermath_style": "RESTRAINED",
+    "visual_hints": {
+      "material_style": "RUNIC_PRISMATIC_BARRIER_PLANE",
+      "accent_color_hex": "#e8d28e"
+    },
+    "audio_profile": {
+      "drone_family": "RESONANT_GLASS_CHORD",
+      "silence_pre_impact_ms": 0,
+      "impact_family": "HARMONIC_DEFLECT_RING",
+      "sustain_loop_family": "BARRIER_STRAIN_CHIME"
+    }
+  },
+  "budget": {
+    "derived_upfront_mana": 18.0,
+    "derived_sustain_mana_per_s": 0.0,
+    "derived_reserve_mana": 22.0,
+    "environment_discount_applied": false,
+    "subject_count": 1,
+    "process_count": 2,
+    "peak_nodes": 0,
+    "peak_edges": 0,
+    "peak_surface_quads": 24,
+    "peak_fracture_bodies": 0,
+    "compiler_status": "VALID"
+  }
+}

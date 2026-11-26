@@ -1,0 +1,146 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/fpddmw/magic-3D/schemas/semantic_intent_v0_2.schema.json",
+  "title": "SemanticIntent v0.2",
+  "description": "Upstream compact semantic output produced by deterministic rune rules or paused-altar LLM before deterministic lowering into CompiledSpellDSL v0.2.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "runes_used",
+    "rune_contributions",
+    "intent_summary",
+    "subjects",
+    "spatial_intent",
+    "causal_steps",
+    "combat_contract_intent",
+    "art_intent"
+  ],
+  "properties": {
+    "schema_version": { "const": "0.2" },
+    "runes_used": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "rune_contributions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["rune", "role_in_circuit", "meaning_contribution"],
+        "properties": {
+          "rune": { "type": "string", "minLength": 1 },
+          "role_in_circuit": {
+            "type": "string",
+            "enum": ["ELEMENT", "GENESIS", "FORM", "MOTION", "SUSTAIN", "ACCUMULATE", "CARRIER", "SCOPE_MODIFIER"]
+          },
+          "meaning_contribution": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "intent_summary": { "type": "string", "minLength": 1 },
+    "subjects": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "kind", "concept_ref", "borrow_from_environment"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "kind": { "type": "string", "enum": ["MATERIAL", "FIELD", "RELATION"] },
+          "concept_ref": { "type": "string", "minLength": 1 },
+          "borrow_from_environment": { "type": "boolean" }
+        }
+      }
+    },
+    "spatial_intent": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["subject_id", "organization", "anchor_intent", "continuity", "allow_auto_supports"],
+        "properties": {
+          "subject_id": { "type": "string", "minLength": 1 },
+          "organization": {
+            "type": "string",
+            "enum": ["FOCUSED_BODY", "EXTENDED_PATH", "INTERWOVEN_WEB", "BOUNDED_PLANE", "VOLUMETRIC_REGION", "ATTACHED_AURA"]
+          },
+          "anchor_intent": {
+            "type": "string",
+            "enum": ["CASTER_HAND", "CASTER_BODY", "AIM_POINT", "LOCKED_TARGET", "WORLD_SURFACE", "FOLLOW_SUBJECT"]
+          },
+          "attach_to_subject_id": { "type": "string" },
+          "continuity": { "type": "string", "enum": ["CONTINUOUS", "DISCRETE", "DIFFUSE"] },
+          "allow_auto_supports": { "type": "boolean" }
+        }
+      }
+    },
+    "causal_steps": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["step_id", "trigger", "target_subject_id", "action_intent"],
+        "properties": {
+          "step_id": { "type": "string", "minLength": 1 },
+          "trigger": {
+            "type": "string",
+            "enum": ["ON_CAST_START", "DURING_CHARGE", "ON_RELEASE", "ON_INTERRUPT", "ON_CONTACT", "DURING_SUSTAIN", "ON_DISTURBANCE"]
+          },
+          "target_subject_id": { "type": "string", "minLength": 1 },
+          "action_intent": {
+            "type": "string",
+            "enum": [
+              "GATHER_OR_MANIFEST",
+              "EXTEND_AND_WEAVE",
+              "PULL_INWARD",
+              "PUSH_OUTWARD",
+              "LIFT_UPWARD",
+              "SLAM_DOWNWARD",
+              "ADVANCE_TOWARD_TARGET",
+              "FREEZE_IN_PLACE",
+              "SHATTER_INTO_SHARDS",
+              "SENSE_DISTURBANCE",
+              "BLOCK_OR_DEFLECT",
+              "WITHDRAW_SUPPORT"
+            ]
+          },
+          "propagate_along_structure": { "type": "boolean" },
+          "invert_polarity": { "type": "boolean" }
+        }
+      }
+    },
+    "combat_contract_intent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tempo", "ownership", "mobility_expectation", "dodge_cancel"],
+      "properties": {
+        "tempo": { "type": "string", "enum": ["INSTANT", "CHARGED", "SUSTAINED", "RITUAL_ANCHORED"] },
+        "ownership": { "type": "string", "enum": ["DETACHED", "CASTER_FOCUS", "ANCHORED_WORLD_OR_VESSEL", "SELF_BODY"] },
+        "mobility_expectation": { "type": "string", "enum": ["FULL_MOVE", "SLOW_WALK", "ROOTED"] },
+        "dodge_cancel": { "type": "string", "enum": ["INTERRUPT", "RELEASE_EARLY", "COMMITTED"] }
+      }
+    },
+    "art_intent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["composition", "symmetry", "tension", "contrast", "delivery", "aftermath_style"],
+      "properties": {
+        "composition": { "type": "string", "enum": ["CONCENTRATED", "STREAMING", "ENVELOPING", "STRUCTURAL", "DIFFUSE"] },
+        "symmetry": { "type": "string", "enum": ["NONE", "AXIAL", "RADIAL", "PLANAR"] },
+        "tension": { "type": "string", "enum": ["NONE", "GRADUAL_ACCUMULATION", "SUSTAINED_STRAIN", "INSTANT_SNAP"] },
+        "contrast": { "type": "string", "enum": ["LOW", "MEDIUM", "HIGH"] },
+        "delivery": { "type": "string", "enum": ["CONTINUOUS", "CONCENTRATED", "BURST", "PASSIVE"] },
+        "aftermath_style": { "type": "string", "enum": ["NONE", "RESTRAINED", "LINGERING_DECAY", "MONUMENTAL_RESIDUE"] }
+      }
+    }
+  }
+}

@@ -1,0 +1,230 @@
+{
+  "schema_version": "0.2",
+  "meta": {
+    "id": "case4_fog_disturbance_sense",
+    "display_name": "雾织感应（弥散体积雾遮蔽＋方向性扰动反馈）",
+    "rune_signature": [
+      "水",
+      "气",
+      "弥散",
+      "铺展",
+      "以太",
+      "联结",
+      "回应"
+    ],
+    "intent_summary": "建立围绕自身的弥散体积雾介质遮蔽视线，同时在雾场扰动通道与施法者感知间建立有限关系耦合；只反馈入侵扰动方向与强度，不附赠透视或伤害，结束维系后撤去感应连结，雾气依自然规律扩散消散。",
+    "world_law_version": "0.2"
+  },
+  "subjects": [
+    {
+      "id": "sensing_fog",
+      "kind": "MATERIAL",
+      "material_id": "FOG",
+      "initial_phase": "GAS_MIST",
+      "field_channel": null,
+      "initial_quantity": 4.0,
+      "inherit_world_law": true,
+      "interaction_profile": {
+        "hp_weight": 0.0,
+        "poise_weight": 0.0,
+        "impulse_weight": 0.0,
+        "mobility_constraint": "NONE"
+      },
+      "overrides": {}
+    }
+  ],
+  "spatial": [
+    {
+      "subject_id": "sensing_fog",
+      "carrier": "REGION",
+      "reference": {
+        "anchor_source": "CASTER_BODY",
+        "binding": "FOLLOW",
+        "secondary_anchors": [],
+        "frame": "FOLLOW_CASTER"
+      },
+      "geometry": {
+        "generator": "RADIAL_SPHERE",
+        "dimension": "3D",
+        "extent_m": 11.0,
+        "thickness_m": 0.0,
+        "node_budget": 0,
+        "edge_budget": 0,
+        "quad_budget": 0
+      },
+      "distribution": {
+        "sampling": "DIFFUSE",
+        "boundary": "FALLOFF",
+        "extent_profile": {
+          "curve": "DECAY_OUT",
+          "domain": "RADIAL_R",
+          "min_val": 0.2,
+          "max_val": 1.0,
+          "inverted": false
+        },
+        "density": 0.55
+      },
+      "connectivity": {
+        "allow_branching": false,
+        "allow_loop_close": false,
+        "allow_local_deformation": false,
+        "max_deflect_iterations_per_node": 0,
+        "on_obstruction": "SLIDE_BOUNDARY"
+      }
+    }
+  ],
+  "relations": [
+    {
+      "id": "rel_fog_perception",
+      "kind": "FUNCTIONAL_LINK",
+      "source_subject_id": "sensing_fog",
+      "target_ref": "CASTER_PERCEPTION",
+      "channel": "INFORMATIONAL",
+      "mode": "DISTURBANCE_PULSE",
+      "max_distance_m": 12.0
+    }
+  ],
+  "processes": [
+    {
+      "id": "proc_fog_sustain",
+      "role": "ACTIVE_EFFECT",
+      "start": {
+        "type": "ON_CAST_START"
+      },
+      "operations": [
+        {
+          "family": "ESTABLISH",
+          "subject_id": "sensing_fog",
+          "initial_scale": 1.0
+        },
+        {
+          "family": "CONSTRAIN",
+          "target_subject_id": "sensing_fog",
+          "constraint_family": "CONTAIN",
+          "anchor_ref": "CASTER_BODY",
+          "desired_value": 11.0,
+          "tolerance": 1.5,
+          "capacity": 45.0,
+          "on_exceed": "YIELD",
+          "provider_ref": "CASTER_MANA"
+        },
+        {
+          "family": "COUPLE",
+          "coupling_id": "DISTURBANCE_TO_PERCEPTION",
+          "source_ref": "sensing_fog.disturbance",
+          "target_ref": "CASTER_PERCEPTION",
+          "signal_granularity": "DIRECTION_AND_INTENSITY_ONLY"
+        }
+      ],
+      "end": {
+        "events": ["RELEASE", "INTERRUPT", "DEPLETED"],
+        "max_duration_s": 18.0
+      },
+      "transitions": [
+        {
+          "on_event": "RELEASE",
+          "next_process_id": "proc_fog_release",
+          "action": "START_NEXT"
+        },
+        {
+          "on_event": "INTERRUPT",
+          "next_process_id": "proc_fog_release",
+          "action": "START_NEXT"
+        },
+        {
+          "on_event": "DEPLETED",
+          "next_process_id": "proc_fog_release",
+          "action": "START_NEXT"
+        }
+      ]
+    },
+    {
+      "id": "proc_fog_release",
+      "role": "PAYOFF",
+      "start": {
+        "type": "ON_EVENT",
+        "event": "RELEASE"
+      },
+      "operations": [
+        {
+          "family": "WITHDRAW",
+          "target_scope": "RELATION",
+          "target_id": "rel_fog_perception",
+          "mode": "STOP_SUPPORT"
+        },
+        {
+          "family": "WITHDRAW",
+          "target_scope": "ALL_SPELL_SUPPORTS",
+          "mode": "STOP_SUPPORT"
+        }
+      ],
+      "end": {
+        "events": ["COMPLETED"],
+        "max_duration_s": 0.05
+      },
+      "transitions": []
+    }
+  ],
+  "contract": {
+    "combat": {
+      "formation": "INSTANT",
+      "min_deliverable_progress": 0.0,
+      "full_charge_s": 0.35,
+      "charge_tiers": [
+        {
+          "min_progress": 0.0,
+          "scale_mul": 1.0,
+          "intensity_mul": 1.0,
+          "cost_mul": 1.0
+        }
+      ],
+      "on_under_threshold_release": "DELIVER_MIN_TIER",
+      "caster_movement": "FULL_MOVE",
+      "dodge_cancel_policy": "TRIGGER_RELEASE",
+      "inputs_used": [
+        "CAST_HOLD",
+        "VOLUNTARY_RELEASE",
+        "INTERRUPT_SIGNAL"
+      ],
+      "controller": "CASTER_FOCUS",
+      "anchor_owner": "CASTER",
+      "provider": {
+        "material_source": "ENVIRONMENT_WITH_MANA_FALLBACK",
+        "energy_source": "CASTER_MANA",
+        "post_release_reserve_mana": 0.0
+      }
+    },
+    "interruption_priority": "INTERRUPT_WINS_UNLESS_COMMITTED"
+  },
+  "expression": {
+    "composition": "DIFFUSE",
+    "symmetry": "NONE",
+    "tension": "NONE",
+    "contrast": "LOW",
+    "delivery": "PASSIVE",
+    "aftermath_style": "LINGERING_DECAY",
+    "visual_hints": {
+      "material_style": "VOLUMETRIC_MIST_WITH_SONAR_RIPPLES",
+      "accent_color_hex": "#9dd8e6"
+    },
+    "audio_profile": {
+      "drone_family": "HOLLOW_WIND_WHISPER",
+      "silence_pre_impact_ms": 0,
+      "impact_family": "ETHEREAL_SONAR_PING",
+      "sustain_loop_family": "SOFT_MIST_AMBIENCE"
+    }
+  },
+  "budget": {
+    "derived_upfront_mana": 14.0,
+    "derived_sustain_mana_per_s": 3.5,
+    "derived_reserve_mana": 0.0,
+    "environment_discount_applied": true,
+    "subject_count": 1,
+    "process_count": 2,
+    "peak_nodes": 0,
+    "peak_edges": 0,
+    "peak_surface_quads": 0,
+    "peak_fracture_bodies": 0,
+    "compiler_status": "VALID"
+  }
+}

@@ -1,0 +1,159 @@
+# Spec v0.2 Contract Stub — Wave 1 implementation target
+# Canonical enums & hard budget constants matching docs/02_Magic_DSL_v0.2_正式语法与语义规范.md
+class_name MagicDSLTypes
+extends RefCounted
+
+const SCHEMA_VERSION := "0.2"
+
+# Single-spell & scene-level hard budget caps (v0.2 initial baselines)
+const MAX_SUBJECTS_PER_SPELL := 8
+const MAX_RELATIONS_PER_SPELL := 16
+const MAX_PROCESSES_PER_SPELL := 8
+const MAX_PATH_NODES := 16
+const MAX_PATH_EDGES := 24
+const MAX_SURFACE_QUADS := 64
+const MAX_FRACTURE_BODIES := 12
+const MAX_DEFLECT_ITERATIONS_PER_NODE := 2
+const FIXED_SIM_HZ := 60
+
+const MAX_ACTIVE_MAGIC_BODIES_SCENE := 64
+const MAX_ACTIVE_PATH_GRAPHS_SCENE := 4
+const MAX_ACTIVE_SURFACES_SCENE := 6
+const MAX_ACTIVE_REGIONS_SCENE := 8
+const MAX_ACTIVE_PROCESSES_SCENE := 24
+const MAX_DIRECT_CONTROL_FOCUS := 1
+
+enum SubjectKind {
+	MATERIAL,
+	FIELD,
+	RELATION,
+}
+
+enum Carrier {
+	BODY,
+	PATH_GRAPH,
+	SURFACE,
+	REGION,
+}
+
+enum SupportStatus {
+	UNSUPPORTED,
+	LIMITED,
+	SUPPORTED,
+}
+
+enum Capability {
+	POSE_MOVE,
+	EXTENT_SCALE,
+	LOCAL_DEFORMATION,
+	FRACTURE_OR_SPLIT,
+	SOLID_COLLISION,
+	STRUCTURAL_PROPAGATE,
+	PROFILE_DISTRIBUTION,
+	SPATIAL_QUERY_AND_FIELD,
+}
+
+enum OperationFamily {
+	ESTABLISH,
+	DRIVE,
+	CONSTRAIN,
+	TRANSFORM,
+	TRANSFER,
+	COUPLE,
+	WITHDRAW,
+}
+
+enum StateChannel {
+	POSE,
+	EXTENT,
+	DISTRIBUTION,
+	FLOW,
+	INTENSITY,
+	DIRECTION,
+	VELOCITY_IMPULSE,
+}
+
+enum ConstraintFamily {
+	POSITION,
+	DISTANCE,
+	ATTACH,
+	COHESION,
+	SUPPORT,
+	CONFORM,
+	CONTAIN,
+	BOUND,
+}
+
+enum TransformId {
+	PATH_LIQUID_TO_BODY_SOLID,
+	BODY_SOLID_TO_SHARDS,
+	BODY_SOLID_TO_LIQUID_REGION,
+	FOG_REGION_TO_ICE_SHARDS,
+	FIELD_RECONFIGURE,
+}
+
+enum CouplingId {
+	DISTURBANCE_TO_PERCEPTION,
+	SUBJECT_POSE_TO_FIELD_ORIGIN,
+	CONTACT_TO_TRIGGER,
+	CONTACT_TO_CONDUCTION,
+	HEAT_FLUX_TO_PHASE,
+}
+
+enum EventType {
+	RELEASE,
+	INTERRUPT,
+	DEPLETED,
+	CONTACT_ENTER,
+	OBSTRUCTION,
+	BROKEN,
+	COMPLETED,
+	TIMER,
+	DISTURBANCE,
+}
+
+enum InteractionChannel {
+	MECHANICAL,
+	MATERIAL,
+	THERMAL,
+	CONDUCTIVE,
+	OPTICAL,
+	INFORMATIONAL,
+	SPATIAL,
+	TEMPORAL,
+}
+
+enum ProfileCurve {
+	CONSTANT,
+	LINEAR,
+	SLOW_BUILD,
+	FAST_ESTABLISH,
+	BELL_CONCENTRATED,
+	IMPULSE_SPIKE,
+	DECAY_OUT,
+	PIECEWISE_4PT,
+}
+
+enum FormationMode {
+	INSTANT,
+	GRADUAL_CHARGE,
+}
+
+enum CasterMovement {
+	FULL_MOVE,
+	SLOW_SOLEMN_WALK,
+	ROOTED,
+}
+
+enum DodgeCancelPolicy {
+	TRIGGER_INTERRUPT,
+	TRIGGER_RELEASE,
+	LOCKED_ON_COMMIT,
+}
+
+enum MobilityConstraint {
+	NONE,
+	SLOW,
+	ROOT_TETHER,
+	ENCUMBER,
+}
