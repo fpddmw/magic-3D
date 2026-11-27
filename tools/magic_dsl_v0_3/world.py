@@ -33,6 +33,7 @@ class World:
             ev = e["event"]
             required = {
                 "aim": {"vector"},
+                "aim_point": {"vector"},
                 "move": {"vector"},
                 "unlink": {"ref"},
                 "cut": {"ref", "other"},
@@ -178,6 +179,8 @@ class World:
         kind = event["event"]
         if kind == "aim":
             self.aim = self.direction(event["vector"])
+        if kind == "aim_point":
+            self.scene["aim_point"] = list(event["vector"])
         if kind == "move":
             self.origin = list(event["vector"])
         if kind == "unlink":

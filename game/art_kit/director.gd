@@ -144,7 +144,8 @@ func cue(key: String, tr: Dictionary, spatial: Dictionary, p: Vector3, beat: flo
 	var v: Dictionary = voices[key]
 	v.until = clock_s + (.28 if tr.cue == "impact" else .20)
 	v.node.position = p
-	var radius = minf(spatial.get("geometry", {}).get("extent_m", 1.0), 6.)
+	var geometry = spatial.get("geometry", {})
+	var radius = minf(geometry.get("radius_m", geometry.get("extent_m", 1.0)), 6.)
 	var size = (
 		radius * (.26 + .5 * beat) if tr.get("motion") != "gather" else radius * (.80 - .55 * beat)
 	)

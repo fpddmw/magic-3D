@@ -1,0 +1,6 @@
+{
+  "source": "design_anchor",
+  "prior_expectation": "在左瞄点近旁的探针先向水平外侧运动并升温；移到右瞄点后左侧保留动量和已有温升，右侧开始受推并升温。松手结束两种主动作用。",
+  "unseen": "实验前只登记输入和观测，不提供样例或候选配方。通过准入后原样加入游戏目录。",
+  "scene": "studies/aim_field/scene.json"
+}

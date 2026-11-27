@@ -263,6 +263,8 @@ func action(pid: String, op: Dictionary, dt: float) -> bool:
 	var s: Dictionary = subs[rel.get("from", t)]
 	var law = arena.world
 	if a == "form":
+		if s.has("medium") and s.medium not in law.media:
+			return false
 		if not rel.is_empty():
 			if subs[rel.to].kind == "WorldRef" and not is_instance_valid(source(subs[rel.to])):
 				return false
@@ -342,7 +344,7 @@ func action(pid: String, op: Dictionary, dt: float) -> bool:
 			arena.phase(b, "solid" if a == "solidify" else "liquid")
 		return true
 	var targets: Dictionary = law.candidates(sp, p, at.aim, channel)
-	if a in ["impulse", "accelerate", "warm", "conduct", "freeze"]:
+	if a in ["impulse", "accelerate", "sustain_force", "warm", "conduct", "freeze"]:
 		if a == "conduct" or a == "freeze":
 			var eligible = {}
 			if not reached.has(t):
@@ -396,6 +398,8 @@ func action(pid: String, op: Dictionary, dt: float) -> bool:
 				reserve = 0.
 			"accelerate":
 				budget = scale_factor * u.acceleration * dt
+			"sustain_force":
+				budget = scale_factor * u.force_n * dt
 			"warm":
 				budget = scale_factor * u.heat_per_s * dt
 			"conduct":
@@ -405,13 +409,17 @@ func action(pid: String, op: Dictionary, dt: float) -> bool:
 			if op.get("allocation") == "distance_weighted":
 				targets[b] /= 1. + p.distance_to(b.global_position)
 			total += targets[b]
+		if a == "sustain_force":
+			total = maxf(1., total)
 		var hit = false
 		var impact = p
 		for b in targets:
 			var value = (
 				budget * targets[b] * b.mass if a == "accelerate" else budget * targets[b] / total
 			)
-			if a in ["impulse", "accelerate"]:
+			if a == "sustain_force":
+				law.deliver(b, law.column_direction(op.field_vector, b.global_position - p) * value)
+			elif a in ["impulse", "accelerate"]:
 				var j = law.axis(op.axis, p, at.aim, b.global_position) * value
 				if law.deliver(b, j):
 					hit = true

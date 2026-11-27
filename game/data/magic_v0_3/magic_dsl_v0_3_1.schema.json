@@ -1680,6 +1680,13 @@
             "aim_point"
           ]
         },
+        "bind": {
+          "enum": [
+            "cast",
+            "enter",
+            "live"
+          ]
+        },
         "exclude": {
           "type": "array",
           "items": {
@@ -2271,7 +2278,8 @@
                   "cut",
                   "unlink",
                   "aim",
-                  "move"
+                  "move",
+                  "aim_point"
                 ]
               },
               "ref": {

@@ -33,6 +33,16 @@ def experiment(inputs, expectation, generate, *, scene=None, repair=False):
         prompt = {
             "task": "只返回一个 CompilationOutput JSON。所有声明 ID 唯一；作用须有来源、有效句柄与支付证明。禁止访问样例或仓库。",
             "input": data,
+            "contract": (
+                "构筑期只输出 JSON。不要调用工具。声明 ID 跨各段唯一。每个主体或关系在施力前"
+                "由当前过程 enter/form 建立句柄，退出时撤去。Field 采用 Manifest 来源，"
+                "medium 按 required_media 给出。独占控制、供给、最长时段由契约声明。"
+                "持续力使用有限直柱域及三个有符号分量，其合成长度在 (0,1]。"
+                "参照在 cast、enter 时捕获，或 live 时持续重取。Expression 可以为空。"
+                "RuneContributions 须逐枚指向本配方内真实声明。请从输入的符文和锚点构思。"
+                if data["DSLVersion"] == "0.3.1"
+                else "按输入所列版本的机器契约生成。"
+            ),
             "registry": registry,
             "response_schema": {"$ref": "#/$defs/CompilationOutput", "$defs": schema["$defs"]},
             "repair": diagnostic,

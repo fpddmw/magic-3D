@@ -1,0 +1,59 @@
+{
+  "caster_mana": 100,
+  "media": [
+    "ambient_air"
+  ],
+  "position": [
+    0,
+    0,
+    -4
+  ],
+  "aim": [
+    0,
+    0,
+    -1
+  ],
+  "aim_point": [
+    -4,
+    0,
+    -12
+  ],
+  "until_s": 1.25,
+  "objects": [
+    {
+      "id": "left",
+      "position": [
+        -4,
+        1,
+        -12.8
+      ],
+      "mass": 1
+    },
+    {
+      "id": "right",
+      "position": [
+        4,
+        1,
+        -12.8
+      ],
+      "mass": 1
+    }
+  ],
+  "slots": {},
+  "edges": [],
+  "events": [
+    {
+      "at": 0.5,
+      "event": "aim_point",
+      "vector": [
+        4,
+        0,
+        -12
+      ]
+    },
+    {
+      "at": 1,
+      "event": "release"
+    }
+  ]
+}

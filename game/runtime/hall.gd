@@ -44,6 +44,12 @@ func _ready() -> void:
 			push_error("Recipe digest mismatch: " + entry.path)
 			continue
 		entry.recipe = data(entry.path)
+		entry.display_name = entry.recipe.name
+		for subject in entry.recipe.Subjects:
+			var ref = subject.get("spatial", {}).get("reference", {})
+			if ref.get("anchor") == "aim_point":
+				entry.display_name += " · " + ("随瞄点" if ref.bind == "live" else "固定瞄点")
+				break
 		catalog.append(entry)
 		if entry.path.ends_with("/pressure_wind.json"):
 			selected = catalog.size() - 1
@@ -142,7 +148,10 @@ func _ready() -> void:
 			world.slots.spring = b
 		last = b
 	ui()
-	if not testing:
+	if "--aim-study" in OS.get_cmdline_user_args():
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+		call_deferred("run_aim_study")
+	elif not testing:
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	elif "--hall-test" in OS.get_cmdline_user_args():
 		call_deferred("run_checks")
@@ -415,7 +424,7 @@ func _physics_process(dt: float) -> void:
 	info.text = (
 		"%s   ·   %d / %d\n魔力 %.0f    耐力 %.0f    韧性 %.0f    %s"
 		% [
-			catalog[selected].recipe.name,
+			catalog[selected].display_name,
 			selected + 1,
 			catalog.size(),
 			mana,
@@ -427,6 +436,10 @@ func _physics_process(dt: float) -> void:
 	charge_bar.value = (
 		100. * latest_cast.ratio() if latest_cast and not latest_cast.active.is_empty() else 0.
 	)
+
+
+func run_aim_study() -> void:
+	await preload("res://runtime/aim_checks.gd").new().run(self)
 
 
 func run_checks() -> void:

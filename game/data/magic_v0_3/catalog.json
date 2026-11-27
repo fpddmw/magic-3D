@@ -183,6 +183,36 @@
     }
   },
   {
+    "path": "res://data/magic_v0_3/slice/wind_fixed.json",
+    "sha256": "fe09cdf0738672ec5cbc3c5013083b0bcdc58a424df0b9bd4e2def22ab4aa76b",
+    "quote": {
+      "tariff_version": "tariff-0.3.1",
+      "upfront_mana": 5.46,
+      "mana_per_s": 5.46,
+      "rates": {
+        "sustain": 5.46
+      },
+      "max_paid_mana": 16.38,
+      "reserve_capacity": 0,
+      "total_impulse_budget": 0
+    }
+  },
+  {
+    "path": "res://data/magic_v0_3/slice/wind_follow.json",
+    "sha256": "bc5fae6f187fad86399000cf87564c32a90f68f1272fc34bbf527aa586d253c5",
+    "quote": {
+      "tariff_version": "tariff-0.3.1",
+      "upfront_mana": 5.46,
+      "mana_per_s": 5.46,
+      "rates": {
+        "sustain": 5.46
+      },
+      "max_paid_mana": 16.38,
+      "reserve_capacity": 0,
+      "total_impulse_budget": 0
+    }
+  },
+  {
     "path": "res://data/magic_v0_3/trials/early/admitted.json",
     "sha256": "468f0d706ab68be7e28813158d5677061e76f0b3fff65be100f3a8c5008d46d5",
     "quote": {

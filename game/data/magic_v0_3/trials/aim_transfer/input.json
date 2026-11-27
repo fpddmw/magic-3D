@@ -1,0 +1,73 @@
+{
+  "RuneGraph": {
+    "nodes": [
+      {
+        "id": "arc",
+        "rune": "以太"
+      },
+      {
+        "id": "spread",
+        "rune": "散"
+      },
+      {
+        "id": "fire",
+        "rune": "火"
+      },
+      {
+        "id": "guide",
+        "rune": "引"
+      }
+    ],
+    "links": [
+      {
+        "id": "whole",
+        "kind": "共同组织",
+        "members": [
+          "arc",
+          "spread",
+          "fire",
+          "guide"
+        ]
+      }
+    ]
+  },
+  "SemanticAnchors": [
+    {
+      "ref": "whole",
+      "meaning": "以瞄点为中心水平排开近物，让出一小片空地。只向外推，不旋转也不升降。作用随瞄点移动，按住一秒仍可用，松手即止。",
+      "mechanism": "sustain_force",
+      "anchor": "aim_point",
+      "bind": "live",
+      "axis": "radial_out",
+      "phase": "active"
+    },
+    {
+      "ref": "whole",
+      "meaning": "火意使同一小片区域的近物在受推期间实际升温。两处相距八米的地面瞄点应可分开影响，测物在瞄点水平一米以内、高一米。",
+      "mechanism": "warm",
+      "anchor": "aim_point",
+      "bind": "live",
+      "phase": "active"
+    }
+  ],
+  "CastingContext": {
+    "target": "aim",
+    "timing": "open"
+  },
+  "PlayerKnowledge": [
+    "以太",
+    "散",
+    "火",
+    "引"
+  ],
+  "DSLVersion": "0.3.1",
+  "WorldKnowledgeVersion": "world-0.3.1",
+  "CapabilityProfile": "offline-0.3.1",
+  "SupportedCapabilities": [
+    "form",
+    "sustain_force",
+    "warm",
+    "end"
+  ],
+  "ArtisticStyle": "ruined_city"
+}

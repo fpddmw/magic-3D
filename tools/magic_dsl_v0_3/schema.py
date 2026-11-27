@@ -233,12 +233,13 @@ def build():
             "mechanism": enum(*mechanisms),
             "axis": enum(*REG["abilities"]["impulse"]["parameters"]["axis"]),
             "anchor": enum("target", "caster", "source", "aim_point"),
+            "bind": d["Spatial"]["properties"]["reference"]["properties"]["bind"],
             "exclude": {**arr(enum(*mechanisms), 8), "uniqueItems": True},
             "phase": enum("enter", "active", "repeat"),
             "controller": enum("caster", "autonomous"),
             "supply": enum("caster", "linked_reserve"),
         },
-        ["phase", "controller", "supply", "axis", "anchor", "exclude"],
+        ["phase", "controller", "supply", "axis", "anchor", "bind", "exclude"],
     )
     d["CompilationInput"] = obj(
         {
@@ -356,7 +357,15 @@ def build():
                     {
                         "at": num(0, 30),
                         "event": enum(
-                            "release", "interrupt", "contact", "signal", "cut", "unlink", "aim", "move"
+                            "release",
+                            "interrupt",
+                            "contact",
+                            "signal",
+                            "cut",
+                            "unlink",
+                            "aim",
+                            "move",
+                            "aim_point",
                         ),
                         "ref": ident,
                         "other": ident,

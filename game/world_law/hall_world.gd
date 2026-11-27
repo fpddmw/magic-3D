@@ -1,5 +1,6 @@
 extends Node3D
 
+var media := ["ambient_air"]
 var slots: Dictionary = {}
 var edges: Array = []
 var units: Dictionary
@@ -55,6 +56,27 @@ func axis(kind: String, origin: Vector3, aim: Vector3, p: Vector3) -> Vector3:
 			return Vector3.UP.cross(p - origin).normalized()
 
 
+func column_weight(geometry: Dictionary, distribution, delta: Vector3) -> float:
+	var r = Vector2(delta.x, delta.z).length() / geometry.radius_m
+	var y = delta.y / geometry.height_m
+	if r > 1. or y < 0. or y > 1.:
+		return 0.
+	var radial = distribution.radial if distribution is Dictionary else distribution
+	var weight = 1.
+	if radial == "bell":
+		weight = pow(1. - r * r, 2.)
+	elif radial == "linear_falloff":
+		weight = 1. - r
+	if distribution is Dictionary and distribution.axial == "linear_falloff":
+		weight *= 1. - y
+	return weight
+
+
+func column_direction(v: Dictionary, delta: Vector3) -> Vector3:
+	var radial = Vector3(delta.x, 0., delta.z).normalized()
+	return radial * v.radial + Vector3.UP.cross(radial) * v.tangential + Vector3.UP * v.axial
+
+
 func candidates(sp: Dictionary, origin: Vector3, aim: Vector3, channel: String) -> Dictionary:
 	var out = {}
 	var pool = (
@@ -68,11 +90,17 @@ func candidates(sp: Dictionary, origin: Vector3, aim: Vector3, channel: String) 
 		var delta: Vector3 = b.global_position - origin
 		var d = delta.length()
 		var g = sp.geometry
-		if d > g.extent_m:
-			continue
-		if g.shape == "cone" and delta.dot(aim) < d * cos(deg_to_rad(g.half_angle_deg)):
-			continue
-		var w = 1. if sp.distribution == "uniform" else maxf(0., 1. - d / g.extent_m)
+		var w: float
+		if g.shape == "column":
+			w = column_weight(g, sp.distribution, delta)
+			if w <= 0.:
+				continue
+		else:
+			if d > g.extent_m:
+				continue
+			if g.shape == "cone" and delta.dot(aim) < d * cos(deg_to_rad(g.half_angle_deg)):
+				continue
+			w = 1. if sp.distribution == "uniform" else maxf(0., 1. - d / g.extent_m)
 		if (
 			channel in ["pressure", "optical"]
 			or (channel == "thermal" and b.get_meta("thermal_path", "radiation") == "radiation")

@@ -254,7 +254,8 @@ def accept(data, candidate):
                 }
                 sid = recipe.relations.get(op["target"], {}).get("from", op["target"])
                 spatial = recipe.subjects.get(sid, {}).get("spatial", {})
-                actual["anchor"] = spatial.get("reference", {}).get("anchor")
+                reference = spatial.get("reference", {})
+                actual.update(anchor=reference.get("anchor"), bind=reference.get("bind"))
                 if all(anchor.get(k, v) == v for k, v in actual.items()) and (
                     "axis" not in anchor or acts_along(op, anchor["axis"])
                 ):
@@ -340,7 +341,7 @@ def accept(data, candidate):
         )
     alternatives = set()
     for a in candidate["AlternativeAnchors"]:
-        pair = tuple(a.get(k) for k in ("ref", "mechanism", "phase", "controller", "supply"))
+        pair = tuple(a.get(k) for k in ("ref", "mechanism", "phase", "controller", "supply", "anchor", "bind", "axis"))
         check(
             a["ref"] in refs
             and a["mechanism"] in capabilities

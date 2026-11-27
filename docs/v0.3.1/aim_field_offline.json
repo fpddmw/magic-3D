@@ -1,0 +1,144 @@
+{
+  "wind_fixed": [
+    {
+      "at_s": 0.5,
+      "mana_spent": 8.19,
+      "status": "active",
+      "probes": {
+        "left": {
+          "velocity_m_s": [
+            -0.99826806,
+            1.05840088,
+            0.98176395
+          ],
+          "temperature_delta": 0
+        },
+        "right": {
+          "velocity_m_s": [
+            0,
+            0,
+            0
+          ],
+          "temperature_delta": 0
+        }
+      }
+    },
+    {
+      "at_s": 1,
+      "mana_spent": 10.92,
+      "status": "finished",
+      "probes": {
+        "left": {
+          "velocity_m_s": [
+            -0.71226827,
+            2.15111924,
+            2.26805847
+          ],
+          "temperature_delta": 0
+        },
+        "right": {
+          "velocity_m_s": [
+            0,
+            0,
+            0
+          ],
+          "temperature_delta": 0
+        }
+      }
+    },
+    {
+      "at_s": 1.25,
+      "mana_spent": 10.92,
+      "status": "finished",
+      "probes": {
+        "left": {
+          "velocity_m_s": [
+            -0.71226827,
+            2.15111924,
+            2.26805847
+          ],
+          "temperature_delta": 0
+        },
+        "right": {
+          "velocity_m_s": [
+            0,
+            0,
+            0
+          ],
+          "temperature_delta": 0
+        }
+      }
+    }
+  ],
+  "wind_follow": [
+    {
+      "at_s": 0.5,
+      "mana_spent": 8.19,
+      "status": "active",
+      "probes": {
+        "left": {
+          "velocity_m_s": [
+            -0.99826806,
+            1.05840088,
+            0.98176395
+          ],
+          "temperature_delta": 0
+        },
+        "right": {
+          "velocity_m_s": [
+            0,
+            0,
+            0
+          ],
+          "temperature_delta": 0
+        }
+      }
+    },
+    {
+      "at_s": 1,
+      "mana_spent": 10.92,
+      "status": "finished",
+      "probes": {
+        "left": {
+          "velocity_m_s": [
+            -0.99826806,
+            1.05840088,
+            0.98176395
+          ],
+          "temperature_delta": 0
+        },
+        "right": {
+          "velocity_m_s": [
+            -0.99826806,
+            1.05840088,
+            0.98176395
+          ],
+          "temperature_delta": 0
+        }
+      }
+    },
+    {
+      "at_s": 1.25,
+      "mana_spent": 10.92,
+      "status": "finished",
+      "probes": {
+        "left": {
+          "velocity_m_s": [
+            -0.99826806,
+            1.05840088,
+            0.98176395
+          ],
+          "temperature_delta": 0
+        },
+        "right": {
+          "velocity_m_s": [
+            -0.99826806,
+            1.05840088,
+            0.98176395
+          ],
+          "temperature_delta": 0
+        }
+      }
+    }
+  ]
+}

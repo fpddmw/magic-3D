@@ -1,0 +1,171 @@
+{
+  "checks": {
+    "equal_payment": true,
+    "fixed_catalog": true,
+    "fixed_coast_left": true,
+    "fixed_coast_right": true,
+    "fixed_floor_marks": true,
+    "fixed_initial_recipient": true,
+    "fixed_input_began_cast": true,
+    "fixed_recipient": true,
+    "fixed_release": true,
+    "fixed_same_active_cast": true,
+    "follow_catalog": true,
+    "follow_coast_left": true,
+    "follow_coast_right": true,
+    "follow_floor_marks": true,
+    "follow_initial_recipient": true,
+    "follow_input_began_cast": true,
+    "follow_recipient": true,
+    "follow_release": true,
+    "follow_same_active_cast": true,
+    "identical_first_half": true
+  },
+  "display": "macOS",
+  "engine": "4.5.1-stable (official)",
+  "passed": true,
+  "physics": "Jolt Physics",
+  "samples": {
+    "fixed": {
+      "aim_end": [
+        4.0,
+        0.0,
+        -12.0
+      ],
+      "aim_start": [
+        -3.99999928474426,
+        0.0,
+        -12.0
+      ],
+      "before_move": {
+        "left": {
+          "heat": 0.0,
+          "v": [
+            -0.997909605503082,
+            1.05847072601318,
+            0.982178747653961
+          ]
+        },
+        "mana": 91.8100000000002,
+        "right": {
+          "heat": 0.0,
+          "v": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "before_release": {
+        "left": {
+          "heat": 0.0,
+          "v": [
+            -0.711322367191315,
+            2.15122365951538,
+            2.26808762550354
+          ]
+        },
+        "mana": 89.0800000000004,
+        "right": {
+          "heat": 0.0,
+          "v": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "coast": {
+        "left": {
+          "heat": 0.0,
+          "v": [
+            -0.711322367191315,
+            2.15122365951538,
+            2.26808762550354
+          ]
+        },
+        "mana": 89.0800000000004,
+        "right": {
+          "heat": 0.0,
+          "v": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "serial": 1
+    },
+    "follow": {
+      "aim_end": [
+        4.0,
+        0.0,
+        -12.0
+      ],
+      "aim_start": [
+        -3.99999928474426,
+        0.0,
+        -12.0
+      ],
+      "before_move": {
+        "left": {
+          "heat": 0.0,
+          "v": [
+            -0.997909605503082,
+            1.05847072601318,
+            0.982178747653961
+          ]
+        },
+        "mana": 91.8100000000002,
+        "right": {
+          "heat": 0.0,
+          "v": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "before_release": {
+        "left": {
+          "heat": 0.0,
+          "v": [
+            -0.997909605503082,
+            1.05847072601318,
+            0.982178747653961
+          ]
+        },
+        "mana": 89.0800000000004,
+        "right": {
+          "heat": 0.0,
+          "v": [
+            -0.997910857200623,
+            1.05847084522247,
+            0.982177555561066
+          ]
+        }
+      },
+      "coast": {
+        "left": {
+          "heat": 0.0,
+          "v": [
+            -0.997909605503082,
+            1.05847072601318,
+            0.982178747653961
+          ]
+        },
+        "mana": 89.0800000000004,
+        "right": {
+          "heat": 0.0,
+          "v": [
+            -0.997910857200623,
+            1.05847084522247,
+            0.982177555561066
+          ]
+        }
+      },
+      "serial": 2
+    }
+  },
+  "renderer": "Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M6 (Apple9)"
+}

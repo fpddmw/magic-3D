@@ -585,7 +585,8 @@
     "max_layers": 64,
     "silence_window_s": 0.06
   },
-  "game_edition": "0.3.0",
+  "game_editions": ["0.3.0", "0.3.1"],
+  "game_column_abilities": ["form", "end", "sustain_force", "warm"],
   "column_profiles": {
     "radial": [
       "uniform",
