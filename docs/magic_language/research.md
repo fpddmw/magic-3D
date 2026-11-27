@@ -1,6 +1,6 @@
 # 研究覆盖索引 · 20 个经典场景与 18 个拓展意向
 
-当前逐题状态见[38 道原题的索引、独立配方与对照](corpus/README.md)。全部已给出条件明确的设计谱与纸面推演。原先只有部分规则或缺世界通道的题，现已补上候选语义。由机器契约执行及在游戏中兑现的范围仍待后续阶段验证。[共用世界规则](corpus/semantics.md) · [待决权限](corpus/decisions.md)
+当前逐题状态见[38 道原题的索引、独立配方与对照](corpus/README.md)。全部已给出条件明确的设计谱与纸面推演。原先只有部分规则或缺世界通道的题，现已补上候选语义。由机器契约执行及在游戏中兑现的范围仍待后续阶段验证。[共用世界规则](corpus/semantics.md) · [本轮权限默认](corpus/decisions.md)
 
 上一轮的“整谱／分解／边界”是当时对 16 组初稿的判断，历史版本见[逐项旧表](https://github.com/fpddmw/magic-3D/blob/a29bc67e9dd636c6eaaaa365ddd00293dd47d1dd/docs/magic_language/research.md)。首次对 20 个现象做的离线与实机证据盘点见[原始矩阵](../v0.3.1/现象表达矩阵.md)。
 

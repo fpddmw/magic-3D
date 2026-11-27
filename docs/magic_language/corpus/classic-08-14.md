@@ -41,9 +41,10 @@ K frame = chain(slab,slot(piers),medium)
 K form = poses(slab,cast(input(form)),wall=pitch(90deg),ramp=pitch(30deg),bridge=pitch(0deg))
 R load = support(slab,frame)
 P lay <5s,caster> : tick Transform.grow(slab,extent,1m/s,truncate,rock),Constrain.support(load) | on release -> [Transform.handoff_world(slab)] end
-X lay.hero @slab.front = skin/slate/advance <- growth + rumble
-X lay.secondary @slab.realized = skin/slate/strain <- load + crack
+X include stage-scores.md#j09
 ```
+
+[本配方的完整舞台谱与分镜](stage-scores.md#j09)
 
 **正例**　选 bridge 时近端延伸，抵达远墩后才形成第二支点，释放后自然咬合承重。之后炸裂中缝，仍受两侧不同支点承托的部分分别验负荷。
 

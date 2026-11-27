@@ -6,17 +6,17 @@
 
 ## J01 · 岩石球
 
-从地面分别抬起三块岩石，悬停成列，松手后沿弧线投出，各石可独立碰撞、碎裂并留下。
+从地面分别抬起至多三块岩石，悬停成列，松手后沿弧线投出，各石可独立碰撞、碎裂并留下。
 
 **现场与锚定**　`{土,聚}▷引`。借三块可移动石，石上有有限天然裂缝。施法者与地面可承担升力和反冲。
 
 ```text
 C 石料,引力,有限传力
-S stones = borrow(stone,exact(group(nearby(loose_stone,3m),3),3))
+S stones = borrow(stone,select(loose_stone,within=3m,up_to=3,order=distance_key))
 K row = formation(stones,3,arc,simultaneous,0.8m)
 K center = reference(row,offset(live(caster),(0,1.2m,0)))
-R sling = force(caster,self,via=slot(ground))
-P raise each(row) <3s,caster> : tick Drive.motion(self,guided_drift,home(row,self)) | on release -> [Drive.impulse(sling,aim_upward)] fly
+R sling = force(caster,self,via=resolve(reaction,at=caster,policy=contact))
+P raise each(row) <3s,caster> : tick Drive.motion(self,guided_drift,home(row,self)) | on release -> [Transform.detach(self),Drive.impulse(sling,aim_upward)] fly
 P fly <2s,caster> : tick Drive.motion(self,ballistic,world) | when overload(self) => Transform.fracture(self,material_seam) | on timeout -> end
 X raise.hero @self.realized = array/slate/gather <- velocity + rumble
 X fly.secondary @self.realized = mass/slate/shed <- break + crack ~0.3s
@@ -24,7 +24,7 @@ X fly.secondary @self.realized = mass/slate/shed <- break + crack ~0.3s
 
 **正例**　三块先离地再悬停，交付捕获上仰方向，之后受重力呈弧。横梁挡住中间一块并使该石裂缝过载，只有它留下碎块，另外两块继续。超时还权后世界继续算动量。
 
-**反例**　从同一现场只取走第三块，exact 建立失败，地上两块原位。只改变横梁强度则影响中途的碎裂，不能回溯收回已投出的石。
+**反例**　从同一现场只取走第三块，普通取材只抬起剩余两块，各花自己的牵引和交付份；无石则本次借材失败。若意向明确要求完整三角，将 up_to=3 换成 exact=3，此时两块均留在原位。若要补第三块，须另声明借后有偿具现、允许的本性和新材料份额。只改变横梁强度则影响中途的碎裂，不能回溯收回已投出的石。
 
 <a id="j02"></a>
 
@@ -66,16 +66,17 @@ C 寒冷弧面,热交换,动作派生
 S blade = manifest(aether,body(1m),live(weapon))
 S wave = derived(blade,patch(4,1.6m,0.15m,50deg),live(blade))
 K form = basis(wave,arcane_inertia,caster)
-R chillA = thermal(hit(blade),slot(heatSink),via=blade)
-R chillB = thermal(hit(wave),slot(heatSink),via=wave)
+R chillA = thermal(hit(blade),resolve(thermal_sink,at=contact(blade).position,policy=ambient),via=blade)
+R chillB = thermal(hit(wave),resolve(thermal_sink,at=contact(wave).position,policy=ambient),via=wave)
 R castWave = force(caster,wave,basis=form)
 P swing <1s,caster> : tick Drive.motion(blade,sweep_arc,weapon) | when contact(blade) => Drive.heat(chillA,forward) | on pose_release -> [Establish.open(wave),Transform.detach(wave),Drive.impulse(castWave,forward)] travel
 P travel <2s,caster> : enter Withdraw.close(blade) | tick Drive.motion(wave,ballistic,world) | on contact(wave) -> [Drive.heat(chillB,forward)] end
-X swing.hero @blade.realized = skin/crystal/advance <- velocity + breath
-X travel.hero @wave.realized = ribbon/crystal/advance <- velocity + ring ~0.3s
+X include stage-scores.md#j03
 ```
 
-**正例**　先扫中 A，A 失热。角色在离刃后转身，波继续原方向接触 B，B 的水膜在抽热超过潜热门槛时结霜。两次热均进同一有限汇，不能各称拥有全额。
+[本配方的完整舞台谱与分镜](stage-scores.md#j03)
+
+**正例**　先扫中 A，A 失热。角色在离刃后转身，波继续原方向接触 B，B 的水膜在抽热超过潜热门槛时结霜。本题现场两处接触都只可达同一有限热汇，两次热均进该汇，不能各称拥有全额。
 
 **反例**　只把 B 换成干砖，仍能失热，表面没有那层水霜。只把打断放在离刃同刻，则 A 先前的温降保留，B 没有接触也没有温降。
 
@@ -97,9 +98,10 @@ K direction = bounds(push,radial_out)
 K speed = bounds(core,linear_speed,0.6m/s)
 P kindle <2s,caster> : enter Establish.open(core) | tick Transfer.move(caster,fuel,all) | on release if ready(fuel,0.2) -> creep
 P creep <4s,caster> : tick Drive.motion(core,guided_drift,aim) | on proximity(core) -> [Transfer.split(fuel,hot@0.7,push@0.3)] end
-X kindle.hero @core.realized = core/ember/gather <- fill + breath
-X creep.hero @core.realized = skin/ember/advance <- velocity + rumble
+X include stage-scores.md#j04
 ```
+
+[本配方的完整舞台谱与分镜](stage-scores.md#j04)
 
 **正例**　慢行时位置持续改变，未有临近就没有爆发。实付热使油迹达到着火阈值，燃料和空气继续支持燃烧；碎物另得有限径向冲量。
 
@@ -119,20 +121,21 @@ S moon = manifest(aether,body(0.15m),live(hand))
 S cloud = derived(moon,sphere(0.2m),live(moon))
 K size = store(mana,moon,large)
 R rise = gravity(moon,caster)
-R shade = optical(cloud,within(cloud,sightline))
-R cold = thermal(within(cloud,warm),slot(heatSink))
-R dim = arcane_support(cloud,support_of(within(cloud,spell)))
+R shade = optical(cloud,within(cloud,sightline),extent=realized(cloud))
+R cold = thermal(within(cloud,warm),resolve(thermal_sink,at=cloud,policy=ambient),extent=scale(realized(cloud),0.5))
+R dim = arcane_support(cloud,support_of(within(cloud,spell)),extent=scale(realized(cloud),0.75))
 K shell = basis(moon,arcane_inertia,caster)
 R send = force(caster,moon,basis=shell)
 P form <4s,caster> : enter Establish.open(moon),Establish.open(cloud) | tick independent([Transfer.move(caster,size,all),Drive.shape(moon,body(0.8m),fill(size)),Drive.shape(cloud,sphere(2m),fill(size))],Drive.gravity(rise,up),Drive.optics(shade,0.25),Drive.heat(cold,forward),Constrain.suppress(dim)) | on release if ready(size,0.5) -> [Transform.detach(moon),Transfer.deliver(size,send)] glide
 P glide <3s,caster> : tick independent(Drive.motion(moon,ballistic,world),Drive.optics(shade,0.25),Drive.heat(cold,forward),Constrain.suppress(dim))
-X form.omen @moon.sky = horizon/dark/gather <- fill[0.5..1]:ease_in + breath
-X glide.hero @cloud.boundary(optical) = core/dark/advance <- velocity + rumble
+X include stage-scores.md#j05
 ```
 
-**正例**　向上局部加速度超过自然重力时角色升起。放出后角色失去该项升力，已长成的各域随月行。冰的悬托进入域且容量不足时失效，冰带原有动量下落。
+[本配方的完整舞台谱与分镜](stage-scores.md#j05)
 
-**反例**　只移走热汇，温石不再失热，月体照旧遮光并能压制悬托。把悬冰换成自然冰块则无异常边可压制。天光暗化没有扩大世界作用域。
+**正例**　向上局部加速度超过自然重力时角色升起。云域满尺寸时，取距月心 1.2 m 的温物与悬托，观察端可见消光；该点在 1.5 m 干涉域内、在 1 m 热域外。放出后角色失去该项升力，已长成的各域随月行。冰的悬托进入域且容量不足时失效，冰带原有动量下落。
+
+**反例**　只移走本题唯一可达热汇，温石不再失热，月体照旧遮光并能压制悬托。把悬冰换成自然冰块则无异常边可压制。天光暗化没有扩大世界作用域。
 
 <a id="j06"></a>
 
@@ -174,14 +177,15 @@ X conduct.secondary @self.realized = ribbon/ember/shed <- impact ~0.15s
 C 空气,有限三分量力
 S f = manifest(air,column(0.3m,0.2m,0.5m),capture(aim))
 K reserve = store(mana,f,large)
-R spin = force(f,within(f,movable),via=slot(air))
+R spin = force(f,within(f,movable),via=resolve(medium,within=f,kind=air))
 K profile = bounds(spin,linear_falloff,uniform)
 K strength = envelope(spin,fill(reserve),linear)
 P chant <4s,caster> : enter Establish.open(f) | tick Transfer.move(caster,reserve,all),Drive.shape(f,column(3m,1.5m,8m),fill(reserve)) | on release if ready(reserve,0.3) -> hold
 P hold <5s,reserve> : tick Drive.shape(f,column(3m,1.5m,8m),fill(reserve)),Drive.field(spin,v(-0.48,0.64,0.60)) | on interrupt -> end
-X chant.hero @f.boundary(force) = ribbon/mist/gather <- fill + breath
-X hold.hero @f.realized = ribbon/mist/turn <- velocity + rumble
+X include stage-scores.md#j07
 ```
+
+[本配方的完整舞台谱与分镜](stage-scores.md#j07)
 
 **正例**　蓄满时柱底和柱顶不同宽，东侧探针向内、绕轴并上升，轴心只受轴向作用。寄存额度消耗后作用域逐步收窄，满额力乘以实际余额比，远侧先失去作用。尾段无新增受力。
 

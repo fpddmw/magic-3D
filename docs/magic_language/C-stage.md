@@ -50,3 +50,59 @@
 | 月牙碰柱或自然到期 | 碰柱只在真实 impact 时给一次石廊回响。未命中时仅衰减。尾光沿最后路径停留 0.3 s | 若尾光还能造成第二次推力，表现已越权 |
 
 这份规格定义编排的因果与美术接口。曲线、色板分寸、材质档位及异步节拍能否在不同组合里显得凝聚，仍需实机艺术评审。
+
+## C5 · 用构形、时钟和轨道创作一场演出
+
+一组艺术构造可和配方局部一起展开到 X。A7 的几何值在此也可独立使用。作者可以画一个比手掌更大的中空薄壳，将三条异步的窄带系在壳内，另把音源留在掌心。薄壳跟随谁、窄带在哪一拍遮过核心、何时可以显示真实接触，都须从谱上读出。
+
+```text
+group 名(带类型参数) @空间 {
+  visual 名 = 几何 / 材质(参数) / 运动(参数) ; start=… ; drive=… ; stop=… ; tail=…
+  environment 名 = 有界环境构图 ; …
+  audio 名 = 有界声源和包络 ; …
+  body 名 = 既有动作的表现参数 ; …
+  camera 名 = 可撤销的镜头请求 ; …
+  use 子组(实参) @空间
+}
+```
+
+| 语法 | 读法 |
+|---|---|
+| `@real(subject.geometry / relation.boundary / event.position)` | 读取当前观察者合法可见的提交几何、实际交付或边界。未实现、超出可见权或无回执时相应轨关闭。`contour/front/history(subject,n)` 只读有界真实样本。 |
+| `@local(frame)` | 独立局部舞台，可 attach、capture、mirror、repeat、layer、sweep、stagger。目标姿态可作为构图参照，但须绘成构思/聚势形象，危险和支点提示须取 real。失参按 track 的 stop；tail 只保留快照。 |
+| `@scene(visible_sky / vault / floor / room)` | 只在观察者可见/可听且有适配的场景面工作。可选按次序尝试替代位置；均缺则静默。远景无光学遮挡或观测端权限。 |
+| `visual / environment / audio / body / camera` | visual 用轮廓、层、材质与有界形变；environment 用表面掠光、悬尘或远景投影；audio 用真实或局部锚、起音/衰减及混响；body 只请求既有动作的叠加权重；camera 服从观众设置与自由镜头。后二者不改动作判定、视线或物理时间。世界听觉需要 B 的 acoustic，单独一条音轨只进表现混音。 |
+| `start/stop, first(a,b), while, delay, duration, loop(n), stagger(dt), overlap, crossfade(dt), tail` | 绑定进入/退出、已提交操作或世界回执。默认从所属 scope 进入到退出，scope 或参照失效先停，未启动的延迟项取消。一次事件轨默认播放一次；重新触发须有有限触发数与新事件键。退场可显式只冻结余韵。 |
+| `drive=源[lo..hi]:curve→参数[a..b]` | 先限幅归一再映射，`linear/ease_in/ease_out/smooth/step` 五种曲线。源可为 fill、growth、load、实际速度/方向、进程相位或自某个事件起的有界 elapsed。`relative_timing` 可让同一局部的壳先成、三带错开、声音晚于锋面收束。回执音画共享原事件键；延迟写在余响上。 |
+
+可组合属性有轮廓宽度、层厚、粗糙度、透射、折射、发光、小面积高光、遮罩、位置、相位和透明度，分别是有界长度、角或归一量。材质 `dark/etch/mist/crystal/slate/water/ember` 的变体按 C2 的实际载体取样。独立圆壳、环、分支和扫掠带还须声明艺术几何的维数以选择适配。视觉遮罩只在本组层间裁剪。身体叠加、声场包络和镜头请求各用自己的通道能力表；一个音轨不需要一个假球体。没有模块时允许按谱中次序降档，必需的实在轮廓缺失须报告。
+
+全谱对每一阶段标主次；父组权重乘子权重，同一视图的主位总额上限为 1。不同施法相遇沿 C3 排序。交叉淡变连续交接，危险/失效信息可同时保留细轮廓。局部过载先去昂贵远景、体积及次级透明层；声源按方位和事件优先，不吞实际接触的主拍。蓝耗、世界求解量、渲染/混音各自计账。场景色板约束大面积明度，窄亮处依真实锋面或明确装饰形象选取。
+
+### 两个可跨作品传递的艺术组
+
+```text
+group ribs(frame:Pose, r:Length, t:Phase) @local(frame) {
+  visual rib = repeat(at(arc(+Y,r,65deg),tilt(18deg)),3,yaw(120deg))
+               / etch(roughness=.75,emission=.12) / turn(t,24deg);
+               stagger=0.06s; drive=t[0.25..0.85]:smooth→opacity[0,.55]
+}
+group knock(e:EventAt, space:Room) @real(e.position) {
+  audio attack = crack(attack=.008s,decay=.09s); start=e
+  audio reflection @scene(space) = echo(decay=.32s); start=e; delay=.05s
+}
+```
+
+窗口的两个端点均是归一化读数。`tilt/yaw` 是绕本地 X/Y 的有界转角。`knock` 调用须提供一次真实事件。两个组都能被改锚、裁短或在不同的父形象中重用。具体尺寸、节奏和材质选择是待美术审阅的创作值。[六份完整舞台谱与分镜](corpus/stage-scores.md) · [同一作用换形象、同一形象换作用](corpus/recombinations.md)
+
+### 旧单轨和完整谱怎样一起读
+
+旧式 `X p.role @s.anchor = form/material/motion <- driver + cue ~tail` 展开成同 scope 的形象轨和可选的声音/导演轨，共用时钟和锚；`none` 不生成该轨。`X include file#section` 为相对文件中的一个完整 X 块，只在作者展开时取代旧式 X，不产生额外实例。组可命名中间几何给子轨：`parent=壳` 继承它的已实现艺术变换和可见权重，子轨可局部转向、部分遮罩或改用独立时间窗，不能借亲缘取得世界权限。子轨无单独角色时继承组角色；未标角色的组默认 secondary。多条 hero 同时申请时遵循 C3；明确的 `crossfade` 在相交阶段分配旧新权重。
+
+事件发生时所属过程恰好结束，仍允许在该次提交取一次最后样本起拍；局部端点消失，短音和明写的 tail 使用冻结的位置，边界/危险提示立即结束。世界自然材料的可见外观遵守每名玩家当下的实际观察权限。`while=load>.65` 之类谓词是登记读数与同类型阈值的一次比较；未写驱动窗口取全幅，标量驱动只绑定该模块声明的默认参数。`progress(p)` 在 p 内是从入段起的世界时/该段硬顶，`elapsed(event)` 使用实际事件戳。离开过程中显式锁存时可选离场前已支付的满度；后续运动不可用该视觉锁存值重复付费。
+
+### 异步编排的边界
+
+同一组可以写 `start=after(track.start,80ms)`、`start=after(track.end,40ms)` 或 `while=overlap(trackA,trackB)`。这些依赖只构成艺术时钟的有向无环图；父组还未启动、依赖缺失或进入等待后被取消，子拍点一并取消。`track.end` 指有效演出区间的终点；尾音另有有限 tail，不把主体多留一拍。`relative_timing(parent,start=.2,end=.8)` 把父级已知区间的相位裁成子级 0…1。未知何时松手的父级可绑定已实现蓄度或实际进入/退出事件，不能从预定硬顶倒推玩家的松手时刻。
+
+以 R3 的暗壳为例，在 `ribs` 第一根实际起笔后 60、120 ms 放出第二、第三根，是 stagger 对三子轨的展开。若 90 ms 时结束整术，已起的两根执行各自退出，第三根没有出现。把同样的三根放进 J05，随月体而行的环继续用锁存的局部值，室内穹顶轨可以独立淡出。没有一条艺术依赖可以给世界过程补发释放。

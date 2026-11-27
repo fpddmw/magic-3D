@@ -1,8 +1,8 @@
-# 原题所需的共用语义
+# 38 份谱的兼容读法
 
-本页补充 [A 的空间与身份](../A-space.md)、[B 的过程与世界](../B-world.md)、[C 的只读舞台](../C-stage.md)和 [D 的调度](../D-resolution.md)。所有规格及下列算例均为审阅提案。旧版机器 Schema 的准入范围由已发行版本决定。这里的数是题设，在同题反例中保持相同。
+[空间与构形](../A-space.md) · [局部控制、守恒和领域合同](../B-world.md) · [舞台](../C-stage.md) · [解析与时序](../D-resolution.md)。六面简记继续可读。尺寸和槽名是原题现场实参。
 
-## 1 · 怎样读一份谱
+## 旧六面简记
 
 沿用 C/S/R/P/K/X 六面。写 `slot(name)` 的地方，现场只提供有类型的物、几何、器件、资源或实际输入。例如“承台”可提供接触和强度，“哨铃”可接收信号；现场不能提供“敌人已被拦住”一类预制结论。符文图和自然语言锚在配方前。词提供意向，知识与世界条件补全具体机构。时、生及高阶空间的配方只用于推演相应权限开放后的世界。
 
@@ -13,45 +13,7 @@
 - `K … = bounds(…)` 给速率、单次量、最大工作量与范围加物理上限；`K … = basis(受体,条件,付款端)` 是局部赋性/供给合同，随所列责任退出。`K … = bind(process,input,drives,target,limit)` 只更改目标/驱动值。关系 `via` 指实际通路，`basis` 指异常性质的成立依据。预算先为整个配方按档报价，再沿实际同时对象分配。满度、分布和颜色都不能额外放大已实付总作用。
 - 每谱至少有一条 X。`X all.…` 可跨阶段，世界读数或事件缺失时对应轨不显示。光学形象可影响世界观察仅当另有有效光学通道；声音提示可影响场内听者仅当另有真实声源。危险边界、触点与相变锋面均用已实现几何。未特别说明时，其他声画模块采用 C 的有限默认；角色姿态和音乐不能凭表现轨生成世界事件。
 
-## 2 · 空间子集、控制权与协调
-
-**段与端口。** `part(g,i)` 固定材料段键；`liquid_connected(g,port)` 只沿当前液态材料边取从端口可达的部分；`component(g,seed,channel)` 类推。它们是每步重新求值的视图，不创造新主体。分段相变可限在选中的真实份额。已提交的固段保留身份，撤销流态运动控制，按真实支撑承担接触。`pivot(g,root)` 取当前受控分量上最近的有效固定边界，否则取合法来源参照；引用支点只提供位姿，不能输送物质或自动继承下游控制。`supply`、`flow`、`control`、`support`、`conduct` 独立判通。断供时已付的寄托才可维持孤立端。缺路径后的自由份额、端点在途余额与有限几何仍由世界持有。
-
-**协调分配。** `match(workers,jobs,policy)` 是只读的有界一对一分配。workers 来自实际成员，jobs 来自真实传感数据（如有限时间内可能和保护面相交的轨迹）或有限的操作目标。用相对位置/速度和当前通路求接触时间上界、转向/到达耗时。没有足够时长、负荷、视线、权限或碰撞通路的候选边剔除。先保留人工指令占用的成员，再在可行边中最大化完成数；同数最早危险优先，再比较总到达耗时，最后按稳定键打破平局。分配只是目标意图。`goal(plan,self)` 无任务时退回自己的阵列槽；有任务时是要求赶到的真实相交位姿。碰撞体到位前不会拦截。认领绑定任务与槽的代际号，手动接管、成员破坏或任务失效先撤销旧认领，同一快照对剩余集合重新匹配。手动控制只占一个焦点，其他槽继续有限自主行动。同样规则可给搬运器件分配工作点。
-
-**运动与连接。** `Drive.motion` 沿限定运动模式请求位移/朝向；支撑与运动都要说明反力端。`Constrain.bind(r)` 只在真实接触或合法媒介与容量条件满足时建立约束，可用于黏附、抓持、局部固定、主动约束边界。容量不足先滑移，超过断裂阈值释放该边；自然接缝按材料与接合姿态裁决。`Couple.link(r)` 只在端点真实相容时连边，`Withdraw.close(r)` 断开本术的主动边。自然黏性、受压、导电率、刚度与可燃性属于版本化材料属性；热损伤降低实体边的有效截面与容量，重新传递负荷。`Drive.shape(s,目标几何,归一驱动)` 只在初态与显式上限之间插值，固定构形可写 small/large 两端。生长需料，纯域改变范围需付费；实际推进受阻，碰撞、查询与表现都读取同一成形结果。
-
-## 3 · 有限介质与守恒
-
-`Transfer.route(r,rate)` 请求沿当前有效边运送同类型份额。总量取本步带宽、源余额、容器余量和实付责任的最小值。`Couple.switch(old,new)` 在一个事务内验证新边端点、介质与权限后，切换本术的输送方向；失败保持原路。已出发的包锁定原边及接收端，旧边自然毁坏则在最后可实现位置结清。材料、热、电、信息各用自己单位、耗散与载荷，不能因为共用一个几何图就共用余额。`store(thermal,host,cap)` 以 J 计实际吸收热量并受热容/温区限制。阈值事件 `full(k)`、`empty(source)` 在提交后送出。
-
-`hydraulic` 端口为有限水单元，具有真实底高、截面积、容量、质量和有向边。水位由材料体积/面积确定。每个固定世界步中各边按旧水头差、导通量及最大流量申请转移，先合计源支出并限于现有量，再合计目的余容并等比裁剪，所有扣入同时提交。端墙或有界维持的压力约束可以降低特定边流量；外源流入或重力回填消耗实际水量。判断能否通过读取实际水深、净空及占位。波涌可以用若干相连单元的有限时序释放，旋涡可叠加切向力。连续海洋的全域模拟与这些局部语义没有依赖关系。
-
-`thermal` 写明供、受两端；`Drive.heat(r,forward)` 的热沿边流动，冷作用从目标向热汇流。达到材料的相变阈值还须支付潜热。可燃物达到点燃条件后，由世界依据可用燃料、氧化环境和散热继续演化，耗尽会熄灭。`magnetic` 仅查询具有相应材料响应的主体；牵引有距离、力矩、负荷和阻挡约束。普通实物与符合接口的外术实体适用相同规则。
-
-## 4 · 信号、观察与有限自主
-
-`Couple.sample(r,format)` 从真实端点按时隙读取、经 r 送达。`Couple.relay(r,event_kind)` 转发已提交事件。每包有来源、采样步、接收权限、去重键和有效期；断联、越界或超时不重播。格式是有限的 `sector_event`（区段＋扰动边沿）、`light_frame`（视锥内被遮挡后的一帧有限光样本）、`sound_frame`（该位置的有限声学频带），或实际任务标记。接收者只读格式许可的字段。`disturbance` 来自介质的实际形变/动量交换，静止不反复上报，风、物件和人都可能触发。拆除信息线不影响光学。
-
-`acoustic` 有声源、介质、空间边界和听者。在声明的有限路径及传播时间内，按频带衰减、边界交段、绕行与听觉阈值提交听者读数。`Drive.gain(r,q)` 对本关系上的源辐射、传播或某个过程速率施加有界无量纲系数，签名指定作用量。串行衰减相乘，声音的多路径能量相加后判听者阈值；游戏内听觉和玩家对此世界声源的混音读同一结果。排除界面音与配乐。远端观测的两个输出独立扣带宽，朦胧的画面无权补足被墙挡住的细节。
-
-`Drive.emit(r,pattern)` 从有位姿的有限非实体光学端口发出可被真实视线采样的图样。形象跟随已有实体或姿态样本，接受公开的有限事件换样；实体碰撞、质量、听觉、奥术签名要各自有成立条件。观察者按自己的视线、照度与感知接口得到内容，发现「见形但接触落空」保存为该观察者的矛盾证据。识破可改变该观察者的判断，其他人须实际收到消息才知道。作者不能直接写全体观察者的信念。
-
-有限自主沿用有界 P、真实感应、工作匹配、受限导航和真实抓持。`waypoint(s,goal)` 在声明可通行的有限图与演员尺寸上取下一可达点，平手按稳定键；阻断后重算，无路则等到下一次有效事件或超时。器物只执行绑定过程，不能读隐藏目标、编写新策略或自动取得借物权。
-
-## 5 · 空间穿越、局部时率、活体过程
-
-`R gate = spatial(a,b,…)` 两端为实际定向有限面。`Transfer.cross(gate,event.subject)` 要求进入方向、通行类别、整体包络、映射许可、真实出口扫掠净空和支撑责任均成立。用出口框架 × 局部半转 × 入口框架的逆变换映射交点、朝向及相对速度；移动入口先减去入口该点速度，出口加回出口点速度。质量、内部状态、材料键与世界键保留，新增动能须由运动端及付款承担。失败保持源侧的最后合法状态，不复制或部分穿越，事件标记为已处理。成功后同实体清出出口面并再次实际穿入才能重触发。双向使用反变换并共享每步一次的穿越戳；多物争用同一出口按 D 的空间预留裁决。保留出口法线方向的小净空只用于几何容差。
-
-`R clock = temporal(source,process_port)` 只选已登记可局部变速的过程。`Drive.gain(clock,0..1)` 按世界时步积分局部进度；0 暂停进度，恢复时从原进度继续，已经提交的事件不撤销。候选合同中魔力账、世界硬时限、外界碰撞与边界通行都按世界时。待交付事项记录为有界的一次性权益；到达局部阈值才交付，同时检查世界目标与供给仍有效。离域不补发，多个局部倍率相乘后裁到登记域。不得通过反复进出增殖进度或重写历史。
-
-`R bio = life(source,plant,via=environment)` 只选已有活体的登记更新端。`Transform.advance(r,limit)` 请求有界正向组织进展：分配最多可用水、环境底物与本次作用责任，在有限空间建立可支撑的新组织和覆盖，原子扣除形成所用材料。空间受阻或任何必需来源耗尽时减小增量，实际为零则暂停。受损或无活性组织不能因几何可增长而获得生命。撤术后新组织留在原植株，由自然条件继续更新。此处只给奇幻游戏中的离散世界合同。
-
-## 6 · 同步、权限与表现
-
-手动占用、相变后写权掩码、双端净空都在新步预留时检查；现步产生的热、扰动、相态与接触在提交后才触发新的订阅。跨门属于世界原子边界事务：穿越检测暂存源侧合法状态，裁决前不把物体公布到另一侧。已经存在的约束共享真实负荷。光学/声学像、远景与余韵不参与控制或结账。每题显式写出的戏剧性均可被其反例取消或改变。原题可在给定局部容量内成立，「任意量」「所有观察者」「永久维系」都要单独论证。[待决的世界与玩家权限](decisions.md)
-
-## 7 · 读谱词表与组合的默认值
+## 已有构造的展开索引
 
 下表补齐谱里省去的展开步骤。词表描述世界数据类型与有限变换；案例编号、标题和场景美术不可作能力分派键。
 
@@ -79,3 +41,21 @@
 **同时刻的增补次序。** 先结清旧区间，在新边界处理打断、到期和玩家离场，再处理手动成员/路径选择及端口切换，然后再为自动任务预留。受影响的旧代际申请作废。在同一提交中，必需事务写同一状态的操作按声明次序使用本地暂存值；其他过程只读取旧提交。形态或权限在提交时变化后，下步任何持续控制都要重新校验受体。临界接触可在同一日志中同时有真实物理冲量与另付费的魔法作用，二者须分来源，不能重复消费同一碰撞。
 
 **阵列与传感的两个实参。** `orbit_phase(g,rate)` 只推进空闲布局的角相位；赶赴任务的成员离开各自原环位，人工目标优先。它改变可达性预测的初态，不能把实体直接摆到新位置。`transducer(subject,measure,threshold,format)` 为实际接触/介质登记有界传感器。以冲量为例，区段内一次实际扰动跨过阈值才生成边沿，回落复位。sector_event 取传感区段和时间，去重键属于传感器；原动作者的身份与坐标在投影成包时移除。采样缓冲每区只留最新的未发边沿，超过本格式一个采样周期或在链接断开时丢弃。因此积压小动作不会在恢复供给后泄露历史。
+
+## 从旧词回到语言内核、构造库和领域能力
+
+按在语句中的**签名**分类。例如 `material` 作 R 构造时是材料连通关系，作 select 谓词时读材料类型。以下为原谱调用和简写的归宿；领域目录供审阅，还未形成新机器注册表。
+
+| 归宿 | 旧谱记号 | 规范读法 |
+|---|---|---|
+| 语言内核 | `ref borrow manifest derived slot input event each fork join independent repeat by owner store bind bounds basis enum choice` | 有类型来源、有限控制流、权利、容器与责任。slot 实例化现场端口；choice/enum/by 是有限标签的声明、选择与消去。 |
+| 构造库 · 空间 | `body path patch sphere column cone capture live cast offset reference formation layout grid layout_targets poses pitch initial topology chain orbit_phase` | A 的基本形和采样/变换/排列。chain 额外申请 B 的承重端。orbit_phase 只推进目标位姿。 |
+| 构造库 · 关系与控制 | `control material support arcane_support adhesion natural envelope per_member ports packet transducer relative basis` | 用端点建立带类型的边、介质、局部账户或传感绑定。basis 的声明是内核，具体惯性/承力依据来自已登记能力。 |
+| 领域能力 | `force gravity magnetic electric thermal hydraulic optical acoustic information spatial temporal growth_material life growth match waypoint approaches` | B6 的签名给出实际世界或导航服务。growth 作生长关系构造时属于领域，作 X 进度时是读数。match 使用有界相交预测与到达成本；waypoint 要可行导航。 |
+| 派生读数与可达集合 | `fill residual active ready support_of clock_of goal home pivot component part eligible solid_parts outside hit sensed first_contact visible_points initial` | 从有权读取的余额、图、事件、部位、初态或姿态取投影。residual 作为交付实参时仍只能消费一次。初态声明和读取初态签名可区分。 |
+| 有类型的谓词和事件 | `at_least near contact contacts crossed crossings changed overload scheduled local_after signal proximity selected adjacent` | 数值阈值、真实接触或通知、资格筛选。scheduled 来自有限派发；selected 相当于从合格视图 pick。contact 的事件只在变化边沿出现。 |
+| 旧选择/排布别名 | `nearby within group exact selected layout grid` | `group(nearby(T,r),n) → select(T,within=r,up_to=n,order=distance_key)`；外包 exact 替换数量策略。`within(s,T)` 是在 s 的真实通道域查询；`selected(g,input) → pick(g,input,key)`。grid/layout 由 A7 的有界行列、旋转、采样组合产生。 |
+| 向量和身份投影 | `v toward along_velocity piece local_after packet store residual` | 三轴分量、边界时锁定的单位向量、实际速度方向、已提交分份键、局部时钟事件、有类型的整包/存放/剩余量。零速无投射方向。 |
+| 提案中的派生数据 | `gaze_event pose_sample turn_to_sample pulse formed joined arrived release_for quote` | 来自受权观察、真实姿态、有限拍点、世界提交或版本报价；不得向读视图写事实。 |
+
+七操作族仍由 B4 与本轮 B6 的渠道合同解释：Establish.open；Drive 的 motion/shape/field/impulse/gravity/heat/charge/optics/gain/emit；Constrain 的 bind/cut/lock/support/suppress；Transfer 的 move/apportion/split/deliver/route/capture/cross/handoff；Couple 的 link/unlink/relay/sample/switch；Transform 的 advance/detach/fracture/grow/handoff_world/phase/phase_path/repair；Withdraw.close。能力名组合不赋予无穷动作。将一套任务匹配、时率或水文能力从可用目录移除会产生明确的 capability_gap，其余配方仍按同一语法展开。

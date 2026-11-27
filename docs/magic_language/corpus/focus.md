@@ -20,7 +20,9 @@ K mobile = basis(self,arcane_inertia,caster)
 R brace = support(self,hit(self),basis=mobile)
 K sensor = approaches(caster,visible_moving,4m,0.5s)
 K jobs = match(ring,sensor,reachable)
-K manual = bind(guard,input(member_pose),manual_goal,ring,2m/s)
+K formation_aim = bind(guard,input(formation_pose),layout_pose,ring,2m/s,on_loss=home)
+K member = pick(ring,input(point),first_intersection,on_loss=clear)
+K manual = bind(guard,input(member_pose),manual_goal,member,2m/s,on_loss=release_claim)
 P guard each(ring) <6s,caster> : tick independent(Drive.motion(self,guided_drift,goal(jobs,self)),Constrain.support(brace)) | on release -> [Transform.handoff_world(self)] end
 X guard.hero @self.realized = array/slate/advance <- velocity
 X guard.secondary @self.realized = skin/etch/strain <- load + crack
@@ -36,7 +38,7 @@ X guard.secondary @self.realized = skin/etch/strain <- load + crack
 | 两物分别到达盾面 | 各盾承受真实接触与反力，超过容量才破裂 | 两次触点归属不同盾，按材料恢复系数停下或偏转，脉纹随真实负荷点亮 |
 | 结束 | 松手撤去运动授权 | 盾仍是原物，物体保留此前取得的动量 |
 
-还能把空闲 C 调往别的走廊，那里只有在盾真正抵达后才出现防护。
+玩家可先把整圈向门口偏转，所有未认领槽重新算可达时间；只在看见并指中一个实盾时，单员目标才优先。指空使单员选择为空，其余盾继续按阵形迎击。还能把空闲 C 调往别的走廊，那里只有在盾真正抵达后才出现防护。
 
 **反例**　从 0.10 s 分叉，只把 A 手动派往侧墙。旧的 A→v 认领先作废，B 保留 u，C 仍不可达。v 穿过预期位置，继续由世界与角色结算；系统不能把旧认领算成命中。若改的唯一条件是 B 的容量低于 u 的负荷，则 B 到位、实际接触、B 破裂，u 的剩余运动继续。这两个失败原因在法坛和舞台上应能分开。
 
@@ -57,11 +59,13 @@ R leash = control(caster,band,via=chain)
 R pin = support(slot(stoneClip),solid_parts(band))
 K steer = bind(pilot,aim,desired_path,eligible(band,liquid,leash),1m/s)
 K base = pivot(band,slot(feed))
+K freeze_pick = pick(eligible(band,liquid,leash),input(point),mode=first_intersection,on_loss=clear)
 P fill <1s,caster> : enter Transfer.move(src,band,4kg),Couple.link(leash) | on ready -> pilot
-P pilot <8s,caster> : tick independent(Drive.motion(eligible(band,liquid,leash),guided_drift,relative(base,aim)),Constrain.bind(pin)) | when changed(input(freeze_part)) => Transform.phase(selected(band,input(freeze_part)),solid,slot(coldStone)) | on release -> [Transform.handoff_world(band)] end
-X pilot.hero @band.realized = ribbon/water/turn <- velocity + breath
-X pilot.secondary @band.front = skin/crystal/advance <- growth + ring
+P pilot <8s,caster> : tick independent(Drive.motion(eligible(band,liquid,leash),guided_drift,relative(base,aim)),Constrain.bind(pin)) | when input(confirm) if valid(freeze_pick) => Transform.phase(freeze_pick,solid,slot(coldStone)) | on release -> [Transform.handoff_world(band)] end
+X include stage-scores.md#t03
 ```
+
+[本配方的完整舞台谱与分镜](stage-scores.md#t03)
 
 **正例**　以下表中的“可控”指有下一步运动写权，刚提交的相变不能让原液态控制再多移动 b 一步。
 
@@ -73,7 +77,9 @@ X pilot.secondary @band.front = skin/crystal/advance <- growth + ring
 | 改瞄点 | c–d 绕实际固定点转弯，已有 2 kg 能被驾驶。b 不被瞄点拖走 | 不能从上游穿过冰再给 c–d 添加水。控制、质量、受力三笔分别可查 |
 | 松手 | 停止外部引导；3 kg 水依世界流动或落下 | 1 kg 冰在自然扣合足以承载时继续留在石扣，另一术可独立借取并融化 |
 
-**反例**　从已成冰检查点只切断控制线 b→c。c–d 虽然彼此仍由液态材料连接，却立即失去玩家写权，随后随重力和接触演化。a 仍可控，b 仍在，四段质量合计仍为 4 kg。另从选择 b 前只清空热汇，b 不结冰、不成为刚性支点，四段继续按液态控制。只移走石扣时 b 可结冰但不能成为固定的世界支点。
+**反例**　普通动作输入沿可见水带取最近真实交点，确认时复查；指空不会抽热。探索变奏只把选择方式换为 key，允许按已显露的段精确选取。连续前沿变奏用 mode=front 及相交边沿替换确认，按实际到达顺序和剩余热容量逐份提交。
+
+从已成冰检查点只切断控制线 b→c。c–d 虽然彼此仍由液态材料连接，却立即失去玩家写权，随后随重力和接触演化。a 仍可控，b 仍在，四段质量合计仍为 4 kg。另从选择 b 前只清空热汇，b 不结冰、不成为刚性支点，四段继续按液态控制。只移走石扣时 b 可结冰但不能成为固定的世界支点。
 
 <a id="t13"></a>
 

@@ -99,20 +99,20 @@ X see.secondary @eye.realized = core/etch/still <- signal
 
 两个实际入口配对，在任一端正向跨面时把同一物体及其运动状态映射到另一端。
 
-**现场与锚定**　`{空,联}→引`。A、B 是有净空的定向门框，B 比 A 转过 90°，均固定于世界。题设允许刚体及自愿角色通过。
+**现场与锚定**　`{空,联}→引`。A、B 是有净空的定向门框，B 比 A 转过 90°，均固定于世界。开放门允许实物和角色完整跨面，须通过出口净空检查。
 
 ```text
 C 空间映射,有向面,身份连续
 S a = manifest(aether,patch(1,2m,1m,0deg),capture(slot(frameA)))
 S b = manifest(aether,patch(1,2m,1m,0deg),capture(slot(frameB)))
 R pair = spatial(a,b,mode=bidirectional)
-K who = bounds(pair,rigid_or_willing,whole_body)
+K who = bounds(pair,physical_body,whole_body)
 P passage <5s,caster> : enter Couple.link(pair) | when crossed(pair) => Transfer.cross(pair,event.subject) | on release -> end
 X passage.hero @a.boundary(spatial) = skin/etch/still <- progress
 X passage.secondary @b.realized = skin/etch/shed <- impact + echo ~0.2s
 ```
 
-**正例**　物体以 2 m/s 进入 A，保留世界键、质量与相对速率，出 B 的方向由两端框架决定。清出 B 后主动返穿才执行逆映射。
+**正例**　物体以 2 m/s 进入 A，保留世界键、质量与相对速率，出 B 的方向由两端框架决定。角色被盾推过同一开放面时也可通行，抵住门框且外力不足时没有跨面事件。清出 B 后再次实际返穿才执行逆映射。
 
 **反例**　只在 B 放实墙，出口包络预留失败，物体留在 A 的合法侧且没有副本。超宽物体也不被切成两半送出。
 

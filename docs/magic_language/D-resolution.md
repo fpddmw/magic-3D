@@ -84,3 +84,54 @@ X 过程.角色 @主体.空间锚 = 形象/材质/运动 <- 驱动[起..止]:曲
 | 初次碰柱及下一逻辑步 | 物理初触提交回执，travel 在随后边界消费一次，做附加的有界冲量后结束 | 自然碰撞与配方的附加交付各记其来源，柱获得的动量依真实结算 | 初触音依其真实事件；附加交付音只认本过程相应的实际回执。尾时结束不回滚世界 |
 
 分别改两个条件：若 0.40 s 同时收到强制打断，wave 从未建立。若移走立柱且途中再无接触，wave 会建立并在时限届满时退出，实际命中回声为零。一次对照只改一个条件；这两条反事实可分别揭露“强行播放整套魔法”和“未接触也交付”的错误。
+
+## D5 附 · 同步与权限边界
+手动占用、相变后写权掩码、双端净空都在新步预留时检查；现步产生的热、扰动、相态与接触在提交后才触发新的订阅。跨门属于世界原子边界事务：穿越检测暂存源侧合法状态，裁决前不把物体公布到另一侧。已经存在的约束共享真实负荷。光学/声学像、远景与余韵不参与控制或结账。每题显式写出的戏剧性均可被其反例取消或改变。原题可在给定局部容量内成立，「任意量」「所有观察者」「永久维系」都要单独论证。[本轮世界权限默认](corpus/decisions.md)
+
+<a id="d6"></a>
+
+## D6 · 创作描述怎样展开为确切的一份配方
+
+| 顺序与边界 | 解析结果 | 失配怎样报告 |
+|---|---|---|
+| 构筑时 1 · 绑定 | 固定语言、知识、领域、艺术与报价版本。解析六面声明、局部端口、输入类型/权利、符文锚和唯一入口 | 越权/单位错误定位到实参；意义不符报 anchor_mismatch，公理禁用报 world_denied |
+| 构筑时 2 · 有限展开 | 将 use 词法内联；几何化为 A7 值，生成定数实例与有界成员模板。预留最大数和最大并发，身份含词法路径、稳定成员键、代际 | 递归、参照环、展开上界缺失、非法替换在作者位置拒收 |
+| 构筑时 3 · 空间与通道 | 引用分 desired/real/visual；编出捕获/实时参照、各域、通道输入输出及 resolve 的有序策略 | 查询接口未开放报 capability_gap；把 X 轮廓接到 hydraulic.via 报类型错误 |
+| 构筑时 4 · 过程与责任 | 展平 each/fork/接续，织入局部 owner、账户额度、结清路径与交接。选择独立项或整体事务 | 共享余额二次消费、无反力条件、无结清出口分别指向 K/R/P |
+| 构筑时 5 · 舞台 | 静态内联 X include/group，绑定真实事件类型、独立参照、曲线、时限、分镜和按观察者仲裁 | 不存在的关系回执拒收；可选资产缺失记降档，必需可读性无适配记缺口 |
+| 建术与每步 6 · 求值 | 在现场选择、取得写权、展开**实际成员**并报价/预留，D3 调度。每步用实得快照查询可达、受力、提交回执，最后推进艺术时钟 | 无现场来源报 missing_source；有来源却付不起报 insufficient_responsibility；局部不满足条件可截断/跳过的粒度由 B 合同决定 |
+
+三个边界可分别审阅。构筑时知道「最多三块、每块两个过程」，遇到现场才知道有哪两块，飞行后才知道哪一块真撞到了柱。后端按物理步给接触和已实现位姿；失败时清理本次预留及未提交命令。已发生的碰撞、吸热、位移和自然燃烧都作为下一步输入保留。
+
+### 两块石的六面展开
+
+取[member 源段](composition.md)，给现场施法键 17，借物为世界键 41、73（按距离排序）；第 3 槽为空。输入端为 caster 已取得的地面反力、一次可受权的定向释放。下表中的控制/发射信用由版本报价产生。为便于对账，设此次已获冲量资格共 6 N·s，牵引共 4 个本版本控制计量单位；示数不写入创作配方。世界反冲端还须负担等反冲，反力不够时不提交该次离阵。
+
+```text
+C  stone:有质量、可借；motion:有限控制；delivery:有反力的有限冲量
+S  m41.b=borrow(world:41,writer=17/m/41/1); m73.b=borrow(world:73,writer=17/m/73/1)
+R  m41.tether=(site0,b41,reaction=ground); m41.out=(ground,b41,dir=site0.forward)
+   m73.tether=(site1,b73,reaction=ground); m73.out=(ground,b73,dir=site1.forward)
+P  entry -> fork(m41.hold,m73.hold)   // 各自终止，不用 join(any) 取消邻槽
+   m41.hold: tick guide(b41,site0); on release_for(41) if near -> [detach(b41),deliver(q41,out41)] m41.flight
+   m73.hold: tick guide(b73,site1); on release_for(73) if near -> [detach(b73),deliver(q73,out73)] m73.flight
+   m41.flight: natural_motion(b41); at 2s -> return_world(b41),end41
+   m73.flight: natural_motion(b73); at 2s -> return_world(b73),end73
+K  common=capture(aim); site0=at(sample(arc,3)[0],common); site1=at(sample(arc,3)[1],common)
+   q41=3 N·s,q73=3 N·s; g41=2 units,g73=2 units; parent_unassigned=0
+   control_writer[41]=m41.hold; control_writer[73]=m73.hold; hold deadline=3s each
+   hold失主/超时:解除该tether、还同一石、按原合同耗散未用主动信用；flight自然动量留世界
+X  m41.edge=real(b41)/hold41; m41.line=start(commit(detach,41)),stop(first(contact41,end41)),tail=.12s
+   m73.edge=real(b73)/hold73; m73.line=start(commit(detach,73)),stop(first(contact73,end73)),tail=.12s
+```
+
+完整键前缀为 `(17,m,world_id,generation=1)`；m41 等仅为本表示的短名。`guide/deliver/natural_motion/return_world` 分别展开为源段 Drive.motion、Transfer.deliver、Drive.motion(ballistic,world) 与 Transform.handoff_world，并无第四套操作。根分份一次，后继 move 各自写权，飞行世界时满 2 秒归还观察句柄。物理预算按最多三体和六段过程报价，实付按两体、实际时间和交付计；艺术预算为至多三轮廓、三条四样本尾迹和有限交叠。艺术降档不能为 q41 充值。
+
+| 同一检查点只改一项 | 展开/提交所得 |
+|---|---|
+| 41 已就位，73 被障碍挡住，两者同时收到 release | 41 撤 tether、从真实位姿脱离、q41 从 3 到 0，产生一个带 41 键的尾迹；73 仍 hold，q73=3。后续 41 接触不会触发 73。 |
+| 改为只选 73，73 未就绪 | 两笔 q 都保持 3，无脱离回执。若随后 41 消失，不重排 73、不复用 41 键，控制份按已用时清算。 |
+| 同一 41、73 和初态，只把共同参照 capture 改 live，随后瞄点移动 | 槽位目标变化，石按限速和碰撞接近新目标；固定参照版继续朝旧位。q 在成功释放前保持。 |
+| 两端之间另画一条线，再把它换成装满水的真管 | 前者只展开 X，物理账无新增；后者多出材料 S、输送 R、填充 P 和来源 K。抽掉水后只能看见几何。两图遮住标题仍能从六面区分。 |
+
+`commit`、接触及 phase 等一次性事件以(来源、代际、序号)去重。舞台可在提交边界最后一次消费属于将退场主体的回执，以快照生成有界尾声；需要再作用于世界的过程最快下步读取回执，须重新校验权限。跨阶段 `latch` 只传已锁的艺术样本。重复施法不继承旧订阅。
