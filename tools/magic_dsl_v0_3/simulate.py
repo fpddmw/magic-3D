@@ -4,12 +4,10 @@ from collections import defaultdict
 from copy import deepcopy
 
 from .admission import check
+from .schema import REG
 from .world import World
 
 EPS = 1e-9
-
-
-from .schema import REG
 
 
 class Simulation:
@@ -58,6 +56,13 @@ class Simulation:
     def art(self, p, cue):
         for tr in self.r.data["Expression"]:
             if tr["process"] != p or tr["cue"] != cue:
+                continue
+            if (
+                tr.get("director")
+                and self.r.contracts[self.r.nodes[p]["contract"]]["max_s"]
+                - (self.time - self.active[p]["start"])
+                > REG["artkit"]["silence_window_s"]
+            ):
                 continue
             value = self.ratio() if tr["bind"] == "fill_ratio" else 1
             if tr["bind"] == "geometry":
@@ -110,7 +115,9 @@ class Simulation:
         for op in self.r.nodes[p]["exit"]:
             if self.handles.get(op["target"]) == p:
                 if op["ability"] == "handoff_world":
-                    self.record("handoff_world", object=self.material_ids[op["target"]], handle=op["target"])
+                    self.record(
+                        "handoff_world", object=self.material_ids[op["target"]], handle=op["target"]
+                    )
                 self.close(op["target"])
         for hand in (edge or {}).get("handoff", []):
             h = hand["handle"]
@@ -177,12 +184,17 @@ class Simulation:
                 if self.captured[t] is None:
                     return False
                 if sub["kind"] == "Material":
-                    root = self.w.source(self.r,t)
+                    root = self.w.source(self.r, t)
                     if sub["source"]["kind"] == "Manifest":
                         root = "manifest_" + t
                         if root in self.w.objects or len(self.w.objects) >= REG["limits"]["targets"]:
                             return False
-                        self.w.objects[root] = dict(id=root, position=list(self.captured[t][0]), mass=self.scale, phase="solid")
+                        self.w.objects[root] = {
+                            "id": root,
+                            "position": list(self.captured[t][0]),
+                            "mass": self.scale,
+                            "phase": "solid",
+                        }
                     self.material_ids[t] = root
             else:
                 rel = self.r.relations[t]
@@ -224,11 +236,11 @@ class Simulation:
                 ]
                 budget = self.scale * self.units[unit] * dt
             for k, w in weights.items():
-                value = budget * w / total
+                value = budget * w * objects[k]["mass"] if a == "accelerate" else budget * w / total
                 o = objects[k]
                 outcome[k] = value
                 if a in ("impulse", "accelerate"):
-                    direction = self.w.axis(op["axis"],*pose,o["position"])
+                    direction = self.w.axis(op["axis"], *pose, o["position"])
                     old = o.get("velocity", [0, 0, 0])
                     o["velocity"] = [x + y * value / o["mass"] for x, y in zip(old, direction)]
                 elif a == "warm":
@@ -237,19 +249,22 @@ class Simulation:
                     o["charge"] = o.get("charge", 0) + value
             if a == "impulse":
                 self.delivered += sum(outcome.values())
-        elif a in ("project","grow","fracture"):
+        elif a in ("project", "grow", "fracture"):
             key = self.material_ids[t]
             o = objects[key]
             if a == "project":
-                axis = self.w.axis(op["axis"],*pose,o["position"])
-                o["velocity"] = [v+d*self.scale*self.units["project_impulse"]/o["mass"] for v,d in zip(o.get("velocity",[0,0,0]),axis)]
-                outcome[key] = self.scale*self.units["project_impulse"]
+                axis = self.w.axis(op["axis"], *pose, o["position"])
+                o["velocity"] = [
+                    v + d * self.scale * self.units["project_impulse"] / o["mass"]
+                    for v, d in zip(o.get("velocity", [0, 0, 0]), axis)
+                ]
+                outcome[key] = self.scale * self.units["project_impulse"]
             if a == "grow":
-                value = min(self.units["max_growth"], o.get("growth",0) + self.units["growth_per_s"]*dt)
+                value = min(self.units["max_growth"], o.get("growth", 0) + self.units["growth_per_s"] * dt)
                 outcome[key] = o["growth"] = value
             if a == "fracture":
                 outcome[key] = o["fragments"] = self.units["max_fragments"]
-        elif a in ("solidify","melt"):
+        elif a in ("solidify", "melt"):
             material = self.w.source(self.r, sid)
             if (
                 material not in candidates

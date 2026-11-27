@@ -55,3 +55,13 @@ uv run --isolated --with-requirements tools/magic_dsl_v0_3/requirements.txt pyth
 uv run --isolated --with-requirements tools/magic_dsl_v0_3/requirements.txt python -m tools.magic_dsl_v0_3 simulate "$D/recipes/pressure_wind.json" "$D/fixtures/wind.json"
 uv run --isolated --with-requirements tools/magic_dsl_v0_3/requirements.txt python -m tools.magic_dsl_v0_3 accept "$D/fixtures/altar_input.json" "$D/fixtures/altar_output.json"
 ```
+
+## 雨殿能力增量
+
+配方保持同一 v0.3 IR。按本性登记可提供的接口，操作匹配接口，关系同时匹配两端、成立依据与有效条件。土、火、雾和纯奥术已加入本性表。契约保留有限总责任。`project / grow / melt / fracture / handoff_world` 分别作用于原位有限实体。生长在这里指材料体量的有限变化。局部引力交付加速度，冲量按权重分摊单次实付总量。
+
+`Spatial.reference.anchor` 支持施法者、实际来源、瞄点和目标。绑定时刻为施法开始、过程进入或实时跟随。缺少必要参照时该次建立失败。`radial_in / radial_out` 取对象与中心的连线，`tangential` 取世界上轴与外向径向的叉积。轴心处没有可用方向时交付向量为零。普通墙面只参与需要遮挡或穿透判断的通道。承载须有实际接触，导电与材料传播各读自己的有效边。
+
+`Expression` 以主体形象、材质光学、运动形变、空间异象、视听导演组织已登记模块。材质要求绑定一个几何主体。片岩、晶质与银雾各有 Body、PathGraph、SurfacePatch、Region 适配，四个着色入口共享色板和归一化拍点。主次按过程事件登记，同时施法由导演仲裁并在 0.16 秒内交接权重。高亮集中于约 9% 的局部纹样带，这个参数只约束着色器，整帧占比需画面评审。`impact` 绑定实际交付。`pre_delivery_silence` 只在既有定时过程的最后 60 毫秒衰减本次声音，其超时后继须有真实交付。玩家直接释放的分支不获得额外等待。
+
+`budgets` 分别报告蓝耗、物理几何配额和演出轨道层数。实际帧时间与显存由图形后端观测。发行目录保存源 JSON 的摘要与确定性报价，战斗直接读取通过准入的原始配方。修改配方后重新运行 `python -m tools.magic_dsl_v0_3.catalog`。[复现命令与运行边界](雨殿切片.md)

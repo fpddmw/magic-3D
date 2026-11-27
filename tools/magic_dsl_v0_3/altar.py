@@ -57,7 +57,15 @@ def reading(recipe):
         "sight": "视线穿过",
         "disturbance": "出现可观测扰动",
         "aim": "瞄准方向",
-        "up": "世界向上", "aim_point":"瞄点","target":"目标位置","radial_in":"径向内收","radial_out":"径向外推","tangential":"绕世界上轴切向","earth":"土石","aether":"纯奥术","fire":"火","mist":"雾",
+        "up": "世界向上",
+        "aim_point": "瞄点",
+        "target": "目标位置",
+        "radial_in": "径向内收",
+        "radial_out": "径向外推",
+        "tangential": "绕世界上轴切向",
+        "earth": "土石",
+        "fire": "火",
+        "mist": "雾",
         "down": "世界向下",
         "distance_weighted": "近处权重较高",
         "equal": "按分布权重平分",
@@ -89,7 +97,7 @@ def reading(recipe):
         angle = f"，半角 {g['half_angle_deg']}°" if "half_angle_deg" in g else ""
         ref = space["reference"]
         lines.append(
-            f"{sid} 为{label(recipe.nature[sid])}，{source}。{label(g['shape'])}延伸 {g['extent_m']} 米{angle}，{label(space['distribution'])}，{label(space.get('scope', 'within_field'))}。参照取{label(ref['anchor'])}，{label(ref['bind'])}绑定。"
+            f"{sid} 为{('纯奥术' if recipe.nature[sid] == 'aether' else label(recipe.nature[sid]))}，{source}。{label(g['shape'])}延伸 {g['extent_m']} 米{angle}，{label(space['distribution'])}，{label(space.get('scope', 'within_field'))}。参照取{label(ref['anchor'])}，{label(ref['bind'])}绑定。"
         )
         if s.get("medium") == "ambient_air":
             lines.append("交付时需要现场有空气。")
@@ -219,15 +227,39 @@ def accept(data, candidate):
                     "controller": contract["controller"],
                     "supply": supply,
                 }
-                sid = recipe.relations.get(op["target"], {}).get("from",op["target"])
+                sid = recipe.relations.get(op["target"], {}).get("from", op["target"])
                 spatial = recipe.subjects.get(sid, {}).get("spatial", {})
-                actual.update(axis=op.get("axis"),anchor=spatial.get("reference",{}).get("anchor"))
+                actual.update(axis=op.get("axis"), anchor=spatial.get("reference", {}).get("anchor"))
                 if all(anchor.get(k, v) == v for k, v in actual.items()):
                     return True
         return False
 
+    def conflicts(anchor):
+        if "axis" not in anchor:
+            return False
+        opposition = {"up": "down", "down": "up", "radial_in": "radial_out", "radial_out": "radial_in"}
+        opposite = opposition.get(anchor["axis"])
+        if opposite is None:
+            return False
+        support = targets(anchor["ref"])
+        for pid, actions in ops.items():
+            for phase, op in actions:
+                if pid not in support and op["target"] not in support:
+                    continue
+                if phase != anchor.get("phase", phase) or op["ability"] != anchor["mechanism"]:
+                    continue
+                if op.get("axis") == opposite:
+                    return True
+        return False
+
     for anchor in data["SemanticAnchors"]:
-        check(not (set(anchor.get("exclude",[])) & used), "SemanticAnchors","补全引入玩家排除的机制","ANCHOR_MISMATCH")
+        check(not conflicts(anchor), "SemanticAnchors", "补全在同一锚定范围引入相反方向", "ANCHOR_MISMATCH")
+        check(
+            not (set(anchor.get("exclude", [])) & used),
+            "SemanticAnchors",
+            "补全引入玩家排除的机制",
+            "ANCHOR_MISMATCH",
+        )
         check(realized(anchor), "SemanticAnchors", "配方未兑现所锚定局部的作用或责任", "ANCHOR_MISMATCH")
     for group in groups.values():
         if group["kind"] == "发生接续":
@@ -251,7 +283,10 @@ def accept(data, candidate):
         )
     if target == "aim":
         check(
-            any(s["geometry"]["shape"] == "cone" or s["reference"]["anchor"] in ("aim_point","target") for s in spaces)
+            any(
+                s["geometry"]["shape"] == "cone" or s["reference"]["anchor"] in ("aim_point", "target")
+                for s in spaces
+            )
             or any(op.get("axis") == "aim" for rows in ops.values() for _, op in rows),
             "CastingContext",
             "缺少瞄准参照",

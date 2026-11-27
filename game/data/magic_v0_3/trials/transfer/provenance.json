@@ -1,0 +1,21 @@
+{
+  "model": "gpt-6.2-sol",
+  "adapter": "codex exec, ephemeral, read-only, empty working directory",
+  "calls": [
+    {
+      "kind": "first_pass",
+      "prompt_sha256": "e8fb2ad45ab54502832b6293d06b9de66206b135566bebcdb3df98cb101e7525",
+      "guidance": "你作为法坛的生成模型，仅返回合法 CompilationOutput JSON。不要调用工具。已知全部语法和能力见下方，无配方示例。所有声明 id 全局唯一。构筑所需的实际作用、局部责任和归一化储备。场有 region 或面；本次试验要求覆盖目标两侧与前后。不得预测敌人类别或写法术专用逻辑。不得自报蓝耗。持有句柄后才能作用并在退出时撤去，蓄积与交付分两个节点，中间须有实付阈值证明。只交付构筑输入支持的能力。"
+    },
+    {
+      "kind": "diagnostic_repair",
+      "prompt_sha256": "d8fc753694f7d5d67e7a50eaa244583bc9028301c96e950159c287c0af9d604b",
+      "guidance": "你作为法坛的生成模型，仅返回合法 CompilationOutput JSON。不要调用工具。已知全部语法和能力见下方，无配方示例。所有声明 id 全局唯一。构筑所需的实际作用、局部责任和归一化储备。场有 region 或面；本次试验要求覆盖目标两侧与前后。不得预测敌人类别或写法术专用逻辑。不得自报蓝耗。持有句柄后才能作用并在退出时撤去，蓄积与交付分两个节点，中间须有实付阈值证明。只交付构筑输入支持的能力。"
+    }
+  ],
+  "inputs": "20 rune lexicon, constrained input and machine schema; no repository recipes supplied",
+  "expectation_source": "design_anchor",
+  "human_preference": null,
+  "frozen_runtime": "b8e61805e238094a79e298362d4d995c9adeed8b",
+  "repair_feedback": "来源签名诊断，以及通用材料来源、现场媒介和轨道引用约束"
+}

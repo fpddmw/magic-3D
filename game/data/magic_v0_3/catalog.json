@@ -167,6 +167,22 @@
     }
   },
   {
+    "path": "res://data/magic_v0_3/slice/outward_control.json",
+    "sha256": "5a5ae03c2b185e15211a35432bc2858a71cced379424afb6575a680605bbde74",
+    "quote": {
+      "tariff_version": "tariff-0.3.0",
+      "upfront_mana": 16.976,
+      "mana_per_s": 8.488,
+      "rates": {
+        "accumulate": 8.488,
+        "deliver": 0
+      },
+      "max_paid_mana": 50.928,
+      "reserve_capacity": 16.976,
+      "total_impulse_budget": 84.88
+    }
+  },
+  {
     "path": "res://data/magic_v0_3/trials/early/admitted.json",
     "sha256": "468f0d706ab68be7e28813158d5677061e76f0b3fff65be100f3a8c5008d46d5",
     "quote": {

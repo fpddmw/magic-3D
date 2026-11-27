@@ -11,7 +11,7 @@ from .simulate import Simulation
 def main():
     parser = argparse.ArgumentParser(description="Magic DSL v0.3 离线校验、计费、读解与推演")
     sub = parser.add_subparsers(dest="command", required=True)
-    for k in ("validate", "price", "read", "simulate", "accept", "input", "record", "trial"):
+    for k in ("validate", "price", "budgets", "read", "simulate", "accept", "input", "record", "trial"):
         cmd = sub.add_parser(k)
         cmd.add_argument("file")
         if k == "trial":
@@ -41,7 +41,9 @@ def main():
             result = {"status": "valid"}
         else:
             recipe = Recipe(data)
-            if args.command == "price":
+            if args.command == "budgets":
+                result = recipe.budgets
+            elif args.command == "price":
                 result = recipe.quote
             elif args.command == "read":
                 result = reading(recipe)

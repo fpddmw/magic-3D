@@ -1,0 +1,204 @@
+{
+  "version": "0.3.0",
+  "name": "同构反向对照",
+  "scale": "small",
+  "Concepts": [
+    {
+      "id": "stone_nature",
+      "nature": "earth"
+    },
+    {
+      "id": "pressure_nature",
+      "nature": "aether"
+    }
+  ],
+  "Subjects": [
+    {
+      "id": "stone_core",
+      "kind": "Material",
+      "concept": "stone_nature",
+      "source": {
+        "kind": "Manifest"
+      },
+      "spatial": {
+        "carrier": "Body",
+        "geometry": {
+          "shape": "mass",
+          "extent_m": 0.25,
+          "bodies": 1
+        },
+        "reference": {
+          "anchor": "target",
+          "bind": "cast"
+        },
+        "distribution": "uniform",
+        "scope": "self"
+      }
+    },
+    {
+      "id": "inward_field",
+      "kind": "Field",
+      "concept": "pressure_nature",
+      "source": {
+        "kind": "Manifest"
+      },
+      "spatial": {
+        "carrier": "Region",
+        "geometry": {
+          "shape": "sphere",
+          "extent_m": 3
+        },
+        "reference": {
+          "anchor": "target",
+          "bind": "cast"
+        },
+        "distribution": "uniform",
+        "scope": "within_field"
+      }
+    }
+  ],
+  "Relations": [],
+  "Processes": {
+    "entry": [
+      "accumulate"
+    ],
+    "nodes": [
+      {
+        "id": "accumulate",
+        "contract": "charge_duty",
+        "join": "all",
+        "enter": [],
+        "active": [
+          {
+            "op": "Transfer",
+            "ability": "charge",
+            "target": "@reserve"
+          }
+        ],
+        "on": [
+          {
+            "event": "release",
+            "when": "reserve_ready",
+            "to": [
+              "deliver"
+            ]
+          },
+          {
+            "event": "release",
+            "when": "reserve_low",
+            "to": []
+          },
+          {
+            "event": "interrupt",
+            "when": "always",
+            "to": []
+          },
+          {
+            "event": "timeout",
+            "when": "always",
+            "to": []
+          }
+        ],
+        "exit": []
+      },
+      {
+        "id": "deliver",
+        "contract": "delivery_duty",
+        "join": "all",
+        "enter": [
+          {
+            "op": "Establish",
+            "ability": "form",
+            "target": "stone_core"
+          },
+          {
+            "op": "Establish",
+            "ability": "form",
+            "target": "inward_field"
+          },
+          {
+            "op": "Drive",
+            "ability": "impulse",
+            "target": "inward_field",
+            "axis": "radial_out",
+            "allocation": "distance_weighted",
+            "budget": "paid_reserve"
+          }
+        ],
+        "active": [],
+        "on": [
+          {
+            "event": "timeout",
+            "when": "always",
+            "to": []
+          },
+          {
+            "event": "interrupt",
+            "when": "always",
+            "to": []
+          }
+        ],
+        "exit": [
+          {
+            "op": "Withdraw",
+            "ability": "end",
+            "target": "inward_field"
+          },
+          {
+            "op": "Withdraw",
+            "ability": "end",
+            "target": "stone_core"
+          }
+        ]
+      }
+    ]
+  },
+  "Contracts": [
+    {
+      "id": "charge_duty",
+      "controller": "caster",
+      "mobility": "slow_walk",
+      "focus": "exclusive",
+      "provider": "@caster",
+      "max_s": 4,
+      "reserve": {
+        "full_charge_s": 2,
+        "min_release_ratio": 0.5
+      }
+    },
+    {
+      "id": "delivery_duty",
+      "controller": "caster",
+      "mobility": "free",
+      "focus": "none",
+      "provider": "@caster",
+      "max_s": 0.2
+    }
+  ],
+  "Expression": [
+    {
+      "process": "accumulate",
+      "cue": "active",
+      "bind": "fill_ratio",
+      "audio": "low_rise",
+      "pose": "gather_power"
+    },
+    {
+      "process": "deliver",
+      "cue": "enter",
+      "bind": "geometry",
+      "subject": "inward_field",
+      "visual": "pressure_front",
+      "motion": "gather",
+      "space_fx": "compression"
+    },
+    {
+      "process": "deliver",
+      "cue": "impact",
+      "bind": "actual_impact",
+      "visual": "stone_dust",
+      "motion": "gather",
+      "audio": "stone_strain"
+    }
+  ]
+}

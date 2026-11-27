@@ -429,6 +429,9 @@
     "focus": [
       "primary",
       "secondary"
+    ],
+    "director": [
+      "pre_delivery_silence"
     ]
   },
   "limits": {
@@ -471,7 +474,8 @@
     "global_dynamic_bodies": 64,
     "max_tick_cost_us_per_cast": 300,
     "max_deflect_iterations_per_node": 2,
-    "evidence": "pending_engine"
+    "evidence": "single_hall_jolt_and_metal",
+    "performance_status": "open"
   },
   "interfaces": {
     "air": [
@@ -563,6 +567,7 @@
     "highlight_fraction": 0.09,
     "focus_blend_s": 0.16,
     "max_tracks": 16,
-    "max_layers": 64
+    "max_layers": 64,
+    "silence_window_s": 0.06
   }
 }

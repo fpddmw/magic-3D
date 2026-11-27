@@ -82,14 +82,14 @@ class World:
 
     @staticmethod
     def axis(name, origin, aim, position):
-        if name in ("aim","up","down"):
-            return {"aim":aim,"up":[0,1,0],"down":[0,-1,0]}[name]
-        v = [b-a for a,b in zip(origin,position)]
+        if name in ("aim", "up", "down"):
+            return {"aim": aim, "up": [0, 1, 0], "down": [0, -1, 0]}[name]
+        v = [b - a for a, b in zip(origin, position)]
         if name == "radial_in":
             v = [-x for x in v]
         if name == "tangential":
-            v = [v[2],0,-v[0]]
-        return World.direction(v) if hypot(*v) > 1e-9 else [0,0,0]
+            v = [v[2], 0, -v[0]]
+        return World.direction(v) if hypot(*v) > 1e-9 else [0, 0, 0]
 
     def affected(self, space, pose, channel):
         if pose is None:
@@ -107,7 +107,11 @@ class World:
                 continue
             if channel == "thermal" and o.get("thermal_path", "radiation") == "insulated":
                 continue
-            if channel == "thermal" and o.get("thermal_path","radiation") == "radiation" and o.get("occluded"):
+            if (
+                channel == "thermal"
+                and o.get("thermal_path", "radiation") == "radiation"
+                and o.get("occluded")
+            ):
                 continue
             delta = [x - y for x, y in zip(o["position"], origin)]
             axial = sum(x * y for x, y in zip(delta, aim))

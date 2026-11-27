@@ -1,0 +1,14 @@
+{
+  "model": "gpt-6.2-sol",
+  "adapter": "codex exec, ephemeral, read-only, empty working directory",
+  "calls": [
+    {
+      "kind": "first_pass",
+      "prompt_sha256": "82445df4c8c8d4ce2f917257c342ac2d529cc88b20759a33e7d241325a24874d",
+      "guidance": "仅根据以下构筑输入、注册表和 schema 返回一个 CompilationOutput JSON。仅文本生成，无工具、无文件访问，无代码围栏。JSON 用英文键。所有声明 id 全局唯一。每个非引用主体必须 form 建立。土可以 Manifest 的 Material Body，或可表达土意向的真实机制。现场 target 槽是世界锚点。蓄力须独立节点 active charge @reserve；release reserve_ready 到后继，干预才在 enter 中 form 后 impulse，预算 paid_reserve；reserve_low 退出。若要求向心，使用球形域或有限范围几何并保证覆盖中心两侧。实机子集允许并优先纯奥术球域模拟土的聚拢力，无需额外未使用声明；也允许土实体作为冲量作用锚。仅实际表意列贡献，备选可空。enter / active / exit / on 均必填。首轮请以玩家意图为先。"
+    }
+  ],
+  "inputs": "20 rune lexicon, constrained input and machine schema; no repository recipes supplied",
+  "expectation_source": "design_anchor",
+  "human_preference": null
+}

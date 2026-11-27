@@ -1,0 +1,104 @@
+{
+  "checks": {
+    "all_suites_completed": true,
+    "charge_follows_connected_edges": true,
+    "control_outward_CrackedPier": true,
+    "control_outward_LooseStone": true,
+    "control_outward_Sentinel": true,
+    "control_outward_WorkedStone4": true,
+    "guard_spends_stamina_preserves_poise": true,
+    "host_pays_and_disconnects": true,
+    "host_supplies_live_light": true,
+    "interrupt_prevents_delivery": true,
+    "local_signal_returns_to_bound_receiver": true,
+    "optical_ray_crosses_finite_sheet": true,
+    "other_cast_owns_body_at_delivery_-1": true,
+    "other_cast_owns_body_at_delivery_1": true,
+    "paid_charge_releases_same_tick": true,
+    "phase_front_resumes_on_reconnect": true,
+    "phase_front_stops_at_cut": true,
+    "poise_stagger": true,
+    "roll_spends_stamina": true,
+    "support_breaks_on_overload": true,
+    "support_carries_contact": true,
+    "thermal_edge_conserves_heat": true,
+    "transfer_environment_overload": true,
+    "transfer_inward_CrackedPier": true,
+    "transfer_inward_LooseStone": true,
+    "transfer_inward_Sentinel": true,
+    "transfer_inward_WorkedStone2": true,
+    "unsupported_load_falls": true,
+    "world_body_continues": true,
+    "world_handoff_preserves_body_state_and_edge": true
+  },
+  "engine": "4.5.1-stable (official)",
+  "observations": {
+    "control_outward_CrackedPier": [
+      0.627024114131927,
+      0.0,
+      0.0
+    ],
+    "control_outward_LooseStone": [
+      0.0,
+      0.0,
+      -4.59817695617676
+    ],
+    "control_outward_Sentinel": [
+      -1.72431623935699,
+      0.0,
+      0.0
+    ],
+    "control_outward_WorkedStone4": [
+      0.0,
+      0.0,
+      3.44863247871399
+    ],
+    "optical_ray_crosses_finite_sheet": [
+      0.25,
+      1.0
+    ],
+    "paid_charge_releases_same_tick": 0.4,
+    "positions_before_release": [
+      "(-2.0, 0.0, 0.0)",
+      "(2.0, 0.0, 0.0)",
+      "(0.0, 0.0, -2.0)",
+      "(0.0, 0.0, 2.0)"
+    ],
+    "support_breaks_on_overload": [
+      {
+        "event": "overload",
+        "load": 15.0
+      }
+    ],
+    "thermal_edge_conserves_heat": [
+      8.95166992740751,
+      1.04833007259249
+    ],
+    "transfer_inward_CrackedPier": [
+      -0.627024114131927,
+      0.0,
+      0.0
+    ],
+    "transfer_inward_LooseStone": [
+      0.0,
+      0.0,
+      4.59817695617676
+    ],
+    "transfer_inward_Sentinel": [
+      1.72431623935699,
+      0.0,
+      0.0
+    ],
+    "transfer_inward_WorkedStone2": [
+      0.0,
+      0.0,
+      -3.44863247871399
+    ],
+    "unsupported_load_falls": [
+      1.51405894756317,
+      0.268384695053101
+    ],
+    "world_handoff_preserves_body_state_and_edge": 38738593565
+  },
+  "physics": "Jolt Physics"
+}

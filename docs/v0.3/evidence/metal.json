@@ -1,0 +1,126 @@
+{
+  "engine": "Godot 4.5.1",
+  "benchmark": "75 warm-up frames then 300 real frame_post_draw intervals; Forward+ Metal, uncapped, 1080p render target, AI enabled, movement/roll/melee, charging, casting, support and projectile workload.",
+  "method": "Each sample is a fresh process. Metal viewport GPU timing returned zero; use wall-clock frame intervals. Video memory is the Godot rendering counter.",
+  "runs": [
+    {
+      "driver": "metal",
+      "frames_over_16_67_ms": 19,
+      "gpu": "Apple M6 (Apple9)",
+      "max_ms": 31.638,
+      "method": "forward_plus",
+      "p50_ms": 9.61,
+      "p95_ms": 21.624,
+      "peak_video_mem_bytes": 179683328,
+      "physics": "Jolt Physics",
+      "samples": 300,
+      "slowest": {
+        "frame": 119,
+        "ms": 31.638
+      },
+      "texture_px": "(1920.0, 1080.0)",
+      "video_mem_bytes": 179683328,
+      "viewport": "(1920.0, 1080.0)",
+      "viewport_cpu_p95_ms": 0.785000026226044,
+      "viewport_gpu_p95_ms": 0.0
+    },
+    {
+      "driver": "metal",
+      "frames_over_16_67_ms": 18,
+      "gpu": "Apple M6 (Apple9)",
+      "max_ms": 32.787,
+      "method": "forward_plus",
+      "p50_ms": 9.627,
+      "p95_ms": 17.215,
+      "peak_video_mem_bytes": 179421184,
+      "physics": "Jolt Physics",
+      "samples": 300,
+      "slowest": {
+        "frame": 96,
+        "ms": 32.787
+      },
+      "texture_px": "(1920.0, 1080.0)",
+      "video_mem_bytes": 179421184,
+      "viewport": "(1920.0, 1080.0)",
+      "viewport_cpu_p95_ms": 0.739000022411346,
+      "viewport_gpu_p95_ms": 0.0
+    },
+    {
+      "driver": "metal",
+      "frames_over_16_67_ms": 18,
+      "gpu": "Apple M6 (Apple9)",
+      "max_ms": 32.989,
+      "method": "forward_plus",
+      "p50_ms": 6.33,
+      "p95_ms": 19.349,
+      "peak_video_mem_bytes": 179683328,
+      "physics": "Jolt Physics",
+      "samples": 300,
+      "slowest": {
+        "frame": 112,
+        "ms": 32.989
+      },
+      "texture_px": "(1920.0, 1080.0)",
+      "video_mem_bytes": 179683328,
+      "viewport": "(1920.0, 1080.0)",
+      "viewport_cpu_p95_ms": 0.904999971389771,
+      "viewport_gpu_p95_ms": 0.0
+    }
+  ],
+  "earlier_configurations": {
+    "4x_msaa_before_audio_preparation": [
+      {
+        "driver": "metal",
+        "gpu": "Apple M6 (Apple9)",
+        "max_ms": 1644.726,
+        "method": "forward_plus",
+        "p50_ms": 5.409,
+        "p95_ms": 33.233,
+        "peak_video_mem_bytes": 282656768,
+        "physics": "Jolt Physics",
+        "samples": 300,
+        "texture_px": "(1920.0, 1080.0)",
+        "video_mem_bytes": 282443776,
+        "viewport": "(1920.0, 1080.0)"
+      }
+    ],
+    "2x_msaa_with_limited_shadows": [
+      {
+        "driver": "metal",
+        "gpu": "Apple M6 (Apple9)",
+        "max_ms": 72.92,
+        "method": "forward_plus",
+        "p50_ms": 10.048,
+        "p95_ms": 25.253,
+        "peak_video_mem_bytes": 232914944,
+        "physics": "Jolt Physics",
+        "samples": 300,
+        "slowest": {
+          "frame": 196,
+          "ms": 72.92
+        },
+        "texture_px": "(1920.0, 1080.0)",
+        "video_mem_bytes": 232685568,
+        "viewport": "(1920.0, 1080.0)"
+      },
+      {
+        "driver": "metal",
+        "gpu": "Apple M6 (Apple9)",
+        "max_ms": 41.167,
+        "method": "forward_plus",
+        "p50_ms": 12.498,
+        "p95_ms": 25.098,
+        "peak_video_mem_bytes": 232898560,
+        "physics": "Jolt Physics",
+        "samples": 300,
+        "slowest": {
+          "frame": 97,
+          "ms": 41.167
+        },
+        "texture_px": "(1920.0, 1080.0)",
+        "video_mem_bytes": 232439808,
+        "viewport": "(1920.0, 1080.0)"
+      }
+    ]
+  }
+}
