@@ -59,7 +59,10 @@ func run(h) -> void:
 	h.player.struck(60.,Vector3.FORWARD)
 	evidence("poise_stagger",h.player.state=="stagger")
 	var file=entry(h,"/transfer/admitted.json")
-	if not file.is_empty(): await transfer(h,file,body)
+	if not file.is_empty():
+		h.mana=300
+		var concurrent=h.cast_entry(entry(h,"/cast_stone.json"))
+		await transfer(h,file,concurrent.bodies.stone)
 	var result={"engine":Engine.get_version_info().string,"physics":ProjectSettings.get_setting("physics/3d/physics_engine"),"checks":checks,"observations":measurements}
 	print("HALL_RESULT ",JSON.stringify(result))
 	tree.quit(1 if checks.values().has(false) else 0)
@@ -75,22 +78,29 @@ func transfer(h,file:Dictionary,manifest:RigidBody3D) -> void:
 		if b.name=="LooseStone": moving=b
 		if b.name=="CrackedPier": pillar=b
 	var targets=[h.enemy,pillar,moving,manifest]
-	var spread=[Vector3(-1.15,0,0),Vector3(1.15,0,0),Vector3(0,0,-1.15),Vector3(0,0,1.15)]
+	var spread=[Vector3(-2,0,0),Vector3(2,0,0),Vector3(0,0,-2),Vector3(0,0,2)]
 	var snapshots=[]
 	for i in targets.size():
 		var b=targets[i]
-		b.global_position=center+spread[i]
+		b.freeze=true
+		b.global_transform=Transform3D(Basis(),center+spread[i])
 		b.linear_velocity=Vector3.ZERO
 		b.gravity_scale=0.
 		b.sleeping=false
-		b.freeze=(b==pillar)
+		b.angular_velocity=Vector3.ZERO
 	pillar.set_meta("integrity",.1)
 	await ticks(h,3)
 	h.mana=300
 	var cast=h.cast_entry(file)
 	for n in cast.contracts.values():
 		if n.has("reserve"): await ticks(h,ceili(60*n.reserve.full_charge_s*.8))
-	for b in targets: snapshots.append(b.linear_velocity)
+	evidence("other_cast_owns_body_at_delivery",typeof(manifest.get_meta("control"))==TYPE_INT)
+	for b in targets:
+		b.freeze=(b==pillar)
+		snapshots.append(b.linear_velocity)
+	await ticks(h,2)
+	measurements["positions_before_release"]=[]
+	for b in targets: measurements["positions_before_release"].append(str(b.global_position-center))
 	cast.input_event("release")
 	await ticks(h,3)
 	for i in targets.size():

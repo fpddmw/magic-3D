@@ -1,0 +1,57 @@
+{
+  "RuneGraph": {
+    "nodes": [
+      {
+        "id": "earth",
+        "rune": "土"
+      },
+      {
+        "id": "gather",
+        "rune": "聚"
+      },
+      {
+        "id": "draw",
+        "rune": "引"
+      }
+    ],
+    "links": [
+      {
+        "id": "whole",
+        "kind": "共同组织",
+        "members": [
+          "earth",
+          "gather",
+          "draw"
+        ]
+      }
+    ]
+  },
+  "SemanticAnchors": [
+    {
+      "ref": "whole",
+      "mechanism": "impulse",
+      "axis": "radial_in",
+      "meaning": "牵向瞄准目标周围中心",
+      "anchor": "target"
+    }
+  ],
+  "CastingContext": {
+    "target": "aim",
+    "timing": "charge"
+  },
+  "PlayerKnowledge": [
+    "土",
+    "聚",
+    "引"
+  ],
+  "DSLVersion": "0.3.0",
+  "WorldKnowledgeVersion": "world-0.3.0",
+  "CapabilityProfile": "offline-0.3.0",
+  "SupportedCapabilities": [
+    "form",
+    "end",
+    "impulse",
+    "charge"
+  ],
+  "ArtisticStyle": "ruined_city"
+}

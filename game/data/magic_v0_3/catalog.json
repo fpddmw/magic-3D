@@ -180,5 +180,21 @@
       "reserve_capacity": 0,
       "total_impulse_budget": 0
     }
+  },
+  {
+    "path": "res://data/magic_v0_3/trials/transfer/admitted.json",
+    "sha256": "e6d6a3c3f87b1c3152f533756ad58f9810ca3afcebb64b5c8364982be40df30e",
+    "quote": {
+      "tariff_version": "tariff-0.3.0",
+      "upfront_mana": 16.976,
+      "mana_per_s": 8.488,
+      "rates": {
+        "accumulate": 8.488,
+        "deliver": 0
+      },
+      "max_paid_mana": 50.928,
+      "reserve_capacity": 16.976,
+      "total_impulse_budget": 84.88
+    }
   }
 ]
