@@ -1,0 +1,142 @@
+{
+  "version": "0.3.0",
+  "name": "寄灯",
+  "scale": "medium",
+  "Concepts": [
+    {
+      "id": "nature",
+      "nature": "light"
+    },
+    {
+      "id": "lamp_nature",
+      "nature": "reservoir"
+    }
+  ],
+  "Subjects": [
+    {
+      "id": "field",
+      "concept": "nature",
+      "kind": "Field",
+      "source": {
+        "kind": "Manifest"
+      },
+      "spatial": {
+        "carrier": "Region",
+        "geometry": {
+          "shape": "sphere",
+          "extent_m": 6
+        },
+        "reference": {
+          "anchor": "caster",
+          "bind": "enter"
+        },
+        "distribution": "uniform"
+      }
+    },
+    {
+      "id": "lamp",
+      "concept": "lamp_nature",
+      "kind": "WorldRef",
+      "source": {
+        "kind": "Reference",
+        "slot": "lamp"
+      }
+    }
+  ],
+  "Relations": [
+    {
+      "id": "feed",
+      "from": "lamp",
+      "to": "field",
+      "channel": "arcane_supply",
+      "basis": "aether",
+      "validity": "linked"
+    }
+  ],
+  "Processes": {
+    "entry": [
+      "plant"
+    ],
+    "nodes": [
+      {
+        "id": "plant",
+        "contract": "place",
+        "join": "any",
+        "enter": [
+          {
+            "op": "Establish",
+            "ability": "form",
+            "target": "field"
+          }
+        ],
+        "active": [],
+        "exit": [],
+        "on": [
+          {
+            "event": "ready",
+            "when": "always",
+            "to": [
+              "shine"
+            ],
+            "handoff": [
+              {
+                "handle": "field",
+                "to": "shine"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "shine",
+        "contract": "host",
+        "join": "any",
+        "enter": [],
+        "active": [
+          {
+            "op": "Drive",
+            "ability": "illuminate",
+            "target": "field"
+          }
+        ],
+        "exit": [
+          {
+            "op": "Withdraw",
+            "ability": "end",
+            "target": "field"
+          }
+        ],
+        "on": []
+      }
+    ]
+  },
+  "Contracts": [
+    {
+      "id": "place",
+      "controller": "caster",
+      "mobility": "free",
+      "focus": "none",
+      "provider": "@caster",
+      "max_s": 2
+    },
+    {
+      "id": "host",
+      "controller": "autonomous",
+      "mobility": "free",
+      "focus": "none",
+      "provider": "lamp",
+      "max_s": 6,
+      "supply_link": "feed"
+    }
+  ],
+  "Expression": [
+    {
+      "process": "shine",
+      "cue": "active",
+      "bind": "geometry",
+      "subject": "field",
+      "visual": "imprint",
+      "audio": "bell"
+    }
+  ]
+}

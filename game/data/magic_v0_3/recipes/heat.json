@@ -1,0 +1,85 @@
+{
+  "version": "0.3.0",
+  "name": "暖石龛",
+  "scale": "medium",
+  "Concepts": [
+    {
+      "id": "nature",
+      "nature": "heat"
+    }
+  ],
+  "Subjects": [
+    {
+      "id": "field",
+      "concept": "nature",
+      "kind": "Field",
+      "source": {
+        "kind": "Manifest"
+      },
+      "spatial": {
+        "carrier": "Region",
+        "geometry": {
+          "shape": "sphere",
+          "extent_m": 6
+        },
+        "reference": {
+          "anchor": "caster",
+          "bind": "enter"
+        },
+        "distribution": "uniform"
+      }
+    }
+  ],
+  "Relations": [],
+  "Processes": {
+    "entry": [
+      "work"
+    ],
+    "nodes": [
+      {
+        "id": "work",
+        "contract": "sustain",
+        "join": "any",
+        "enter": [
+          {
+            "op": "Establish",
+            "ability": "form",
+            "target": "field"
+          }
+        ],
+        "active": [
+          {
+            "op": "Drive",
+            "ability": "warm",
+            "target": "field"
+          }
+        ],
+        "exit": [
+          {
+            "op": "Withdraw",
+            "ability": "end",
+            "target": "field"
+          }
+        ],
+        "on": [
+          {
+            "event": "release",
+            "when": "always",
+            "to": []
+          }
+        ]
+      }
+    ]
+  },
+  "Contracts": [
+    {
+      "id": "sustain",
+      "controller": "caster",
+      "mobility": "free",
+      "focus": "none",
+      "provider": "@caster",
+      "max_s": 3
+    }
+  ],
+  "Expression": []
+}

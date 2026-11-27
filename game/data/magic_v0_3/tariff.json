@@ -1,0 +1,42 @@
+{
+  "version": "tariff-0.3.0",
+  "scale": {
+    "small": 1,
+    "medium": 2,
+    "large": 4
+  },
+  "base": 1,
+  "relation": 0.5,
+  "unit_per_m": 0.12,
+  "geometry": {
+    "Body": 1,
+    "Region": 1.2,
+    "SurfacePatch": 1.1,
+    "PathGraph": 1.3
+  },
+  "work": {
+    "form": 0.5,
+    "end": 0,
+    "charge": 2,
+    "impulse": 2,
+    "accelerate": 1,
+    "freeze": 1.5,
+    "warm": 1,
+    "conduct": 1.5,
+    "bear_load": 2,
+    "attenuate": 1,
+    "notify": 0.75,
+    "illuminate": 0.5,
+    "solidify": 1.5
+  },
+  "world_units": {
+    "impulse_per_work_s": 10,
+    "acceleration": 1,
+    "heat_per_s": 2,
+    "charge_per_pulse": 2,
+    "load_capacity": 5,
+    "light_level": 2,
+    "transmission": 0.25,
+    "phase_mass": 2
+  }
+}

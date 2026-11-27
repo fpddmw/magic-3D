@@ -1,0 +1,171 @@
+{
+  "MagicDSL": {
+    "version": "0.3.0",
+    "name": "承落光幕",
+    "scale": "medium",
+    "Concepts": [
+      {
+        "id": "nature",
+        "nature": "light"
+      },
+      {
+        "id": "hall_nature",
+        "nature": "site"
+      }
+    ],
+    "Subjects": [
+      {
+        "id": "field",
+        "concept": "nature",
+        "kind": "Field",
+        "source": {
+          "kind": "Manifest"
+        },
+        "spatial": {
+          "carrier": "SurfacePatch",
+          "geometry": {
+            "shape": "sheet",
+            "extent_m": 6,
+            "quads": 4
+          },
+          "reference": {
+            "anchor": "caster",
+            "bind": "enter"
+          },
+          "distribution": "uniform"
+        },
+        "properties": [
+          {
+            "aspect": "bearing",
+            "via": "boundary"
+          }
+        ]
+      },
+      {
+        "id": "hall",
+        "concept": "hall_nature",
+        "kind": "WorldRef",
+        "source": {
+          "kind": "Reference",
+          "slot": "observed_site"
+        }
+      }
+    ],
+    "Relations": [
+      {
+        "id": "boundary",
+        "from": "field",
+        "to": "hall",
+        "channel": "mechanical",
+        "validity": "contact",
+        "basis": "aether"
+      }
+    ],
+    "Processes": {
+      "entry": [
+        "work"
+      ],
+      "nodes": [
+        {
+          "id": "work",
+          "contract": "sustain",
+          "join": "any",
+          "enter": [
+            {
+              "op": "Establish",
+              "ability": "form",
+              "target": "field"
+            },
+            {
+              "op": "Establish",
+              "ability": "form",
+              "target": "boundary"
+            }
+          ],
+          "active": [
+            {
+              "op": "Constrain",
+              "ability": "bear_load",
+              "target": "boundary"
+            }
+          ],
+          "exit": [
+            {
+              "op": "Withdraw",
+              "ability": "end",
+              "target": "boundary"
+            },
+            {
+              "op": "Withdraw",
+              "ability": "end",
+              "target": "field"
+            }
+          ],
+          "on": [
+            {
+              "event": "release",
+              "when": "always",
+              "to": []
+            }
+          ]
+        }
+      ]
+    },
+    "Contracts": [
+      {
+        "id": "sustain",
+        "controller": "caster",
+        "mobility": "free",
+        "focus": "none",
+        "provider": "@caster",
+        "max_s": 3
+      }
+    ],
+    "Expression": [
+      {
+        "process": "work",
+        "cue": "enter",
+        "bind": "geometry",
+        "subject": "field",
+        "visual": "light_veil",
+        "motion": "expand"
+      }
+    ]
+  },
+  "Interpretation": "承落光幕",
+  "RuneContributions": [
+    {
+      "node": "light",
+      "meaning": "光幕的实际界面",
+      "refs": [
+        "field"
+      ]
+    },
+    {
+      "node": "response",
+      "meaning": "对实际现场条件响应",
+      "refs": [
+        "work"
+      ]
+    },
+    {
+      "node": "guard",
+      "meaning": "承担来物负荷",
+      "refs": [
+        "boundary"
+      ]
+    }
+  ],
+  "AlternativeAnchors": [
+    {
+      "ref": "guard",
+      "meaning": "遮蔽视线",
+      "mechanism": "attenuate"
+    },
+    {
+      "ref": "guard",
+      "meaning": "传回扰动警示",
+      "mechanism": "notify"
+    }
+  ]
+}

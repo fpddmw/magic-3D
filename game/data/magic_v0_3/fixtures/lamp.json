@@ -1,0 +1,41 @@
+{
+  "caster_mana": 200,
+  "position": [
+    0,
+    0,
+    0
+  ],
+  "aim": [
+    0,
+    0,
+    1
+  ],
+  "until_s": 4,
+  "objects": [
+    {
+      "id": "lens",
+      "position": [
+        0,
+        0,
+        1
+      ],
+      "mass": 1,
+      "mana": 4,
+      "linked": true
+    },
+    {
+      "id": "stair",
+      "position": [
+        0,
+        0,
+        2
+      ],
+      "mass": 1
+    }
+  ],
+  "slots": {
+    "lamp": "lens"
+  },
+  "edges": [],
+  "events": []
+}

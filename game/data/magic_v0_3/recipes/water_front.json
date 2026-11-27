@@ -1,0 +1,120 @@
+{
+  "version": "0.3.0",
+  "name": "涧脉凝霜",
+  "scale": "medium",
+  "Concepts": [
+    {
+      "id": "nature",
+      "nature": "water"
+    },
+    {
+      "id": "stream_nature",
+      "nature": "site"
+    }
+  ],
+  "Subjects": [
+    {
+      "id": "field",
+      "concept": "nature",
+      "kind": "Material",
+      "source": {
+        "kind": "Borrow",
+        "ref": "stream"
+      },
+      "spatial": {
+        "carrier": "PathGraph",
+        "geometry": {
+          "shape": "network",
+          "extent_m": 6,
+          "nodes": 8,
+          "edges": 12
+        },
+        "reference": {
+          "anchor": "source",
+          "bind": "enter"
+        },
+        "distribution": "uniform"
+      },
+      "initial_phase": "liquid"
+    },
+    {
+      "id": "stream",
+      "concept": "stream_nature",
+      "kind": "WorldRef",
+      "source": {
+        "kind": "Reference",
+        "slot": "spring"
+      }
+    }
+  ],
+  "Relations": [],
+  "Processes": {
+    "entry": [
+      "work"
+    ],
+    "nodes": [
+      {
+        "id": "work",
+        "contract": "sustain",
+        "join": "any",
+        "enter": [
+          {
+            "op": "Establish",
+            "ability": "form",
+            "target": "field"
+          }
+        ],
+        "active": [
+          {
+            "op": "Transform",
+            "ability": "freeze",
+            "target": "field",
+            "propagation": {
+              "origin": "bound_source",
+              "via": "live_material",
+              "speed_m_s": 2,
+              "reach_m": 6,
+              "hops": 6,
+              "attenuation": 0.05,
+              "missing": "stop"
+            }
+          }
+        ],
+        "exit": [
+          {
+            "op": "Withdraw",
+            "ability": "end",
+            "target": "field"
+          }
+        ],
+        "on": [
+          {
+            "event": "release",
+            "when": "always",
+            "to": []
+          }
+        ]
+      }
+    ]
+  },
+  "Contracts": [
+    {
+      "id": "sustain",
+      "controller": "caster",
+      "mobility": "free",
+      "focus": "none",
+      "provider": "@caster",
+      "max_s": 3
+    }
+  ],
+  "Expression": [
+    {
+      "process": "work",
+      "cue": "active",
+      "bind": "geometry",
+      "subject": "field",
+      "visual": "ice_rime",
+      "motion": "harden"
+    }
+  ]
+}

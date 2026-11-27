@@ -1,0 +1,133 @@
+{
+  "version": "0.3.0",
+  "name": "隔望光幕",
+  "scale": "medium",
+  "Concepts": [
+    {
+      "id": "nature",
+      "nature": "light"
+    },
+    {
+      "id": "hall_nature",
+      "nature": "site"
+    }
+  ],
+  "Subjects": [
+    {
+      "id": "field",
+      "concept": "nature",
+      "kind": "Field",
+      "source": {
+        "kind": "Manifest"
+      },
+      "spatial": {
+        "carrier": "SurfacePatch",
+        "geometry": {
+          "shape": "sheet",
+          "extent_m": 6,
+          "quads": 4
+        },
+        "reference": {
+          "anchor": "caster",
+          "bind": "enter"
+        },
+        "distribution": "uniform"
+      },
+      "properties": [
+        {
+          "aspect": "screening",
+          "via": "boundary"
+        }
+      ]
+    },
+    {
+      "id": "hall",
+      "concept": "hall_nature",
+      "kind": "WorldRef",
+      "source": {
+        "kind": "Reference",
+        "slot": "observed_site"
+      }
+    }
+  ],
+  "Relations": [
+    {
+      "id": "boundary",
+      "from": "field",
+      "to": "hall",
+      "channel": "optical",
+      "validity": "sight",
+      "basis": "nature"
+    }
+  ],
+  "Processes": {
+    "entry": [
+      "work"
+    ],
+    "nodes": [
+      {
+        "id": "work",
+        "contract": "sustain",
+        "join": "any",
+        "enter": [
+          {
+            "op": "Establish",
+            "ability": "form",
+            "target": "field"
+          },
+          {
+            "op": "Establish",
+            "ability": "form",
+            "target": "boundary"
+          }
+        ],
+        "active": [
+          {
+            "op": "Drive",
+            "ability": "attenuate",
+            "target": "boundary"
+          }
+        ],
+        "exit": [
+          {
+            "op": "Withdraw",
+            "ability": "end",
+            "target": "boundary"
+          },
+          {
+            "op": "Withdraw",
+            "ability": "end",
+            "target": "field"
+          }
+        ],
+        "on": [
+          {
+            "event": "release",
+            "when": "always",
+            "to": []
+          }
+        ]
+      }
+    ]
+  },
+  "Contracts": [
+    {
+      "id": "sustain",
+      "controller": "caster",
+      "mobility": "free",
+      "focus": "none",
+      "provider": "@caster",
+      "max_s": 3
+    }
+  ],
+  "Expression": [
+    {
+      "process": "work",
+      "cue": "enter",
+      "bind": "geometry",
+      "subject": "field",
+      "visual": "light_veil",
+      "motion": "expand"
+    }
+  ]
+}

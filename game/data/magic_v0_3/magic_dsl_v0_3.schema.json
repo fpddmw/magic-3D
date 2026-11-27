@@ -1,0 +1,1936 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:city-fates:magic-dsl:0.3.0",
+  "$ref": "#/$defs/Recipe",
+  "$defs": {
+    "Propagation": {
+      "type": "object",
+      "properties": {
+        "origin": {
+          "enum": [
+            "bound_source"
+          ]
+        },
+        "via": {
+          "enum": [
+            "live_material"
+          ]
+        },
+        "speed_m_s": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 30
+        },
+        "reach_m": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 30
+        },
+        "hops": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 12
+        },
+        "attenuation": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "missing": {
+          "enum": [
+            "stop"
+          ]
+        }
+      },
+      "required": [
+        "origin",
+        "via",
+        "speed_m_s",
+        "reach_m",
+        "hops",
+        "attenuation",
+        "missing"
+      ],
+      "additionalProperties": false
+    },
+    "Spatial": {
+      "type": "object",
+      "properties": {
+        "carrier": {
+          "enum": [
+            "Region",
+            "SurfacePatch",
+            "PathGraph",
+            "Body"
+          ]
+        },
+        "geometry": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "shape": {
+                  "const": "cone"
+                },
+                "extent_m": {
+                  "type": "number",
+                  "exclusiveMinimum": 0,
+                  "maximum": 30
+                },
+                "half_angle_deg": {
+                  "type": "number",
+                  "exclusiveMinimum": 0,
+                  "maximum": 89
+                }
+              },
+              "required": [
+                "shape",
+                "extent_m",
+                "half_angle_deg"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "shape": {
+                  "const": "sphere"
+                },
+                "extent_m": {
+                  "type": "number",
+                  "exclusiveMinimum": 0,
+                  "maximum": 30
+                }
+              },
+              "required": [
+                "shape",
+                "extent_m"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "shape": {
+                  "const": "sheet"
+                },
+                "extent_m": {
+                  "type": "number",
+                  "exclusiveMinimum": 0,
+                  "maximum": 30
+                },
+                "quads": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 64
+                }
+              },
+              "required": [
+                "shape",
+                "extent_m",
+                "quads"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "shape": {
+                  "const": "network"
+                },
+                "extent_m": {
+                  "type": "number",
+                  "exclusiveMinimum": 0,
+                  "maximum": 30
+                },
+                "nodes": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 16
+                },
+                "edges": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 24
+                }
+              },
+              "required": [
+                "shape",
+                "extent_m",
+                "nodes",
+                "edges"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "shape": {
+                  "const": "mass"
+                },
+                "extent_m": {
+                  "type": "number",
+                  "exclusiveMinimum": 0,
+                  "maximum": 30
+                },
+                "bodies": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 16
+                }
+              },
+              "required": [
+                "shape",
+                "extent_m",
+                "bodies"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "reference": {
+          "type": "object",
+          "properties": {
+            "anchor": {
+              "enum": [
+                "caster",
+                "source"
+              ]
+            },
+            "bind": {
+              "enum": [
+                "cast",
+                "enter",
+                "live"
+              ]
+            }
+          },
+          "required": [
+            "anchor",
+            "bind"
+          ],
+          "additionalProperties": false
+        },
+        "distribution": {
+          "enum": [
+            "uniform",
+            "linear_falloff"
+          ]
+        },
+        "scope": {
+          "enum": [
+            "within_field",
+            "self"
+          ]
+        }
+      },
+      "required": [
+        "carrier",
+        "geometry",
+        "reference",
+        "distribution"
+      ],
+      "additionalProperties": false
+    },
+    "Subject": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]{0,39}$"
+        },
+        "kind": {
+          "enum": [
+            "Material",
+            "Field",
+            "WorldRef"
+          ]
+        },
+        "concept": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]{0,39}$"
+        },
+        "source": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "enum": [
+                    "Manifest"
+                  ]
+                }
+              },
+              "required": [
+                "kind"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "enum": [
+                    "Reference"
+                  ]
+                },
+                "slot": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9_]{0,39}$"
+                }
+              },
+              "required": [
+                "kind",
+                "slot"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "enum": [
+                    "Borrow",
+                    "Derived"
+                  ]
+                },
+                "ref": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9_]{0,39}$"
+                }
+              },
+              "required": [
+                "kind",
+                "ref"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "spatial": {
+          "$ref": "#/$defs/Spatial"
+        },
+        "medium": {
+          "enum": [
+            "ambient_air"
+          ]
+        },
+        "initial_phase": {
+          "enum": [
+            "liquid",
+            "solid"
+          ]
+        },
+        "properties": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "aspect": {
+                "enum": [
+                  "bearing",
+                  "screening",
+                  "sensing"
+                ]
+              },
+              "via": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_]{0,39}$"
+              }
+            },
+            "required": [
+              "aspect",
+              "via"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 0,
+          "maxItems": 8
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "concept",
+        "source"
+      ],
+      "additionalProperties": false
+    },
+    "Relation": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]{0,39}$"
+        },
+        "from": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]{0,39}$"
+        },
+        "to": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]{0,39}$"
+        },
+        "channel": {
+          "enum": [
+            "mechanical",
+            "optical",
+            "information",
+            "arcane_supply"
+          ]
+        },
+        "basis": {
+          "enum": [
+            "aether",
+            "nature"
+          ]
+        },
+        "validity": {
+          "enum": [
+            "contact",
+            "sight",
+            "disturbance",
+            "linked"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "from",
+        "to",
+        "channel",
+        "basis",
+        "validity"
+      ],
+      "additionalProperties": false
+    },
+    "Operation": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "const": "Establish"
+            },
+            "ability": {
+              "const": "form"
+            },
+            "target": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9_]{0,39}$"
+                },
+                {
+                  "const": "@reserve"
+                }
+              ]
+            }
+          },
+          "required": [
+            "op",
+            "ability",
+            "target"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "const": "Withdraw"
+            },
+            "ability": {
+              "const": "end"
+            },
+            "target": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9_]{0,39}$"
+                },
+                {
+                  "const": "@reserve"
+                }
+              ]
+            }
+          },
+          "required": [
+            "op",
+            "ability",
+            "target"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "const": "Transfer"
+            },
+            "ability": {
+              "const": "charge"
+            },
+            "target": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9_]{0,39}$"
+                },
+                {
+                  "const": "@reserve"
+                }
+              ]
+            }
+          },
+          "required": [
+            "op",
+            "ability",
+            "target"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "const": "Drive"
+            },
+            "ability": {
+              "const": "impulse"
+            },
+            "target": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9_]{0,39}$"
+                },
+                {
+                  "const": "@reserve"
+                }
+              ]
+            },
+            "axis": {
+              "enum": [
+                "aim",
+                "up",
+                "down"
+              ]
+            },
+            "allocation": {
+              "enum": [
+                "distance_weighted",
+                "equal"
+              ]
+            },
+            "budget": {
+              "enum": [
+                "paid_reserve"
+              ]
+            }
+          },
+          "required": [
+            "op",
+            "ability",
+            "target",
+            "axis",
+            "allocation",
+            "budget"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "const": "Drive"
+            },
+            "ability": {
+              "const": "accelerate"
+            },
+            "target": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9_]{0,39}$"
+                },
+                {
+                  "const": "@reserve"
+                }
+              ]
+            },
+            "axis": {
+              "enum": [
+                "up",
+                "down"
+              ]
+            }
+          },
+          "required": [
+            "op",
+            "ability",
+            "target",
+            "axis"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "const": "Transform"
+            },
+            "ability": {
+              "const": "freeze"
+            },
+            "target": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9_]{0,39}$"
+                },
+                {
+                  "const": "@reserve"
+                }
+              ]
+            },
+            "propagation": {
+              "$ref": "#/$defs/Propagation"
+            }
+          },
+          "required": [
+            "op",
+            "ability",
+            "target",
+            "propagation"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "const": "Drive"
+            },
+            "ability": {
+              "const": "warm"
+            },
+            "target": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9_]{0,39}$"
+                },
+                {
+                  "const": "@reserve"
+                }
+              ]
+            }
+          },
+          "required": [
+            "op",
+            "ability",
+            "target"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "const": "Drive"
+            },
+            "ability": {
+              "const": "conduct"
+            },
+            "target": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9_]{0,39}$"
+                },
+                {
+                  "const": "@reserve"
+                }
+              ]
+            }
+          },
+          "required": [
+            "op",
+            "ability",
+            "target"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "const": "Constrain"
+            },
+            "ability": {
+              "const": "bear_load"
+            },
+            "target": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9_]{0,39}$"
+                },
+                {
+                  "const": "@reserve"
+                }
+              ]
+            }
+          },
+          "required": [
+            "op",
+            "ability",
+            "target"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "const": "Drive"
+            },
+            "ability": {
+              "const": "attenuate"
+            },
+            "target": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9_]{0,39}$"
+                },
+                {
+                  "const": "@reserve"
+                }
+              ]
+            }
+          },
+          "required": [
+            "op",
+            "ability",
+            "target"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "const": "Couple"
+            },
+            "ability": {
+              "const": "notify"
+            },
+            "target": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9_]{0,39}$"
+                },
+                {
+                  "const": "@reserve"
+                }
+              ]
+            }
+          },
+          "required": [
+            "op",
+            "ability",
+            "target"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "const": "Drive"
+            },
+            "ability": {
+              "const": "illuminate"
+            },
+            "target": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9_]{0,39}$"
+                },
+                {
+                  "const": "@reserve"
+                }
+              ]
+            }
+          },
+          "required": [
+            "op",
+            "ability",
+            "target"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "const": "Transform"
+            },
+            "ability": {
+              "const": "solidify"
+            },
+            "target": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9_]{0,39}$"
+                },
+                {
+                  "const": "@reserve"
+                }
+              ]
+            }
+          },
+          "required": [
+            "op",
+            "ability",
+            "target"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "Contract": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]{0,39}$"
+        },
+        "controller": {
+          "enum": [
+            "caster",
+            "autonomous"
+          ]
+        },
+        "mobility": {
+          "enum": [
+            "slow_walk",
+            "free",
+            "rooted"
+          ]
+        },
+        "focus": {
+          "enum": [
+            "exclusive",
+            "none"
+          ]
+        },
+        "provider": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_]{0,39}$"
+            },
+            {
+              "const": "@caster"
+            }
+          ]
+        },
+        "supply_link": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]{0,39}$"
+        },
+        "max_s": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 30
+        },
+        "reserve": {
+          "type": "object",
+          "properties": {
+            "full_charge_s": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 30
+            },
+            "min_release_ratio": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 1
+            }
+          },
+          "required": [
+            "full_charge_s",
+            "min_release_ratio"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "id",
+        "controller",
+        "mobility",
+        "focus",
+        "provider",
+        "max_s"
+      ],
+      "additionalProperties": false
+    },
+    "Edge": {
+      "type": "object",
+      "properties": {
+        "event": {
+          "enum": [
+            "release",
+            "interrupt",
+            "timeout",
+            "contact",
+            "signal",
+            "ready"
+          ]
+        },
+        "when": {
+          "enum": [
+            "always",
+            "reserve_ready",
+            "reserve_low"
+          ]
+        },
+        "to": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]{0,39}$"
+          },
+          "minItems": 0,
+          "maxItems": 4,
+          "uniqueItems": true
+        },
+        "handoff": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "handle": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_]{0,39}$"
+              },
+              "to": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_]{0,39}$"
+              }
+            },
+            "required": [
+              "handle",
+              "to"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 0,
+          "maxItems": 12
+        }
+      },
+      "required": [
+        "event",
+        "when",
+        "to"
+      ],
+      "additionalProperties": false
+    },
+    "Process": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]{0,39}$"
+        },
+        "contract": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]{0,39}$"
+        },
+        "join": {
+          "enum": [
+            "all",
+            "any"
+          ]
+        },
+        "enter": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Operation"
+          },
+          "minItems": 0,
+          "maxItems": 16
+        },
+        "active": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Operation"
+          },
+          "minItems": 0,
+          "maxItems": 16
+        },
+        "on": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Edge"
+          },
+          "minItems": 0,
+          "maxItems": 12
+        },
+        "exit": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Operation"
+          },
+          "minItems": 0,
+          "maxItems": 16
+        },
+        "repeat": {
+          "type": "object",
+          "properties": {
+            "times": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 8
+            },
+            "interval_s": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 30
+            },
+            "actions": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Operation"
+              },
+              "minItems": 1,
+              "maxItems": 16
+            }
+          },
+          "required": [
+            "times",
+            "interval_s",
+            "actions"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "id",
+        "contract",
+        "join",
+        "enter",
+        "active",
+        "on",
+        "exit"
+      ],
+      "additionalProperties": false
+    },
+    "Track": {
+      "type": "object",
+      "properties": {
+        "process": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]{0,39}$"
+        },
+        "cue": {
+          "enum": [
+            "enter",
+            "active",
+            "impact",
+            "exit"
+          ]
+        },
+        "bind": {
+          "enum": [
+            "constant",
+            "fill_ratio",
+            "geometry",
+            "actual_impact"
+          ]
+        },
+        "subject": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]{0,39}$"
+        },
+        "visual": {
+          "enum": [
+            "pressure_front",
+            "air_streaks",
+            "light_veil",
+            "stone_dust",
+            "ice_rime",
+            "water_thread",
+            "ember_haze",
+            "electric_arc",
+            "gravity_rings",
+            "motes",
+            "ward_edge",
+            "imprint"
+          ]
+        },
+        "motion": {
+          "enum": [
+            "gather",
+            "expand",
+            "pulse",
+            "drift",
+            "ripple",
+            "harden",
+            "fracture",
+            "fade"
+          ]
+        },
+        "audio": {
+          "enum": [
+            "low_rise",
+            "air_release",
+            "ice_crack",
+            "stone_strain",
+            "bell",
+            "water_run",
+            "ember",
+            "electric_hum"
+          ]
+        },
+        "pose": {
+          "enum": [
+            "gather_power",
+            "cast",
+            "brace"
+          ]
+        },
+        "camera": {
+          "enum": [
+            "local_impact"
+          ]
+        }
+      },
+      "required": [
+        "process",
+        "cue",
+        "bind"
+      ],
+      "additionalProperties": false
+    },
+    "Recipe": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "0.3.0"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 180
+        },
+        "scale": {
+          "enum": [
+            "small",
+            "medium",
+            "large"
+          ]
+        },
+        "Concepts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_]{0,39}$"
+              },
+              "nature": {
+                "enum": [
+                  "air",
+                  "gravity",
+                  "heat",
+                  "electric",
+                  "light",
+                  "water",
+                  "site",
+                  "reservoir"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "nature"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1,
+          "maxItems": 8
+        },
+        "Subjects": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Subject"
+          },
+          "minItems": 1,
+          "maxItems": 8
+        },
+        "Relations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Relation"
+          },
+          "minItems": 0,
+          "maxItems": 12
+        },
+        "Processes": {
+          "type": "object",
+          "properties": {
+            "entry": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_]{0,39}$"
+              },
+              "minItems": 1,
+              "maxItems": 4,
+              "uniqueItems": true
+            },
+            "nodes": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Process"
+              },
+              "minItems": 1,
+              "maxItems": 8
+            }
+          },
+          "required": [
+            "entry",
+            "nodes"
+          ],
+          "additionalProperties": false
+        },
+        "Contracts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Contract"
+          },
+          "minItems": 1,
+          "maxItems": 8
+        },
+        "Expression": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Track"
+          },
+          "minItems": 0,
+          "maxItems": 32
+        }
+      },
+      "required": [
+        "version",
+        "name",
+        "scale",
+        "Concepts",
+        "Subjects",
+        "Relations",
+        "Processes",
+        "Contracts",
+        "Expression"
+      ],
+      "additionalProperties": false
+    },
+    "RuneGraph": {
+      "type": "object",
+      "properties": {
+        "nodes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_]{0,39}$"
+              },
+              "rune": {
+                "enum": [
+                  "土",
+                  "水",
+                  "气",
+                  "火",
+                  "光",
+                  "电",
+                  "重力",
+                  "空",
+                  "时",
+                  "生",
+                  "以太",
+                  "聚",
+                  "散",
+                  "引",
+                  "联",
+                  "分",
+                  "逆",
+                  "藏",
+                  "应",
+                  "守"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "rune"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1,
+          "maxItems": 32
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_]{0,39}$"
+              },
+              "kind": {
+                "enum": [
+                  "共同组织",
+                  "局部关联",
+                  "发生接续"
+                ]
+              },
+              "members": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9_]{0,39}$"
+                },
+                "minItems": 2,
+                "maxItems": 16,
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "id",
+              "kind",
+              "members"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 0,
+          "maxItems": 32
+        }
+      },
+      "required": [
+        "nodes",
+        "links"
+      ],
+      "additionalProperties": false
+    },
+    "Anchor": {
+      "type": "object",
+      "properties": {
+        "ref": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]{0,39}$"
+        },
+        "meaning": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 180
+        },
+        "mechanism": {
+          "enum": [
+            "impulse",
+            "accelerate",
+            "freeze",
+            "warm",
+            "conduct",
+            "bear_load",
+            "attenuate",
+            "notify",
+            "illuminate",
+            "solidify"
+          ]
+        },
+        "phase": {
+          "enum": [
+            "enter",
+            "active",
+            "repeat"
+          ]
+        },
+        "controller": {
+          "enum": [
+            "caster",
+            "autonomous"
+          ]
+        },
+        "supply": {
+          "enum": [
+            "caster",
+            "linked_reserve"
+          ]
+        }
+      },
+      "required": [
+        "ref",
+        "meaning",
+        "mechanism"
+      ],
+      "additionalProperties": false
+    },
+    "CompilationInput": {
+      "type": "object",
+      "properties": {
+        "RuneGraph": {
+          "$ref": "#/$defs/RuneGraph"
+        },
+        "SemanticAnchors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Anchor"
+          },
+          "minItems": 0,
+          "maxItems": 16
+        },
+        "CastingContext": {
+          "type": "object",
+          "properties": {
+            "target": {
+              "enum": [
+                "self",
+                "aim",
+                "world"
+              ]
+            },
+            "timing": {
+              "enum": [
+                "open",
+                "instant",
+                "charge",
+                "remain"
+              ]
+            }
+          },
+          "required": [
+            "target",
+            "timing"
+          ],
+          "additionalProperties": false
+        },
+        "PlayerKnowledge": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "土",
+              "水",
+              "气",
+              "火",
+              "光",
+              "电",
+              "重力",
+              "空",
+              "时",
+              "生",
+              "以太",
+              "聚",
+              "散",
+              "引",
+              "联",
+              "分",
+              "逆",
+              "藏",
+              "应",
+              "守"
+            ]
+          },
+          "minItems": 0,
+          "maxItems": 20,
+          "uniqueItems": true
+        },
+        "WorldKnowledgeVersion": {
+          "const": "world-0.3.0"
+        },
+        "DSLVersion": {
+          "const": "0.3.0"
+        },
+        "CapabilityProfile": {
+          "const": "offline-0.3.0"
+        },
+        "SupportedCapabilities": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "form",
+              "end",
+              "charge",
+              "impulse",
+              "accelerate",
+              "freeze",
+              "warm",
+              "conduct",
+              "bear_load",
+              "attenuate",
+              "notify",
+              "illuminate",
+              "solidify"
+            ]
+          },
+          "minItems": 0,
+          "maxItems": 32,
+          "uniqueItems": true
+        },
+        "ArtisticStyle": {
+          "enum": [
+            "ruined_city"
+          ]
+        }
+      },
+      "required": [
+        "RuneGraph",
+        "SemanticAnchors",
+        "CastingContext",
+        "PlayerKnowledge",
+        "WorldKnowledgeVersion",
+        "DSLVersion",
+        "CapabilityProfile",
+        "SupportedCapabilities",
+        "ArtisticStyle"
+      ],
+      "additionalProperties": false
+    },
+    "CompilationOutput": {
+      "type": "object",
+      "properties": {
+        "Interpretation": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 180
+        },
+        "RuneContributions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "node": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_]{0,39}$"
+              },
+              "meaning": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 180
+              },
+              "refs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9_]{0,39}$"
+                },
+                "minItems": 1,
+                "maxItems": 12,
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "node",
+              "meaning",
+              "refs"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1,
+          "maxItems": 32
+        },
+        "MagicDSL": {
+          "$ref": "#/$defs/Recipe"
+        },
+        "AlternativeAnchors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Anchor"
+          },
+          "minItems": 0,
+          "maxItems": 2
+        }
+      },
+      "required": [
+        "Interpretation",
+        "RuneContributions",
+        "MagicDSL",
+        "AlternativeAnchors"
+      ],
+      "additionalProperties": false
+    },
+    "Diagnostic": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 180
+        },
+        "path": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "path",
+        "message"
+      ],
+      "additionalProperties": false
+    },
+    "TrainingRecord": {
+      "type": "object",
+      "properties": {
+        "input": {
+          "$ref": "#/$defs/CompilationInput"
+        },
+        "candidate": {},
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Diagnostic"
+          },
+          "minItems": 0,
+          "maxItems": 32
+        },
+        "corrected": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/CompilationOutput"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "observation_source": {
+          "const": "offline-0.3.0"
+        },
+        "observations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "ability": {
+                "enum": [
+                  "form",
+                  "end",
+                  "charge",
+                  "impulse",
+                  "accelerate",
+                  "freeze",
+                  "warm",
+                  "conduct",
+                  "bear_load",
+                  "attenuate",
+                  "notify",
+                  "illuminate",
+                  "solidify"
+                ]
+              },
+              "world_object": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_]{0,39}$"
+              },
+              "value": {
+                "type": [
+                  "number",
+                  "string",
+                  "boolean"
+                ]
+              },
+              "at_s": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 30
+              }
+            },
+            "required": [
+              "ability",
+              "world_object",
+              "value",
+              "at_s"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 0,
+          "maxItems": 262144
+        },
+        "prior_expectation": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "preference": {
+          "enum": [
+            "accepted",
+            "reanchored",
+            "rejected",
+            null
+          ]
+        },
+        "tariff_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 180
+        }
+      },
+      "required": [
+        "input",
+        "candidate",
+        "diagnostics",
+        "corrected",
+        "observation_source",
+        "observations",
+        "prior_expectation",
+        "preference",
+        "tariff_version"
+      ],
+      "additionalProperties": false
+    },
+    "WorldObject": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]{0,39}$"
+        },
+        "position": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "minimum": -10000,
+            "maximum": 10000
+          },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "mass": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 10000
+        },
+        "load": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10000
+        },
+        "contact": {
+          "type": "boolean"
+        },
+        "occluded": {
+          "type": "boolean"
+        },
+        "sight": {
+          "type": "boolean"
+        },
+        "disturbance": {
+          "type": "boolean"
+        },
+        "conductive": {
+          "type": "boolean"
+        },
+        "phase": {
+          "enum": [
+            "liquid",
+            "solid"
+          ]
+        },
+        "mana": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10000
+        },
+        "linked": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "position",
+        "mass"
+      ],
+      "additionalProperties": false
+    },
+    "Scene": {
+      "type": "object",
+      "properties": {
+        "caster_mana": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10000
+        },
+        "media": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "ambient_air"
+            ]
+          },
+          "minItems": 0,
+          "maxItems": 8,
+          "uniqueItems": true
+        },
+        "position": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "minimum": -10000,
+            "maximum": 10000
+          },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "aim": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "minimum": -10000,
+            "maximum": 10000
+          },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "until_s": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 30
+        },
+        "objects": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/WorldObject"
+          },
+          "minItems": 0,
+          "maxItems": 16
+        },
+        "slots": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]{0,39}$"
+          },
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]{0,39}$"
+          },
+          "maxProperties": 16
+        },
+        "edges": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "a": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_]{0,39}$"
+              },
+              "b": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_]{0,39}$"
+              },
+              "kind": {
+                "enum": [
+                  "material",
+                  "electric"
+                ]
+              },
+              "intact": {
+                "type": "boolean"
+              },
+              "length_m": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "maximum": 30
+              }
+            },
+            "required": [
+              "a",
+              "b",
+              "kind",
+              "intact",
+              "length_m"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 0,
+          "maxItems": 24
+        },
+        "events": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "at": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 30
+              },
+              "event": {
+                "enum": [
+                  "release",
+                  "interrupt",
+                  "contact",
+                  "signal",
+                  "cut",
+                  "unlink",
+                  "aim",
+                  "move"
+                ]
+              },
+              "ref": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_]{0,39}$"
+              },
+              "other": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_]{0,39}$"
+              },
+              "vector": {
+                "type": "array",
+                "items": {
+                  "type": "number",
+                  "minimum": -10000,
+                  "maximum": 10000
+                },
+                "minItems": 3,
+                "maxItems": 3
+              }
+            },
+            "required": [
+              "at",
+              "event"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 0,
+          "maxItems": 64
+        }
+      },
+      "required": [
+        "caster_mana",
+        "position",
+        "aim",
+        "until_s",
+        "objects",
+        "slots",
+        "edges",
+        "events"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

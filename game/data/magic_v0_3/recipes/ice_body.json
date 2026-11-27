@@ -1,0 +1,137 @@
+{
+  "version": "0.3.0",
+  "name": "凝水留冰",
+  "scale": "medium",
+  "Concepts": [
+    {
+      "id": "nature",
+      "nature": "water"
+    },
+    {
+      "id": "stream_nature",
+      "nature": "site"
+    }
+  ],
+  "Subjects": [
+    {
+      "id": "field",
+      "concept": "nature",
+      "kind": "Material",
+      "source": {
+        "kind": "Borrow",
+        "ref": "stream"
+      },
+      "spatial": {
+        "carrier": "Body",
+        "geometry": {
+          "shape": "mass",
+          "extent_m": 1,
+          "bodies": 1
+        },
+        "reference": {
+          "anchor": "source",
+          "bind": "enter"
+        },
+        "distribution": "uniform"
+      },
+      "initial_phase": "liquid"
+    },
+    {
+      "id": "stream",
+      "concept": "stream_nature",
+      "kind": "WorldRef",
+      "source": {
+        "kind": "Reference",
+        "slot": "spring"
+      }
+    },
+    {
+      "id": "ice",
+      "concept": "nature",
+      "kind": "Material",
+      "source": {
+        "kind": "Derived",
+        "ref": "field"
+      },
+      "spatial": {
+        "carrier": "Body",
+        "geometry": {
+          "shape": "mass",
+          "extent_m": 1,
+          "bodies": 1
+        },
+        "reference": {
+          "anchor": "source",
+          "bind": "enter"
+        },
+        "distribution": "uniform"
+      },
+      "initial_phase": "solid"
+    }
+  ],
+  "Relations": [],
+  "Processes": {
+    "entry": [
+      "work"
+    ],
+    "nodes": [
+      {
+        "id": "work",
+        "contract": "sustain",
+        "join": "any",
+        "enter": [
+          {
+            "op": "Establish",
+            "ability": "form",
+            "target": "field"
+          },
+          {
+            "op": "Transform",
+            "ability": "solidify",
+            "target": "field"
+          },
+          {
+            "op": "Establish",
+            "ability": "form",
+            "target": "ice"
+          }
+        ],
+        "active": [],
+        "exit": [
+          {
+            "op": "Withdraw",
+            "ability": "end",
+            "target": "ice"
+          }
+        ],
+        "on": [
+          {
+            "event": "release",
+            "when": "always",
+            "to": []
+          }
+        ]
+      }
+    ]
+  },
+  "Contracts": [
+    {
+      "id": "sustain",
+      "controller": "caster",
+      "mobility": "free",
+      "focus": "none",
+      "provider": "@caster",
+      "max_s": 3
+    }
+  ],
+  "Expression": [
+    {
+      "process": "work",
+      "cue": "enter",
+      "bind": "geometry",
+      "subject": "ice",
+      "visual": "ice_rime",
+      "motion": "harden"
+    }
+  ]
+}

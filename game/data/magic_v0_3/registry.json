@@ -1,0 +1,377 @@
+{
+  "edition": "0.3.0",
+  "knowledge": "world-0.3.0",
+  "profile": "offline-0.3.0",
+  "runes": {
+    "土": "成体、承载",
+    "水": "流动、相合",
+    "气": "通达、压力",
+    "火": "激发、炼变",
+    "光": "显明、照耀",
+    "电": "势差、贯通",
+    "重力": "沉重、牵落",
+    "空": "距离、内外",
+    "时": "延续、节律",
+    "生": "成长、更新",
+    "以太": "奥术、联系",
+    "聚": "集中、结合、成形",
+    "散": "展开、弥漫、释放",
+    "引": "牵动、导向、传递",
+    "联": "连接、依附、共同成立",
+    "分": "分离、提取、切断",
+    "逆": "反向、对立、转化",
+    "藏": "容纳、保存、潜伏",
+    "应": "响应、感应、共鸣",
+    "守": "保护、维持、约束"
+  },
+  "deferred_runes": [
+    "时",
+    "生"
+  ],
+  "deferred_capabilities": [
+    "history_rewrite_forbidden",
+    "local_time_rate",
+    "living_growth",
+    "spatial_portal"
+  ],
+  "natures": {
+    "air": [
+      "Field",
+      "Region"
+    ],
+    "gravity": [
+      "Field",
+      "Region"
+    ],
+    "heat": [
+      "Field",
+      "Region"
+    ],
+    "electric": [
+      "Field",
+      "PathGraph"
+    ],
+    "light": [
+      "Field",
+      "Region",
+      "SurfacePatch"
+    ],
+    "water": [
+      "Material",
+      "PathGraph",
+      "Body"
+    ],
+    "site": [
+      "WorldRef"
+    ],
+    "reservoir": [
+      "WorldRef"
+    ]
+  },
+  "geometry": {
+    "cone": "Region",
+    "sphere": "Region",
+    "sheet": "SurfacePatch",
+    "network": "PathGraph",
+    "mass": "Body"
+  },
+  "channels": {
+    "mechanical": {
+      "from": [
+        "light"
+      ],
+      "to": [
+        "site"
+      ],
+      "validity": "contact",
+      "basis": "aether"
+    },
+    "optical": {
+      "from": [
+        "light"
+      ],
+      "to": [
+        "site"
+      ],
+      "validity": "sight",
+      "basis": "nature"
+    },
+    "information": {
+      "from": [
+        "light"
+      ],
+      "to": [
+        "site"
+      ],
+      "validity": "disturbance",
+      "basis": "aether"
+    },
+    "arcane_supply": {
+      "from": [
+        "reservoir"
+      ],
+      "to": [
+        "light",
+        "air",
+        "gravity",
+        "heat",
+        "water",
+        "electric"
+      ],
+      "validity": "linked",
+      "basis": "aether"
+    }
+  },
+  "abilities": {
+    "form": {
+      "op": "Establish",
+      "targets": [
+        "handle"
+      ],
+      "phases": [
+        "enter"
+      ],
+      "readout": "建立并接管",
+      "parameters": {}
+    },
+    "end": {
+      "op": "Withdraw",
+      "targets": [
+        "handle"
+      ],
+      "phases": [
+        "exit"
+      ],
+      "readout": "撤去主动作用并保留既成变化",
+      "parameters": {}
+    },
+    "charge": {
+      "op": "Transfer",
+      "targets": [
+        "reserve"
+      ],
+      "phases": [
+        "active"
+      ],
+      "readout": "将实际支付的魔力存入本次储备",
+      "parameters": {}
+    },
+    "impulse": {
+      "op": "Drive",
+      "targets": [
+        "air"
+      ],
+      "phases": [
+        "enter"
+      ],
+      "readout": "沿选定方向分配有限总冲量",
+      "parameters": {
+        "axis": [
+          "aim",
+          "up",
+          "down"
+        ],
+        "allocation": [
+          "distance_weighted",
+          "equal"
+        ],
+        "budget": [
+          "paid_reserve"
+        ]
+      }
+    },
+    "accelerate": {
+      "op": "Drive",
+      "targets": [
+        "gravity"
+      ],
+      "phases": [
+        "active"
+      ],
+      "readout": "对域内物体施加局部加速度",
+      "parameters": {
+        "axis": [
+          "up",
+          "down"
+        ]
+      }
+    },
+    "freeze": {
+      "op": "Transform",
+      "targets": [
+        "water"
+      ],
+      "phases": [
+        "active"
+      ],
+      "readout": "从支点沿实时连通的同份水体原位转固",
+      "parameters": {
+        "propagation": "Propagation"
+      }
+    },
+    "warm": {
+      "op": "Drive",
+      "targets": [
+        "heat"
+      ],
+      "phases": [
+        "active"
+      ],
+      "readout": "向域内物体交付有限热量",
+      "parameters": {}
+    },
+    "conduct": {
+      "op": "Drive",
+      "targets": [
+        "electric"
+      ],
+      "phases": [
+        "enter",
+        "repeat"
+      ],
+      "readout": "沿有效导电通路分配电荷",
+      "parameters": {}
+    },
+    "bear_load": {
+      "op": "Constrain",
+      "targets": [
+        "mechanical"
+      ],
+      "phases": [
+        "active"
+      ],
+      "readout": "实际接触时承担有限结构负荷",
+      "parameters": {}
+    },
+    "attenuate": {
+      "op": "Drive",
+      "targets": [
+        "optical"
+      ],
+      "phases": [
+        "active"
+      ],
+      "readout": "衰减作用域内的视线",
+      "parameters": {}
+    },
+    "notify": {
+      "op": "Couple",
+      "targets": [
+        "information"
+      ],
+      "phases": [
+        "active"
+      ],
+      "readout": "将实际观察到的扰动传回接收端",
+      "parameters": {}
+    },
+    "illuminate": {
+      "op": "Drive",
+      "targets": [
+        "light"
+      ],
+      "phases": [
+        "active"
+      ],
+      "readout": "提高作用范围内的照度",
+      "parameters": {}
+    },
+    "solidify": {
+      "op": "Transform",
+      "targets": [
+        "water"
+      ],
+      "phases": [
+        "enter"
+      ],
+      "readout": "使来源中的有限水体原位成冰",
+      "parameters": {}
+    }
+  },
+  "art": {
+    "visual": [
+      "pressure_front",
+      "air_streaks",
+      "light_veil",
+      "stone_dust",
+      "ice_rime",
+      "water_thread",
+      "ember_haze",
+      "electric_arc",
+      "gravity_rings",
+      "motes",
+      "ward_edge",
+      "imprint"
+    ],
+    "motion": [
+      "gather",
+      "expand",
+      "pulse",
+      "drift",
+      "ripple",
+      "harden",
+      "fracture",
+      "fade"
+    ],
+    "audio": [
+      "low_rise",
+      "air_release",
+      "ice_crack",
+      "stone_strain",
+      "bell",
+      "water_run",
+      "ember",
+      "electric_hum"
+    ],
+    "pose": [
+      "gather_power",
+      "cast",
+      "brace"
+    ],
+    "camera": [
+      "local_impact"
+    ]
+  },
+  "limits": {
+    "subjects": 8,
+    "relations": 12,
+    "nodes": 8,
+    "entry": 4,
+    "extent_m": 30,
+    "bodies": 16,
+    "path_nodes": 16,
+    "path_edges": 24,
+    "surface_quads": 64,
+    "point_lights": 3,
+    "targets": 16,
+    "hops": 12,
+    "duration_s": 30,
+    "repeats": 8,
+    "mana_upfront": 300,
+    "mana_per_s": 60,
+    "reserve": 200
+  },
+  "properties": {
+    "bearing": {
+      "channel": "mechanical",
+      "ability": "bear_load"
+    },
+    "screening": {
+      "channel": "optical",
+      "ability": "attenuate"
+    },
+    "sensing": {
+      "channel": "information",
+      "ability": "notify"
+    }
+  },
+  "required_media": {
+    "air": "ambient_air"
+  },
+  "engine_gates": {
+    "global_dynamic_bodies": 64,
+    "max_tick_cost_us_per_cast": 300,
+    "max_deflect_iterations_per_node": 2,
+    "evidence": "pending_engine"
+  }
+}

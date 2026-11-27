@@ -1,0 +1,52 @@
+{
+  "caster_mana": 200,
+  "position": [
+    0,
+    0,
+    0
+  ],
+  "aim": [
+    0,
+    0,
+    1
+  ],
+  "until_s": 1,
+  "objects": [
+    {
+      "id": "stone",
+      "position": [
+        0,
+        0,
+        2
+      ],
+      "mass": 1,
+      "load": 6,
+      "contact": true
+    },
+    {
+      "id": "window",
+      "position": [
+        0,
+        0,
+        3
+      ],
+      "mass": 1,
+      "sight": true
+    },
+    {
+      "id": "bell",
+      "position": [
+        0,
+        0,
+        4
+      ],
+      "mass": 1,
+      "disturbance": true
+    }
+  ],
+  "slots": {
+    "observed_site": "bell"
+  },
+  "edges": [],
+  "events": []
+}

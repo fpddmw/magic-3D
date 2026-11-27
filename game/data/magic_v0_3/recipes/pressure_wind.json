@@ -1,0 +1,154 @@
+{
+  "version": "0.3.0",
+  "name": "压风",
+  "scale": "medium",
+  "Concepts": [
+    {
+      "id": "nature",
+      "nature": "air"
+    }
+  ],
+  "Subjects": [
+    {
+      "id": "field",
+      "concept": "nature",
+      "kind": "Field",
+      "source": {
+        "kind": "Manifest"
+      },
+      "spatial": {
+        "carrier": "Region",
+        "geometry": {
+          "shape": "cone",
+          "extent_m": 6,
+          "half_angle_deg": 25
+        },
+        "reference": {
+          "anchor": "caster",
+          "bind": "enter"
+        },
+        "distribution": "linear_falloff"
+      },
+      "medium": "ambient_air"
+    }
+  ],
+  "Relations": [],
+  "Processes": {
+    "entry": [
+      "charge"
+    ],
+    "nodes": [
+      {
+        "id": "charge",
+        "contract": "gather",
+        "join": "any",
+        "enter": [],
+        "active": [
+          {
+            "op": "Transfer",
+            "ability": "charge",
+            "target": "@reserve"
+          }
+        ],
+        "exit": [],
+        "on": [
+          {
+            "event": "release",
+            "when": "reserve_ready",
+            "to": [
+              "deliver"
+            ]
+          },
+          {
+            "event": "release",
+            "when": "reserve_low",
+            "to": []
+          },
+          {
+            "event": "interrupt",
+            "when": "always",
+            "to": []
+          }
+        ]
+      },
+      {
+        "id": "deliver",
+        "contract": "burst",
+        "join": "any",
+        "enter": [
+          {
+            "op": "Establish",
+            "ability": "form",
+            "target": "field"
+          },
+          {
+            "op": "Drive",
+            "ability": "impulse",
+            "target": "field",
+            "axis": "aim",
+            "allocation": "distance_weighted",
+            "budget": "paid_reserve"
+          }
+        ],
+        "active": [],
+        "exit": [
+          {
+            "op": "Withdraw",
+            "ability": "end",
+            "target": "field"
+          }
+        ],
+        "on": []
+      }
+    ]
+  },
+  "Contracts": [
+    {
+      "id": "gather",
+      "controller": "caster",
+      "mobility": "slow_walk",
+      "focus": "exclusive",
+      "provider": "@caster",
+      "max_s": 2.5,
+      "reserve": {
+        "full_charge_s": 1.5,
+        "min_release_ratio": 0.2
+      }
+    },
+    {
+      "id": "burst",
+      "controller": "caster",
+      "mobility": "free",
+      "focus": "none",
+      "provider": "@caster",
+      "max_s": 0.12
+    }
+  ],
+  "Expression": [
+    {
+      "process": "charge",
+      "cue": "active",
+      "bind": "fill_ratio",
+      "visual": "air_streaks",
+      "motion": "gather",
+      "audio": "low_rise",
+      "pose": "gather_power"
+    },
+    {
+      "process": "deliver",
+      "cue": "enter",
+      "bind": "geometry",
+      "subject": "field",
+      "visual": "pressure_front",
+      "motion": "expand",
+      "audio": "air_release",
+      "pose": "cast"
+    },
+    {
+      "process": "deliver",
+      "cue": "impact",
+      "bind": "actual_impact",
+      "camera": "local_impact"
+    }
+  ]
+}

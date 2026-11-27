@@ -1,0 +1,57 @@
+{
+  "RuneGraph": {
+    "nodes": [
+      {
+        "id": "light",
+        "rune": "光"
+      },
+      {
+        "id": "response",
+        "rune": "应"
+      },
+      {
+        "id": "guard",
+        "rune": "守"
+      }
+    ],
+    "links": [
+      {
+        "id": "whole",
+        "kind": "共同组织",
+        "members": [
+          "light",
+          "response",
+          "guard"
+        ]
+      }
+    ]
+  },
+  "SemanticAnchors": [],
+  "CastingContext": {
+    "target": "world",
+    "timing": "open"
+  },
+  "PlayerKnowledge": [
+    "光",
+    "应",
+    "守"
+  ],
+  "DSLVersion": "0.3.0",
+  "WorldKnowledgeVersion": "world-0.3.0",
+  "CapabilityProfile": "offline-0.3.0",
+  "SupportedCapabilities": [
+    "form",
+    "end",
+    "charge",
+    "impulse",
+    "accelerate",
+    "freeze",
+    "warm",
+    "conduct",
+    "bear_load",
+    "attenuate",
+    "notify",
+    "illuminate"
+  ],
+  "ArtisticStyle": "ruined_city"
+}

@@ -1,16 +1,20 @@
-# Magic 3D / City Fates 3D
+# Magic 3D · 废城中的语义魔法
 
-这是一款以语义魔法构筑为核心的 3D 奇幻废城动作冒险游戏。玩家在法坛理解并组织符文，在断桥和高拱石殿间用走位、格挡与近战争取施法窗口。改变一枚符文的所指，可以改变力量在世界中的实际后果。
+玩家在法坛用少量符文表达意向，模型构思完整现象。确认后的 **Magic DSL v0.3** 保存形成过程、局部责任、世界作用和视听轨道。承落的光幕可以接住石块，也可能因负荷过大而破裂；另一道外观相同的光幕可以改变观察条件，让石块照常通过。
 
-**从 [Magic Core](docs/magic_core/README.md) 开始。** 世界公理约束何种魔法成立，词义与构造关系给出解释，Core 保存确定的意义。游戏逻辑、艺术表现和施法体验各自转译；执行 v0.2.2 提供 Godot 4 / Forward+ / Jolt 的下游契约。
-
-| 要做的工作 | 入口 |
+| 活动入口 | 内容 |
 |---|---|
-| 讨论或修订设定 | [世界公理与概念](docs/magic_core/世界公理与概念.md) · [决定与版本迁移](docs/magic_core/资产迁移与版本.md) |
-| 编写语义构筑 | [语言与 Core DSL](docs/magic_core/语言与Core_DSL.md) · [词义登记](game/data/core/meanings.json) |
-| 比较新旧构筑 | [21 例覆盖矩阵](docs/magic_core/案例覆盖与语义验收.md) · [水冰雾参考数据](game/data/examples/water_core_cases.json) · [跨域构筑](game/data/examples/law_core_cases.json) |
-| 对接世界、艺术和动作 | [三路转译契约](docs/magic_core/三路转译契约.md) · [Godot 与数据导航](game/README.md) |
-| 准备施工与验收 | [阶段 A–E 计划](docs/06_Magic_Runtime_三波次实施与验收计划.md) · [交付清单与验证范围](docs/magic_core/交付清单.md) |
-| 废城与动作设计 | [游戏总纲](docs/01_设计哲学与总纲.md) · [世界结构](docs/03_世界结构与废城探索.md) · [动作与导演](docs/04_动作底盘、战斗与演出导演.md) |
+| [魔法形而上学](docs/v0.3/魔法形而上学.md) | 性质和以太公理、五种构思逻辑、因果与世界作用 |
+| [20 枚符文与编译契约](docs/v0.3/符文与编译契约.md) | 构筑图、锚定、一次生成、确定性读解及训练记录 |
+| [Magic DSL v0.3 正式规范](docs/v0.3/Magic_DSL.md) | 六部分配方、过程与资源、能力边界及复现命令 |
+| [离线验收](docs/v0.3/验收.md) | 压风、三种守护、断边、寄托与实机边界 |
+| [机器契约与配方](game/data/magic_v0_3) | Draft 2020-12 Schema、注册表、计费表与场景 |
+| [废城世界](docs/03_世界结构与废城探索.md) · [动作与导演](docs/04_动作底盘、战斗与演出导演.md) | 共享空间、慢拍动作及视听目标 |
 
-阶段 B 已交付离线语义编译器，可直接编译一张新构筑图并核对推导与执行条件。[运行方法与三组验收](docs/magic_core/阶段B_编译器与验收.md)。目标性能、视听和动作手感留到实机验收。原有 [v0.2.2 执行基线](docs/02_Magic_DSL_v0.2_正式语法与语义规范.md)、[水冰雾图鉴](docs/design/魔法图鉴_水冰雾参考案例/README.md)与[旧仓审计](docs/00_资产清点与迁移清单.md)均可查阅。
+在仓库根目录运行新基线的全部回归。
+
+```sh
+uv run --isolated --with-requirements tools/magic_dsl_v0_3/requirements.txt python -m unittest discover -s tests -v
+```
+
+旧 54 词、Magic Core 0.1.x 及执行 DSL 0.2.2 已[归档](archive/pre-v0.3/README.md)。Godot 当前保留既有场景，实机法坛、运行时接入及视听品质另行验收。

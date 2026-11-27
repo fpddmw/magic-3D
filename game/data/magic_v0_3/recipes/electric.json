@@ -1,0 +1,92 @@
+{
+  "version": "0.3.0",
+  "name": "铜脉传电",
+  "scale": "medium",
+  "Concepts": [
+    {
+      "id": "nature",
+      "nature": "electric"
+    }
+  ],
+  "Subjects": [
+    {
+      "id": "field",
+      "concept": "nature",
+      "kind": "Field",
+      "source": {
+        "kind": "Manifest"
+      },
+      "spatial": {
+        "carrier": "PathGraph",
+        "geometry": {
+          "shape": "network",
+          "extent_m": 6,
+          "nodes": 8,
+          "edges": 12
+        },
+        "reference": {
+          "anchor": "caster",
+          "bind": "enter"
+        },
+        "distribution": "uniform"
+      }
+    }
+  ],
+  "Relations": [],
+  "Processes": {
+    "entry": [
+      "work"
+    ],
+    "nodes": [
+      {
+        "id": "work",
+        "contract": "sustain",
+        "join": "any",
+        "enter": [
+          {
+            "op": "Establish",
+            "ability": "form",
+            "target": "field"
+          }
+        ],
+        "active": [],
+        "exit": [
+          {
+            "op": "Withdraw",
+            "ability": "end",
+            "target": "field"
+          }
+        ],
+        "on": [
+          {
+            "event": "release",
+            "when": "always",
+            "to": []
+          }
+        ],
+        "repeat": {
+          "times": 2,
+          "interval_s": 0.6,
+          "actions": [
+            {
+              "op": "Drive",
+              "ability": "conduct",
+              "target": "field"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "Contracts": [
+    {
+      "id": "sustain",
+      "controller": "caster",
+      "mobility": "free",
+      "focus": "none",
+      "provider": "@caster",
+      "max_s": 3
+    }
+  ],
+  "Expression": []
+}
