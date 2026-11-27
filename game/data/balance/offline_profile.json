@@ -1,0 +1,19 @@
+{
+  "id": "unit_probe",
+  "description": "阶段 B 的离线标尺。实际强度、蓄力曲线及动作窗口由后续平衡配置确定。",
+  "extent_m": 1.0,
+  "capacity_mu": 4.0,
+  "reserve_capacity": 4.0,
+  "charge_rate": 1.0,
+  "impulse_per_unit": 1.0,
+  "field_intensity": 1.0,
+  "propagation": {
+    "speed_m_s": 1.0,
+    "max_reach_m": 6.0,
+    "max_hops": 6,
+    "attenuation": 0.0
+  },
+  "path_nodes": 8,
+  "path_edges": 8,
+  "field_tick_estimate_us": 12
+}

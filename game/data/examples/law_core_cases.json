@@ -1,0 +1,189 @@
+[
+  {
+    "id": "L01",
+    "name": "取火之显明",
+    "versions": {"core":"0.1.1","semantics":"0.1.1","execution":"0.2.2","artkit":"0.2.3"},
+    "graph": [
+      {"id":"n1","form":"构成","scope":"火的概念","inputs":[],"words":["火"],"operands":[{"type":"Concept","reads":["concept.fire"]}]},
+      {"id":"n2","form":"修饰","scope":"火的显明","inputs":["n1"],"words":["以太","分离"],"aspect_ref":"fire.visibility","operands":[{"type":"Concept","reads":["concept.aether"]},{"type":"Aspect","reads":["aspect.fire.visibility","n2:0"]}]},
+      {"id":"n3","form":"阶段","scope":"已成立的独立作用","inputs":["n2"],"words":["延续"],"aspect_ref":"fire.visibility","operands":[{"type":"Process","reads":["contract.sustain","reference.region"]}],"intents":[{"ref":"v1","space":{"organization":"radial_region","anchor":"aim_point"}}]}
+    ],
+    "core": {
+      "concepts": [
+        {"id":"fire","concept":"火"},
+        {"id":"effect","concept":"光"}
+      ],
+      "subjects": [
+        {"id":"field","concept_ref":"effect","source":"Manifest","binding":"施法者承担有限域内的持续作用","source_ref":"@caster","intent_ref":"v1","spatial_intent":{"support":"region","layout":"radial","distribution":"field","anchor":"aim_point"}}
+      ],
+      "relations": [
+        {"id":"channel","from":"field","to":"@target","channel":"光学","condition":"目标处于实际作用范围"}
+      ],
+      "processes": [
+        {"id":"establish","when":"on_cast","operation":"Establish","target":"field","after":[],"condition":"指称与独立化获准，供给充足","result":"照亮作用域","requires_all":["性质已获准","持续供给"],"effects":["增强显明"]},
+        {"id":"end","when":"on_release","operation":"Withdraw","target":"field","after":["establish"],"condition":"主动维持终止","result":"撤去主动作用，现场结果依世界规律演化","requires_all":["主动释放"],"effects":["解除主动作用"]}
+      ],
+      "contract": {"formation":"一次成形","control":"引导","supply":["持续"],"owner":"施法者","on_release":"终止持续作用","on_interrupt":"撤去主动影响"},
+      "obligations": [
+        {"term":"n3:0","at_use":["supply_available"]}
+      ]
+    },
+    "trace": [
+      {"node":"n1","senses":["火.指称"],"outputs":["fire"],"because":"引用火的性质，无须点燃场景","rule_id":"G.compose"},
+      {"node":"n2","senses":["以太.指称","分离.抽离"],"outputs":["effect"],"because":"仅抽离指定性质，由以太承载","rule_id":"G.modify"},
+      {"node":"n3","senses":["延续.持续"],"outputs":["field","channel","establish","end"],"because":"维持需要支付；结束来自松手契约","rule_id":"G.phase"}
+    ],
+    "lowering": {"binding":"map.light","legacy_example":null,"gap":"下游有相应场通道。独立化仅覆盖此例已登记的性质，规则未实机验证。","execution_refs":{}}
+  },
+  {
+    "id": "L02",
+    "name": "显明反转成暗",
+    "versions": {"core":"0.1.1","semantics":"0.1.1","execution":"0.2.2","artkit":"0.2.3"},
+    "graph": [
+      {"id":"n1","form":"构成","scope":"火的概念","inputs":[],"words":["火"],"operands":[{"type":"Concept","reads":["concept.fire"]}]},
+      {"id":"n2","form":"修饰","scope":"火的显明","inputs":["n1"],"words":["以太","分离"],"aspect_ref":"fire.visibility","operands":[{"type":"Concept","reads":["concept.aether"]},{"type":"Aspect","reads":["aspect.fire.visibility","n2:0"]}]},
+      {"id":"n3","form":"构成","scope":"选定作用的极性","inputs":["n2"],"words":["反转"],"aspect_ref":"fire.visibility","operands":[{"type":"Aspect","reads":["aspect.fire.visibility","n2:1"]}]},
+      {"id":"n4","form":"阶段","scope":"已成立的独立作用","inputs":["n3"],"words":["延续"],"aspect_ref":"fire.visibility","operands":[{"type":"Process","reads":["contract.sustain","reference.region"]}],"intents":[{"ref":"v1","space":{"organization":"radial_region","anchor":"aim_point"}}]}
+    ],
+    "core": {
+      "concepts": [
+        {"id":"fire","concept":"火"},
+        {"id":"isolated","concept":"光"},
+        {"id":"effect","concept":"暗"}
+      ],
+      "subjects": [
+        {"id":"field","concept_ref":"effect","source":"Manifest","binding":"施法者承担有限域内的持续作用","source_ref":"@caster","intent_ref":"v1","spatial_intent":{"support":"region","layout":"radial","distribution":"field","anchor":"aim_point"}}
+      ],
+      "relations": [
+        {"id":"channel","from":"field","to":"@target","channel":"光学","condition":"目标处于实际作用范围"}
+      ],
+      "processes": [
+        {"id":"establish","when":"on_cast","operation":"Establish","target":"field","after":[],"condition":"指称与独立化获准，供给充足","result":"抑制域内显明","requires_all":["性质已获准","持续供给"],"effects":["抑制显明"]},
+        {"id":"end","when":"on_release","operation":"Withdraw","target":"field","after":["establish"],"condition":"主动维持终止","result":"撤去主动作用，现场结果依世界规律演化","requires_all":["主动释放"],"effects":["解除主动作用"]}
+      ],
+      "contract": {"formation":"一次成形","control":"引导","supply":["持续"],"owner":"施法者","on_release":"终止持续作用","on_interrupt":"撤去主动影响"},
+      "obligations": [
+        {"term":"n4:0","at_use":["supply_available"]}
+      ]
+    },
+    "trace": [
+      {"node":"n1","senses":["火.指称"],"outputs":["fire"],"because":"引用火的性质，无须点燃场景","rule_id":"G.compose"},
+      {"node":"n2","senses":["以太.指称","分离.抽离"],"outputs":["isolated"],"because":"仅抽离指定性质，由以太承载","rule_id":"G.modify"},
+      {"node":"n3","senses":["反转.光学"],"outputs":["effect"],"because":"在同一通道取登记的反向义项","rule_id":"G.compose"},
+      {"node":"n4","senses":["延续.持续"],"outputs":["field","channel","establish","end"],"because":"维持需要支付；结束来自松手契约","rule_id":"G.phase"}
+    ],
+    "lowering": {"binding":"map.dark","legacy_example":null,"gap":"下游有相应场通道。独立化仅覆盖此例已登记的性质，规则未实机验证。","execution_refs":{}}
+  },
+  {
+    "id": "L03",
+    "name": "取火之温热",
+    "versions": {"core":"0.1.1","semantics":"0.1.1","execution":"0.2.2","artkit":"0.2.3"},
+    "graph": [
+      {"id":"n1","form":"构成","scope":"火的概念","inputs":[],"words":["火"],"operands":[{"type":"Concept","reads":["concept.fire"]}]},
+      {"id":"n2","form":"修饰","scope":"火的温热","inputs":["n1"],"words":["以太","分离"],"aspect_ref":"fire.heat","operands":[{"type":"Concept","reads":["concept.aether"]},{"type":"Aspect","reads":["aspect.fire.heat","n2:0"]}]},
+      {"id":"n3","form":"阶段","scope":"已成立的独立作用","inputs":["n2"],"words":["延续"],"aspect_ref":"fire.heat","operands":[{"type":"Process","reads":["contract.sustain","reference.region"]}],"intents":[{"ref":"v1","space":{"organization":"radial_region","anchor":"aim_point"}}]}
+    ],
+    "core": {
+      "concepts": [
+        {"id":"fire","concept":"火"},
+        {"id":"effect","concept":"热作用"}
+      ],
+      "subjects": [
+        {"id":"field","concept_ref":"effect","source":"Manifest","binding":"施法者承担有限域内的持续作用","source_ref":"@caster","intent_ref":"v1","spatial_intent":{"support":"region","layout":"radial","distribution":"field","anchor":"aim_point"}}
+      ],
+      "relations": [
+        {"id":"channel","from":"field","to":"@target","channel":"热","condition":"目标处于实际作用范围"}
+      ],
+      "processes": [
+        {"id":"establish","when":"on_cast","operation":"Establish","target":"field","after":[],"condition":"指称与独立化获准，供给充足","result":"向目标交付热量","requires_all":["性质已获准","持续供给"],"effects":["注入热量"]},
+        {"id":"end","when":"on_release","operation":"Withdraw","target":"field","after":["establish"],"condition":"主动维持终止","result":"撤去主动作用，现场结果依世界规律演化","requires_all":["主动释放"],"effects":["解除主动作用"]}
+      ],
+      "contract": {"formation":"一次成形","control":"引导","supply":["持续"],"owner":"施法者","on_release":"终止持续作用","on_interrupt":"撤去主动影响"},
+      "obligations": [
+        {"term":"n3:0","at_use":["supply_available"]}
+      ]
+    },
+    "trace": [
+      {"node":"n1","senses":["火.指称"],"outputs":["fire"],"because":"引用火的性质，无须点燃场景","rule_id":"G.compose"},
+      {"node":"n2","senses":["以太.指称","分离.抽离"],"outputs":["effect"],"because":"仅抽离指定性质，由以太承载","rule_id":"G.modify"},
+      {"node":"n3","senses":["延续.持续"],"outputs":["field","channel","establish","end"],"because":"维持需要支付；结束来自松手契约","rule_id":"G.phase"}
+    ],
+    "lowering": {"binding":"map.heat","legacy_example":null,"gap":"下游有相应场通道。独立化仅覆盖此例已登记的性质，规则未实机验证。","execution_refs":{}}
+  },
+  {
+    "id": "L04",
+    "name": "温热反转为抽热",
+    "versions": {"core":"0.1.1","semantics":"0.1.1","execution":"0.2.2","artkit":"0.2.3"},
+    "graph": [
+      {"id":"n1","form":"构成","scope":"火的概念","inputs":[],"words":["火"],"operands":[{"type":"Concept","reads":["concept.fire"]}]},
+      {"id":"n2","form":"修饰","scope":"火的温热","inputs":["n1"],"words":["以太","分离"],"aspect_ref":"fire.heat","operands":[{"type":"Concept","reads":["concept.aether"]},{"type":"Aspect","reads":["aspect.fire.heat","n2:0"]}]},
+      {"id":"n3","form":"构成","scope":"选定作用的极性","inputs":["n2"],"words":["反转"],"aspect_ref":"fire.heat","operands":[{"type":"Aspect","reads":["aspect.fire.heat","n2:1"]}]},
+      {"id":"n4","form":"阶段","scope":"已成立的独立作用","inputs":["n3"],"words":["延续"],"aspect_ref":"fire.heat","operands":[{"type":"Process","reads":["contract.sustain","reference.region"]}],"intents":[{"ref":"v1","space":{"organization":"radial_region","anchor":"aim_point"}}]}
+    ],
+    "core": {
+      "concepts": [
+        {"id":"fire","concept":"火"},
+        {"id":"isolated","concept":"热作用"},
+        {"id":"effect","concept":"抽热"}
+      ],
+      "subjects": [
+        {"id":"field","concept_ref":"effect","source":"Manifest","binding":"施法者承担有限域内的持续作用","source_ref":"@caster","intent_ref":"v1","spatial_intent":{"support":"region","layout":"radial","distribution":"field","anchor":"aim_point"}}
+      ],
+      "relations": [
+        {"id":"channel","from":"field","to":"@target","channel":"热","condition":"目标处于实际作用范围"}
+      ],
+      "processes": [
+        {"id":"establish","when":"on_cast","operation":"Establish","target":"field","after":[],"condition":"指称与独立化获准，供给充足","result":"从目标取走热量，按现场热交换演化","requires_all":["性质已获准","持续供给"],"effects":["抽取热量"]},
+        {"id":"end","when":"on_release","operation":"Withdraw","target":"field","after":["establish"],"condition":"主动维持终止","result":"撤去主动作用，现场结果依世界规律演化","requires_all":["主动释放"],"effects":["解除主动作用"]}
+      ],
+      "contract": {"formation":"一次成形","control":"引导","supply":["持续"],"owner":"施法者","on_release":"终止持续作用","on_interrupt":"撤去主动影响"},
+      "obligations": [
+        {"term":"n4:0","at_use":["supply_available"]}
+      ]
+    },
+    "trace": [
+      {"node":"n1","senses":["火.指称"],"outputs":["fire"],"because":"引用火的性质，无须点燃场景","rule_id":"G.compose"},
+      {"node":"n2","senses":["以太.指称","分离.抽离"],"outputs":["isolated"],"because":"仅抽离指定性质，由以太承载","rule_id":"G.modify"},
+      {"node":"n3","senses":["反转.热流"],"outputs":["effect"],"because":"在同一通道取登记的反向义项","rule_id":"G.compose"},
+      {"node":"n4","senses":["延续.持续"],"outputs":["field","channel","establish","end"],"because":"维持需要支付；结束来自松手契约","rule_id":"G.phase"}
+    ],
+    "lowering": {"binding":"map.cool","legacy_example":null,"gap":"下游有相应场通道。独立化仅覆盖此例已登记的性质，规则未实机验证。","execution_refs":{}}
+  },
+  {
+    "id": "L05",
+    "name": "有限域的积蓄与重压",
+    "versions": {"core":"0.1.1","semantics":"0.1.1","execution":"0.2.2","artkit":"0.2.3"},
+    "graph": [
+      {"id":"n1","form":"构成","scope":"有限域和指定规律","inputs":[],"words":["重力","空"],"operands":[{"type":"Concept","reads":["concept.gravity"]},{"type":"Concept","reads":["concept.space"]}],"intents":[{"ref":"v1","space":{"organization":"radial_region","anchor":"aim_point"}}]},
+      {"id":"n2","form":"阶段","scope":"有时长和供给的积蓄","inputs":["n1"],"words":["延续"],"aspect_ref":"gravity.direction","operands":[{"type":"Process","reads":["contract.sustain","contract.reserve"]}],"intents":[{"ref":"v2","profile":"accumulate","event":"during_hold"}]},
+      {"id":"n3","form":"接续","scope":"沿指定方向交付","inputs":["n2"],"words":["爆发"],"aspect_ref":"gravity.direction","operands":[{"type":"Process","reads":["n2:0","n1:0","aspect.gravity.direction"]}],"intents":[{"ref":"v3","direction":{"frame":"world","axis":"down"},"profile":"brief","event":"voluntary_release"}]}
+    ],
+    "core": {
+      "concepts": [
+        {"id":"law","concept":"重力"}
+      ],
+      "subjects": [
+        {"id":"field","concept_ref":"law","source":"Manifest","binding":"施法者供给区域内引力","source_ref":"@caster","intent_ref":"v1","spatial_intent":{"support":"region","layout":"radial","distribution":"field","anchor":"aim_point"}}
+      ],
+      "relations": [
+        {"id":"load","from":"field","to":"@target","channel":"力学","condition":"目标当前在作用域内"}
+      ],
+      "processes": [
+        {"id":"charge","when":"while_held","operation":"Transfer","target":"field","after":[],"condition":"供给持续且未超储备","result":"随实际时间积蓄本次可交付作用","requires_all":["持续供给","储备有余容"],"effects":["积入储备"],"intent_ref":"v2","profile":"over_time"},
+        {"id":"slam","when":"on_release","operation":"Drive","target":"load","after":["charge"],"condition":"有可交付储备，目标在场","result":"沿所选世界轴短时交付已积蓄的作用","requires_all":["储备可用","实际域内"],"effects":["定向加速度"],"intent_ref":"v3","profile":"short_impulse","direction":{"frame":"world","axis":"down"}},
+        {"id":"abort","when":"on_interrupt","operation":"Withdraw","target":"field","after":["charge"],"condition":"积蓄被打断","result":"停止继续蓄能，未交付的重压终止","requires_all":["强制中断"],"effects":["解除主动作用"]}
+      ],
+      "contract": {"formation":"持续塑造","control":"引导","supply":["持续","预付"],"owner":"施法者","on_release":"集中交付已积蓄的部分","on_interrupt":"终止未交付作用"},
+      "obligations": [
+        {"term":"n2:0","at_use":["supply_available"]},
+        {"term":"n3:0","at_use":["reserve_nonempty"]}
+      ]
+    },
+    "trace": [
+      {"node":"n1","senses":["重力.指称","空.指称"],"outputs":["law","field","load"],"because":"空限定空间所指；力学作用有独立引力依据","rule_id":"G.compose"},
+      {"node":"n2","senses":["延续.持续"],"outputs":["charge","abort"],"because":"积蓄来自契约规定的储备过程","rule_id":"G.phase"},
+      {"node":"n3","senses":["爆发.集中交付"],"outputs":["slam"],"because":"短时交付的上限取决于已积蓄量","rule_id":"G.cause"}
+    ],
+    "lowering": {"binding":"map.gravity","legacy_example":"case2_gravity_collapse.json","gap":"旧基准还包含抬升与径向收拢，本例只主张有供给的积蓄与重压。","execution_refs":{"field":["f_grav"],"slam":["p_slam_down"]}}
+  }
+]

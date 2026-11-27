@@ -1,0 +1,50 @@
+{
+  "artkit_version": "0.2.3",
+  "profiles": [
+    {
+      "id": "expr.phase_front",
+      "requires": [
+        "realized_solid_ice",
+        "material_phase_changed",
+        "realized_connected_structure"
+      ],
+      "composition": "把新旧材质的明暗交界置于实际前沿，保留断口和负空间。",
+      "space": "实际连通部分和局部相变坐标",
+      "omen": "沿有效支点收紧高频泛音",
+      "delivery": "前沿抵达时亮起棱面，素材按实际体量交付",
+      "surface_module": "CRYSTALLINE_ICE",
+      "impact_module": "ICE_LOCK_CRACK",
+      "aftermath": "石殿残响逐渐衰减，冰体寿命由世界负责。"
+    },
+    {
+      "id": "expr.load_delivery",
+      "requires": [
+        "gravity_channel",
+        "stored_intervention",
+        "actual_mechanical_delivery"
+      ],
+      "composition": "以受力区为视觉重心，上方留出净空。",
+      "space": "世界裁定的受力位置；室内听取石穹反射，室外留出远景。",
+      "omen": "以实有积蓄驱动张力，几何形变保持真实边界可读。",
+      "delivery": "声音从静默转入低频重击，实际交付决定强调时刻。",
+      "surface_module": "GRAVITY_DISTORTION",
+      "impact_module": "TECTONIC_SLAM",
+      "aftermath": "接触位置的残尘与室内外各自的余响衰减。"
+    },
+    {
+      "id": "expr.signal_arrival",
+      "requires": [
+        "mist_medium",
+        "active_information_link",
+        "actual_disturbance"
+      ],
+      "composition": "保持雾体主轮廓，用局部次级运动标记来向。",
+      "space": "信号的方向和强弱，精度受实际通道限制。",
+      "omen": "环境风声给信号响应留出空隙。",
+      "delivery": "有效信号到达接收端时显示一次有限响应。",
+      "surface_module": "LIGHT_ABSORB_VOID",
+      "impact_module": "ETHER_PING",
+      "aftermath": "撤链后反馈停止，雾仍按世界状态消散。"
+    }
+  ]
+}

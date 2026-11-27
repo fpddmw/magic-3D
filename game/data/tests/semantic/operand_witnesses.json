@@ -1,0 +1,20 @@
+{
+  "semantic_rules_version": "0.1.1",
+  "description": "补足参考构筑未用到的首批义项，并核对误配与现场条件。reads 为有类型的输入；prior 为独立上游输入，按先后编号 n1、n2 等，每个只有第 0 项。",
+  "witnesses": [
+    {"word":"光","type":"Concept","reads":["concept.light"],"expected":["光.指称"],"expected_status":"VALID"},
+    {"word":"分离","type":"Entity","reads":["concept.water"],"expected":["分离.拆分"],"expected_status":"VALID"},
+    {"word":"反转","type":"Aspect","aspect_ref":"gravity.direction","prior":[{"word":"重力","type":"Concept","reads":["concept.gravity"]}],"reads":["aspect.gravity.direction","n1:0"],"expected":["反转.方向"],"expected_status":"VALID"},
+    {"word":"联结","type":"Relation","prior":[{"word":"以太","type":"Concept","reads":["concept.aether"]}],"reads":["reference.vessel","contract.payload","n1:0"],"expected":["联结.寄托"],"expected_status":"VALID"},
+    {"word":"联结","type":"Relation","reads":["reference.contact"],"expected":["联结.传力"],"expected_status":"VALID"},
+    {"word":"穿透","type":"Process","reads":["contract.drive","choice.boundary"],"expected":[],"expected_status":"INVALID_MEANING"},
+    {"word":"凝固","type":"Concept","reads":["concept.water"],"expected":["凝固.构成"],"forbid_grants":["solidified"],"expected_status":"VALID"},
+    {"word":"凝固","type":"Entity","reads":["concept.water"],"expected":["凝固.相变"],"defer":["material_present"],"expected_status":"VALID"},
+    {"word":"借用","type":"Entity","reads":["contract.material"],"expected":["借用.取材"],"defer":["source_reachable","source_nonempty"],"expected_status":"VALID"},
+    {"word":"借用","type":"Entity","reads":["concept.water"],"expected":[],"expected_status":"INVALID_MEANING"},
+    {"word":"凝聚","type":"Entity","reads":["concept.water"],"expected":["凝聚.结合"],"forbid_grants":["stored_action"],"expected_status":"VALID"},
+    {"word":"爆发","type":"Process","reads":["contract.reserve"],"expected":[],"expected_status":"INVALID_MEANING"},
+    {"word":"联结","type":"Relation","reads":["reference.contact","reference.feed"],"expected":["联结.传力","联结.取源"],"expected_status":"AMBIGUOUS"},
+    {"word":"回应","type":"Relation","reads":["reference.perception"],"expected":[],"expected_status":"INVALID_MEANING"}
+  ]
+}

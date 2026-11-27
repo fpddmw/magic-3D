@@ -1,0 +1,26 @@
+{
+  "semantic_rules_version": "0.1.1",
+  "vectors": [
+    {"id":"S01","family":"同词异境","base":"M015","input":"向雾中的真实扰动施加联结，接收者是施法者","candidate_senses":["联结.感应"],"expected_trace":["真实扰动","信息通路","传回方向强弱"],"expected_status":"VALID","require":["扰动反馈"],"forbid":["材料输送","目标身份"]},
+    {"id":"S02","family":"同词异境","base":"M020","input":"对水源和场所的取水端施加联结","candidate_senses":["联结.取源"],"expected_trace":["相容的物质端点","来源使用关系","有限输水"],"expected_status":"VALID","require":["材料通路"],"forbid":["信息通路","免费推进"]},
+    {"id":"S03","family":"同词异序","base":"M009","input":"先把水定义为固体，再交织已有冰条","candidate_senses":["凝固.构成","交织.交错"],"expected_trace":["冰的概念","取得实体","硬条交错"],"expected_status":"VALID","require":["先固后织"],"forbid":["液态绕柱","收束时冻结"]},
+    {"id":"S04","family":"同词异序","base":"M009","input":"先织液态水网，主动松手时再凝固","candidate_senses":["交织.交错","凝固.相变"],"expected_trace":["实际液态路径","松手","当前形状凝固"],"expected_status":"VALID","require":["先织后冻"],"forbid":["标准冰网替换"]},
+    {"id":"S05","family":"共同限定","base":"M001","input":"将同一份水同时凝聚并延展，未声明推动","candidate_senses":["凝聚.结合","延展.连续"],"expected_trace":["内部结合＋连续伸展","集中的长形主体"],"expected_status":"VALID","require":["结合与连续"],"forbid":["发射能力","时间积蓄"]},
+    {"id":"S06","family":"局部作用域","base":"L04","input":"只反转温热作用，显明保持","candidate_senses":["分离.抽离","反转.热流"],"expected_trace":["所指为温热","独立热作用","目标失热"],"expected_status":"VALID","require":["抽取热量"],"forbid":["抑光"]},
+    {"id":"S07","family":"概念构成","base":"L01","input":"在法坛推导火的显明可以独立成光","candidate_senses":["火.指称","分离.抽离"],"expected_trace":["概念性质","可独立化限制","光的概念"],"expected_status":"VALID","require":["独立显明"],"forbid":["点燃场地","现场事件"]},
+    {"id":"S08","family":"性质继承","base":"M009","input":"两条水带仅交叉而不相合，同时结冰后要求交叉点焊接","candidate_senses":["交织.交错","凝固.相变"],"expected_trace":["相交","无材料连续证据","拒绝焊点推论"],"expected_status":"INVALID_MEANING","require":["保留各自材料"],"forbid":["接触自动焊接"]},
+    {"id":"S09","family":"能力缺失","base":"M017","input":"器物保存冰矛与魔力，但要求只靠穿透自动发射","candidate_senses":["封存.限制","穿透.贯入"],"expected_trace":["有储备","缺推进关系","发射结论无依据"],"expected_status":"INVALID_MEANING","require":["缺推进"],"forbid":["发射能力"]},
+    {"id":"S10","family":"歧义","base":"L01","input":"火＋以太＋分离，未指定性质","candidate_senses":["火.指称","以太.指称","分离.抽离"],"expected_trace":["火同时具有温热和显明","两种合法候选","要求选择作用域"],"expected_status":"AMBIGUOUS","require":["显明候选","温热候选"],"forbid":["任择其一"]},
+    {"id":"S11","family":"跨域迁移","base":"L02","input":"把对立转换从热通道迁移到指定的显明通道","candidate_senses":["分离.抽离","反转.光学"],"expected_trace":["选定光学对象","匹配光学对立","抑光"],"expected_status":"VALID","require":["抑光"],"forbid":["抽取热量"]},
+    {"id":"S12","family":"未知构筑","base":"M003","input":"把延展的水带改为沿货箱把手牵拉，现场存在连续路径与受力接触","candidate_senses":["延展.连续","牵引.拉动"],"expected_trace":["世界引用换为可搬物","原力学通道仍有效","有限拖动"],"expected_status":"VALID","require":["搬移物件"],"forbid":["专用搬运技能"]},
+    {"id":"S13","family":"能力缺失","base":"L05","input":"仅用凝聚要求引力随持咒时间不断蓄能","candidate_senses":["凝聚.结合"],"expected_trace":["空间集中","无入账过程","拒绝时间积蓄"],"expected_status":"INVALID_MEANING","require":["缺储备过程"],"forbid":["时间积蓄"]},
+    {"id":"S14","family":"因果接续","base":"L02","input":"声明显明反转，另要求无事件、期限或撤除条件自行再次反转","candidate_senses":["反转.光学"],"expected_trace":["只有第一次反转","未声明第二次改变的时机"],"expected_status":"INVALID_MEANING","require":["缺终止依据"],"forbid":["自动复原"]},
+    {"id":"S15","family":"权限边界","base":"L05","input":"改为限制过程速率，要求负速率回到历史事件之前","candidate_senses":["时.指称","反转.方向"],"expected_trace":["可引用速率","负向历史操作没有登记权限"],"expected_status":"INVALID_MEANING","require":["历史保持"],"forbid":["倒转历史"]},
+    {"id":"S16","family":"能力缺口","base":"M015","input":"以可导振的石梁、已知振源和接收者代替雾域，要求结构图传播","candidate_senses":["联结.感应","回应.反馈"],"expected_trace":["语义端点齐备","需要结构信号采样","执行能力延后"],"expected_status":"UNSUPPORTED_LOWERING","require":["记录能力缺口"],"forbid":["改用雾域"]},
+    {"id":"S17","family":"现场条件","base":"M003","input":"输入合法的借水构筑，现场水源已干","candidate_senses":["借用.取材"],"expected_trace":["构筑许可保留","施法绑定失败","本次无法取材"],"expected_status":"MISSING_BINDING","require":["来源不足"],"forbid":["免费造物"]},
+    {"id":"S18","family":"能力缺失","base":"M014","input":"在普通雾幕里直接读出伏兵身份","candidate_senses":["弥散.分布","铺展.覆盖"],"expected_trace":["有光学遮蔽","缺少感应关系及身份信号"],"expected_status":"INVALID_MEANING","require":["仅有遮蔽"],"forbid":["目标身份"]},
+    {"id":"S19","family":"性质继承","base":"M009","input":"受击打断尚未收束的液态前沿","candidate_senses":["交织.交错","凝固.相变"],"expected_trace":["选中打断分支","失去主动托举","水落下"],"expected_status":"VALID","require":["液态留存"],"forbid":["打断自动凝固"]},
+    {"id":"S20","family":"因果接续","base":"M020","input":"来源仍有水，但场所的预付驱动已耗尽","candidate_senses":["借用.取材","排斥.推动"],"expected_trace":["来源账仍有效","驱动账为零","出流停止"],"expected_status":"VALID","require":["已排水留存"],"forbid":["无限推力"]},
+    {"id":"S21","family":"未知构筑","base":"M017","input":"把器物所封存的冰矛替换成由火的显明独立化所得的光学作用。预付一次照明，门板受压后解封。","candidate_senses":["分离.抽离","联结.寄托","封存.限制","回应.触发","释放.解限"],"expected_trace":["只取显明得到光学内容","器物预存该作用与一次供给","门板受压触发已备照明","消耗后清空存储"],"expected_status":"VALID","require":["一次受压照明","预付作用扣除"],"forbid":["发射冰矛","灼烧","识别开门者"]}
+  ]
+}

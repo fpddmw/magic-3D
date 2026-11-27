@@ -17,3 +17,6 @@ build/
 *.gguf
 *.onnx
 *.bin
+
+# Offline semantic compiler
+__pycache__/

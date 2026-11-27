@@ -1,0 +1,333 @@
+{
+  "semantic_rules_version": "0.1.1",
+  "first_batch": [
+    "水",
+    "气",
+    "火",
+    "以太",
+    "光",
+    "重力",
+    "空",
+    "凝固",
+    "凝聚",
+    "延展",
+    "交织",
+    "铺展",
+    "弥散",
+    "联结",
+    "回应",
+    "借用",
+    "牵引",
+    "排斥",
+    "穿透",
+    "分离",
+    "反转",
+    "延续",
+    "爆发",
+    "束缚"
+  ],
+  "acceptance_extension": [
+    "汇聚"
+  ],
+  "sources": {
+    "concept.water": {
+      "basis": "水的本性；现场材料通过来源契约另行取得",
+      "facts": [
+        "water",
+        "liquid",
+        "organisable",
+        "concentrable",
+        "dispersible",
+        "divisible",
+        "bounded_change"
+      ]
+    },
+    "concept.air": {
+      "basis": "气态介质的性质",
+      "facts": [
+        "air",
+        "medium"
+      ]
+    },
+    "concept.fire": {
+      "basis": "火的性质",
+      "facts": [
+        "fire"
+      ]
+    },
+    "concept.aether": {
+      "basis": "以太媒介的性质",
+      "facts": [
+        "aether"
+      ]
+    },
+    "concept.light": {
+      "basis": "光的概念",
+      "facts": [
+        "light"
+      ]
+    },
+    "concept.space": {
+      "basis": "空间关系",
+      "facts": [
+        "space"
+      ]
+    },
+    "concept.gravity": {
+      "basis": "引力规律",
+      "facts": [
+        "gravity"
+      ]
+    },
+    "aspect.fire.visibility": {
+      "basis": "明确选取火的显明",
+      "facts": [
+        "separable",
+        "optical",
+        "optical_inverse"
+      ]
+    },
+    "aspect.fire.heat": {
+      "basis": "明确选取火的温热",
+      "facts": [
+        "separable",
+        "thermal",
+        "thermal_inverse"
+      ]
+    },
+    "aspect.gravity.direction": {
+      "basis": "明确选取有向引力",
+      "facts": [
+        "reversible_direction"
+      ]
+    },
+    "aspect.medium.signal": {
+      "basis": "雾滴可以保有界扰动信号",
+      "facts": [
+        "signal_source"
+      ]
+    },
+    "reference.axis": {
+      "basis": "建立了方向参照槽",
+      "facts": [
+        "direction_ref"
+      ]
+    },
+    "reference.region": {
+      "basis": "建立了范围参照槽",
+      "facts": [
+        "extent_ref"
+      ]
+    },
+    "reference.center": {
+      "basis": "建立了共同中心槽",
+      "facts": [
+        "center_ref"
+      ]
+    },
+    "reference.contact": {
+      "basis": "选择实际接触传力的通道和端点",
+      "facts": [
+        "mechanical_endpoints",
+        "contact_route"
+      ]
+    },
+    "reference.feed": {
+      "basis": "选择源水与材料接收端",
+      "facts": [
+        "material_endpoints",
+        "source_slot"
+      ]
+    },
+    "reference.perception": {
+      "basis": "选择感知端点",
+      "facts": [
+        "receiver"
+      ]
+    },
+    "reference.vessel": {
+      "basis": "选择可寄托载体及其接受端",
+      "facts": [
+        "vessel_endpoint"
+      ]
+    },
+    "reference.pressure": {
+      "basis": "选择在受压时交付的事件通道",
+      "facts": [
+        "observable_event"
+      ]
+    },
+    "reference.target_motion": {
+      "basis": "指定待限制的目标运动",
+      "facts": [
+        "bounded_change"
+      ]
+    },
+    "contract.sustain": {
+      "basis": "明确声明有限持续供给与可维持作用",
+      "facts": [
+        "finite_supply",
+        "ongoing_work"
+      ]
+    },
+    "contract.reserve": {
+      "basis": "建立有上限的储备和供给契约",
+      "facts": [
+        "finite_supply",
+        "reservoir"
+      ]
+    },
+    "contract.drive": {
+      "basis": "显式为可授权的驱动提供来源",
+      "facts": [
+        "drive_supply"
+      ]
+    },
+    "contract.material": {
+      "basis": "声明有限环境材料来源的绑定槽",
+      "facts": [
+        "source_slot"
+      ]
+    },
+    "contract.focus": {
+      "basis": "施法者持续控制前沿",
+      "facts": [
+        "direct_control"
+      ]
+    },
+    "contract.support": {
+      "basis": "声明可承担负荷的有限支撑",
+      "facts": [
+        "support_slot"
+      ]
+    },
+    "contract.payload": {
+      "basis": "声明已另行构成且有来源的载荷引用，须解析到实际载荷",
+      "facts": [
+        "payload_ref"
+      ]
+    },
+    "choice.strands": {
+      "basis": "将同一材料分作多条连续段共同组织",
+      "facts": [
+        "plural_strands"
+      ]
+    },
+    "choice.boundary": {
+      "basis": "指定可能遇到的阻隔及其可贯入条件",
+      "facts": [
+        "boundary_ref"
+      ]
+    }
+  },
+  "contract_derivations": [
+    {
+      "id": "reserve_over_time",
+      "requires_selection": {
+        "profile": "accumulate"
+      },
+      "all": [
+        "sustain",
+        "reservoir"
+      ],
+      "grant": [
+        "stored_action"
+      ],
+      "output_requires": "sustain"
+    }
+  ],
+  "observations": {
+    "actual_contact": {
+      "meaning": "目标与实际材料接触",
+      "provider": "contact",
+      "condition_id": "当前接触"
+    },
+    "connected_material": {
+      "meaning": "当下材料有连续受力路径",
+      "provider": "realized_topology",
+      "condition_id": "路径连续"
+    },
+    "source_reachable": {
+      "meaning": "来源可达",
+      "provider": "world_binding",
+      "condition_id": "来源可达"
+    },
+    "source_nonempty": {
+      "meaning": "来源有足量可用材料",
+      "provider": "material_ledger",
+      "condition_id": "来源有量"
+    },
+    "receiver_available": {
+      "meaning": "接收端有效",
+      "provider": "relation_endpoint",
+      "condition_id": "接收端有效"
+    },
+    "vessel_intact": {
+      "meaning": "器物尚完整",
+      "provider": "world_binding",
+      "condition_id": "载体完整"
+    },
+    "actual_disturbance": {
+      "meaning": "此刻存在通道能传的信号",
+      "provider": "information_channel",
+      "condition_id": "真实扰动"
+    },
+    "actual_event": {
+      "meaning": "约定的接触或压力事件实际发生",
+      "provider": "event_source",
+      "condition_id": null
+    },
+    "payload_available": {
+      "meaning": "已有载荷可交付",
+      "provider": "reserve_ledger",
+      "condition_id": null
+    },
+    "material_present": {
+      "meaning": "该处确有被引用材料",
+      "provider": "material_ledger",
+      "condition_id": "已有材料"
+    },
+    "supply_available": {
+      "meaning": "当前供给有效",
+      "provider": "resource_provider",
+      "condition_id": null
+    },
+    "momentum_available": {
+      "meaning": "仍有实际推进余力",
+      "provider": "mechanical_state",
+      "condition_id": "已有推进"
+    },
+    "reserve_nonempty": {
+      "meaning": "储备有实际余额",
+      "provider": "reserve_ledger",
+      "condition_id": "储备可用"
+    },
+    "support_valid": {
+      "meaning": "支撑在场且能承受负荷",
+      "provider": "realized_topology",
+      "condition_id": "有效支点"
+    }
+  },
+  "aspect_permissions": {
+    "fire.visibility": {
+      "owner_evidence_any": [
+        "fire"
+      ]
+    },
+    "fire.heat": {
+      "owner_evidence_any": [
+        "fire"
+      ]
+    },
+    "gravity.direction": {
+      "owner_evidence_any": [
+        "gravity"
+      ]
+    },
+    "medium.signal": {
+      "owner_evidence_any": [
+        "dispersed_content"
+      ]
+    }
+  }
+}

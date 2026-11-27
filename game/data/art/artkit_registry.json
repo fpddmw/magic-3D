@@ -1,0 +1,178 @@
+{
+  "artkit_version": "0.2.3",
+  "contour_modules": [
+    "SCULPTED_CORE",
+    "FACETED_PRISM",
+    "CONTINUOUS_RIBBON",
+    "BRANCH_TENDRIL",
+    "PLANAR_SIGIL",
+    "VOLUMETRIC_MIST",
+    "FIELD_AURA_RING"
+  ],
+  "surface_modules": [
+    "REFRACTIVE_LIQUID",
+    "CRYSTALLINE_ICE",
+    "ROUGH_STONE",
+    "CONDUCTIVE_ARC",
+    "GRAVITY_DISTORTION",
+    "LIGHT_ABSORB_VOID",
+    "THERMAL_FROST",
+    "THERMAL_EMBER",
+    "RUNIC_BARRIER_GLASS"
+  ],
+  "secondary_modules": [
+    "VELOCITY_FOAM",
+    "STRESS_CRACKS",
+    "FROST_CREEP_DECAL",
+    "CRATER_DECAL",
+    "SCORCH_DECAL",
+    "FLOATING_DUST",
+    "ARC_SPARKS",
+    "SONAR_RIPPLES"
+  ],
+  "drone_modules": [
+    "NONE",
+    "CRYSTALLINE_HUM",
+    "SUB_VOID_RUMBLE",
+    "ARC_CRACKLE_HUM",
+    "HOLLOW_WIND",
+    "RESONANT_CHORD"
+  ],
+  "impact_modules": [
+    "NONE",
+    "ICE_LOCK_CRACK",
+    "TECTONIC_SLAM",
+    "THUNDER_CRACK",
+    "HARMONIC_DEFLECT",
+    "FROST_SHATTER",
+    "ETHER_PING"
+  ],
+  "sustain_loop_modules": [
+    "NONE",
+    "TENSE_WATER_STRAIN",
+    "SILENT_PRESSURE_HUM",
+    "SOFT_MIST_AMBIENCE",
+    "BARRIER_STRAIN_CHIME",
+    "ARC_HOLD_BUZZ"
+  ],
+  "artkit_state_defaults": {
+    "WATER|LIQUID|PATH_GRAPH": {
+      "contour_module": "BRANCH_TENDRIL",
+      "surface_module": "REFRACTIVE_LIQUID",
+      "secondary_modules": [
+        "VELOCITY_FOAM"
+      ]
+    },
+    "WATER|LIQUID|BODY": {
+      "contour_module": "SCULPTED_CORE",
+      "surface_module": "REFRACTIVE_LIQUID",
+      "secondary_modules": [
+        "VELOCITY_FOAM"
+      ]
+    },
+    "ICE|SOLID|BODY": {
+      "contour_module": "FACETED_PRISM",
+      "surface_module": "CRYSTALLINE_ICE",
+      "secondary_modules": [
+        "STRESS_CRACKS",
+        "FROST_CREEP_DECAL"
+      ]
+    },
+    "ICE|SOLID|PATH_GRAPH": {
+      "contour_module": "BRANCH_TENDRIL",
+      "surface_module": "CRYSTALLINE_ICE",
+      "secondary_modules": [
+        "FROST_CREEP_DECAL"
+      ]
+    },
+    "ICE|SOLID|SURFACE": {
+      "contour_module": "PLANAR_SIGIL",
+      "surface_module": "CRYSTALLINE_ICE",
+      "secondary_modules": [
+        "FROST_CREEP_DECAL"
+      ]
+    },
+    "FOG|GAS_MIST|REGION": {
+      "contour_module": "VOLUMETRIC_MIST",
+      "surface_module": "LIGHT_ABSORB_VOID",
+      "secondary_modules": [
+        "FLOATING_DUST"
+      ]
+    },
+    "FLAME|PLASMA|REGION": {
+      "contour_module": "VOLUMETRIC_MIST",
+      "surface_module": "THERMAL_EMBER",
+      "secondary_modules": [
+        "SCORCH_DECAL"
+      ]
+    },
+    "FLAME|PLASMA|BODY": {
+      "contour_module": "SCULPTED_CORE",
+      "surface_module": "THERMAL_EMBER",
+      "secondary_modules": [
+        "SCORCH_DECAL"
+      ]
+    },
+    "LIGHTNING_PLASMA|PLASMA|PATH_GRAPH": {
+      "contour_module": "BRANCH_TENDRIL",
+      "surface_module": "CONDUCTIVE_ARC",
+      "secondary_modules": [
+        "ARC_SPARKS",
+        "SCORCH_DECAL"
+      ]
+    },
+    "GRAVITY|REGION": {
+      "contour_module": "FIELD_AURA_RING",
+      "surface_module": "GRAVITY_DISTORTION",
+      "secondary_modules": [
+        "FLOATING_DUST",
+        "CRATER_DECAL"
+      ]
+    },
+    "HEAT_EXTRACTION|REGION": {
+      "contour_module": "FIELD_AURA_RING",
+      "surface_module": "THERMAL_FROST",
+      "secondary_modules": [
+        "FROST_CREEP_DECAL"
+      ]
+    },
+    "HEAT_INJECTION|REGION": {
+      "contour_module": "FIELD_AURA_RING",
+      "surface_module": "THERMAL_EMBER",
+      "secondary_modules": [
+        "SCORCH_DECAL"
+      ]
+    },
+    "LIGHT_ATTENUATION|REGION": {
+      "contour_module": "VOLUMETRIC_MIST",
+      "surface_module": "LIGHT_ABSORB_VOID",
+      "secondary_modules": [
+        "FLOATING_DUST"
+      ]
+    },
+    "ELECTRIC_POTENTIAL|REGION": {
+      "contour_module": "FIELD_AURA_RING",
+      "surface_module": "CONDUCTIVE_ARC",
+      "secondary_modules": [
+        "ARC_SPARKS"
+      ]
+    },
+    "SPATIAL_BARRIER|SURFACE": {
+      "contour_module": "PLANAR_SIGIL",
+      "surface_module": "RUNIC_BARRIER_GLASS",
+      "secondary_modules": [
+        "STRESS_CRACKS"
+      ]
+    }
+  },
+  "conditional_modules": [
+    {
+      "module": "SONAR_RIPPLES",
+      "requires": [
+        "active_information_link",
+        "actual_disturbance"
+      ],
+      "scope": "signal_direction_and_strength"
+    }
+  ]
+}

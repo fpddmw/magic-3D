@@ -1,0 +1,393 @@
+{
+  "execution_version": "0.2.2",
+  "mappings": [
+    {
+      "id": "map.solid",
+      "meaning": "实体组织、方向与承载",
+      "target": "ICE×BODY / SURFACE，受力与接触",
+      "status": "CONTRACT",
+      "gap": "阻力、切实支撑及受阻生长需专门验收"
+    },
+    {
+      "id": "map.path",
+      "meaning": "连续水材与接触牵引",
+      "target": "WATER×PATH_GRAPH，GRAPH_SUPPORT，DRIVE",
+      "status": "CONTRACT",
+      "gap": "受力路径断开后终止传力"
+    },
+    {
+      "id": "map.freeze",
+      "meaning": "在实际连续结构上相变",
+      "target": "PATH_GRAPH，TRANSFORM/PHASE_CHANGE，PATH_CONNECTIVITY",
+      "status": "PARTIAL",
+      "gap": "旧基准一复合刚体上限不代表相交部分语义焊接；冻后续费束缚缺支路"
+    },
+    {
+      "id": "map.mist",
+      "meaning": "双向遮蔽",
+      "target": "FOG×REGION，LIGHT_ATTENUATION",
+      "status": "CONTRACT",
+      "gap": "同一浓度更新敌我视线"
+    },
+    {
+      "id": "map.signal",
+      "meaning": "雾扰动的通路与反馈",
+      "target": "DISTURBANCE_TO_PERCEPTION",
+      "status": "PARTIAL",
+      "gap": "仅有雾信号基准；一般结构振动须补采样和材料图"
+    },
+    {
+      "id": "map.seal",
+      "meaning": "器物预存、受压与交付",
+      "target": "CONTACT_TO_TRIGGER，事件过程与预付储备",
+      "status": "PARTIAL",
+      "gap": "封存冰矛的推进与可交付载荷需单独绑定"
+    },
+    {
+      "id": "map.source",
+      "meaning": "来源与预付驱动分账",
+      "target": "WORLD_REF，TRANSFER，预付储备",
+      "status": "PARTIAL",
+      "gap": "跨场所流路、堵塞处理与两类消耗同时终止尚缺"
+    },
+    {
+      "id": "map.light",
+      "meaning": "独立显明",
+      "target": "LIGHT_EMISSION×REGION",
+      "status": "CONTRACT",
+      "gap": "须说明光学覆盖与实际照明的关系"
+    },
+    {
+      "id": "map.dark",
+      "meaning": "主动抑光",
+      "target": "LIGHT_ATTENUATION×REGION",
+      "status": "CONTRACT",
+      "gap": "视线变化不得包含额外感知"
+    },
+    {
+      "id": "map.heat",
+      "meaning": "温热作用",
+      "target": "HEAT_INJECTION×REGION",
+      "status": "CONTRACT",
+      "gap": "热交换去向与对象热态"
+    },
+    {
+      "id": "map.cool",
+      "meaning": "抽取热量",
+      "target": "HEAT_EXTRACTION×REGION",
+      "status": "CONTRACT",
+      "gap": "达到实际相变条件才结冰"
+    },
+    {
+      "id": "map.gravity",
+      "meaning": "域内引力驱动",
+      "target": "GRAVITY×REGION，方向与强度剖面",
+      "status": "CONTRACT",
+      "gap": "分别核对蓄能、抬升、向心与交付依据"
+    },
+    {
+      "id": "map.vibration",
+      "meaning": "实体振动感应",
+      "target": "INFORMATIONAL 设计方向",
+      "status": "DEFERRED",
+      "gap": "结构传播与接收器的信号模型"
+    },
+    {
+      "id": "map.time",
+      "meaning": "有限局部过程速率",
+      "target": "LOCAL_TIME_RATE×REGION",
+      "status": "DEFERRED",
+      "gap": "调度与冲突模型"
+    },
+    {
+      "id": "map.space",
+      "meaning": "高阶空间改写",
+      "target": "空间参照已有，折跃无已批准通用映射",
+      "status": "DEFERRED",
+      "gap": "路径、权限与代价均待裁决"
+    }
+  ],
+  "source_core_version": "0.1.2",
+  "projections": {
+    "space": [
+      {
+        "match": {
+          "support": "solid",
+          "layout": "tapered",
+          "distribution": "concentrated"
+        },
+        "emit": {
+          "carrier": "BODY",
+          "generator": "LANCE_PRISM"
+        }
+      },
+      {
+        "match": {
+          "support": "path",
+          "layout": "single",
+          "distribution": "continuous"
+        },
+        "emit": {
+          "carrier": "PATH_GRAPH",
+          "generator": "LINE_SEGMENT"
+        }
+      },
+      {
+        "match": {
+          "support": "path",
+          "layout": "interlaced",
+          "distribution": "continuous"
+        },
+        "emit": {
+          "carrier": "PATH_GRAPH",
+          "generator": "BRANCH_WEB"
+        }
+      },
+      {
+        "match": {
+          "support": "solid",
+          "layout": "sheet",
+          "distribution": "continuous"
+        },
+        "emit": {
+          "carrier": "BODY",
+          "generator": "SLAB_MONOLITH"
+        }
+      },
+      {
+        "match": {
+          "support": "surface",
+          "layout": "strip",
+          "distribution": "continuous"
+        },
+        "emit": {
+          "carrier": "SURFACE",
+          "generator": "SWEPT_STRIP"
+        }
+      },
+      {
+        "match": {
+          "support": "region",
+          "layout": "radial",
+          "distribution": "dispersed"
+        },
+        "emit": {
+          "carrier": "REGION",
+          "generator": "RADIAL_SPHERE"
+        }
+      },
+      {
+        "match": {
+          "support": "region",
+          "layout": "radial",
+          "distribution": "field"
+        },
+        "emit": {
+          "carrier": "REGION",
+          "generator": "RADIAL_SPHERE"
+        }
+      }
+    ],
+    "anchor": [
+      {
+        "match": "aim_point",
+        "emit": {
+          "spawn_anchor": "AIM_POINT"
+        }
+      },
+      {
+        "match": "caster_hand",
+        "emit": {
+          "spawn_anchor": "CASTER_HAND"
+        }
+      },
+      {
+        "match": "carrier_surface",
+        "emit": {
+          "spawn_anchor": "WORLD_REF"
+        }
+      },
+      {
+        "match": "water_source",
+        "emit": {
+          "spawn_anchor": "WORLD_REF"
+        }
+      },
+      {
+        "match": "support_contact",
+        "emit": {
+          "spawn_anchor": "AUTO_SUPPORT_SURFACE"
+        }
+      },
+      {
+        "match": "site",
+        "emit": {
+          "spawn_anchor": "WORLD_POINT"
+        }
+      }
+    ],
+    "direction": [
+      {
+        "match": {
+          "frame": "world",
+          "axis": "up"
+        },
+        "emit": {
+          "mode": "WORLD_AXIS",
+          "axis": "UP"
+        }
+      },
+      {
+        "match": {
+          "frame": "world",
+          "axis": "down"
+        },
+        "emit": {
+          "mode": "WORLD_AXIS",
+          "axis": "DOWN"
+        }
+      },
+      {
+        "match": {
+          "frame": "aim",
+          "axis": "forward"
+        },
+        "emit": {
+          "mode": "FRAME_RELATIVE",
+          "axis": "AIM_FORWARD"
+        }
+      },
+      {
+        "match": {
+          "frame": "surface",
+          "axis": "normal"
+        },
+        "emit": {
+          "mode": "FRAME_RELATIVE",
+          "axis": "SURFACE_NORMAL"
+        }
+      }
+    ],
+    "profile": [
+      {
+        "operation": "Transfer",
+        "match": "over_time",
+        "emit": {
+          "op": "TRANSFER"
+        },
+        "required_parameters": [
+          "source_ref",
+          "target_subject_id",
+          "resource_kind",
+          "rate_per_s",
+          "max_amount",
+          "on_insufficient_source"
+        ]
+      },
+      {
+        "operation": "Drive",
+        "match": "short_impulse",
+        "emit": {
+          "op": "DRIVE",
+          "mode": "IMPULSE",
+          "profile": "INSTANT_BURST"
+        }
+      }
+    ],
+    "propagation": [
+      {
+        "operation": "Transform",
+        "effect": "原位转固",
+        "match": {
+          "channel": "material_continuity",
+          "origin": "support_contact",
+          "topology": "realized_live",
+          "missing_origin": "abort_delivery"
+        },
+        "emit": {
+          "op": "TRANSFORM",
+          "transform_id": "PHASE_CHANGE",
+          "target_phase": "SOLID",
+          "preserve": [
+            "MASS",
+            "MOMENTUM",
+            "TOPOLOGY",
+            "POSITION"
+          ],
+          "propagation": {
+            "domain": "PATH_CONNECTIVITY",
+            "origin_ref": "TARGET:SURFACE",
+            "connectivity_policy": "LIVE_CONNECTIVITY",
+            "on_missing_origin": "ABORT_NO_COST"
+          }
+        },
+        "required_parameters": [
+          "speed_m_s",
+          "max_reach_m",
+          "attenuation",
+          "max_hops"
+        ],
+        "origin_binding": {
+          "execution_ref": "TARGET:SURFACE",
+          "material_ref": "material",
+          "lookup": "support_contact",
+          "cardinality": "one",
+          "on_unresolved": "ABORT_NO_COST"
+        }
+      }
+    ],
+    "traversal": {
+      "domain": "PATH_CONNECTIVITY",
+      "connectivity_policy": "LIVE_CONNECTIVITY",
+      "edge_kind": "material_continuity",
+      "edge_state": "intact",
+      "vertex_state": "liquid",
+      "read_at": "frontier_step",
+      "missing_origin": "ABORT_NO_COST"
+    },
+    "delivery": [
+      {
+        "operation": "Drive",
+        "effect": "定向加速度",
+        "match": "short_impulse",
+        "emit": {
+          "channel": "VELOCITY_IMPULSE"
+        }
+      }
+    ],
+    "subjects": {
+      "重力": {
+        "field_channel": "GRAVITY"
+      },
+      "光": {
+        "field_channel": "LIGHT_EMISSION"
+      },
+      "暗": {
+        "field_channel": "LIGHT_ATTENUATION"
+      },
+      "热作用": {
+        "field_channel": "HEAT_INJECTION"
+      },
+      "抽热": {
+        "field_channel": "HEAT_EXTRACTION"
+      },
+      "水": {
+        "material_id": "WATER",
+        "initial_phase": "LIQUID"
+      },
+      "冰": {
+        "material_id": "ICE",
+        "initial_phase": "SOLID"
+      },
+      "雾": {
+        "material_id": "FOG",
+        "initial_phase": "GAS_MIST"
+      }
+    },
+    "expression_for_effect": {
+      "定向加速度": "expr.load_delivery",
+      "原位转固": "expr.phase_front",
+      "传递实际信号": "expr.signal_arrival"
+    }
+  }
+}

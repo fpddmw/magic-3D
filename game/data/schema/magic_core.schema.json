@@ -1,0 +1,1705 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:city-fates:magic-core:0.1.2",
+  "title": "Magic Core 语义图、干预契约与版本化参考构筑",
+  "type": "array",
+  "items": {
+    "$ref": "#/$defs/Case"
+  },
+  "minItems": 1,
+  "$defs": {
+    "Versions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "core",
+        "semantics",
+        "execution",
+        "artkit"
+      ],
+      "properties": {
+        "core": {
+          "type": "string",
+          "pattern": "^[0-9]+[.][0-9]+[.][0-9]+$"
+        },
+        "semantics": {
+          "type": "string",
+          "pattern": "^[0-9]+[.][0-9]+[.][0-9]+$"
+        },
+        "execution": {
+          "type": "string",
+          "pattern": "^[0-9]+[.][0-9]+[.][0-9]+$"
+        },
+        "artkit": {
+          "type": "string",
+          "pattern": "^[0-9]+[.][0-9]+[.][0-9]+$"
+        }
+      }
+    },
+    "SemanticGraph": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "form",
+          "scope",
+          "inputs",
+          "words"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^n[1-9][0-9]*$"
+          },
+          "form": {
+            "enum": [
+              "共同限定",
+              "修饰",
+              "构成",
+              "接续",
+              "阶段",
+              "共享引用"
+            ]
+          },
+          "scope": {
+            "type": "string",
+            "minLength": 1
+          },
+          "inputs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^n[1-9][0-9]*$"
+            },
+            "minItems": 0,
+            "uniqueItems": true
+          },
+          "words": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1
+          },
+          "aspect_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "operands": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/WordOperand"
+            },
+            "minItems": 1
+          },
+          "intents": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/IntentChoice"
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          }
+        }
+      },
+      "minItems": 1
+    },
+    "CompileTrace": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "node",
+          "senses",
+          "outputs",
+          "because",
+          "rule_id"
+        ],
+        "properties": {
+          "node": {
+            "type": "string",
+            "pattern": "^n[1-9][0-9]*$"
+          },
+          "senses": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1
+          },
+          "outputs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_]*$"
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          },
+          "because": {
+            "type": "string",
+            "minLength": 1
+          },
+          "rule_id": {
+            "type": "string",
+            "pattern": "^G[.][a-z]+$"
+          }
+        }
+      },
+      "minItems": 1
+    },
+    "Lowering": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "binding",
+        "legacy_example",
+        "gap",
+        "execution_refs"
+      ],
+      "properties": {
+        "binding": {
+          "type": "string",
+          "minLength": 1
+        },
+        "legacy_example": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "pattern": "^case[a-z0-9_]+[.]json$"
+            }
+          ]
+        },
+        "gap": {
+          "type": "string",
+          "minLength": 1
+        },
+        "execution_refs": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]*$"
+          },
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_]*$"
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          }
+        }
+      }
+    },
+    "Case": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name",
+        "versions",
+        "graph",
+        "core",
+        "trace",
+        "lowering"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Z][0-9]{2,3}$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "versions": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Versions"
+            },
+            {
+              "properties": {
+                "core": {
+                  "enum": [
+                    "0.1.0",
+                    "0.1.1",
+                    "0.1.2"
+                  ]
+                },
+                "semantics": {
+                  "enum": [
+                    "0.1.0",
+                    "0.1.1"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "graph": {
+          "$ref": "#/$defs/SemanticGraph"
+        },
+        "core": {
+          "$ref": "#/$defs/CoreFields"
+        },
+        "trace": {
+          "$ref": "#/$defs/CompileTrace"
+        },
+        "lowering": {
+          "$ref": "#/$defs/Lowering"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "versions": {
+                "properties": {
+                  "core": {
+                    "enum": [
+                      "0.1.1",
+                      "0.1.2"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "versions": {
+                "properties": {
+                  "semantics": {
+                    "const": "0.1.1"
+                  }
+                }
+              },
+              "graph": {
+                "items": {
+                  "required": [
+                    "operands"
+                  ]
+                }
+              },
+              "core": {
+                "required": [
+                  "obligations"
+                ],
+                "properties": {
+                  "processes": {
+                    "items": {
+                      "allOf": [
+                        {
+                          "if": {
+                            "properties": {
+                              "effects": {
+                                "contains": {
+                                  "const": "定向加速度"
+                                }
+                              }
+                            }
+                          },
+                          "then": {
+                            "required": [
+                              "direction",
+                              "profile",
+                              "intent_ref"
+                            ]
+                          }
+                        },
+                        {
+                          "if": {
+                            "required": [
+                              "propagation"
+                            ]
+                          },
+                          "then": {
+                            "properties": {
+                              "operation": {
+                                "enum": [
+                                  "Transform",
+                                  "Drive",
+                                  "Transfer"
+                                ]
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "versions": {
+                "properties": {
+                  "semantics": {
+                    "const": "0.1.0"
+                  }
+                }
+              },
+              "graph": {
+                "items": {
+                  "not": {
+                    "anyOf": [
+                      {
+                        "required": [
+                          "intents"
+                        ]
+                      },
+                      {
+                        "required": [
+                          "operands"
+                        ]
+                      }
+                    ]
+                  }
+                }
+              },
+              "core": {
+                "not": {
+                  "required": [
+                    "obligations"
+                  ]
+                },
+                "properties": {
+                  "subjects": {
+                    "items": {
+                      "not": {
+                        "anyOf": [
+                          {
+                            "required": [
+                              "spatial_intent"
+                            ]
+                          },
+                          {
+                            "required": [
+                              "intent_ref"
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "processes": {
+                    "items": {
+                      "not": {
+                        "anyOf": [
+                          {
+                            "required": [
+                              "direction"
+                            ]
+                          },
+                          {
+                            "required": [
+                              "profile"
+                            ]
+                          },
+                          {
+                            "required": [
+                              "propagation"
+                            ]
+                          },
+                          {
+                            "required": [
+                              "intent_ref"
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "versions": {
+                "properties": {
+                  "core": {
+                    "const": "0.1.2"
+                  }
+                }
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "core": {
+                "$ref": "#/$defs/MagicCore"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "core": {
+                "$ref": "#/$defs/LegacyMagicCore"
+              },
+              "graph": {
+                "items": {
+                  "properties": {
+                    "intents": {
+                      "items": {
+                        "not": {
+                          "required": [
+                            "intervention"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "WordOperand": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "reuse"
+          ],
+          "properties": {
+            "reuse": {
+              "type": "string",
+              "pattern": "^n[1-9][0-9]*:(0|[1-9][0-9]*)$"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "reads"
+          ],
+          "properties": {
+            "type": {
+              "enum": [
+                "Concept",
+                "Entity",
+                "Aspect",
+                "Relation",
+                "Process"
+              ]
+            },
+            "reads": {
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^[a-z]+[.][a-z_]+([.][a-z_]+)?$"
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^n[1-9][0-9]*:(0|[1-9][0-9]*)$"
+                  }
+                ]
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "subject": {
+              "type": "string",
+              "pattern": "^v[1-9][0-9]*$"
+            }
+          }
+        }
+      ]
+    },
+    "SpatialIntent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "support",
+        "layout",
+        "distribution",
+        "anchor"
+      ],
+      "properties": {
+        "support": {
+          "enum": [
+            "solid",
+            "path",
+            "surface",
+            "region"
+          ]
+        },
+        "layout": {
+          "enum": [
+            "tapered",
+            "single",
+            "interlaced",
+            "sheet",
+            "strip",
+            "radial"
+          ]
+        },
+        "distribution": {
+          "enum": [
+            "dispersed",
+            "continuous",
+            "field",
+            "concentrated"
+          ]
+        },
+        "anchor": {
+          "enum": [
+            "aim_point",
+            "caster_hand",
+            "carrier_surface",
+            "water_source",
+            "support_contact",
+            "site"
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "properties": {
+            "support": {
+              "const": "solid"
+            },
+            "layout": {
+              "const": "tapered"
+            },
+            "distribution": {
+              "const": "concentrated"
+            }
+          }
+        },
+        {
+          "properties": {
+            "support": {
+              "const": "path"
+            },
+            "layout": {
+              "const": "single"
+            },
+            "distribution": {
+              "const": "continuous"
+            }
+          }
+        },
+        {
+          "properties": {
+            "support": {
+              "const": "path"
+            },
+            "layout": {
+              "const": "interlaced"
+            },
+            "distribution": {
+              "const": "continuous"
+            }
+          }
+        },
+        {
+          "properties": {
+            "support": {
+              "const": "solid"
+            },
+            "layout": {
+              "const": "sheet"
+            },
+            "distribution": {
+              "const": "continuous"
+            }
+          }
+        },
+        {
+          "properties": {
+            "support": {
+              "const": "surface"
+            },
+            "layout": {
+              "const": "strip"
+            },
+            "distribution": {
+              "const": "continuous"
+            }
+          }
+        },
+        {
+          "properties": {
+            "support": {
+              "const": "region"
+            },
+            "layout": {
+              "const": "radial"
+            },
+            "distribution": {
+              "const": "dispersed"
+            }
+          }
+        },
+        {
+          "properties": {
+            "support": {
+              "const": "region"
+            },
+            "layout": {
+              "const": "radial"
+            },
+            "distribution": {
+              "const": "field"
+            }
+          }
+        }
+      ]
+    },
+    "Direction": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "frame",
+            "axis"
+          ],
+          "properties": {
+            "frame": {
+              "const": "world"
+            },
+            "axis": {
+              "enum": [
+                "up",
+                "down"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "frame",
+            "axis"
+          ],
+          "properties": {
+            "frame": {
+              "const": "aim"
+            },
+            "axis": {
+              "enum": [
+                "forward"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "frame",
+            "axis"
+          ],
+          "properties": {
+            "frame": {
+              "const": "surface"
+            },
+            "axis": {
+              "enum": [
+                "normal"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "PropagationIntent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "channel",
+        "origin",
+        "topology",
+        "missing_origin",
+        "material"
+      ],
+      "properties": {
+        "channel": {
+          "const": "material_continuity"
+        },
+        "origin": {
+          "const": "support_contact"
+        },
+        "topology": {
+          "const": "realized_live"
+        },
+        "missing_origin": {
+          "const": "abort_delivery"
+        },
+        "material": {
+          "type": "string",
+          "pattern": "^v[1-9][0-9]*$"
+        }
+      }
+    },
+    "IntentChoice": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "ref",
+            "space"
+          ],
+          "properties": {
+            "ref": {
+              "type": "string",
+              "pattern": "^v[1-9][0-9]*$"
+            },
+            "space": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "organization",
+                "anchor"
+              ],
+              "properties": {
+                "organization": {
+                  "enum": [
+                    "tapered_mass",
+                    "continuous_strand",
+                    "interlaced_strands",
+                    "supported_sheet",
+                    "spread_course",
+                    "radial_dispersion",
+                    "radial_region"
+                  ]
+                },
+                "anchor": {
+                  "enum": [
+                    "aim_point",
+                    "caster_hand",
+                    "carrier_surface",
+                    "water_source",
+                    "support_contact",
+                    "site"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "ref"
+          ],
+          "properties": {
+            "ref": {
+              "type": "string",
+              "pattern": "^v[1-9][0-9]*$"
+            },
+            "profile": {
+              "enum": [
+                "accumulate",
+                "brief"
+              ]
+            },
+            "direction": {
+              "$ref": "#/$defs/Direction"
+            },
+            "material": {
+              "type": "string",
+              "pattern": "^v[1-9][0-9]*$"
+            },
+            "propagate": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "via",
+                "start",
+                "sampling",
+                "missing"
+              ],
+              "properties": {
+                "via": {
+                  "const": "continuous_material"
+                },
+                "start": {
+                  "const": "support_contact"
+                },
+                "sampling": {
+                  "const": "live"
+                },
+                "missing": {
+                  "const": "abort_delivery"
+                }
+              }
+            },
+            "event": {
+              "enum": [
+                "during_hold",
+                "voluntary_release",
+                "interruption"
+              ]
+            },
+            "action": {
+              "const": "end_control"
+            },
+            "intervention": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [],
+              "properties": {
+                "mode": {
+                  "enum": [
+                    "具现",
+                    "调动",
+                    "重构",
+                    "赋予",
+                    "干涉"
+                  ]
+                },
+                "target": {
+                  "$ref": "#/$defs/InterventionTarget"
+                },
+                "permission": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9_]*[.][a-z][a-z0-9_]*$"
+                },
+                "scope": {
+                  "$ref": "#/$defs/InterventionScope"
+                },
+                "responsibility": {
+                  "$ref": "#/$defs/Responsibility"
+                }
+              },
+              "minProperties": 1
+            }
+          },
+          "anyOf": [
+            {
+              "required": [
+                "profile"
+              ]
+            },
+            {
+              "required": [
+                "direction"
+              ]
+            },
+            {
+              "required": [
+                "propagate"
+              ]
+            },
+            {
+              "required": [
+                "action"
+              ]
+            }
+          ],
+          "dependentRequired": {
+            "material": [
+              "propagate"
+            ],
+            "propagate": [
+              "material",
+              "event"
+            ],
+            "profile": [
+              "event"
+            ],
+            "action": [
+              "event"
+            ]
+          }
+        }
+      ]
+    },
+    "InterventionTarget": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "ref",
+            "facet"
+          ],
+          "properties": {
+            "kind": {
+              "enum": [
+                "subject",
+                "relation"
+              ]
+            },
+            "ref": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_]*$"
+            },
+            "facet": {
+              "enum": [
+                "content",
+                "spatial_organization",
+                "relation",
+                "sustaining_condition",
+                "effect"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "ref",
+            "facet"
+          ],
+          "properties": {
+            "kind": {
+              "const": "account"
+            },
+            "ref": {
+              "const": "@reserve"
+            },
+            "facet": {
+              "const": "reserve"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "instance_ref",
+            "member_ref",
+            "facet"
+          ],
+          "properties": {
+            "kind": {
+              "const": "active_magic"
+            },
+            "instance_ref": {
+              "const": "@target"
+            },
+            "member_ref": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_]*$"
+            },
+            "facet": {
+              "enum": [
+                "content",
+                "spatial_organization",
+                "relation",
+                "sustaining_condition",
+                "effect"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "InterventionScope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "ref"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "in_region",
+            "account",
+            "reachable_source",
+            "subject_space",
+            "connected_material",
+            "contact",
+            "relation_endpoints",
+            "existing_support"
+          ]
+        },
+        "ref": {
+          "type": "string",
+          "pattern": "^(@(source|reserve)|v[1-9][0-9]*|[a-z][a-z0-9_]*)$"
+        }
+      }
+    },
+    "SupplySource": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "mode",
+            "provider_ref"
+          ],
+          "properties": {
+            "mode": {
+              "const": "active"
+            },
+            "provider_ref": {
+              "const": "@caster"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "mode",
+            "provider_ref",
+            "reserve_ref"
+          ],
+          "properties": {
+            "mode": {
+              "const": "hosted"
+            },
+            "provider_ref": {
+              "enum": [
+                "@vessel",
+                "@site"
+              ]
+            },
+            "reserve_ref": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_]*$"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "mode",
+            "provider_ref",
+            "relation_ref"
+          ],
+          "properties": {
+            "mode": {
+              "const": "external"
+            },
+            "provider_ref": {
+              "const": "@source"
+            },
+            "relation_ref": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_]*$"
+            }
+          }
+        }
+      ]
+    },
+    "Responsibility": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "tenure",
+            "source",
+            "conditions",
+            "on_end"
+          ],
+          "properties": {
+            "tenure": {
+              "enum": [
+                "upfront",
+                "active",
+                "prepaid"
+              ]
+            },
+            "source": {
+              "$ref": "#/$defs/SupplySource"
+            },
+            "conditions": {
+              "$ref": "#/$defs/InterventionConditions"
+            },
+            "on_end": {
+              "const": "preserve_realized"
+            },
+            "account_ref": {
+              "const": "@reserve"
+            }
+          },
+          "if": {
+            "properties": {
+              "tenure": {
+                "const": "prepaid"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "account_ref"
+            ]
+          },
+          "else": {
+            "not": {
+              "required": [
+                "account_ref"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "tenure",
+            "from_processes",
+            "conditions",
+            "on_end"
+          ],
+          "properties": {
+            "tenure": {
+              "enum": [
+                "inherited",
+                "ending"
+              ]
+            },
+            "from_processes": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_]*$"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "conditions": {
+              "$ref": "#/$defs/InterventionConditions"
+            },
+            "on_end": {
+              "const": "preserve_realized"
+            }
+          }
+        }
+      ]
+    },
+    "Intervention": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "target",
+        "basis",
+        "scope",
+        "responsibility"
+      ],
+      "properties": {
+        "mode": {
+          "enum": [
+            "具现",
+            "调动",
+            "重构",
+            "赋予",
+            "干涉"
+          ]
+        },
+        "target": {
+          "$ref": "#/$defs/InterventionTarget"
+        },
+        "basis": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "permission",
+            "terms",
+            "medium",
+            "site_conditions"
+          ],
+          "properties": {
+            "permission": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_]*[.][a-z][a-z0-9_]*$"
+            },
+            "terms": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^n[1-9][0-9]*:(0|[1-9][0-9]*)$"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "medium": {
+              "enum": [
+                "implicit",
+                "explicit"
+              ]
+            },
+            "site_conditions": {
+              "$ref": "#/$defs/InterventionConditions"
+            }
+          }
+        },
+        "scope": {
+          "$ref": "#/$defs/InterventionScope"
+        },
+        "responsibility": {
+          "$ref": "#/$defs/Responsibility"
+        }
+      }
+    },
+    "CoreFields": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "concepts",
+        "subjects",
+        "relations",
+        "processes",
+        "contract"
+      ],
+      "properties": {
+        "concepts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "concept"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_]*$"
+              },
+              "concept": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "minItems": 1
+        },
+        "subjects": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "concept_ref",
+              "source",
+              "binding",
+              "source_ref"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_]*$"
+              },
+              "concept_ref": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_]*$"
+              },
+              "source": {
+                "enum": [
+                  "Manifest",
+                  "Borrow",
+                  "Reference",
+                  "Transform"
+                ]
+              },
+              "binding": {
+                "type": "string",
+                "minLength": 1
+              },
+              "source_ref": {
+                "oneOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9_]*$"
+                  },
+                  {
+                    "enum": [
+                      "@caster",
+                      "@target",
+                      "@support",
+                      "@observer",
+                      "@vessel",
+                      "@source",
+                      "@reserve",
+                      "@site"
+                    ]
+                  }
+                ]
+              },
+              "intent_ref": {
+                "type": "string",
+                "pattern": "^v[1-9][0-9]*$"
+              },
+              "spatial_intent": {
+                "$ref": "#/$defs/SpatialIntent"
+              }
+            },
+            "dependentRequired": {
+              "spatial_intent": [
+                "intent_ref"
+              ],
+              "intent_ref": [
+                "spatial_intent"
+              ]
+            }
+          },
+          "minItems": 0
+        },
+        "relations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "from",
+              "to",
+              "channel",
+              "condition"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_]*$"
+              },
+              "from": {
+                "oneOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9_]*$"
+                  },
+                  {
+                    "enum": [
+                      "@caster",
+                      "@target",
+                      "@support",
+                      "@observer",
+                      "@vessel",
+                      "@source",
+                      "@reserve",
+                      "@site"
+                    ]
+                  }
+                ]
+              },
+              "to": {
+                "oneOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9_]*$"
+                  },
+                  {
+                    "enum": [
+                      "@caster",
+                      "@target",
+                      "@support",
+                      "@observer",
+                      "@vessel",
+                      "@source",
+                      "@reserve",
+                      "@site"
+                    ]
+                  }
+                ]
+              },
+              "channel": {
+                "enum": [
+                  "光学",
+                  "热",
+                  "力学",
+                  "结构",
+                  "信息",
+                  "材料",
+                  "事件",
+                  "寄托",
+                  "供能",
+                  "空间",
+                  "时间"
+                ]
+              },
+              "condition": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "minItems": 0
+        },
+        "processes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "when",
+              "operation",
+              "target",
+              "after",
+              "condition",
+              "result",
+              "requires_all",
+              "effects"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_]*$"
+              },
+              "when": {
+                "enum": [
+                  "on_cast",
+                  "on_release",
+                  "while_held",
+                  "while_supplied",
+                  "on_interrupt",
+                  "on_ready",
+                  "on_signal",
+                  "on_contact",
+                  "on_completion",
+                  "on_supply_end",
+                  "on_carrier_loss"
+                ]
+              },
+              "operation": {
+                "enum": [
+                  "Establish",
+                  "Drive",
+                  "Constrain",
+                  "Transform",
+                  "Transfer",
+                  "Couple",
+                  "Withdraw"
+                ]
+              },
+              "target": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_]*$"
+              },
+              "after": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9_]*$"
+                },
+                "minItems": 0,
+                "uniqueItems": true
+              },
+              "condition": {
+                "type": "string",
+                "minLength": 1
+              },
+              "result": {
+                "type": "string",
+                "minLength": 1
+              },
+              "requires_all": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 1,
+                "uniqueItems": true
+              },
+              "effects": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 1,
+                "uniqueItems": true
+              },
+              "intent_ref": {
+                "type": "string",
+                "pattern": "^v[1-9][0-9]*$"
+              },
+              "direction": {
+                "$ref": "#/$defs/Direction"
+              },
+              "profile": {
+                "enum": [
+                  "over_time",
+                  "short_impulse"
+                ]
+              },
+              "propagation": {
+                "$ref": "#/$defs/PropagationIntent"
+              },
+              "intervention": {
+                "$ref": "#/$defs/Intervention"
+              }
+            },
+            "dependentRequired": {
+              "direction": [
+                "intent_ref"
+              ],
+              "profile": [
+                "intent_ref"
+              ],
+              "propagation": [
+                "intent_ref"
+              ]
+            }
+          },
+          "minItems": 0
+        },
+        "contract": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "formation",
+            "control",
+            "supply",
+            "owner",
+            "on_release",
+            "on_interrupt"
+          ],
+          "properties": {
+            "formation": {
+              "enum": [
+                "一次成形",
+                "持续塑造",
+                "寄托建立"
+              ]
+            },
+            "control": {
+              "enum": [
+                "预定",
+                "引导",
+                "条件回应"
+              ]
+            },
+            "supply": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "即时",
+                  "持续",
+                  "预付",
+                  "环境"
+                ]
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "owner": {
+              "enum": [
+                "施法者",
+                "独立现象",
+                "器物",
+                "场所"
+              ]
+            },
+            "on_release": {
+              "type": "string",
+              "minLength": 1
+            },
+            "on_interrupt": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "obligations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "term",
+              "at_use"
+            ],
+            "properties": {
+              "term": {
+                "type": "string",
+                "pattern": "^n[1-9][0-9]*:(0|[1-9][0-9]*)$"
+              },
+              "at_use": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[a-z_]+$"
+                },
+                "minItems": 1,
+                "uniqueItems": true
+              }
+            }
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        }
+      }
+    },
+    "MagicCore": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/CoreFields"
+        },
+        {
+          "required": [
+            "obligations"
+          ],
+          "properties": {
+            "processes": {
+              "items": {
+                "required": [
+                  "intervention"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "LegacyMagicCore": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/CoreFields"
+        },
+        {
+          "properties": {
+            "processes": {
+              "items": {
+                "not": {
+                  "required": [
+                    "intervention"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "InterventionConditions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    }
+  }
+}

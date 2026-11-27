@@ -1,0 +1,135 @@
+{
+  "execution_version": "0.2.2",
+  "hard_limits": {
+    "max_subjects": 8,
+    "max_spatials": 8,
+    "max_relations": 12,
+    "max_processes": 8,
+    "max_entry_processes": 4,
+    "max_dynamic_bodies_per_spell": 16,
+    "max_global_dynamic_bodies": 64,
+    "max_path_nodes": 16,
+    "max_path_edges": 24,
+    "max_surface_quads": 64,
+    "max_point_lights": 3,
+    "max_deflect_iterations_per_node": 2,
+    "min_rebind_cooldown_s": 0.05,
+    "max_propagate_hops": 12,
+    "max_propagate_reach_m": 30.0,
+    "max_pre_delivery_silence_ms": 120,
+    "max_hitstop_local_ms": 140,
+    "max_active_duration_s": 30.0,
+    "max_upfront_mana": 300.0,
+    "max_sustain_mana_per_s": 60.0,
+    "max_reserve_mana": 200.0,
+    "max_tick_cost_us": 300
+  },
+  "process_graph_rules": {
+    "require_dag": true,
+    "require_global_unique_handle_ids": true,
+    "require_linear_handle_ownership": true,
+    "forbid_parallel_exclusive_handle_duplication": true,
+    "establish_allowed_phases": [
+      "on_enter"
+    ],
+    "impulse_allowed_phases": [
+      "on_enter",
+      "on_exit"
+    ],
+    "propagation_allowed_ops": [
+      "TRANSFORM",
+      "DRIVE",
+      "TRANSFER"
+    ],
+    "require_spatial_for_subject_kinds": [
+      "MATERIAL",
+      "FIELD"
+    ]
+  },
+  "material_valid_initial_phases": {
+    "WATER": [
+      "LIQUID"
+    ],
+    "ICE": [
+      "SOLID"
+    ],
+    "STONE": [
+      "SOLID"
+    ],
+    "METAL": [
+      "SOLID"
+    ],
+    "FOG": [
+      "GAS_MIST"
+    ],
+    "FLAME": [
+      "PLASMA"
+    ],
+    "ASH": [
+      "SOLID",
+      "GAS_MIST"
+    ],
+    "LIGHTNING_PLASMA": [
+      "PLASMA"
+    ],
+    "VITAL_SPORE": [
+      "SOLID",
+      "GAS_MIST"
+    ]
+  },
+  "capability_matrix": {
+    "material_x_carrier": {
+      "WATER|BODY": "SUPPORTED",
+      "WATER|PATH_GRAPH": "SUPPORTED",
+      "WATER|SURFACE": "PLANNED",
+      "WATER|REGION": "LIMITED",
+      "ICE|BODY": "SUPPORTED",
+      "ICE|PATH_GRAPH": "LIMITED",
+      "ICE|SURFACE": "SUPPORTED",
+      "ICE|REGION": "PLANNED",
+      "FOG|BODY": "PLANNED",
+      "FOG|PATH_GRAPH": "LIMITED",
+      "FOG|SURFACE": "PLANNED",
+      "FOG|REGION": "SUPPORTED",
+      "LIGHTNING_PLASMA|BODY": "PLANNED",
+      "LIGHTNING_PLASMA|PATH_GRAPH": "SUPPORTED",
+      "LIGHTNING_PLASMA|SURFACE": "PLANNED",
+      "LIGHTNING_PLASMA|REGION": "LIMITED",
+      "FLAME|BODY": "LIMITED",
+      "FLAME|PATH_GRAPH": "PLANNED",
+      "FLAME|SURFACE": "PLANNED",
+      "FLAME|REGION": "LIMITED",
+      "STONE|BODY": "SUPPORTED",
+      "STONE|PATH_GRAPH": "PLANNED",
+      "STONE|SURFACE": "LIMITED",
+      "STONE|REGION": "PLANNED",
+      "METAL|BODY": "SUPPORTED",
+      "METAL|PATH_GRAPH": "PLANNED",
+      "METAL|SURFACE": "LIMITED",
+      "METAL|REGION": "PLANNED",
+      "ASH|REGION": "LIMITED",
+      "VITAL_SPORE|REGION": "PLANNED"
+    },
+    "field_x_carrier": {
+      "GRAVITY|REGION": "SUPPORTED",
+      "HEAT_EXTRACTION|REGION": "SUPPORTED",
+      "HEAT_INJECTION|REGION": "SUPPORTED",
+      "LIGHT_EMISSION|REGION": "SUPPORTED",
+      "LIGHT_ATTENUATION|REGION": "SUPPORTED",
+      "WIND_FORCE|REGION": "SUPPORTED",
+      "ELECTRIC_POTENTIAL|REGION": "SUPPORTED",
+      "ELECTRIC_POTENTIAL|PATH_GRAPH": "LIMITED",
+      "SPATIAL_BARRIER|SURFACE": "SUPPORTED",
+      "SPATIAL_BARRIER|REGION": "PLANNED",
+      "LOCAL_TIME_RATE|REGION": "PLANNED",
+      "VITAL_FLUX|REGION": "PLANNED"
+    },
+    "limited_conditions": {
+      "WATER_TO_ICE_MAX_OUTPUT_BODIES": 16,
+      "ICE_PATH_GRAPH_MAX_NODES": 16,
+      "SPATIAL_BARRIER_REQUIRED_CARRIER": "SURFACE",
+      "PROPAGATE_MAX_HOPS": 12,
+      "PROPAGATE_MAX_REACH_M": 30.0
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "core_version": "0.1.2",
+  "decisions": [
+    {"id":"D01","status":"BASELINE","decision":"合法解释以公理及作用对象为依据，工程能力另行判定","concepts":["以太","水"],"senses":["以太.指称","借用.取材"],"rules":["AX.aether","AX.cost"],"examples":["M003","M015"],"vectors":["S16","S17"],"migration":"冻结旧执行样例的解释版本"},
+    {"id":"D02","status":"BASELINE","decision":"54 枚词按旧 48 加光、电、时、空、生、重力；界保留为关系概念","concepts":["光","电","时","空","生","重力","界"],"senses":["空.指称","重力.指称"],"rules":["AX.relation"],"examples":["L05"],"vectors":["S15"],"migration":"旧重归入重力；旧界逐例审查边界、屏障权限，不能批量改字"},
+    {"id":"D03","status":"BASELINE","decision":"符文知识可以多处引用，实际作用逐实例计费","concepts":["水"],"senses":["牵引.拉动","凝固.相变"],"rules":["AX.cost"],"examples":["M009","M020"],"vectors":["S20"],"migration":"弃用同名只投入一次的语义限制"},
+    {"id":"D04","status":"BASELINE","decision":"概念推导和现场变化分开，状态与关系按有效性继承","concepts":["冰","雾"],"senses":["凝固.构成","凝固.相变","交织.交错"],"rules":["AX.nature","AX.change","AX.cause"],"examples":["M007","M009"],"vectors":["S03","S04","S08"],"migration":"旧网的相交边不得直接生成刚性焊点"},
+    {"id":"D05","status":"BASELINE","decision":"集中组织、空间汇聚、时间积蓄分别取得依据","concepts":["重力"],"senses":["凝聚.结合","汇聚.趋近","爆发.集中交付"],"rules":["AX.organization","AX.cost"],"examples":["L05"],"vectors":["S13"],"migration":"储备来自有时间与供给的过程"},
+    {"id":"D06","status":"BASELINE","decision":"光学、热流反转各自有域；撤去主动作用须有原因","concepts":["火","光","暗","抽热"],"senses":["反转.光学","反转.热流"],"rules":["AX.aspect","AX.cause"],"examples":["L01","L02","L03","L04"],"vectors":["S06","S14"],"migration":"旧构筑升级须保留原所指和结束条件"},
+    {"id":"D07","status":"BASELINE","decision":"封存储备、推进能力与贯入作用分别取证","concepts":["冰"],"senses":["封存.限制","排斥.推动","穿透.贯入"],"rules":["AX.cost"],"examples":["M001","M017"],"vectors":["S09"],"migration":"把待发与可发的构筑分开"},
+    {"id":"D08","status":"SUPERSEDED","decision":"旧规则把以太等同魔力、限定同名符文单次出现","concepts":["以太"],"senses":["以太.指称"],"rules":["AX.aether"],"examples":["M020"],"vectors":["S20"],"migration":"由 D01、D03 替代，历史原文保留"},
+    {"id":"D09","status":"PROPOSED","decision":"何种性质可进一步独立或跨本体赋予，认知怎样获得干预许可","concepts":["火","光"],"senses":["分离.抽离"],"rules":["AX.aspect"],"examples":["L01","L03"],"vectors":["S10"],"migration":"仅启用已登记的光、热等用例"},
+    {"id":"D10","status":"DEFERRED","decision":"活性、人格连续性与灵的高阶干预","concepts":["生命","灵","生"],"senses":["生.指称","离体.脱离"],"rules":["AX.nature"],"examples":["M015"],"vectors":["S18"],"migration":"只支持引用，推迟活体高阶规则；信号不能推出人格"},
+    {"id":"D11","status":"DEFERRED","decision":"高阶时空权限与冲突、空间参照失效的边界","concepts":["时","空"],"senses":["时.指称","空.指称"],"rules":["AX.cause"],"examples":["L05"],"vectors":["S15"],"migration":"局部速率与历史严格区分；空间折跃待议"},
+    {"id":"D12","status":"PROPOSED","decision":"知识的发现、传承、解锁与高阶语法形式","concepts":["水","重力"],"senses":["水.指称","重力.指称"],"rules":["AX.organization"],"examples":["M003","L05"],"vectors":["S12"],"migration":"当前使用知识／理解／掌控职责，暂无技能树"},
+    {"id":"D13","status":"PROPOSED","decision":"积蓄是否应拥有独立符文","concepts":["重力"],"senses":["延续.持续","爆发.集中交付"],"rules":["AX.cost"],"examples":["L05"],"vectors":["S13"],"migration":"积蓄作为过程已成立，词表数量暂按 D02"},
+    {"id":"D14","status":"PROPOSED","decision":"冻后维持束缚和持咒时绑定支点能否同属一个可选契约","concepts":["水","冰"],"senses":["束缚.限制"],"rules":["AX.relation"],"examples":["M009"],"vectors":["S19"],"migration":"保留两份来源的差异与部分映射"},
+    {"id":"D15","status":"BASELINE","decision":"选择参照、方向和传播通道属于构筑；连通边、来源余额与已成材料在现场取得。阶段 A 配对向量固定这项接口。","concepts":["重力","水","冰"],"senses":["重力.指称","爆发.集中交付","凝固.相变","交织.交错"],"rules":["AX.relation","AX.cause"],"examples":["L05","M009"],"vectors":["S04","S08","S13","S17"],"migration":"Core 与词义规则升至 0.1.1。缺少结构化选择的 0.1.0 构筑保持原解释，重新降低需显式补选。执行格式仍为 0.2.2。"},
+    {"id":"D16","status":"BASELINE","decision":"正式采用研究 02 的以太七公理。每项实际干预均须可追溯至世界许可、构筑依据、局部对象、范围及存续责任。","concepts":["以太","水","重力"],"senses":["以太.指称","重力.指称","凝固.相变"],"rules":["E1","E2","E3","E4","E5","E6","E7"],"examples":["L05","M009"],"vectors":["S04","S08","S17","S20"],"migration":"Core 0.1.2、构造 0.1.1。锁定 0.1.1 的输入可回放；跨实例干预与多术共同结算待工程验证。"}
+  ]
+}

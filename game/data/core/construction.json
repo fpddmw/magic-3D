@@ -1,0 +1,405 @@
+{
+  "core_version": "0.1.2",
+  "construction_version": "0.1.1",
+  "actions": {
+    "accrue": {
+      "operation": "Transfer",
+      "when": "while_held",
+      "requires_all": [
+        "持续供给",
+        "储备有余容"
+      ],
+      "effects": [
+        "积入储备"
+      ]
+    },
+    "impulse": {
+      "operation": "Drive",
+      "when": "on_release",
+      "requires_all": [
+        "储备可用",
+        "实际域内"
+      ],
+      "effects": [
+        "定向加速度"
+      ]
+    },
+    "interrupt": {
+      "operation": "Withdraw",
+      "when": "on_interrupt",
+      "requires_all": [
+        "强制中断"
+      ],
+      "effects": [
+        "解除主动作用"
+      ]
+    },
+    "release": {
+      "operation": "Withdraw",
+      "when": "on_release",
+      "requires_all": [
+        "主动释放"
+      ],
+      "effects": [
+        "解除主动作用"
+      ]
+    },
+    "take": {
+      "operation": "Transfer",
+      "when": "on_cast",
+      "requires_all": [
+        "来源可达",
+        "来源有量"
+      ],
+      "effects": [
+        "归属转移"
+      ]
+    },
+    "guide": {
+      "operation": "Drive",
+      "when": "while_held",
+      "requires_all": [
+        "已有材料",
+        "持续供给",
+        "控制有效"
+      ],
+      "effects": [
+        "调整当前组织"
+      ]
+    },
+    "freeze": {
+      "operation": "Transform",
+      "when": "on_release",
+      "requires_all": [
+        "主动释放",
+        "已有材料",
+        "储备可用"
+      ],
+      "effects": [
+        "原位转固"
+      ]
+    },
+    "stop_after_phase": {
+      "operation": "Withdraw",
+      "when": "on_ready",
+      "requires_all": [
+        "相变交付"
+      ],
+      "effects": [
+        "解除主动作用"
+      ]
+    },
+    "bind": {
+      "operation": "Constrain",
+      "when": "on_ready",
+      "requires_all": [
+        "当前接触",
+        "持续供给"
+      ],
+      "effects": [
+        "限制目标运动"
+      ]
+    },
+    "unfunded": {
+      "operation": "Withdraw",
+      "when": "on_supply_end",
+      "requires_all": [
+        "供给终止"
+      ],
+      "effects": [
+        "解除主动作用"
+      ]
+    },
+    "pull": {
+      "operation": "Drive",
+      "when": "while_held",
+      "requires_all": [
+        "当前接触",
+        "路径连续",
+        "持续供给"
+      ],
+      "effects": [
+        "有限牵引"
+      ]
+    },
+    "spread": {
+      "operation": "Establish",
+      "when": "on_cast",
+      "requires_all": [
+        "施法投入可用",
+        "介质可用"
+      ],
+      "effects": [
+        "建立有限分布"
+      ]
+    },
+    "complete": {
+      "operation": "Withdraw",
+      "when": "on_completion",
+      "requires_all": [
+        "成形结束"
+      ],
+      "effects": [
+        "解除主动作用"
+      ]
+    },
+    "listen": {
+      "operation": "Establish",
+      "when": "on_ready",
+      "requires_all": [
+        "传递媒介可用",
+        "接收端有效",
+        "持续供给"
+      ],
+      "effects": [
+        "建立信息通路"
+      ]
+    },
+    "report": {
+      "operation": "Couple",
+      "when": "on_signal",
+      "requires_all": [
+        "真实扰动",
+        "信息通路有效"
+      ],
+      "effects": [
+        "传递实际信号"
+      ]
+    },
+    "solid": {
+      "operation": "Establish",
+      "when": "on_cast",
+      "requires_all": [
+        "施法投入可用"
+      ],
+      "effects": [
+        "建立有限实体"
+      ]
+    },
+    "grow": {
+      "operation": "Establish",
+      "when": "on_cast",
+      "requires_all": [
+        "有效支点",
+        "可用净空",
+        "施法投入可用"
+      ],
+      "effects": [
+        "建立有限实体",
+        "有限延伸"
+      ]
+    },
+    "launch": {
+      "operation": "Drive",
+      "when": "on_release",
+      "requires_all": [
+        "储备可用",
+        "驱动关系有效"
+      ],
+      "effects": [
+        "交付推进"
+      ]
+    },
+    "enter": {
+      "operation": "Drive",
+      "when": "on_contact",
+      "requires_all": [
+        "当前接触",
+        "已有推进"
+      ],
+      "effects": [
+        "有限贯入"
+      ]
+    },
+    "illumination": {
+      "operation": "Establish",
+      "when": "on_cast",
+      "requires_all": [
+        "性质已获准",
+        "持续供给"
+      ],
+      "effects": [
+        "增强显明"
+      ]
+    },
+    "shade": {
+      "operation": "Establish",
+      "when": "on_cast",
+      "requires_all": [
+        "性质已获准",
+        "持续供给"
+      ],
+      "effects": [
+        "抑制显明"
+      ]
+    },
+    "heat": {
+      "operation": "Establish",
+      "when": "on_cast",
+      "requires_all": [
+        "性质已获准",
+        "持续供给"
+      ],
+      "effects": [
+        "注入热量"
+      ]
+    },
+    "cool": {
+      "operation": "Establish",
+      "when": "on_cast",
+      "requires_all": [
+        "性质已获准",
+        "持续供给"
+      ],
+      "effects": [
+        "抽取热量"
+      ]
+    }
+  },
+  "property_fields": {
+    "光": {
+      "channel": "光学",
+      "action": "illumination"
+    },
+    "暗": {
+      "channel": "光学",
+      "action": "shade"
+    },
+    "热作用": {
+      "channel": "热",
+      "action": "heat"
+    },
+    "抽热": {
+      "channel": "热",
+      "action": "cool"
+    }
+  },
+  "spatial_preserves": {
+    "interlaced": {
+      "layout": "interlaced"
+    },
+    "dispersed_content": {
+      "distribution": "dispersed"
+    }
+  },
+  "aspect_scope_facts": {
+    "water.distribution": [
+      "water"
+    ],
+    "solid.support": [
+      "ice"
+    ]
+  },
+  "interventions": {
+    "accrue": {
+      "permission": "reserve.accumulate",
+      "funding": "active"
+    },
+    "impulse": {
+      "permission": "gravity.local_acceleration",
+      "funding": "prepaid"
+    },
+    "take": {
+      "permission": "material.borrow",
+      "funding": "upfront"
+    },
+    "guide": {
+      "permission": "material.organize",
+      "funding": "active"
+    },
+    "freeze": {
+      "permission": "material.phase_in_place",
+      "funding": "prepaid"
+    },
+    "bind": {
+      "permission": "contact.constrain",
+      "funding": "active"
+    },
+    "pull": {
+      "permission": "contact.traction",
+      "funding": "active"
+    },
+    "spread": {
+      "permission": "content.disperse",
+      "funding": "upfront"
+    },
+    "listen": {
+      "permission": "signal.establish",
+      "funding": "active"
+    },
+    "report": {
+      "permission": "signal.transmit",
+      "funding": "inherited"
+    },
+    "solid": {
+      "permission": "content.form",
+      "funding": "upfront"
+    },
+    "grow": {
+      "permission": "content.extend",
+      "funding": "upfront"
+    },
+    "launch": {
+      "permission": "motion.propel",
+      "funding": "prepaid"
+    },
+    "enter": {
+      "permission": "motion.penetrate",
+      "funding": "inherited"
+    },
+    "illumination": {
+      "permission": "aspect.illuminate",
+      "funding": "active"
+    },
+    "shade": {
+      "permission": "aspect.attenuate",
+      "funding": "active"
+    },
+    "heat": {
+      "permission": "aspect.heat",
+      "funding": "active"
+    },
+    "cool": {
+      "permission": "aspect.extract_heat",
+      "funding": "active"
+    },
+    "interrupt": {
+      "permission": "support.end_local",
+      "funding": "ending"
+    },
+    "release": {
+      "permission": "support.end_local",
+      "funding": "ending"
+    },
+    "stop_after_phase": {
+      "permission": "support.end_local",
+      "funding": "ending"
+    },
+    "unfunded": {
+      "permission": "support.end_local",
+      "funding": "ending"
+    },
+    "complete": {
+      "permission": "support.end_local",
+      "funding": "ending"
+    }
+  },
+  "responsibility_conditions": [
+    "持续供给",
+    "储备有余容",
+    "储备可用",
+    "施法投入可用",
+    "控制有效"
+  ],
+  "funding_conditions": {
+    "upfront": [
+      "施法投入可用"
+    ],
+    "active": [
+      "持续供给"
+    ],
+    "prepaid": [
+      "储备可用"
+    ]
+  }
+}

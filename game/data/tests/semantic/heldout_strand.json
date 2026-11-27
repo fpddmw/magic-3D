@@ -1,0 +1,9 @@
+{
+  "versions":{"core":"0.1.2","semantics":"0.1.1","execution":"0.2.2","artkit":"0.2.3"},
+  "graph":[
+    {"id":"n8","form":"构成","scope":"水","inputs":[],"words":["水"],"operands":[{"type":"Concept","reads":["concept.water"]}]},
+    {"id":"n3","form":"修饰","scope":"取用池水","inputs":["n8"],"words":["借用"],"operands":[{"type":"Entity","reads":["n8:0","contract.material"]}]},
+    {"id":"n12","form":"共同限定","scope":"从支点导出一根水线","inputs":["n3"],"words":["延展"],"operands":[{"type":"Entity","reads":["n8:0","reference.axis","contract.focus","contract.sustain"]}],"intents":[{"ref":"v7","space":{"organization":"continuous_strand","anchor":"support_contact"}}]},
+    {"id":"n2","form":"接续","scope":"松手冻结已有水线","inputs":["n12"],"words":["凝固"],"operands":[{"type":"Entity","subject":"v7","reads":["n8:0","n3:0","n12:0","contract.reserve"]}],"intents":[{"ref":"v4","material":"v7","event":"voluntary_release","propagate":{"via":"continuous_material","start":"support_contact","sampling":"live","missing":"abort_delivery"}}]}
+  ]
+}

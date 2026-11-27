@@ -1,0 +1,592 @@
+{
+  "core_version": "0.1.2",
+  "axioms": [
+    {
+      "id": "AX.nature",
+      "name": "本性",
+      "rule": "主体按其本性提供默认性质、能力及自然演化。"
+    },
+    {
+      "id": "AX.aspect",
+      "name": "性质",
+      "rule": "可以引用已有性质，改变或独立化须给出相应权限与承载。"
+    },
+    {
+      "id": "AX.relation",
+      "name": "关系",
+      "rule": "端点、通道、内容与有效条件共同决定一项联系能传什么。"
+    },
+    {
+      "id": "AX.organization",
+      "name": "组织",
+      "rule": "各部分的组织可产生整体性质，前提是所需结构与关系有效。"
+    },
+    {
+      "id": "AX.change",
+      "name": "变化",
+      "rule": "干预有确定对象和范围，可改变状态、组织及获准干涉的规律。"
+    },
+    {
+      "id": "AX.aether",
+      "name": "以太",
+      "rule": "以太承载超出自然条件的存在、性质与作用关系。每项具体能力另需语义依据。"
+    },
+    {
+      "id": "AX.cost",
+      "name": "代价",
+      "rule": "建立、维持、转移和交付分别有供给者与责任终点。"
+    },
+    {
+      "id": "AX.cause",
+      "name": "因果",
+      "rule": "事件依事实接续；撤除主动作用以后，已经形成的世界状态继续演化。"
+    },
+    {
+      "id": "E1",
+      "name": "以太媒介",
+      "rule": "以太是异常存在、性质与关系的成立媒介，不是无限能源。"
+    },
+    {
+      "id": "E2",
+      "name": "意义与代价",
+      "rule": "意义决定魔法的内容，魔力承担干预的代价。"
+    },
+    {
+      "id": "E3",
+      "name": "五种干预",
+      "rule": "魔法通过具现、调动、重构、赋予及干涉改变世界。"
+    },
+    {
+      "id": "E4",
+      "name": "局部规律",
+      "rule": "魔法可以改变局部规律的实际作用，但不能任意改写世界公理。"
+    },
+    {
+      "id": "E5",
+      "name": "成立条件",
+      "rule": "魔法成立需要世界许可、充分意义、实际条件与足够责任。"
+    },
+    {
+      "id": "E6",
+      "name": "魔法作为对象",
+      "rule": "已经成立的魔法本身可以成为其他魔法的作用对象。"
+    },
+    {
+      "id": "E7",
+      "name": "共同因果",
+      "rule": "所有魔法共同参与世界因果，依照实际性质、关系及承担能力产生结果。"
+    }
+  ],
+  "concepts": [
+    {
+      "id": "土",
+      "kind": "材料",
+      "definition": "岩性矿质成体，可承载有限负荷"
+    },
+    {
+      "id": "水",
+      "kind": "材料",
+      "definition": "水性材料，以实际相态和分布参与世界"
+    },
+    {
+      "id": "气",
+      "kind": "材料",
+      "definition": "气态介质传递压力和扰动"
+    },
+    {
+      "id": "火",
+      "kind": "过程",
+      "definition": "燃烧、热激发具有可分别引用的显明与温热"
+    },
+    {
+      "id": "以太",
+      "kind": "媒介",
+      "definition": "使事物能够建立超越其自然条件的存在、性质与作用关系的媒介"
+    },
+    {
+      "id": "光",
+      "kind": "作用",
+      "definition": "直接指称光学，也可从火的显明独立化"
+    },
+    {
+      "id": "电",
+      "kind": "作用",
+      "definition": "势差、通路与放电"
+    },
+    {
+      "id": "时",
+      "kind": "规律",
+      "definition": "特定过程的时序、持续与速率"
+    },
+    {
+      "id": "空",
+      "kind": "关系",
+      "definition": "位置、参照及空间组织"
+    },
+    {
+      "id": "生",
+      "kind": "过程",
+      "definition": "现有活体的维持和更新，深层权限延后"
+    },
+    {
+      "id": "重力",
+      "kind": "规律",
+      "definition": "指定范围内加速度的方向和强度"
+    },
+    {
+      "id": "界",
+      "kind": "关系",
+      "definition": "内外及边界，需另有依据才提供阻挡"
+    },
+    {
+      "id": "冰",
+      "kind": "材料",
+      "definition": "固态组织的水"
+    },
+    {
+      "id": "雾",
+      "kind": "材料",
+      "definition": "气体中实际分布的液态细滴"
+    },
+    {
+      "id": "熔岩",
+      "kind": "材料",
+      "definition": "受热进入流动态的岩性材料"
+    },
+    {
+      "id": "晶体",
+      "kind": "组织",
+      "definition": "内部具有有序重复结构的材料"
+    },
+    {
+      "id": "金属",
+      "kind": "材料",
+      "definition": "可独立存在，适当矿料可经精炼取得"
+    },
+    {
+      "id": "暗",
+      "kind": "作用",
+      "definition": "显明受抑或光被吸收"
+    },
+    {
+      "id": "雷电",
+      "kind": "过程",
+      "definition": "势差沿有效通路交付"
+    },
+    {
+      "id": "生命",
+      "kind": "组织",
+      "definition": "具有边界、内部组织和自我维持的活体整体"
+    },
+    {
+      "id": "毒",
+      "kind": "作用",
+      "definition": "对特定活体的维持过程造成干扰"
+    },
+    {
+      "id": "灵",
+      "kind": "组织",
+      "definition": "以太承载活性印痕的研究对象，人格连续性待决"
+    },
+    {
+      "id": "热作用",
+      "kind": "作用",
+      "definition": "独立于燃烧的热交换"
+    },
+    {
+      "id": "抽热",
+      "kind": "作用",
+      "definition": "目标热量向外转移，需有实际作用通道"
+    }
+  ],
+  "aspects": [
+    {
+      "id": "fire.visibility",
+      "owner": "火",
+      "name": "显明",
+      "result": "光",
+      "inverse": "暗",
+      "limit": "只涉及显明与抑制"
+    },
+    {
+      "id": "fire.heat",
+      "owner": "火",
+      "name": "温热",
+      "result": "热作用",
+      "inverse": "抽热",
+      "limit": "热作用的方向与去向"
+    },
+    {
+      "id": "water.distribution",
+      "owner": "水",
+      "name": "当前分布",
+      "result": "水",
+      "inverse": null,
+      "limit": "仅实际在场的材料"
+    },
+    {
+      "id": "solid.support",
+      "owner": "冰",
+      "name": "固体承载",
+      "result": "冰",
+      "inverse": null,
+      "limit": "取决于负荷、根部和有效支点"
+    },
+    {
+      "id": "gravity.direction",
+      "owner": "重力",
+      "name": "加速度方向",
+      "result": "重力",
+      "inverse": "重力",
+      "limit": "仅域内受重作用"
+    },
+    {
+      "id": "process.rate",
+      "owner": "时",
+      "name": "演化速率",
+      "result": "时",
+      "inverse": null,
+      "limit": "速率非负，过去事件保持"
+    },
+    {
+      "id": "medium.signal",
+      "owner": "雾",
+      "name": "扰动信号",
+      "result": "雾",
+      "inverse": null,
+      "limit": "仅传实际信号"
+    },
+    {
+      "id": "space.boundary",
+      "owner": "空",
+      "name": "内外关系",
+      "result": "界",
+      "inverse": null,
+      "limit": "穿过边界的响应另需依据"
+    },
+    {
+      "id": "life.renewal",
+      "owner": "生",
+      "name": "更新",
+      "result": "生命",
+      "inverse": null,
+      "limit": "仅引用已有活体"
+    }
+  ],
+  "condition_ids": [
+    "施法投入可用",
+    "储备可用",
+    "驱动关系有效",
+    "当前接触",
+    "已有推进",
+    "来源可达",
+    "来源有量",
+    "路径连续",
+    "持续供给",
+    "主动释放",
+    "有效支点",
+    "可用净空",
+    "成形结束",
+    "已有材料",
+    "控制有效",
+    "供给终止",
+    "强制中断",
+    "相变交付",
+    "介质可用",
+    "传递媒介可用",
+    "接收端有效",
+    "真实扰动",
+    "信息通路有效",
+    "载体完整",
+    "载体损毁",
+    "性质已获准",
+    "储备有余容",
+    "实际域内"
+  ],
+  "effect_ids": [
+    "建立有限实体",
+    "交付推进",
+    "有限贯入",
+    "归属转移",
+    "有限牵引",
+    "解除主动作用",
+    "有限延伸",
+    "调整当前组织",
+    "原位转固",
+    "限制目标运动",
+    "建立有限分布",
+    "建立信息通路",
+    "传递实际信号",
+    "限制对外发挥",
+    "建立预付供给",
+    "增强显明",
+    "抑制显明",
+    "注入热量",
+    "抽取热量",
+    "积入储备",
+    "定向加速度"
+  ],
+  "aether": {
+    "definitions": {
+      "意义": "规定希望成立的现象",
+      "以太": "使额外的成立条件成为可能",
+      "魔力": "支付建立、改变与维持条件的代价",
+      "魔法": "依意义组织并在世界中实际发生的奥术作用"
+    },
+    "ordinary_medium": "隐含",
+    "explicit_medium": "组织以太、建立特殊奥术联系、寄托能力或干涉已有魔法须显式取得媒介依据。",
+    "active_magic_facets": {
+      "content": "实际内容",
+      "spatial_organization": "空间组织",
+      "relation": "联结关系",
+      "sustaining_condition": "存续条件",
+      "effect": "实际作用"
+    },
+    "supply_modes": {
+      "active": "施法者实际投入",
+      "hosted": "器物或场所保存的有限储备",
+      "external": "经有效关系连接到实际环境来源"
+    },
+    "limits": [
+      "局部作用受现场对象与有限作用域约束。抽象概念、施法者知识、世界公理和既成历史不属于可改写对象。",
+      "封存、联结、循环均不能增加可支用储备。",
+      "各通道按其适用规律共同结算。抵消作用保留各自的魔法和责任；解除支撑保留已造成的世界变化。"
+    ]
+  },
+  "intervention_permissions": {
+    "reserve.accumulate": {
+      "mode": "调动",
+      "facet": "reserve",
+      "scope": "account",
+      "meaning_all": [
+        "stored_action"
+      ],
+      "effects": [
+        "积入储备"
+      ]
+    },
+    "gravity.local_acceleration": {
+      "mode": "干涉",
+      "facet": "effect",
+      "scope": "in_region",
+      "meaning_all": [
+        "directional_law",
+        "extent_ref",
+        "stored_action",
+        "brief_delivery"
+      ],
+      "effects": [
+        "定向加速度"
+      ]
+    },
+    "material.borrow": {
+      "mode": "调动",
+      "facet": "content",
+      "scope": "reachable_source",
+      "meaning_all": [
+        "borrowed_material"
+      ],
+      "effects": [
+        "归属转移"
+      ]
+    },
+    "material.organize": {
+      "mode": "重构",
+      "facet": "spatial_organization",
+      "scope": "subject_space",
+      "meaning_all": [
+        "borrowed_material",
+        "continuous_course"
+      ],
+      "effects": [
+        "调整当前组织"
+      ]
+    },
+    "material.phase_in_place": {
+      "mode": "重构",
+      "facet": "content",
+      "scope": "connected_material",
+      "meaning_all": [
+        "solidified",
+        "material_identity",
+        "continuous_course"
+      ],
+      "effects": [
+        "原位转固"
+      ]
+    },
+    "contact.constrain": {
+      "mode": "赋予",
+      "facet": "relation",
+      "scope": "contact",
+      "meaning_all": [
+        "constraint"
+      ],
+      "effects": [
+        "限制目标运动"
+      ]
+    },
+    "contact.traction": {
+      "mode": "调动",
+      "facet": "relation",
+      "scope": "contact",
+      "meaning_all": [
+        "pull"
+      ],
+      "effects": [
+        "有限牵引"
+      ]
+    },
+    "content.disperse": {
+      "mode": "具现",
+      "facet": "content",
+      "scope": "subject_space",
+      "meaning_all": [
+        "dispersed_content",
+        "coverage"
+      ],
+      "effects": [
+        "建立有限分布"
+      ]
+    },
+    "signal.establish": {
+      "mode": "赋予",
+      "facet": "relation",
+      "scope": "relation_endpoints",
+      "meaning_all": [
+        "medium_for_arcane",
+        "signal_route"
+      ],
+      "effects": [
+        "建立信息通路"
+      ]
+    },
+    "signal.transmit": {
+      "mode": "调动",
+      "facet": "relation",
+      "scope": "relation_endpoints",
+      "meaning_all": [
+        "medium_for_arcane",
+        "signal_route",
+        "signal_feedback"
+      ],
+      "effects": [
+        "传递实际信号"
+      ]
+    },
+    "content.form": {
+      "mode": "具现",
+      "facet": "content",
+      "scope": "subject_space",
+      "meaning_all": [
+        "ice",
+        "compact"
+      ],
+      "effects": [
+        "建立有限实体"
+      ]
+    },
+    "content.extend": {
+      "mode": "具现",
+      "facet": "content",
+      "scope": "subject_space",
+      "meaning_all": [
+        "ice",
+        "coverage",
+        "continuous_course"
+      ],
+      "effects": [
+        "建立有限实体",
+        "有限延伸"
+      ]
+    },
+    "motion.propel": {
+      "mode": "调动",
+      "facet": "effect",
+      "scope": "subject_space",
+      "meaning_all": [
+        "propulsion"
+      ],
+      "effects": [
+        "交付推进"
+      ]
+    },
+    "motion.penetrate": {
+      "mode": "调动",
+      "facet": "effect",
+      "scope": "contact",
+      "meaning_all": [
+        "propulsion",
+        "penetration"
+      ],
+      "effects": [
+        "有限贯入"
+      ]
+    },
+    "aspect.illuminate": {
+      "mode": "具现",
+      "facet": "effect",
+      "scope": "in_region",
+      "meaning_all": [
+        "medium_for_arcane",
+        "independent_aspect",
+        "visibility_aspect",
+        "sustain"
+      ],
+      "effects": [
+        "增强显明"
+      ]
+    },
+    "aspect.attenuate": {
+      "mode": "具现",
+      "facet": "effect",
+      "scope": "in_region",
+      "meaning_all": [
+        "medium_for_arcane",
+        "independent_aspect",
+        "attenuation",
+        "sustain"
+      ],
+      "effects": [
+        "抑制显明"
+      ]
+    },
+    "aspect.heat": {
+      "mode": "具现",
+      "facet": "effect",
+      "scope": "in_region",
+      "meaning_all": [
+        "medium_for_arcane",
+        "independent_aspect",
+        "heat_aspect",
+        "sustain"
+      ],
+      "effects": [
+        "注入热量"
+      ]
+    },
+    "aspect.extract_heat": {
+      "mode": "具现",
+      "facet": "effect",
+      "scope": "in_region",
+      "meaning_all": [
+        "medium_for_arcane",
+        "independent_aspect",
+        "heat_extraction",
+        "sustain"
+      ],
+      "effects": [
+        "抽取热量"
+      ]
+    },
+    "support.end_local": {
+      "mode": "重构",
+      "facet": "sustaining_condition",
+      "scope": "existing_support",
+      "meaning_all": [],
+      "effects": [
+        "解除主动作用"
+      ]
+    }
+  }
+}

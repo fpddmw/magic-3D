@@ -1,0 +1,31 @@
+{
+  "core_version": "0.1.2",
+  "cases": [
+    {
+      "case": "L05", "intent_ref": "v3", "process": "deliver",
+      "intervention": {
+        "mode": "干涉", "permission": "gravity.local_acceleration",
+        "target": {"kind": "relation", "ref": "load", "facet": "effect"},
+        "scope": {"kind": "in_region", "ref": "v1"},
+        "responsibility": {
+          "tenure": "prepaid", "source": {"mode": "active", "provider_ref": "@caster"},
+          "account_ref": "@reserve", "conditions": ["储备可用"], "on_end": "preserve_realized"
+        }
+      },
+      "terms": ["n1:0", "n1:1", "n2:0", "n3:0"], "site_conditions": ["实际域内"]
+    },
+    {
+      "case": "M009", "intent_ref": "v2", "process": "freeze",
+      "intervention": {
+        "mode": "重构", "permission": "material.phase_in_place",
+        "target": {"kind": "subject", "ref": "subject", "facet": "content"},
+        "scope": {"kind": "connected_material", "ref": "v1"},
+        "responsibility": {
+          "tenure": "prepaid", "source": {"mode": "active", "provider_ref": "@caster"},
+          "account_ref": "@reserve", "conditions": ["储备可用"], "on_end": "preserve_realized"
+        }
+      },
+      "terms": ["n3:1", "n5:0"], "site_conditions": ["主动释放", "已有材料"]
+    }
+  ]
+}

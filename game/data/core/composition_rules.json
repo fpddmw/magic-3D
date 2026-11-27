@@ -1,0 +1,390 @@
+{
+  "semantic_rules_version": "0.1.1",
+  "rules": [
+    {
+      "id": "G.compose",
+      "form": "构成",
+      "scope": "概念",
+      "requires": [
+        "组成概念或被许可的性质引用齐备"
+      ],
+      "combine": "生成概念描述",
+      "preserve": [
+        "组成来源",
+        "选择的性质路径"
+      ],
+      "reject": [
+        "构成时产生现场事件"
+      ]
+    },
+    {
+      "id": "G.qualify",
+      "form": "共同限定",
+      "scope": "同一对象",
+      "requires": [
+        "各义项接受对应的对象类型",
+        "约束可以同时满足"
+      ],
+      "combine": "按对象身份和性质维度合并约束",
+      "preserve": [
+        "各词的贡献",
+        "输入材料总量"
+      ],
+      "reject": [
+        "互斥状态强行合并",
+        "补入无来源的动作"
+      ]
+    },
+    {
+      "id": "G.modify",
+      "form": "修饰",
+      "scope": "一个局部所指",
+      "requires": [
+        "性质或关系通道可辨",
+        "作用在当前权限中"
+      ],
+      "combine": "只改变指定维度",
+      "preserve": [
+        "其他维度",
+        "其余有效关系"
+      ],
+      "reject": [
+        "修改外溢",
+        "授予独立能力"
+      ]
+    },
+    {
+      "id": "G.cause",
+      "form": "接续",
+      "scope": "已发生事件或过程",
+      "requires": [
+        "前置结果成立",
+        "触发可观察且有来源"
+      ],
+      "combine": "建立带条件的过程依赖",
+      "preserve": [
+        "实际主体身份",
+        "先行事实"
+      ],
+      "reject": [
+        "无因再次反转",
+        "由术名推出事件"
+      ]
+    },
+    {
+      "id": "G.phase",
+      "form": "阶段",
+      "scope": "形成、维持或交付",
+      "requires": [
+        "发生或终止条件明确",
+        "供给与责任归属明确"
+      ],
+      "combine": "指定契约阶段与责任交接",
+      "preserve": [
+        "已形成的世界变化"
+      ],
+      "reject": [
+        "提前补齐未完成的阶段",
+        "无供给持续"
+      ]
+    },
+    {
+      "id": "G.reuse",
+      "form": "共享引用",
+      "scope": "此前已成立的所指",
+      "requires": [
+        "上游节点可达",
+        "引用对象仍适用"
+      ],
+      "combine": "复用身份与有效性质",
+      "preserve": [
+        "同一来源",
+        "每个作用独立的代价"
+      ],
+      "reject": [
+        "重复创建同一材料",
+        "重复计作可消耗库存"
+      ]
+    }
+  ],
+  "resolution": {
+    "object_types": [
+      "Entity",
+      "Concept",
+      "Aspect",
+      "Relation",
+      "Process"
+    ],
+    "on_no_licensed_sense": "INVALID_MEANING",
+    "on_multiple_distinct_interpretations": "AMBIGUOUS",
+    "on_missing_site_evidence": "MISSING_BINDING",
+    "stages": [
+      "绑定引用与作用域",
+      "筛选对象类型",
+      "核对权限和前提",
+      "合并约束或建立结构",
+      "保存推导与未满足的现场条件"
+    ]
+  },
+  "intent_normalization": {
+    "space": [
+      {
+        "choice": "tapered_mass",
+        "all": [
+          "compact",
+          "solid"
+        ],
+        "value": {
+          "support": "solid",
+          "layout": "tapered",
+          "distribution": "concentrated"
+        }
+      },
+      {
+        "choice": "continuous_strand",
+        "all": [
+          "continuous_course"
+        ],
+        "value": {
+          "support": "path",
+          "layout": "single",
+          "distribution": "continuous"
+        }
+      },
+      {
+        "choice": "interlaced_strands",
+        "all": [
+          "continuous_course",
+          "interlaced"
+        ],
+        "value": {
+          "support": "path",
+          "layout": "interlaced",
+          "distribution": "continuous"
+        }
+      },
+      {
+        "choice": "supported_sheet",
+        "all": [
+          "coverage",
+          "continuous_course",
+          "solid"
+        ],
+        "value": {
+          "support": "solid",
+          "layout": "sheet",
+          "distribution": "continuous"
+        }
+      },
+      {
+        "choice": "spread_course",
+        "all": [
+          "coverage",
+          "continuous_course"
+        ],
+        "value": {
+          "support": "surface",
+          "layout": "strip",
+          "distribution": "continuous"
+        }
+      },
+      {
+        "choice": "radial_dispersion",
+        "all": [
+          "coverage",
+          "dispersed_content"
+        ],
+        "value": {
+          "support": "region",
+          "layout": "radial",
+          "distribution": "dispersed"
+        }
+      },
+      {
+        "choice": "radial_region",
+        "all": [
+          "extent_ref"
+        ],
+        "value": {
+          "support": "region",
+          "layout": "radial",
+          "distribution": "field"
+        }
+      }
+    ],
+    "directions": [
+      {
+        "choice": {
+          "frame": "world",
+          "axis": "up"
+        },
+        "requires_any": [
+          "directional_law",
+          "propulsion",
+          "continuous_course"
+        ]
+      },
+      {
+        "choice": {
+          "frame": "world",
+          "axis": "down"
+        },
+        "requires_any": [
+          "directional_law",
+          "propulsion",
+          "continuous_course"
+        ]
+      },
+      {
+        "choice": {
+          "frame": "aim",
+          "axis": "forward"
+        },
+        "requires_any": [
+          "directional_law",
+          "propulsion",
+          "continuous_course"
+        ]
+      },
+      {
+        "choice": {
+          "frame": "surface",
+          "axis": "normal"
+        },
+        "requires_any": [
+          "directional_law",
+          "propulsion",
+          "continuous_course"
+        ]
+      }
+    ],
+    "profile": [
+      {
+        "choice": "accumulate",
+        "all": [
+          "sustain",
+          "reservoir"
+        ],
+        "value": "over_time"
+      },
+      {
+        "choice": "brief",
+        "all": [
+          "brief_delivery"
+        ],
+        "value": "short_impulse"
+      }
+    ],
+    "propagation": [
+      {
+        "choice": {
+          "via": "continuous_material",
+          "start": "support_contact",
+          "sampling": "live",
+          "missing": "abort_delivery"
+        },
+        "all": [
+          "solidified",
+          "continuous_course"
+        ],
+        "value": {
+          "channel": "material_continuity",
+          "origin": "support_contact",
+          "topology": "realized_live",
+          "missing_origin": "abort_delivery"
+        },
+        "material_requires": {
+          "support": "path",
+          "distribution": "continuous",
+          "anchor": "support_contact"
+        },
+        "material_binding": {
+          "operand_grant": "solidified",
+          "operand_ref": "subject",
+          "intent_ref": "material"
+        }
+      }
+    ],
+    "process": [
+      {
+        "when": {
+          "profile": "accumulate"
+        },
+        "all": [
+          "sustain",
+          "reservoir"
+        ],
+        "core": {
+          "operation": "Transfer",
+          "effects": [
+            "积入储备"
+          ]
+        }
+      },
+      {
+        "when": {
+          "profile": "brief"
+        },
+        "all": [
+          "directional_law",
+          "brief_delivery"
+        ],
+        "core": {
+          "operation": "Drive",
+          "effects": [
+            "定向加速度"
+          ]
+        }
+      },
+      {
+        "when": {
+          "propagate": {
+            "via": "continuous_material",
+            "start": "support_contact",
+            "sampling": "live",
+            "missing": "abort_delivery"
+          }
+        },
+        "all": [
+          "solidified",
+          "continuous_course"
+        ],
+        "core": {
+          "operation": "Transform",
+          "effects": [
+            "原位转固"
+          ]
+        }
+      },
+      {
+        "when": {
+          "action": "end_control",
+          "event": "interruption"
+        },
+        "all": [
+          "pull"
+        ],
+        "core": {
+          "operation": "Withdraw",
+          "effects": [
+            "解除主动作用"
+          ]
+        }
+      }
+    ],
+    "event": [
+      {
+        "choice": "during_hold",
+        "value": "while_held"
+      },
+      {
+        "choice": "voluntary_release",
+        "value": "on_release"
+      },
+      {
+        "choice": "interruption",
+        "value": "on_interrupt"
+      }
+    ]
+  }
+}

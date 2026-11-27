@@ -1,0 +1,334 @@
+[
+  {
+    "id": "M001",
+    "name": "凝水贯刺 · 明示推进的脱手变体",
+    "versions": {"core":"0.1.1","semantics":"0.1.1","execution":"0.2.2","artkit":"0.2.3"},
+    "graph": [
+      {"id":"n1","form":"构成","scope":"冰的概念","inputs":[],"words":["水","凝固"],"operands":[{"type":"Concept","reads":["concept.water"]},{"type":"Concept","reads":["n1:0"]}]},
+      {"id":"n2","form":"共同限定","scope":"待发实体","inputs":["n1"],"words":["凝聚"],"operands":[{"type":"Entity","reads":["n1:1"]}],"intents":[{"ref":"v1","space":{"organization":"tapered_mass","anchor":"caster_hand"}}]},
+      {"id":"n3","form":"阶段","scope":"发射来源","inputs":["n2"],"words":["排斥"],"operands":[{"type":"Process","reads":["reference.axis","contract.drive","contract.reserve"]}],"intents":[{"ref":"v2","direction":{"frame":"aim","axis":"forward"}}]},
+      {"id":"n4","form":"修饰","scope":"实际推进遇阻","inputs":["n3"],"words":["穿透"],"operands":[{"type":"Process","reads":["n3:0","choice.boundary"]}]}
+    ],
+    "core": {
+      "concepts": [
+        {"id":"ice","concept":"冰"}
+      ],
+      "subjects": [
+        {"id":"spear","concept_ref":"ice","source":"Manifest","binding":"施法者支付冰体材料与塑形","source_ref":"@caster","intent_ref":"v1","spatial_intent":{"support":"solid","layout":"tapered","distribution":"concentrated","anchor":"caster_hand"}}
+      ],
+      "relations": [
+        {"id":"thrust","from":"@caster","to":"spear","channel":"力学","condition":"施法者支付沿瞄准方向的一次推动"}
+      ],
+      "processes": [
+        {"id":"form","when":"on_cast","operation":"Establish","target":"spear","after":[],"condition":"材料与成形投入可用","result":"在手前形成集中冰体","requires_all":["施法投入可用"],"effects":["建立有限实体"]},
+        {"id":"launch","when":"on_release","operation":"Drive","target":"spear","after":["form"],"condition":"thrust 有效且储备可用","result":"获得实际前向运动","requires_all":["储备可用","驱动关系有效"],"effects":["交付推进"],"intent_ref":"v2","direction":{"frame":"aim","axis":"forward"}},
+        {"id":"enter","when":"on_contact","operation":"Drive","target":"spear","after":["launch"],"condition":"接触可贯入且余动充足","result":"按阻力贯入或停住","requires_all":["当前接触","已有推进"],"effects":["有限贯入"]}
+      ],
+      "contract": {"formation":"一次成形","control":"预定","supply":["即时","预付"],"owner":"独立现象","on_release":"交付已备推进","on_interrupt":"尚未交付时撤去主动塑形"},
+      "obligations": [
+        {"term":"n3:0","at_use":["supply_available"]},
+        {"term":"n4:0","at_use":["actual_contact","momentum_available"]}
+      ]
+    },
+    "trace": [
+      {"node":"n1","senses":["水.指称","凝固.构成"],"outputs":["ice"],"because":"概念先确定固态材料","rule_id":"G.compose"},
+      {"node":"n2","senses":["凝聚.结合"],"outputs":["spear","form"],"because":"集中程度限定同一冰体","rule_id":"G.qualify"},
+      {"node":"n3","senses":["排斥.推动"],"outputs":["thrust","launch"],"because":"此变体显式增补推进及其支付者","rule_id":"G.phase"},
+      {"node":"n4","senses":["穿透.贯入"],"outputs":["enter"],"because":"沿已发生的运动贯入","rule_id":"G.modify"}
+    ],
+    "lowering": {"binding":"map.solid","legacy_example":null,"gap":"待测冲量、阻力和贯入限度。原四词构筑缺少发射依据时仅能得到待发冰体。","execution_refs":{}}
+  },
+  {
+    "id": "M003",
+    "name": "引水成索 · 维持牵引",
+    "versions": {"core":"0.1.1","semantics":"0.1.1","execution":"0.2.2","artkit":"0.2.3"},
+    "graph": [
+      {"id":"n1","form":"构成","scope":"材料","inputs":[],"words":["水"],"operands":[{"type":"Concept","reads":["concept.water"]}]},
+      {"id":"n2","form":"修饰","scope":"实际水源","inputs":["n1"],"words":["借用"],"operands":[{"type":"Entity","reads":["n1:0","contract.material"]}]},
+      {"id":"n3","form":"共同限定","scope":"受力通路","inputs":["n2"],"words":["延展","牵引"],"operands":[{"type":"Entity","reads":["n1:0","reference.axis"]},{"type":"Process","reads":["reference.contact","contract.drive"]}],"intents":[{"ref":"v1","space":{"organization":"continuous_strand","anchor":"water_source"}}]},
+      {"id":"n4","form":"阶段","scope":"主动维持","inputs":["n3"],"words":["牵引"],"operands":[{"reuse":"n3:1"}]}
+    ],
+    "core": {
+      "concepts": [
+        {"id":"water","concept":"水"}
+      ],
+      "subjects": [
+        {"id":"cord","concept_ref":"water","source":"Borrow","binding":"从可达积水移入有限水量","source_ref":"@source","intent_ref":"v1","spatial_intent":{"support":"path","layout":"single","distribution":"continuous","anchor":"water_source"}}
+      ],
+      "relations": [
+        {"id":"force","from":"cord","to":"@target","channel":"力学","condition":"连续水带实际接触目标且受力路径未断"}
+      ],
+      "processes": [
+        {"id":"take","when":"on_cast","operation":"Transfer","target":"cord","after":[],"condition":"水源存在","result":"从来源扣减并形成连续水带","requires_all":["来源可达","来源有量"],"effects":["归属转移"]},
+        {"id":"pull","when":"while_held","operation":"Drive","target":"force","after":["take"],"condition":"接触有效且持续供给","result":"沿实际路径拉动目标","requires_all":["当前接触","路径连续","持续供给"],"effects":["有限牵引"]},
+        {"id":"drop","when":"on_release","operation":"Withdraw","target":"force","after":["take"],"condition":"松手","result":"撤去主动牵引并让水自然散落","requires_all":["主动释放"],"effects":["解除主动作用"]}
+      ],
+      "contract": {"formation":"持续塑造","control":"引导","supply":["即时","持续"],"owner":"施法者","on_release":"结束牵引","on_interrupt":"丢失专注后撤去拉力"},
+      "obligations": [
+        {"term":"n2:0","at_use":["source_reachable","source_nonempty"]},
+        {"term":"n3:1","at_use":["actual_contact","connected_material","supply_available"]}
+      ]
+    },
+    "trace": [
+      {"node":"n1","senses":["水.指称"],"outputs":["water"],"because":"所指材料为水","rule_id":"G.compose"},
+      {"node":"n2","senses":["借用.取材"],"outputs":["cord","take"],"because":"水量从现场转入","rule_id":"G.modify"},
+      {"node":"n3","senses":["延展.连续","牵引.拉动"],"outputs":["force","pull"],"because":"牵引经延展的水体和接触点传力","rule_id":"G.qualify"},
+      {"node":"n4","senses":["牵引.拉动"],"outputs":["drop"],"because":"结束同一次牵引，湿润目标不能远程续接","rule_id":"G.phase"}
+    ],
+    "lowering": {"binding":"map.path","legacy_example":null,"gap":"可对接路径载体，动态接触载荷与绕柱仍待适配。","execution_refs":{}}
+  },
+  {
+    "id": "M007",
+    "name": "冰闸 · 支点生长",
+    "versions": {"core":"0.1.1","semantics":"0.1.1","execution":"0.2.2","artkit":"0.2.3"},
+    "graph": [
+      {"id":"n1","form":"构成","scope":"固态材料","inputs":[],"words":["水","凝固"],"operands":[{"type":"Concept","reads":["concept.water"]},{"type":"Concept","reads":["n1:0"]}]},
+      {"id":"n2","form":"共同限定","scope":"受支撑的厚片","inputs":["n1"],"words":["铺展","延展"],"aspect_ref":"solid.support","operands":[{"type":"Entity","reads":["n1:1","reference.region"]},{"type":"Entity","reads":["n1:1","reference.axis"]}],"intents":[{"ref":"v1","space":{"organization":"supported_sheet","anchor":"support_contact"}},{"ref":"v2","direction":{"frame":"aim","axis":"forward"}}]},
+      {"id":"n3","form":"阶段","scope":"有限生长","inputs":["n2"],"words":["延展"],"operands":[{"reuse":"n2:1"}]}
+    ],
+    "core": {
+      "concepts": [
+        {"id":"ice","concept":"冰"}
+      ],
+      "subjects": [
+        {"id":"gate","concept_ref":"ice","source":"Manifest","binding":"由成形投入提供有限材料","source_ref":"@caster","intent_ref":"v1","spatial_intent":{"support":"solid","layout":"sheet","distribution":"continuous","anchor":"support_contact"}}
+      ],
+      "relations": [
+        {"id":"root","from":"gate","to":"@support","channel":"结构","condition":"冰根实际接触可承载的支点"}
+      ],
+      "processes": [
+        {"id":"grow","when":"on_cast","operation":"Establish","target":"gate","after":[],"condition":"支点与净空有效","result":"厚片沿方向延伸，实际轮廓止于不可推动的阻挡","requires_all":["有效支点","可用净空","施法投入可用"],"effects":["建立有限实体","有限延伸"],"intent_ref":"v2","direction":{"frame":"aim","axis":"forward"}},
+        {"id":"rest","when":"on_completion","operation":"Withdraw","target":"gate","after":["grow"],"condition":"停止生长","result":"既成冰片依支撑与温度留存","requires_all":["成形结束"],"effects":["解除主动作用"]}
+      ],
+      "contract": {"formation":"一次成形","control":"预定","supply":["即时"],"owner":"独立现象","on_release":"结束主动生长","on_interrupt":"保留已形成的部分"},
+      "obligations": []
+    },
+    "trace": [
+      {"node":"n1","senses":["水.指称","凝固.构成"],"outputs":["ice"],"because":"确定可承载的固态组织","rule_id":"G.compose"},
+      {"node":"n2","senses":["铺展.覆盖","延展.连续"],"outputs":["gate","root","grow"],"because":"指定覆盖、方向和根部，承重取决于现场","rule_id":"G.qualify"},
+      {"node":"n3","senses":["延展.连续"],"outputs":["rest"],"because":"终止生长保留有效支点","rule_id":"G.phase"}
+    ],
+    "lowering": {"binding":"map.solid","legacy_example":null,"gap":"缺少受阻生长与根部断裂的完整转译。","execution_refs":{}}
+  },
+  {
+    "id": "M009",
+    "name": "霜狱织网 · 图鉴维持束缚分支",
+    "versions": {"core":"0.1.1","semantics":"0.1.1","execution":"0.2.2","artkit":"0.2.3"},
+    "graph": [
+      {"id":"n1","form":"构成","scope":"材料","inputs":[],"words":["水"],"operands":[{"type":"Concept","reads":["concept.water"]}]},
+      {"id":"n2","form":"修饰","scope":"环境水量","inputs":["n1"],"words":["借用"],"operands":[{"type":"Entity","reads":["n1:0","contract.material"]}]},
+      {"id":"n3","form":"共同限定","scope":"可引导的水网","inputs":["n2"],"words":["汇聚","延展","交织"],"operands":[{"type":"Process","reads":["n1:0","reference.center"]},{"type":"Entity","reads":["n1:0","reference.axis","contract.sustain","contract.focus"]},{"type":"Entity","reads":["n3:1","choice.strands"]}],"intents":[{"ref":"v1","space":{"organization":"interlaced_strands","anchor":"support_contact"}}]},
+      {"id":"n4","form":"修饰","scope":"液态接触点","inputs":["n3"],"words":["牵引"],"operands":[{"type":"Process","reads":["reference.contact","contract.drive"]}]},
+      {"id":"n5","form":"接续","scope":"松手时的同一主体","inputs":["n3","n4"],"words":["凝固"],"aspect_ref":"water.distribution","operands":[{"type":"Entity","reads":["n1:0","n2:0","n3:2","n3:1","contract.reserve"],"subject":"v1"}],"intents":[{"ref":"v2","material":"v1","propagate":{"via":"continuous_material","start":"support_contact","sampling":"live","missing":"abort_delivery"},"event":"voluntary_release"}]},
+      {"id":"n6","form":"阶段","scope":"冻结后追加的关系","inputs":["n5"],"words":["束缚"],"operands":[{"type":"Relation","reads":["reference.target_motion","contract.support","contract.sustain"]}]},
+      {"id":"n7","form":"阶段","scope":"收束之前的打断","inputs":["n4"],"words":["牵引"],"operands":[{"reuse":"n4:0"}],"intents":[{"ref":"v3","event":"interruption","action":"end_control"}]}
+    ],
+    "core": {
+      "concepts": [
+        {"id":"water","concept":"水"}
+      ],
+      "subjects": [
+        {"id":"net","concept_ref":"water","source":"Borrow","binding":"场中实际水量，凝固继续引用 net","source_ref":"@source","intent_ref":"v1","spatial_intent":{"support":"path","layout":"interlaced","distribution":"continuous","anchor":"support_contact"}}
+      ],
+      "relations": [
+        {"id":"pull","from":"net","to":"@target","channel":"力学","condition":"液态前沿实际接触目标"},
+        {"id":"support","from":"net","to":"@support","channel":"结构","condition":"现场有效支撑"},
+        {"id":"bind","from":"net","to":"@target","channel":"力学","condition":"原有接触有效且收束后继续支付维系"},
+        {"id":"lift","from":"@caster","to":"net","channel":"力学","condition":"持续塑形期间施法者专注并支付液态组织与托举"}
+      ],
+      "processes": [
+        {"id":"take","when":"on_cast","operation":"Transfer","target":"net","after":[],"condition":"来源水面可达且仍有可用水量","result":"将实际取到的水自来源转入 net，记录同份材料","requires_all":["来源可达","来源有量"],"effects":["归属转移"]},
+        {"id":"weave","when":"while_held","operation":"Drive","target":"net","after":["take"],"condition":"可达水源、专注与供给均有效","result":"前沿受引导并允许受阻，记录实际接触和轮廓","requires_all":["已有材料","持续供给","控制有效"],"effects":["调整当前组织"]},
+        {"id":"freeze","when":"on_release","operation":"Transform","target":"net","after":["weave"],"condition":"已形成材料且主动交付凝固代价","result":"沿实际连续材料冻结当前轮廓","requires_all":["主动释放","已有材料","储备可用"],"effects":["原位转固"],"intent_ref":"v2","propagation":{"channel":"material_continuity","origin":"support_contact","topology":"realized_live","missing_origin":"abort_delivery","material":"v1"}},
+        {"id":"hold","when":"on_ready","operation":"Constrain","target":"bind","after":["freeze"],"condition":"有效接触与续费同时成立","result":"额外维持束缚","requires_all":["当前接触","持续供给"],"effects":["限制目标运动"]},
+        {"id":"stop","when":"on_supply_end","operation":"Withdraw","target":"bind","after":["hold"],"condition":"追加供给结束","result":"自然固体约束及有效支撑留存","requires_all":["供给终止"],"effects":["解除主动作用"]},
+        {"id":"fall","when":"on_interrupt","operation":"Withdraw","target":"pull","after":["weave"],"condition":"液态塑形被强制打断","result":"水失去主动支撑后落下，未完成部分终止","requires_all":["强制中断"],"effects":["解除主动作用"],"intent_ref":"v3"},
+        {"id":"stop_lift","when":"on_ready","operation":"Withdraw","target":"lift","after":["freeze"],"condition":"松手已交付当前部分的相变","result":"撤去液态托举，重新判定实际冰体支点","requires_all":["相变交付"],"effects":["解除主动作用"]},
+        {"id":"stop_pull","when":"on_ready","operation":"Withdraw","target":"pull","after":["freeze"],"condition":"当前部分已交付","result":"原液态牵引结束，额外维持的束缚独立结算","requires_all":["相变交付"],"effects":["解除主动作用"]},
+        {"id":"drop_lift","when":"on_interrupt","operation":"Withdraw","target":"lift","after":["weave"],"condition":"先于主动收束被打断","result":"撤去液态托举；水按实际形状与运动落下","requires_all":["强制中断"],"effects":["解除主动作用"]}
+      ],
+      "contract": {"formation":"持续塑造","control":"引导","supply":["持续","预付"],"owner":"施法者","on_release":"对实际已成部分凝固，可续费束缚","on_interrupt":"打断织网时撤去液态支撑"},
+      "obligations": [
+        {"term":"n2:0","at_use":["source_reachable","source_nonempty"]},
+        {"term":"n4:0","at_use":["actual_contact","connected_material","supply_available"]},
+        {"term":"n5:0","at_use":["material_present"]},
+        {"term":"n6:0","at_use":["actual_contact","support_valid"]}
+      ]
+    },
+    "trace": [
+      {"node":"n1","senses":["水.指称"],"outputs":["water"],"because":"限定材料","rule_id":"G.compose"},
+      {"node":"n2","senses":["借用.取材"],"outputs":["net","take"],"because":"承接有来源的有限水体","rule_id":"G.modify"},
+      {"node":"n3","senses":["汇聚.趋近","延展.连续","交织.交错"],"outputs":["support","weave","lift"],"because":"在实际空间整理水带；几何交叉不提供焊点","rule_id":"G.qualify"},
+      {"node":"n4","senses":["牵引.拉动"],"outputs":["pull"],"because":"实际碰到的目标可被有限牵扯","rule_id":"G.modify"},
+      {"node":"n5","senses":["凝固.相变"],"outputs":["freeze","stop_lift","stop_pull"],"because":"继承已成轮廓、连续材料和有效连接","rule_id":"G.cause"},
+      {"node":"n6","senses":["束缚.限制"],"outputs":["bind","hold","stop"],"because":"持续责任只涵盖额外强化","rule_id":"G.phase"},
+      {"node":"n7","senses":["牵引.拉动"],"outputs":["fall","drop_lift"],"because":"撤去已有主动作用，冰相没有产生","rule_id":"G.phase"}
+    ],
+    "lowering": {"binding":"map.freeze","legacy_example":"case1_water_weave_freeze.json","gap":"仅作部分对照。旧意图将束缚绑定在持咒时的支点，Case 1 没有图鉴的冻后续费强化。","execution_refs":{"weave":["s_water","p_weave_water"],"support":["rel_web_support"],"freeze":["p_freeze_propagate"],"fall":["p_abort_drop"]}}
+  },
+  {
+    "id": "M014",
+    "name": "雾幕 · 一次铺展",
+    "versions": {"core":"0.1.1","semantics":"0.1.1","execution":"0.2.2","artkit":"0.2.3"},
+    "graph": [
+      {"id":"n1","form":"构成","scope":"细滴处于气体中","inputs":[],"words":["水","气","弥散"],"operands":[{"type":"Concept","reads":["concept.water"]},{"type":"Concept","reads":["concept.air"]},{"type":"Concept","reads":["n1:0","n1:1"]}]},
+      {"id":"n2","form":"共同限定","scope":"雾体占据区域","inputs":["n1"],"words":["铺展"],"operands":[{"type":"Entity","reads":["n1:0","reference.region","n1:2"]}],"intents":[{"ref":"v1","space":{"organization":"radial_dispersion","anchor":"aim_point"}}]},
+      {"id":"n3","form":"阶段","scope":"组织结束","inputs":["n2"],"words":["铺展"],"operands":[{"reuse":"n2:0"}]}
+    ],
+    "core": {
+      "concepts": [
+        {"id":"mist","concept":"雾"}
+      ],
+      "subjects": [
+        {"id":"veil","concept_ref":"mist","source":"Manifest","binding":"支付有限水滴，在可用气体中组织","source_ref":"@caster","intent_ref":"v1","spatial_intent":{"support":"region","layout":"radial","distribution":"dispersed","anchor":"aim_point"}}
+      ],
+      "relations": [
+        {"id":"sight","from":"veil","to":"@observer","channel":"光学","condition":"观察者视线穿过实际雾滴分布"}
+      ],
+      "processes": [
+        {"id":"spread","when":"on_cast","operation":"Establish","target":"veil","after":[],"condition":"材料与介质足够","result":"水滴散布并遮挡敌我视线","requires_all":["施法投入可用","介质可用"],"effects":["建立有限分布"]},
+        {"id":"decay","when":"on_completion","operation":"Withdraw","target":"veil","after":["spread"],"condition":"组织已交付","result":"雾随气流稀释，遮蔽同步变化","requires_all":["成形结束"],"effects":["解除主动作用"]}
+      ],
+      "contract": {"formation":"一次成形","control":"预定","supply":["即时"],"owner":"独立现象","on_release":"雾体继续演化","on_interrupt":"已有水滴继续扩散"},
+      "obligations": []
+    },
+    "trace": [
+      {"node":"n1","senses":["水.指称","气.指称","弥散.分布"],"outputs":["mist"],"because":"共同限定物质及分布","rule_id":"G.compose"},
+      {"node":"n2","senses":["铺展.覆盖"],"outputs":["veil","sight","spread"],"because":"视线衰减由密度和实际路径产生","rule_id":"G.qualify"},
+      {"node":"n3","senses":["铺展.覆盖"],"outputs":["decay"],"because":"场地保留已有介质","rule_id":"G.phase"}
+    ],
+    "lowering": {"binding":"map.mist","legacy_example":null,"gap":"单纯遮蔽只需介质和光学反馈。不得借用 Case 4 的感应支路。","execution_refs":{}}
+  },
+  {
+    "id": "M015",
+    "name": "雾织感应 · 扰动回传",
+    "versions": {"core":"0.1.1","semantics":"0.1.1","execution":"0.2.2","artkit":"0.2.3"},
+    "graph": [
+      {"id":"n1","form":"构成","scope":"雾的组成","inputs":[],"words":["水","气","弥散"],"operands":[{"type":"Concept","reads":["concept.water"]},{"type":"Concept","reads":["concept.air"]},{"type":"Concept","reads":["n1:0","n1:1"]}]},
+      {"id":"n2","form":"共同限定","scope":"遮蔽介质","inputs":["n1"],"words":["铺展"],"operands":[{"type":"Entity","reads":["n1:0","reference.region","n1:2"]}],"intents":[{"ref":"v1","space":{"organization":"radial_dispersion","anchor":"aim_point"}}]},
+      {"id":"n3","form":"共享引用","scope":"同一雾体与接收者","inputs":["n2"],"words":["以太","联结"],"aspect_ref":"medium.signal","operands":[{"type":"Concept","reads":["concept.aether"]},{"type":"Relation","reads":["aspect.medium.signal","reference.perception","n3:0","contract.sustain"]}]},
+      {"id":"n4","form":"接续","scope":"实际扰动","inputs":["n3"],"words":["回应"],"aspect_ref":"medium.signal","operands":[{"type":"Relation","reads":["n3:1","aspect.medium.signal"]}]},
+      {"id":"n5","form":"阶段","scope":"维持的通路","inputs":["n3"],"words":["联结"],"operands":[{"reuse":"n3:1"}]}
+    ],
+    "core": {
+      "concepts": [
+        {"id":"mist","concept":"雾"}
+      ],
+      "subjects": [
+        {"id":"veil","concept_ref":"mist","source":"Manifest","binding":"支付雾滴及持续组织","source_ref":"@caster","intent_ref":"v1","spatial_intent":{"support":"region","layout":"radial","distribution":"dispersed","anchor":"aim_point"}}
+      ],
+      "relations": [
+        {"id":"sight","from":"veil","to":"@observer","channel":"光学","condition":"视线穿过实际雾区"},
+        {"id":"signal","from":"veil","to":"@caster","channel":"信息","condition":"存在扰动，传递媒介与接收端有效"}
+      ],
+      "processes": [
+        {"id":"spread","when":"on_cast","operation":"Establish","target":"veil","after":[],"condition":"材料与气体可用","result":"双向遮蔽","requires_all":["施法投入可用","介质可用"],"effects":["建立有限分布"]},
+        {"id":"listen","when":"on_ready","operation":"Establish","target":"signal","after":["spread"],"condition":"建立以太联结且持续供给","result":"在雾与施法者间保持有限通道","requires_all":["传递媒介可用","接收端有效","持续供给"],"effects":["建立信息通路"]},
+        {"id":"report","when":"on_signal","operation":"Couple","target":"signal","after":["listen"],"condition":"实际扰动可达","result":"回传方向与强弱","requires_all":["真实扰动","信息通路有效"],"effects":["传递实际信号"]},
+        {"id":"close","when":"on_release","operation":"Withdraw","target":"signal","after":["listen"],"condition":"维持结束","result":"结束信号，雾自然散开","requires_all":["主动释放"],"effects":["解除主动作用"]}
+      ],
+      "contract": {"formation":"持续塑造","control":"引导","supply":["即时","持续"],"owner":"施法者","on_release":"撤去信息联结","on_interrupt":"停止反馈，既有雾随环境演化"},
+      "obligations": [
+        {"term":"n3:1","at_use":["receiver_available"]},
+        {"term":"n4:0","at_use":["actual_disturbance","receiver_available"]}
+      ]
+    },
+    "trace": [
+      {"node":"n1","senses":["水.指称","气.指称","弥散.分布"],"outputs":["mist"],"because":"水滴在气体中弥散","rule_id":"G.compose"},
+      {"node":"n2","senses":["铺展.覆盖"],"outputs":["veil","sight","spread"],"because":"有雾处影响视线","rule_id":"G.qualify"},
+      {"node":"n3","senses":["以太.指称","联结.感应"],"outputs":["signal","listen"],"because":"以太承载有端点的信息通路","rule_id":"G.reuse"},
+      {"node":"n4","senses":["回应.反馈"],"outputs":["report"],"because":"只交付信号中存在的内容","rule_id":"G.cause"},
+      {"node":"n5","senses":["联结.感应"],"outputs":["close"],"because":"打断或松手后丢失信息联系","rule_id":"G.phase"}
+    ],
+    "lowering": {"binding":"map.signal","legacy_example":"case4_fog_disturbance_sense.json","gap":"旧样例额外包含跟随；该变体没有追随语义。一般结构振动的传感能力仍延后。","execution_refs":{"signal":["rel_disturb_sense"],"spread":["p_fog_veil"],"close":["p_dissipate_fog"]}}
+  },
+  {
+    "id": "M017",
+    "name": "伏霜印 · 预付反刺",
+    "versions": {"core":"0.1.1","semantics":"0.1.1","execution":"0.2.2","artkit":"0.2.3"},
+    "graph": [
+      {"id":"n1","form":"构成","scope":"冰矛材料","inputs":[],"words":["水","凝固"],"operands":[{"type":"Concept","reads":["concept.water"]},{"type":"Concept","reads":["n1:0"]}]},
+      {"id":"n2","form":"共同限定","scope":"有限实体","inputs":["n1"],"words":["凝聚"],"operands":[{"type":"Entity","reads":["n1:1"]}],"intents":[{"ref":"v1","space":{"organization":"tapered_mass","anchor":"carrier_surface"}}]},
+      {"id":"n3","form":"修饰","scope":"预付推进","inputs":["n2"],"words":["排斥","穿透"],"operands":[{"type":"Process","reads":["reference.axis","contract.drive"]},{"type":"Process","reads":["n3:0","choice.boundary"]}],"intents":[{"ref":"v2","direction":{"frame":"surface","axis":"normal"}}]},
+      {"id":"n4","form":"阶段","scope":"保存的作用","inputs":["n2","n3"],"words":["以太","封存"],"operands":[{"type":"Concept","reads":["concept.aether"]},{"type":"Relation","reads":["reference.vessel","contract.payload"]}]},
+      {"id":"n5","form":"接续","scope":"载体现实受压","inputs":["n4"],"words":["回应","释放"],"operands":[{"type":"Relation","reads":["reference.pressure","contract.payload"]},{"type":"Process","reads":["contract.payload"]}]}
+    ],
+    "core": {
+      "concepts": [
+        {"id":"ice","concept":"冰"}
+      ],
+      "subjects": [
+        {"id":"dart","concept_ref":"ice","source":"Manifest","binding":"制作时支付一枚冰矛","source_ref":"@caster","intent_ref":"v1","spatial_intent":{"support":"solid","layout":"tapered","distribution":"concentrated","anchor":"carrier_surface"}}
+      ],
+      "relations": [
+        {"id":"store","from":"dart","to":"@vessel","channel":"寄托","condition":"载体完整且可封存"},
+        {"id":"trigger","from":"@vessel","to":"dart","channel":"事件","condition":"载体表面发生实际挤压"},
+        {"id":"thrust","from":"@vessel","to":"dart","channel":"力学","condition":"沿载体预定方向的排斥能力已预付"}
+      ],
+      "processes": [
+        {"id":"arm","when":"on_cast","operation":"Establish","target":"store","after":[],"condition":"备好材料、载体与一次发射储备","result":"封存已备内容和独立推进能力","requires_all":["载体完整","已有材料","储备可用"],"effects":["限制对外发挥"]},
+        {"id":"release","when":"on_contact","operation":"Withdraw","target":"store","after":["arm"],"condition":"实际受压且储备有效","result":"解封一发","requires_all":["当前接触","储备可用","载体完整"],"effects":["解除主动作用"]},
+        {"id":"launch","when":"on_ready","operation":"Drive","target":"dart","after":["release"],"condition":"thrust 有效，扣除预付储备","result":"扣除一次储备，使已解封的冰矛沿载体局部方向运动","requires_all":["驱动关系有效","储备可用"],"effects":["交付推进"],"intent_ref":"v2","direction":{"frame":"surface","axis":"normal"}},
+        {"id":"spill","when":"on_carrier_loss","operation":"Withdraw","target":"store","after":["arm"],"condition":"载体先行破坏","result":"材料脱落，取消尚未触发的发射","requires_all":["载体损毁"],"effects":["解除主动作用"]},
+        {"id":"enter","when":"on_contact","operation":"Drive","target":"dart","after":["launch"],"condition":"实际运动的冰矛遇到阻隔且余力足够","result":"按实际阻力贯入或停下","requires_all":["当前接触","已有推进"],"effects":["有限贯入"]}
+      ],
+      "contract": {"formation":"寄托建立","control":"条件回应","supply":["即时","预付"],"owner":"器物","on_release":"把既备能力交给器物","on_interrupt":"寄托前中断终止建立"},
+      "obligations": [
+        {"term":"n3:0","at_use":["supply_available"]},
+        {"term":"n3:1","at_use":["actual_contact","momentum_available"]},
+        {"term":"n5:0","at_use":["actual_event","payload_available"]}
+      ]
+    },
+    "trace": [
+      {"node":"n1","senses":["水.指称","凝固.构成"],"outputs":["ice"],"because":"先取得冰材料概念","rule_id":"G.compose"},
+      {"node":"n2","senses":["凝聚.结合"],"outputs":["dart"],"because":"成形后可以存储","rule_id":"G.qualify"},
+      {"node":"n3","senses":["排斥.推动","穿透.贯入"],"outputs":["thrust","launch","enter"],"because":"明确推进来源，穿透只限定遇阻效果","rule_id":"G.modify"},
+      {"node":"n4","senses":["以太.指称","封存.限制"],"outputs":["store","arm","spill"],"because":"器物承接有限内容与独立推进投入","rule_id":"G.phase"},
+      {"node":"n5","senses":["回应.触发","释放.解限"],"outputs":["trigger","release"],"because":"条件只涉及挤压，不识别敌我","rule_id":"G.cause"}
+    ],
+    "lowering": {"binding":"map.seal","legacy_example":"case6_vessel_imprint_seal.json","gap":"基准使用火印。此处借用器物事件契约，冰矛材料与定向推进需另行转译。","execution_refs":{"trigger":["rel_seal_contact"],"arm":["p_armed_watch"]}}
+  },
+  {
+    "id": "M020",
+    "name": "涌泉锚 · 水源与储备分账",
+    "versions": {"core":"0.1.1","semantics":"0.1.1","execution":"0.2.2","artkit":"0.2.3"},
+    "graph": [
+      {"id":"n1","form":"构成","scope":"材料","inputs":[],"words":["水"],"operands":[{"type":"Concept","reads":["concept.water"]}]},
+      {"id":"n2","form":"修饰","scope":"有限水源","inputs":["n1"],"words":["借用","联结"],"operands":[{"type":"Entity","reads":["contract.material"]},{"type":"Relation","reads":["reference.feed"]}]},
+      {"id":"n3","form":"阶段","scope":"场所和驱动储备","inputs":["n2"],"words":["以太","封存"],"operands":[{"type":"Concept","reads":["concept.aether"]},{"type":"Relation","reads":["contract.reserve","reference.vessel"]}]},
+      {"id":"n4","form":"共同限定","scope":"固定流路","inputs":["n2","n3"],"words":["牵引","延展","铺展","排斥"],"operands":[{"type":"Process","reads":["reference.contact","contract.drive"]},{"type":"Entity","reads":["n1:0","reference.axis"]},{"type":"Entity","reads":["n1:0","reference.region"]},{"type":"Process","reads":["reference.axis","contract.drive"]}],"intents":[{"ref":"v1","space":{"organization":"spread_course","anchor":"site"}}]}
+    ],
+    "core": {
+      "concepts": [
+        {"id":"water","concept":"水"}
+      ],
+      "subjects": [
+        {"id":"stream","concept_ref":"water","source":"Borrow","binding":"地点绑定的真实水源","source_ref":"@source","intent_ref":"v1","spatial_intent":{"support":"surface","layout":"strip","distribution":"continuous","anchor":"site"}}
+      ],
+      "relations": [
+        {"id":"feed","from":"@source","to":"stream","channel":"材料","condition":"水源连通且有余量"},
+        {"id":"power","from":"@reserve","to":"@site","channel":"供能","condition":"预付驱动储备有余额"}
+      ],
+      "processes": [
+        {"id":"arm","when":"on_cast","operation":"Establish","target":"power","after":[],"condition":"部署完成且预付力量已封存","result":"场所承接驱动责任","requires_all":["载体完整","储备可用"],"effects":["建立预付供给"]},
+        {"id":"take","when":"while_supplied","operation":"Transfer","target":"stream","after":["arm"],"condition":"feed 和 power 同时有效","result":"扣减源水并将水引入流路","requires_all":["来源可达","来源有量","储备可用"],"effects":["归属转移"]},
+        {"id":"push","when":"while_supplied","operation":"Drive","target":"stream","after":["take"],"condition":"固定出口可达且储备有余额","result":"逐次扣减储备并定向推出","requires_all":["路径连续","驱动关系有效","储备可用"],"effects":["交付推进"]},
+        {"id":"stop","when":"on_supply_end","operation":"Withdraw","target":"power","after":["arm"],"condition":"来源断开或驱动储备耗尽","result":"驱动停止，已排出的水归场地","requires_all":["供给终止"],"effects":["解除主动作用"]}
+      ],
+      "contract": {"formation":"寄托建立","control":"预定","supply":["预付","环境"],"owner":"场所","on_release":"交接后可离开并使用其他法术","on_interrupt":"建立前打断取消交接"},
+      "obligations": [
+        {"term":"n2:0","at_use":["source_reachable","source_nonempty"]},
+        {"term":"n2:1","at_use":["source_reachable"]},
+        {"term":"n4:0","at_use":["actual_contact","connected_material","supply_available"]},
+        {"term":"n4:3","at_use":["supply_available"]}
+      ]
+    },
+    "trace": [
+      {"node":"n1","senses":["水.指称"],"outputs":["water"],"because":"作用对象是水","rule_id":"G.compose"},
+      {"node":"n2","senses":["借用.取材","联结.取源"],"outputs":["feed","stream","take"],"because":"材料输送须有真实来水","rule_id":"G.modify"},
+      {"node":"n3","senses":["以太.指称","封存.限制"],"outputs":["power","arm","stop"],"because":"预付作用与水量各有所有者","rule_id":"G.phase"},
+      {"node":"n4","senses":["牵引.拉动","延展.连续","铺展.覆盖","排斥.推动"],"outputs":["push"],"because":"场所组织流路并有限推水，施法者可离开","rule_id":"G.qualify"}
+    ],
+    "lowering": {"binding":"map.source","legacy_example":null,"gap":"来源账本和预付可复用。跨现场持久的双账与堵塞退场缺少完整基准。","execution_refs":{}}
+  }
+]

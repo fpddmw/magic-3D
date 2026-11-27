@@ -1,0 +1,236 @@
+{
+  "versions": {
+    "core": "0.1.1",
+    "semantics": "0.1.1",
+    "execution": "0.2.2"
+  },
+  "gravity": {
+    "base_file": "law_core_cases.json",
+    "base_case": "L05",
+    "only_variant_input": "/graph/2/intents/0/direction/axis",
+    "common": {
+      "space": {
+        "support": "region",
+        "layout": "radial",
+        "distribution": "field",
+        "anchor": "aim_point"
+      },
+      "accrual": {
+        "operation": "Transfer",
+        "profile": "over_time",
+        "effects": [
+          "积入储备"
+        ],
+        "when": "while_held"
+      },
+      "delivery": {
+        "operation": "Drive",
+        "profile": "short_impulse",
+        "effects": [
+          "定向加速度"
+        ],
+        "when": "on_release"
+      },
+      "execution": {
+        "carrier": "REGION",
+        "generator": "RADIAL_SPHERE",
+        "mode": "IMPULSE",
+        "profile": "INSTANT_BURST",
+        "channel": "VELOCITY_IMPULSE"
+      }
+    },
+    "variants": [
+      {
+        "input": "down",
+        "core_direction": {
+          "frame": "world",
+          "axis": "down"
+        },
+        "execution_direction": {
+          "mode": "WORLD_AXIS",
+          "axis": "DOWN"
+        }
+      },
+      {
+        "input": "up",
+        "core_direction": {
+          "frame": "world",
+          "axis": "up"
+        },
+        "execution_direction": {
+          "mode": "WORLD_AXIS",
+          "axis": "UP"
+        }
+      }
+    ],
+    "test_parameters": {
+      "accrual": {
+        "resource_kind": "EU",
+        "source_ref": "@caster",
+        "target_subject_id": "field",
+        "rate_per_s": 1,
+        "max_amount": 4,
+        "on_insufficient_source": "CLAMP_TO_AVAILABLE"
+      },
+      "delivery": {
+        "target_subject_id": "field",
+        "magnitude": 1
+      }
+    }
+  },
+  "water": {
+    "base_file": "water_core_cases.json",
+    "base_case": "M009",
+    "only_variant_input": "/scene/edges/2/state",
+    "common": {
+      "space": {
+        "support": "path",
+        "layout": "interlaced",
+        "distribution": "continuous",
+        "anchor": "support_contact"
+      },
+      "freeze": {
+        "operation": "Transform",
+        "effects": [
+          "原位转固"
+        ],
+        "propagation": {
+          "material": "v1",
+          "channel": "material_continuity",
+          "origin": "support_contact",
+          "topology": "realized_live",
+          "missing_origin": "abort_delivery"
+        },
+        "when": "on_release"
+      },
+      "execution": {
+        "carrier": "PATH_GRAPH",
+        "generator": "BRANCH_WEB",
+        "domain": "PATH_CONNECTIVITY",
+        "origin_ref": "TARGET:SURFACE",
+        "connectivity_policy": "LIVE_CONNECTIVITY",
+        "on_missing_origin": "ABORT_NO_COST"
+      }
+    },
+    "scene": {
+      "at": "on_release",
+      "origin_binding": {
+        "support_contact": "root"
+      },
+      "liquid_parts": [
+        "root",
+        "fork",
+        "left",
+        "bridge",
+        "tip",
+        "loose"
+      ],
+      "edges": [
+        {
+          "a": "root",
+          "b": "fork",
+          "kind": "material_continuity",
+          "state": "intact",
+          "length_m": 1
+        },
+        {
+          "a": "fork",
+          "b": "left",
+          "kind": "material_continuity",
+          "state": "intact",
+          "length_m": 1
+        },
+        {
+          "a": "fork",
+          "b": "bridge",
+          "kind": "material_continuity",
+          "state": "intact",
+          "length_m": 1
+        },
+        {
+          "a": "bridge",
+          "b": "tip",
+          "kind": "material_continuity",
+          "state": "intact",
+          "length_m": 1
+        },
+        {
+          "a": "left",
+          "b": "loose",
+          "kind": "geometric_contact",
+          "state": "intact",
+          "length_m": 1
+        },
+        {
+          "a": "left",
+          "b": "bridge",
+          "kind": "geometric_contact",
+          "state": "intact",
+          "length_m": 1
+        }
+      ],
+      "test_budget": {
+        "speed_m_s": 1,
+        "max_reach_m": 6,
+        "max_hops": 6,
+        "attenuation": 0
+      },
+      "observe_at_s": 4,
+      "completed": [
+        "take",
+        "weave"
+      ],
+      "reserve_available": true
+    },
+    "variants": [
+      {
+        "input": "intact",
+        "frozen": [
+          "root",
+          "fork",
+          "left",
+          "bridge",
+          "tip"
+        ],
+        "liquid": [
+          "loose"
+        ]
+      },
+      {
+        "input": "broken",
+        "frozen": [
+          "root",
+          "fork",
+          "left"
+        ],
+        "liquid": [
+          "bridge",
+          "tip",
+          "loose"
+        ]
+      }
+    ],
+    "edge_cases": [
+      {
+        "change": "remove_origin",
+        "expected_status": "MISSING_BINDING",
+        "frozen": []
+      },
+      {
+        "change": "break_before_frontier",
+        "before_departure_from": "fork",
+        "edge_index": 2,
+        "frozen": [
+          "root",
+          "fork",
+          "left"
+        ]
+      },
+      {
+        "change": "interrupt_before_release",
+        "expected_operation": "Withdraw",
+        "frozen": []
+      }
+    ]
+  }
+}

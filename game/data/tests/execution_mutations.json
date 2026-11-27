@@ -1,0 +1,203 @@
+{
+  "material_subject_missing_material_and_phase": [
+    {
+      "op": "remove",
+      "path": "/subjects/0/material_id"
+    },
+    {
+      "op": "remove",
+      "path": "/subjects/0/initial_phase"
+    }
+  ],
+  "region_carrier_using_path_generator": [
+    {
+      "op": "replace",
+      "path": "/spatial/0/generator",
+      "value": "BRANCH_WEB"
+    }
+  ],
+  "op_targeting_nonexistent_subject": [
+    {
+      "op": "replace",
+      "path": "/process_graph/processes/0/while_active/1/target_subject_id",
+      "value": "s_ghost_water"
+    }
+  ],
+  "transition_to_nonexistent_process": [
+    {
+      "op": "replace",
+      "path": "/process_graph/processes/0/transitions/0/next_process_ids",
+      "value": [
+        "p_void_missing"
+      ]
+    }
+  ],
+  "duplicate_subject_ids": [
+    {
+      "op": "replace",
+      "path": "/subjects/1/id",
+      "value": "s_water"
+    }
+  ],
+  "unregistered_override_field": [
+    {
+      "op": "add",
+      "path": "/subjects/0/overrides",
+      "value": {
+        "density": 9999
+      }
+    }
+  ],
+  "forged_zero_mana_budget": [
+    {
+      "op": "replace",
+      "path": "/budget/derived_upfront_mana",
+      "value": 0
+    }
+  ],
+  "nonexistent_art_module": [
+    {
+      "op": "add",
+      "path": "/subjects/0/art_overrides/contour_override",
+      "value": "MYTHIC_GALAXY_DRAGON"
+    }
+  ],
+  "impulse_channel_in_target_drive_mode": [
+    {
+      "op": "replace",
+      "path": "/process_graph/processes/1/on_enter/0/mode",
+      "value": "TARGET"
+    }
+  ],
+  "inventory_exceeds_capacity": [
+    {
+      "op": "replace",
+      "path": "/subjects/0/initial_inventory_mu",
+      "value": 99
+    }
+  ],
+  "establish_in_while_active": [
+    {
+      "op": "add",
+      "path": "/process_graph/processes/0/while_active/-",
+      "value": {
+        "op": "ESTABLISH",
+        "target_kind": "SUBJECT",
+        "target_id": "s_water",
+        "handle_id": "h_water"
+      }
+    }
+  ],
+  "unreachable_orphan_process": [
+    {
+      "op": "add",
+      "path": "/process_graph/processes/-",
+      "value": {
+        "id": "p_orphan",
+        "role": "CLEANUP_DISSIPATE",
+        "on_enter": [
+          {
+            "op": "WITHDRAW",
+            "target_scope": "ALL_SPELL_SUPPORTS",
+            "mode": "DISSIPATE"
+          }
+        ],
+        "while_active": [],
+        "on_exit": [],
+        "max_duration_s": 0.25,
+        "transitions": [
+          {
+            "on_event": "ON_TIMEOUT",
+            "event_source_filter": {
+              "scope": "SELF_PROCESS"
+            },
+            "next_process_ids": [],
+            "handoff_handles": [],
+            "action": "STOP_SELF_ONLY"
+          }
+        ]
+      }
+    }
+  ],
+  "gravity_impulse_500_unchanged_budget": [
+    {
+      "op": "replace",
+      "path": "/process_graph/processes/1/on_enter/0/magnitude",
+      "value": 500
+    }
+  ],
+  "delete_all_spatial_for_field": [
+    {
+      "op": "replace",
+      "path": "/spatial",
+      "value": []
+    }
+  ],
+  "duplicate_op_handle_id": [
+    {
+      "op": "replace",
+      "path": "/process_graph/processes/0/while_active/1/handle_id",
+      "value": "h_lift_up"
+    }
+  ],
+  "handoff_future_uncreated_handle": [
+    {
+      "op": "add",
+      "path": "/process_graph/processes/0/transitions/0/handoff_handles/-",
+      "value": "h_freeze"
+    }
+  ],
+  "process_graph_cycle_cleanup_to_entry": [
+    {
+      "op": "replace",
+      "path": "/process_graph/processes/2/transitions/0/next_process_ids",
+      "value": [
+        "p_lift_gather"
+      ]
+    }
+  ],
+  "water_initial_phase_plasma": [
+    {
+      "op": "replace",
+      "path": "/subjects/0/initial_phase",
+      "value": "PLASMA"
+    }
+  ],
+  "impulse_op_inside_while_active": [
+    {
+      "op": "add",
+      "path": "/process_graph/processes/0/while_active/-",
+      "value": {
+        "op": "DRIVE",
+        "target_subject_id": "f_grav",
+        "channel": "VELOCITY_IMPULSE",
+        "mode": "IMPULSE",
+        "magnitude": 28.0,
+        "direction": {
+          "mode": "WORLD_AXIS",
+          "axis": "DOWN"
+        },
+        "profile": "INSTANT_BURST"
+      }
+    }
+  ],
+  "nonexistent_rune_token_in_intent": [
+    {
+      "op": "replace",
+      "path": "/rune_contributions/0/rune_id",
+      "value": "RUNE_FAKE_VOID_DRAGON_999"
+    }
+  ],
+  "invert_clause_missing_scope_target": [
+    {
+      "op": "add",
+      "path": "/clauses/-",
+      "value": {
+        "id": "cl_inverse",
+        "meaning": "反转",
+        "input_refs": [],
+        "timing": "ON_CAST"
+      }
+    }
+  ]
+}

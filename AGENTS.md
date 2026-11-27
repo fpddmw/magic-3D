@@ -7,7 +7,7 @@
 本项目是一款 **3D 庄严奇幻废城动作冒险游戏**，以《艾尔登法环》式的宏大废墟氛围与慢拍厚重动作作为生存底盘，以**基于规律组合的语义魔法生成空间**作为核心灵魂与最高辨识度。
 
 所有设计与工程决策必须服从以下优先级顺序：
-1. **魔法生成空间与三层原语架构（`Semantic Primitives` → `Magic DSL v0.2` → `Runtime Kernels`）**
+1. **魔法形而上学、符文语义与 Magic Core（语义构筑 → 确定的 Core → 逻辑／艺术／施法体验转译；执行 v0.2.2 对接 Runtime Kernels）**
 2. **同源爆炸级 4 层视听质感与沉重慢拍 3D 动作博弈**
 3. **高自由度、因果诚实的共享世界规律（`WorldLaw`）**
 
@@ -18,20 +18,18 @@
 3. **引擎与空间不可回退**：采用 **Godot 4.x（Forward+ / Metal on macOS / Vulkan on Windows + Jolt 3D）** 实现真实 3D，**必须同时支持开阔苍穹外景与挑高哥特室内战斗**；严禁退回 2D 像素或自研底层 CFD 连续流体求解器（拒绝 CSG 布尔与任意网格切割）。
 4. **兼顾普通玩家硬件与构筑期算力隔离**：
    - 目标 Apple M6 及普通中端独显 1080p 稳跑 60 FPS（战斗显存 $\le 2.5\text{ GB}$）。
-   - 若接入本地轻量语义模型，**仅在“法坛构筑 / 世界暂停”阶段输出 `SemanticIntent`**，经确定性编译器降维并静态校验为 `CompiledSpellDSL` 后释放模型算力；**战斗中保持 0 模型开销、0 帧率损耗**。
+   - 若接入本地轻量语义模型，**仅在“法坛构筑 / 世界暂停”阶段输出 `SemanticIntent`**，经确定性语义解释生成 Magic Core 与 CompileTrace，再降低并静态校验为 `CompiledSpellDSL` 后释放模型算力；**战斗中保持 0 模型开销、0 帧率损耗**。
 5. **严禁空壳 TODO 与丑陋白盒过关**：Wave 1 就必须同时交付废城暴雨石殿氛围、4 层复合视觉栈、4 层动态音频与沉重动作手感门禁。未经实机运行验证的能力一律标为草案/待验证。
 
 ## 3. 当前活跃里程碑与分工边界
 
-- **当前阶段**：**`Magic DSL v0.2.2` 纯规范与实施计划收口完成（Option A 纯设计/数据基线，待锁定最后 3 项细节后进入 Wave 0 施工）**。
-- **规划与施工分离纪律**：本仓现阶段仅维护设计文档、施工计划、Draft 2020-12 Schema、单源声明式规则表（[dsl_rules_v0_2.json](game/data/rules/dsl_rules_v0_2.json)）、共享测试向量（[validator_negative_vectors.json](game/data/tests/validator_negative_vectors.json)）与基准 JSON；**规划/规范会话不得越界预写 `.py` / `.gd` 实现代码**，全部可执行校验器与运行时代码在施工会话中严格由单源规则表统一生成/实现。
-- **主入口**：
-  - 正式规范（v0.2.2）：[docs/02_Magic_DSL_v0.2_正式语法与语义规范.md](docs/02_Magic_DSL_v0.2_正式语法与语义规范.md)
-  - 分波次施工与验收计划：[docs/06_Magic_Runtime_三波次实施与验收计划.md](docs/06_Magic_Runtime_三波次实施与验收计划.md)
-  - 校验 Schema、单源规则表与 7 份基准样例：[magic_dsl_v0_2.schema.json](game/data/schema/magic_dsl_v0_2.schema.json) · [dsl_rules_v0_2.json](game/data/rules/dsl_rules_v0_2.json) · [game/data/spells/](game/data/spells/case1_water_weave_freeze.json)
-  - 21 条共享负向向量与 50 词示例：[validator_negative_vectors.json](game/data/tests/validator_negative_vectors.json) · [sample_intent_water_weave_freeze.json](game/data/intents/sample_intent_water_weave_freeze.json)
+- **当前阶段**：阶段 B，Magic Core 0.1.2 的离线确定性语义编译器与回归验收。世界公理由设计者裁定，工程提交反例与能力缺口。
+- **规划与施工分离**：Option A 仅维护文档、数据、Schema、对照轨迹、测试向量与施工计划。已获授权的阶段 B 施工维护离线编译器、准入校验与验收。Godot 运行时和实机施工归阶段 C、D。每项活动规则在其归属域维护；v0.2.2 综合表固定为兼容基线。
+- **主入口**：[Magic Core](docs/magic_core/README.md) · [语言与契约](docs/magic_core/语言与Core_DSL.md) · [数据职责](game/README.md) · [施工与实机门禁](docs/06_Magic_Runtime_三波次实施与验收计划.md)。
+- **变更纪律**：记录决定 ID、状态、影响、正反例及版本迁移。维护历史原文和已确定构筑的解释版本。首批子集与尚待裁决的高阶概念分开排期。
 
 ## 4. 资料同步与协作纪律
 
 - **历史边界**：旧仓 `../city-fates`（含 C++20/Vulkan 引擎、`src/` 旧原型）与本仓冻结的 v0.1 讨论稿已明确停用，详见 [docs/00_资产清点与迁移清单.md](docs/00_资产清点与迁移清单.md)。
 - **版本管理**：重要规范调整或每波次实机门禁验收通过后再提交与推送，严禁删除无关资产或覆盖用户修改。
+- 每轮交付时，将本轮已定案的规范、实现及验收结果一并提交并推送到 GitHub。核对远端分支的提交号后，在交付回复中附上对应版本的链接，供设计者与 Chat 查阅。
