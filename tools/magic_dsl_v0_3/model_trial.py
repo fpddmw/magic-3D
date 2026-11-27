@@ -9,19 +9,31 @@ from tempfile import TemporaryDirectory
 
 from .admission import Recipe, structure
 from .altar import compile_at_altar, record_observations
-from .schema import REG, SCHEMA, read
+from .schema import REG, SCHEMAS, read
 from .simulate import Simulation
 
 
 def experiment(inputs, expectation, generate, *, scene=None, repair=False):
-    schema = read(SCHEMA)
     calls = []
 
     def candidate(data, diagnostic):
+        schema = read(SCHEMAS[data["DSLVersion"]])
+        geometry = schema["$defs"]["Spatial"]["properties"]["geometry"]["oneOf"]
+        shapes = [variant["properties"]["shape"]["const"] for variant in geometry]
+        capabilities = data["SupportedCapabilities"]
+        registry = {
+            **REG,
+            "edition": data["DSLVersion"],
+            "profile": data["CapabilityProfile"],
+            "knowledge": data["WorldKnowledgeVersion"],
+            "geometry": {shape: REG["geometry"][shape] for shape in shapes},
+            "abilities": {a: REG["abilities"][a] for a in capabilities},
+            "delivery": {a: REG["delivery"][a] for a in capabilities if a in REG["delivery"]},
+        }
         prompt = {
             "task": "只返回一个 CompilationOutput JSON。所有声明 ID 唯一；作用须有来源、有效句柄与支付证明。禁止访问样例或仓库。",
             "input": data,
-            "registry": REG,
+            "registry": registry,
             "response_schema": {"$ref": "#/$defs/CompilationOutput", "$defs": schema["$defs"]},
             "repair": diagnostic,
         }

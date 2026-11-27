@@ -1,0 +1,14 @@
+{
+  "caster_mana": 100, "media": ["ambient_air"],
+  "position": [0,0,0], "aim": [0,0,1], "until_s": 1.5,
+  "objects": [
+    {"id":"east", "position":[1.5,1,0], "mass":1},
+    {"id":"west", "position":[-1.5,1,0], "mass":1},
+    {"id":"axis_probe", "position":[0,1,0], "mass":1},
+    {"id":"outside", "position":[3.1,1,0], "mass":1},
+    {"id":"above", "position":[1,4.1,0], "mass":1},
+    {"id":"below", "position":[1,-0.1,0], "mass":1},
+    {"id":"occluded", "position":[0,1,1], "mass":1, "occluded":true}
+  ],
+  "slots": {}, "edges": [], "events":[{"at":1,"event":"release"}]
+}

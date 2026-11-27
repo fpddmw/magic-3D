@@ -2,6 +2,7 @@
 
 from collections import defaultdict
 from copy import deepcopy
+from math import hypot
 
 from .admission import check
 from .schema import REG
@@ -215,7 +216,7 @@ class Simulation:
         candidates = self.w.affected(space, pose, REG["delivery"][a])
         objects = self.w.objects
         outcome = {}
-        if a in ("impulse", "accelerate", "warm", "conduct"):
+        if a in ("impulse", "accelerate", "sustain_force", "warm", "conduct"):
             weights = {k: v[1] for k, v in candidates.items()}
             if a == "conduct":
                 conductors = {k for k in weights if objects[k].get("conductive")}
@@ -227,9 +228,13 @@ class Simulation:
             if op.get("allocation") == "distance_weighted":
                 weights = {k: v / (1 + candidates[k][0]) for k, v in weights.items()}
             total = sum(weights.values())
+            if a == "sustain_force":
+                total = max(1, total)
             if a == "impulse":
                 budget = self.ratio() * self.r.quote["total_impulse_budget"]
                 self.reserve = 0
+            elif a == "sustain_force":
+                budget = self.r.force_per_field_n * dt
             else:
                 unit = {"accelerate": "acceleration", "warm": "heat_per_s", "conduct": "charge_per_pulse"}[
                     a
@@ -239,15 +244,19 @@ class Simulation:
                 value = budget * w * objects[k]["mass"] if a == "accelerate" else budget * w / total
                 o = objects[k]
                 outcome[k] = value
-                if a in ("impulse", "accelerate"):
-                    direction = self.w.axis(op["axis"], *pose, o["position"])
+                if a in ("impulse", "accelerate", "sustain_force"):
+                    if a == "sustain_force":
+                        direction = self.w.column_vector(op["field_vector"], pose[0], o["position"])
+                        outcome[k] = value * hypot(*direction)
+                    else:
+                        direction = self.w.axis(op["axis"], *pose, o["position"])
                     old = o.get("velocity", [0, 0, 0])
                     o["velocity"] = [x + y * value / o["mass"] for x, y in zip(old, direction)]
                 elif a == "warm":
                     o["temperature_delta"] = o.get("temperature_delta", 0) + value / o["mass"]
                 else:
                     o["charge"] = o.get("charge", 0) + value
-            if a == "impulse":
+            if a in ("impulse", "sustain_force"):
                 self.delivered += sum(outcome.values())
         elif a in ("project", "grow", "fracture"):
             key = self.material_ids[t]
@@ -390,6 +399,7 @@ class Simulation:
         if self.result is not None:
             return deepcopy(self.result)
         until = self.w.scene["until_s"]
+        moving = self.r.data["version"] == "0.3.1"
         external = defaultdict(list)
         for e in self.w.scene["events"]:
             external[e["at"]].append(e)
@@ -404,6 +414,8 @@ class Simulation:
             rates = self.rates()
             by_wallet = defaultdict(float)
             end = min([until, *external])
+            if moving:
+                end = min(end, self.time + 1 / REG["offline_motion_hz"])
             for p, rate in rates.items():
                 state = self.active[p]
                 n = self.r.nodes[p]
@@ -431,8 +443,12 @@ class Simulation:
                         break
                 if p in self.active:
                     self.art(p, "active")
+            if moving:
+                self.w.drift(dt)
             self.dispatch(external.pop(end, []))
         if not self.active:
+            if moving and self.time < until:
+                self.w.drift(until - self.time)
             for h in list(self.handles):
                 self.close(h)
             self.reserve = 0

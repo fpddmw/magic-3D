@@ -1,0 +1,924 @@
+{
+  "vortex": {
+    "field_vector_override": {},
+    "budgets": {
+      "mana": {
+        "tariff_version": "tariff-0.3.1",
+        "upfront_mana": 5.46,
+        "mana_per_s": 5.46,
+        "rates": {
+          "sustain": 5.46
+        },
+        "max_paid_mana": 16.38,
+        "reserve_capacity": 0,
+        "total_impulse_budget": 0
+      },
+      "physics": {
+        "bodies": 0,
+        "edges": 0,
+        "nodes": 0,
+        "quads": 0,
+        "field_target_checks_per_step": 16,
+        "sustained_force_ceiling_n": 4
+      },
+      "render": {
+        "tracks": 0,
+        "layers": 0
+      }
+    },
+    "samples": [
+      {
+        "at_s": 0.5,
+        "status": "active",
+        "mana_spent": 8.19,
+        "sum_impulse_magnitudes_ns": 1.627138628,
+        "probes": {
+          "east": {
+            "position_m": [
+              1.431282402,
+              1.084759562,
+              -0.089710026
+            ],
+            "velocity_m_s": [
+              -0.262801137,
+              0.320353971,
+              -0.336641704
+            ]
+          },
+          "west": {
+            "position_m": [
+              -1.431282402,
+              1.084759562,
+              0.089710026
+            ],
+            "velocity_m_s": [
+              0.262801137,
+              0.320353971,
+              0.336641704
+            ]
+          },
+          "axis_probe": {
+            "position_m": [
+              0.0,
+              1.149230875,
+              0.0
+            ],
+            "velocity_m_s": [
+              0.0,
+              0.559292058,
+              0.0
+            ]
+          },
+          "outside": {
+            "position_m": [
+              3.1,
+              1,
+              0
+            ],
+            "velocity_m_s": [
+              0,
+              0,
+              0
+            ]
+          },
+          "above": {
+            "position_m": [
+              1,
+              4.1,
+              0
+            ],
+            "velocity_m_s": [
+              0,
+              0,
+              0
+            ]
+          },
+          "below": {
+            "position_m": [
+              1,
+              -0.1,
+              0
+            ],
+            "velocity_m_s": [
+              0,
+              0,
+              0
+            ]
+          },
+          "occluded": {
+            "position_m": [
+              0,
+              1,
+              1
+            ],
+            "velocity_m_s": [
+              0,
+              0,
+              0
+            ]
+          }
+        }
+      },
+      {
+        "at_s": 1,
+        "status": "finished",
+        "mana_spent": 10.92,
+        "sum_impulse_magnitudes_ns": 3.273090262,
+        "probes": {
+          "east": {
+            "position_m": [
+              1.219192982,
+              1.332999528,
+              -0.343158822
+            ],
+            "velocity_m_s": [
+              -0.579311207,
+              0.654817696,
+              -0.649682528
+            ]
+          },
+          "west": {
+            "position_m": [
+              -1.219192982,
+              1.332999528,
+              0.343158822
+            ],
+            "velocity_m_s": [
+              0.579311207,
+              0.654817696,
+              0.649682528
+            ]
+          },
+          "axis_probe": {
+            "position_m": [
+              0.0,
+              1.571500943,
+              0.0
+            ],
+            "velocity_m_s": [
+              0.0,
+              1.090364607,
+              0.0
+            ]
+          },
+          "outside": {
+            "position_m": [
+              3.1,
+              1,
+              0
+            ],
+            "velocity_m_s": [
+              0,
+              0,
+              0
+            ]
+          },
+          "above": {
+            "position_m": [
+              1,
+              4.1,
+              0
+            ],
+            "velocity_m_s": [
+              0,
+              0,
+              0
+            ]
+          },
+          "below": {
+            "position_m": [
+              1,
+              -0.1,
+              0
+            ],
+            "velocity_m_s": [
+              0,
+              0,
+              0
+            ]
+          },
+          "occluded": {
+            "position_m": [
+              0,
+              1,
+              1
+            ],
+            "velocity_m_s": [
+              0,
+              0,
+              0
+            ]
+          }
+        }
+      },
+      {
+        "at_s": 1.5,
+        "status": "finished",
+        "mana_spent": 10.92,
+        "sum_impulse_magnitudes_ns": 3.273090262,
+        "probes": {
+          "east": {
+            "position_m": [
+              0.929537379,
+              1.660408377,
+              -0.668000086
+            ],
+            "velocity_m_s": [
+              -0.579311207,
+              0.654817696,
+              -0.649682528
+            ]
+          },
+          "west": {
+            "position_m": [
+              -0.929537379,
+              1.660408377,
+              0.668000086
+            ],
+            "velocity_m_s": [
+              0.579311207,
+              0.654817696,
+              0.649682528
+            ]
+          },
+          "axis_probe": {
+            "position_m": [
+              0.0,
+              2.116683247,
+              0.0
+            ],
+            "velocity_m_s": [
+              0.0,
+              1.090364607,
+              0.0
+            ]
+          },
+          "outside": {
+            "position_m": [
+              3.1,
+              1,
+              0
+            ],
+            "velocity_m_s": [
+              0,
+              0,
+              0
+            ]
+          },
+          "above": {
+            "position_m": [
+              1,
+              4.1,
+              0
+            ],
+            "velocity_m_s": [
+              0,
+              0,
+              0
+            ]
+          },
+          "below": {
+            "position_m": [
+              1,
+              -0.1,
+              0
+            ],
+            "velocity_m_s": [
+              0,
+              0,
+              0
+            ]
+          },
+          "occluded": {
+            "position_m": [
+              0,
+              1,
+              1
+            ],
+            "velocity_m_s": [
+              0,
+              0,
+              0
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "without_lift": {
+    "field_vector_override": {
+      "axial": 0
+    },
+    "budgets": {
+      "mana": {
+        "tariff_version": "tariff-0.3.1",
+        "upfront_mana": 5.46,
+        "mana_per_s": 5.46,
+        "rates": {
+          "sustain": 5.46
+        },
+        "max_paid_mana": 16.38,
+        "reserve_capacity": 0,
+        "total_impulse_budget": 0
+      },
+      "physics": {
+        "bodies": 0,
+        "edges": 0,
+        "nodes": 0,
+        "quads": 0,
+        "field_target_checks_per_step": 16,
+        "sustained_force_ceiling_n": 4
+      },
+      "render": {
+        "tracks": 0,
+        "layers": 0
+      }
+    },
+    "samples": [
+      {
+        "at_s": 0.5,
+        "status": "active",
+        "mana_spent": 8.19,
+        "sum_impulse_magnitudes_ns": 0.854277256,
+        "probes": {
+          "east": {
+            "position_m": [
+              1.431282402,
+              1.0,
+              -0.089710026
+            ],
+            "velocity_m_s": [
+              -0.262801137,
+              0.0,
+              -0.336641704
+            ]
+          },
+          "west": {
+            "position_m": [
+              -1.431282402,
+              1.0,
+              0.089710026
+            ],
+            "velocity_m_s": [
+              0.262801137,
+              0.0,
+              0.336641704
+            ]
+          },
+          "axis_probe": {
+            "position_m": [
+              0.0,
+              1.0,
+              0.0
+            ],
+            "velocity_m_s": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "outside": {
+            "position_m": [
+              3.1,
+              1,
+              0
+            ],
+            "velocity_m_s": [
+              0,
+              0,
+              0
+            ]
+          },
+          "above": {
+            "position_m": [
+              1,
+              4.1,
+              0
+            ],
+            "velocity_m_s": [
+              0,
+              0,
+              0
+            ]
+          },
+          "below": {
+            "position_m": [
+              1,
+              -0.1,
+              0
+            ],
+            "velocity_m_s": [
+              0,
+              0,
+              0
+            ]
+          },
+          "occluded": {
+            "position_m": [
+              0,
+              1,
+              1
+            ],
+            "velocity_m_s": [
+              0,
+              0,
+              0
+            ]
+          }
+        }
+      },
+      {
+        "at_s": 1,
+        "status": "finished",
+        "mana_spent": 10.92,
+        "sum_impulse_magnitudes_ns": 1.746180524,
+        "probes": {
+          "east": {
+            "position_m": [
+              1.219192982,
+              1.0,
+              -0.343158822
+            ],
+            "velocity_m_s": [
+              -0.579311207,
+              0.0,
+              -0.649682528
+            ]
+          },
+          "west": {
+            "position_m": [
+              -1.219192982,
+              1.0,
+              0.343158822
+            ],
+            "velocity_m_s": [
+              0.579311207,
+              0.0,
+              0.649682528
+            ]
+          },
+          "axis_probe": {
+            "position_m": [
+              0.0,
+              1.0,
+              0.0
+            ],
+            "velocity_m_s": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "outside": {
+            "position_m": [
+              3.1,
+              1,
+              0
+            ],
+            "velocity_m_s": [
+              0,
+              0,
+              0
+            ]
+          },
+          "above": {
+            "position_m": [
+              1,
+              4.1,
+              0
+            ],
+            "velocity_m_s": [
+              0,
+              0,
+              0
+            ]
+          },
+          "below": {
+            "position_m": [
+              1,
+              -0.1,
+              0
+            ],
+            "velocity_m_s": [
+              0,
+              0,
+              0
+            ]
+          },
+          "occluded": {
+            "position_m": [
+              0,
+              1,
+              1
+            ],
+            "velocity_m_s": [
+              0,
+              0,
+              0
+            ]
+          }
+        }
+      },
+      {
+        "at_s": 1.5,
+        "status": "finished",
+        "mana_spent": 10.92,
+        "sum_impulse_magnitudes_ns": 1.746180524,
+        "probes": {
+          "east": {
+            "position_m": [
+              0.929537379,
+              1.0,
+              -0.668000086
+            ],
+            "velocity_m_s": [
+              -0.579311207,
+              0.0,
+              -0.649682528
+            ]
+          },
+          "west": {
+            "position_m": [
+              -0.929537379,
+              1.0,
+              0.668000086
+            ],
+            "velocity_m_s": [
+              0.579311207,
+              0.0,
+              0.649682528
+            ]
+          },
+          "axis_probe": {
+            "position_m": [
+              0.0,
+              1.0,
+              0.0
+            ],
+            "velocity_m_s": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "outside": {
+            "position_m": [
+              3.1,
+              1,
+              0
+            ],
+            "velocity_m_s": [
+              0,
+              0,
+              0
+            ]
+          },
+          "above": {
+            "position_m": [
+              1,
+              4.1,
+              0
+            ],
+            "velocity_m_s": [
+              0,
+              0,
+              0
+            ]
+          },
+          "below": {
+            "position_m": [
+              1,
+              -0.1,
+              0
+            ],
+            "velocity_m_s": [
+              0,
+              0,
+              0
+            ]
+          },
+          "occluded": {
+            "position_m": [
+              0,
+              1,
+              1
+            ],
+            "velocity_m_s": [
+              0,
+              0,
+              0
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "reversed_spin": {
+    "field_vector_override": {
+      "tangential": -0.64
+    },
+    "budgets": {
+      "mana": {
+        "tariff_version": "tariff-0.3.1",
+        "upfront_mana": 5.46,
+        "mana_per_s": 5.46,
+        "rates": {
+          "sustain": 5.46
+        },
+        "max_paid_mana": 16.38,
+        "reserve_capacity": 0,
+        "total_impulse_budget": 0
+      },
+      "physics": {
+        "bodies": 0,
+        "edges": 0,
+        "nodes": 0,
+        "quads": 0,
+        "field_target_checks_per_step": 16,
+        "sustained_force_ceiling_n": 4
+      },
+      "render": {
+        "tracks": 0,
+        "layers": 0
+      }
+    },
+    "samples": [
+      {
+        "at_s": 0.5,
+        "status": "active",
+        "mana_spent": 8.19,
+        "sum_impulse_magnitudes_ns": 1.627138628,
+        "probes": {
+          "east": {
+            "position_m": [
+              1.431282402,
+              1.084759562,
+              0.089710026
+            ],
+            "velocity_m_s": [
+              -0.262801137,
+              0.320353971,
+              0.336641704
+            ]
+          },
+          "west": {
+            "position_m": [
+              -1.431282402,
+              1.084759562,
+              -0.089710026
+            ],
+            "velocity_m_s": [
+              0.262801137,
+              0.320353971,
+              -0.336641704
+            ]
+          },
+          "axis_probe": {
+            "position_m": [
+              0.0,
+              1.149230875,
+              0.0
+            ],
+            "velocity_m_s": [
+              0.0,
+              0.559292058,
+              0.0
+            ]
+          },
+          "outside": {
+            "position_m": [
+              3.1,
+              1,
+              0
+            ],
+            "velocity_m_s": [
+              0,
+              0,
+              0
+            ]
+          },
+          "above": {
+            "position_m": [
+              1,
+              4.1,
+              0
+            ],
+            "velocity_m_s": [
+              0,
+              0,
+              0
+            ]
+          },
+          "below": {
+            "position_m": [
+              1,
+              -0.1,
+              0
+            ],
+            "velocity_m_s": [
+              0,
+              0,
+              0
+            ]
+          },
+          "occluded": {
+            "position_m": [
+              0,
+              1,
+              1
+            ],
+            "velocity_m_s": [
+              0,
+              0,
+              0
+            ]
+          }
+        }
+      },
+      {
+        "at_s": 1,
+        "status": "finished",
+        "mana_spent": 10.92,
+        "sum_impulse_magnitudes_ns": 3.273090262,
+        "probes": {
+          "east": {
+            "position_m": [
+              1.219192982,
+              1.332999528,
+              0.343158822
+            ],
+            "velocity_m_s": [
+              -0.579311207,
+              0.654817696,
+              0.649682528
+            ]
+          },
+          "west": {
+            "position_m": [
+              -1.219192982,
+              1.332999528,
+              -0.343158822
+            ],
+            "velocity_m_s": [
+              0.579311207,
+              0.654817696,
+              -0.649682528
+            ]
+          },
+          "axis_probe": {
+            "position_m": [
+              0.0,
+              1.571500943,
+              0.0
+            ],
+            "velocity_m_s": [
+              0.0,
+              1.090364607,
+              0.0
+            ]
+          },
+          "outside": {
+            "position_m": [
+              3.1,
+              1,
+              0
+            ],
+            "velocity_m_s": [
+              0,
+              0,
+              0
+            ]
+          },
+          "above": {
+            "position_m": [
+              1,
+              4.1,
+              0
+            ],
+            "velocity_m_s": [
+              0,
+              0,
+              0
+            ]
+          },
+          "below": {
+            "position_m": [
+              1,
+              -0.1,
+              0
+            ],
+            "velocity_m_s": [
+              0,
+              0,
+              0
+            ]
+          },
+          "occluded": {
+            "position_m": [
+              0,
+              1,
+              1
+            ],
+            "velocity_m_s": [
+              0,
+              0,
+              0
+            ]
+          }
+        }
+      },
+      {
+        "at_s": 1.5,
+        "status": "finished",
+        "mana_spent": 10.92,
+        "sum_impulse_magnitudes_ns": 3.273090262,
+        "probes": {
+          "east": {
+            "position_m": [
+              0.929537379,
+              1.660408377,
+              0.668000086
+            ],
+            "velocity_m_s": [
+              -0.579311207,
+              0.654817696,
+              0.649682528
+            ]
+          },
+          "west": {
+            "position_m": [
+              -0.929537379,
+              1.660408377,
+              -0.668000086
+            ],
+            "velocity_m_s": [
+              0.579311207,
+              0.654817696,
+              -0.649682528
+            ]
+          },
+          "axis_probe": {
+            "position_m": [
+              0.0,
+              2.116683247,
+              0.0
+            ],
+            "velocity_m_s": [
+              0.0,
+              1.090364607,
+              0.0
+            ]
+          },
+          "outside": {
+            "position_m": [
+              3.1,
+              1,
+              0
+            ],
+            "velocity_m_s": [
+              0,
+              0,
+              0
+            ]
+          },
+          "above": {
+            "position_m": [
+              1,
+              4.1,
+              0
+            ],
+            "velocity_m_s": [
+              0,
+              0,
+              0
+            ]
+          },
+          "below": {
+            "position_m": [
+              1,
+              -0.1,
+              0
+            ],
+            "velocity_m_s": [
+              0,
+              0,
+              0
+            ]
+          },
+          "occluded": {
+            "position_m": [
+              0,
+              1,
+              1
+            ],
+            "velocity_m_s": [
+              0,
+              0,
+              0
+            ]
+          }
+        }
+      }
+    ]
+  }
+}

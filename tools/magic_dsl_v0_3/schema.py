@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 
 DATA = Path(__file__).resolve().parents[2] / "game/data/magic_v0_3"
-SCHEMA = DATA / "magic_dsl_v0_3.schema.json"
+SCHEMAS = {"0.3.0": DATA / "magic_dsl_v0_3.schema.json", "0.3.1": DATA / "magic_dsl_v0_3_1.schema.json"}
 
 
 def read(path):
@@ -24,6 +24,7 @@ def read(path):
 
 REG = read(DATA / "registry.json")
 TARIFF = read(DATA / "tariff.json")
+SCHEMA = SCHEMAS[REG["edition"]]
 
 
 def build():
@@ -58,6 +59,7 @@ def build():
     ids = lambda n: {**arr(ident, n), "uniqueItems": True}
     lim = REG["limits"]
     d = {}
+    d["FieldVector"] = obj({k: num(-1, 1) for k in ("radial", "tangential", "axial")})
     d["Propagation"] = obj(
         {
             "origin": enum("bound_source"),
@@ -70,6 +72,7 @@ def build():
         }
     )
     shapes = {
+        "column": {"radius_m": pos(lim["extent_m"]), "height_m": pos(lim["extent_m"])},
         "cone": {"extent_m": pos(30), "half_angle_deg": pos(89)},
         "sphere": {"extent_m": pos(30)},
         "sheet": {"extent_m": pos(30), "quads": integer(1, 64)},
@@ -86,7 +89,12 @@ def build():
                     "bind": enum("cast", "enter", "live"),
                 }
             ),
-            "distribution": enum("uniform", "linear_falloff"),
+            "distribution": {
+                "oneOf": [
+                    enum("uniform", "linear_falloff"),
+                    obj({k: enum(*v) for k, v in REG["column_profiles"].items()}),
+                ]
+            },
             "scope": enum("within_field", "self"),
         },
         ["scope"],
@@ -267,7 +275,7 @@ def build():
             "candidate": {},
             "diagnostics": arr(ref("Diagnostic"), 32),
             "corrected": {"anyOf": [ref("CompilationOutput"), {"type": "null"}]},
-            "observation_source": {"const": "offline-0.3.0"},
+            "observation_source": {"const": REG["profile"]},
             "observations": arr(
                 obj(
                     {
@@ -363,7 +371,7 @@ def build():
     )
     return {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "urn:city-fates:magic-dsl:0.3.0",
+        "$id": "urn:city-fates:magic-dsl:" + REG["edition"],
         "$ref": "#/$defs/Recipe",
         "$defs": d,
     }

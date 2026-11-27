@@ -3,11 +3,11 @@
 from copy import deepcopy
 from functools import lru_cache
 from graphlib import CycleError, TopologicalSorter
-from math import ceil, radians, sin
+from math import ceil, hypot, radians, sin
 
 from jsonschema import Draft202012Validator
 
-from .schema import REG, SCHEMA, TARIFF, read
+from .schema import REG, SCHEMAS, TARIFF, read
 
 
 class Diagnostic(ValueError):
@@ -22,13 +22,30 @@ def check(condition, path, message, code="INVALID_RECIPE"):
 
 
 @lru_cache(None)
-def validator(kind):
-    schema = read(SCHEMA)
+def validator(kind, edition):
+    schema = read(SCHEMAS[edition])
     return Draft202012Validator({"$defs": schema["$defs"], "$ref": "#/$defs/" + kind})
 
 
-def structure(value, kind):
-    err = next(validator(kind).iter_errors(value), None)
+def structure(value, kind, edition=None):
+    # Stored records and published recipes keep their original wire contract.
+    if edition is None and isinstance(value, dict):
+        payload = value
+        if kind == "TrainingRecord":
+            payload = value.get("input")
+        elif kind == "CompilationOutput":
+            payload = value.get("MagicDSL")
+        if isinstance(payload, dict):
+            edition = (
+                payload.get("DSLVersion")
+                if kind in ("CompilationInput", "TrainingRecord")
+                else payload.get("version")
+            )
+    edition = REG["edition"] if edition is None else edition
+    check(
+        isinstance(edition, str) and edition in SCHEMAS, "version", "未登记的 DSL 版本", "INVALID_STRUCTURE"
+    )
+    err = next(validator(kind, edition).iter_errors(value), None)
     if err:
         raise Diagnostic("INVALID_STRUCTURE", err.json_path, err.message)
 
@@ -54,6 +71,10 @@ def operations(node):
 
 def spatial_units(s, tariff):
     g = s["spatial"]["geometry"]
+    if g["shape"] == "column":
+        return tariff["geometry"]["Region"] * (
+            1 + tariff["unit_per_m"] * (2 * g["radius_m"] + g["height_m"])
+        )
     # extent and solid angle both contribute; topological detail cannot reduce price.
     angle = sin(radians(g["half_angle_deg"])) ** 2 if g["shape"] == "cone" else 1
     detail = sum(g.get(k, 0) for k in ("nodes", "edges", "quads", "bodies"))
@@ -91,7 +112,7 @@ def price(recipe, tariff=TARIFF):
         return ceil(x * 1000000) / 1000000
 
     return {
-        "tariff_version": tariff["version"],
+        "tariff_version": tariff.get("edition_versions", {}).get(recipe["version"], tariff["version"]),
         "upfront_mana": upper(upfront),
         "mana_per_s": upper(sum(rates.values())),
         "rates": rates,
@@ -102,6 +123,10 @@ def price(recipe, tariff=TARIFF):
 
 
 class Recipe:
+    @property
+    def force_per_field_n(self):
+        return self.tariff["scale"][self.data["scale"]] * self.tariff["world_units"]["force_n"]
+
     def __init__(self, data, tariff=TARIFF):
         data, tariff = deepcopy(data), deepcopy(tariff)
         structure(data, "Recipe")
@@ -136,6 +161,9 @@ class Recipe:
             check("spatial" in s, sid, "缺少空间")
             sp = s["spatial"]
             g = sp["geometry"]
+            check(
+                not isinstance(sp["distribution"], dict) or g["shape"] == "column", sid, "分轴分布需要柱域"
+            )
             check(
                 REG["geometry"][g["shape"]] == sp["carrier"] and sp["carrier"] in allowed,
                 sid,
@@ -240,6 +268,12 @@ class Recipe:
             check(self.quote[k] <= REG["limits"][cap], k, "确定性计费超出硬顶", "OVER_BUDGET")
         kit = REG["artkit"]
         tracks = data["Expression"]
+        if data["version"] == "0.3.1":
+            field_ops = sum(
+                op["ability"] == "sustain_force" for n in self.nodes.values() for op in n["active"]
+            )
+            quota["field_target_checks_per_step"] = field_ops * limits["targets"]
+            quota["sustained_force_ceiling_n"] = field_ops * self.force_per_field_n
         self.budgets = {
             "mana": self.quote,
             "physics": quota,
@@ -351,6 +385,17 @@ class Recipe:
                         pid,
                         "操作目标与能力签名不符",
                     )
+                    if op["ability"] == "sustain_force":
+                        check(
+                            self.subjects[t]["spatial"]["geometry"]["shape"] == "column",
+                            pid,
+                            "持续复合力需要柱域",
+                        )
+                        check(
+                            0 < hypot(*op["field_vector"].values()) <= 1,
+                            pid,
+                            "场分量的合成长度必须在 (0,1] 内",
+                        )
                     if op["ability"] in (
                         "project",
                         "grow",

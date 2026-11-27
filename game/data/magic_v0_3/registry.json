@@ -1,7 +1,7 @@
 {
-  "edition": "0.3.0",
-  "knowledge": "world-0.3.0",
-  "profile": "offline-0.3.0",
+  "edition": "0.3.1",
+  "knowledge": "world-0.3.1",
+  "profile": "offline-0.3.1",
   "runes": {
     "土": "成体、承载",
     "水": "流动、相合",
@@ -92,7 +92,8 @@
     "sphere": "Region",
     "sheet": "SurfacePatch",
     "network": "PathGraph",
-    "mass": "Body"
+    "mass": "Body",
+    "column": "Region"
   },
   "channels": {
     "mechanical": {
@@ -371,6 +372,19 @@
         "exit"
       ],
       "readout": "原位移交同一物理实体给世界"
+    },
+    "sustain_force": {
+      "op": "Drive",
+      "targets": [
+        "pressure"
+      ],
+      "phases": [
+        "active"
+      ],
+      "readout": "在柱域内按实际分布分配持续力并保留所得动量",
+      "parameters": {
+        "field_vector": "FieldVector"
+      }
     }
   },
   "art": {
@@ -541,7 +555,8 @@
     "bear_load": "contact",
     "attenuate": "optical",
     "illuminate": "optical",
-    "notify": "information"
+    "notify": "information",
+    "sustain_force": "pressure"
   },
   "artkit": {
     "adapters": {
@@ -569,5 +584,18 @@
     "max_tracks": 16,
     "max_layers": 64,
     "silence_window_s": 0.06
-  }
+  },
+  "game_edition": "0.3.0",
+  "column_profiles": {
+    "radial": [
+      "uniform",
+      "linear_falloff",
+      "bell"
+    ],
+    "axial": [
+      "uniform",
+      "linear_falloff"
+    ]
+  },
+  "offline_motion_hz": 32
 }

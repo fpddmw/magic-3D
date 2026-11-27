@@ -101,8 +101,6 @@ class World:
             if space.get("scope") == "self" and key != self.slots.get("self"):
                 continue
             d = dist(o["position"], origin)
-            if d > g["extent_m"]:
-                continue
             if channel == "pressure" and o.get("occluded"):
                 continue
             if channel == "thermal" and o.get("thermal_path", "radiation") == "insulated":
@@ -114,16 +112,46 @@ class World:
             ):
                 continue
             delta = [x - y for x, y in zip(o["position"], origin)]
-            axial = sum(x * y for x, y in zip(delta, aim))
-            if g["shape"] == "cone" and axial + 1e-10 < d * cos(radians(g["half_angle_deg"])):
-                continue
-            # The sheet uses observed contact/sight at the interface, within its finite radius.
-            weight = 1 if space["distribution"] == "uniform" else max(0, 1 - d / g["extent_m"])
+            if g["shape"] == "column":
+                weight = self.column_weight(g, space["distribution"], delta)
+            else:
+                if d > g["extent_m"]:
+                    continue
+                axial = sum(x * y for x, y in zip(delta, aim))
+                if g["shape"] == "cone" and axial + 1e-10 < d * cos(radians(g["half_angle_deg"])):
+                    continue
+                weight = 1 if space["distribution"] == "uniform" else max(0, 1 - d / g["extent_m"])
             if channel == "optical":
                 weight *= o.get("transmission", 0 if o.get("occluded") else 1)
             if weight > 0:
                 out[key] = (d, weight)
         return out
+
+    @staticmethod
+    def column_weight(g, distribution, delta):
+        x, y, z = delta
+        r = hypot(x, z) / g["radius_m"]
+        h = y / g["height_m"]
+        if r > 1 or not 0 <= h <= 1:
+            return 0
+        if isinstance(distribution, str):
+            distribution = {"radial": distribution, "axial": "uniform"}
+        radial = {"uniform": 1, "linear_falloff": 1 - r, "bell": (1 - r * r) ** 2}[distribution["radial"]]
+        return radial * (1 - h if distribution["axial"] == "linear_falloff" else 1)
+
+    @staticmethod
+    def column_vector(components, origin, position):
+        x, z = position[0] - origin[0], position[2] - origin[2]
+        radius = hypot(x, z)
+        if radius:
+            x, z = x / radius, z / radius
+        radial, tangent = components["radial"], components["tangential"]
+        return [radial * x + tangent * z, components["axial"], radial * z - tangent * x]
+
+    def drift(self, dt):
+        for obj in self.objects.values():
+            if "velocity" in obj:
+                obj["position"] = [p + dt * v for p, v in zip(obj["position"], obj["velocity"])]
 
     def network(self, root, kind, eligible, reach, hops, geometry):
         if root not in eligible:

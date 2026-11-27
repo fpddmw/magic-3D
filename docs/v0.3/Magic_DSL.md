@@ -1,5 +1,7 @@
 # Magic DSL v0.3 正式规范 · 离线配置 0.3.0
 
+本页记录 0.3.0 基线。0.3.1 增补柱域及持续复合力，使用同一套离线工具。两版的机器契约按配方版本读取。[0.3.1 语法与复现](../v0.3.1/最小语法与旋风对照.md)
+
 构筑期模型生成唯一的确定性执行配方。游戏代码按共享能力解释这份配方；引用解析、计费、缓存与 Godot 内部数据布局均可由程序派生。六部分是同一现象的描述维度。配方根另有 version、显示名 name 与规模 scale；名字只供显示。
 
 | 声明 | 身份与语义 |
@@ -11,7 +13,7 @@
 | Contracts | 每段绑定控制者、专注、移动承诺、实际付款端、最长时长、可选的归一化蓄力目标。过程转换负责交接，未交接的主动作用随退出关闭。 |
 | Expression | 模块化轨道，随进入、持续、实际命中或退出更新。绑定真实进度、实体几何或实际事件。表现层只读，世界裁决独立。 |
 
-[统一 Draft 2020-12 Schema](../../game/data/magic_v0_3/magic_dsl_v0_3.schema.json) 的根验证配方。`$defs` 另提供 CompilationInput、CompilationOutput、TrainingRecord、Scene 等边界类型。操作签名、可用本性和模块词汇由[注册表](../../game/data/magic_v0_3/registry.json)生成。更新登记后运行 `python -m tools.magic_dsl_v0_3.schema` 重建可供外部工具直接使用的 Schema。
+[0.3.0 Draft 2020-12 Schema](../../game/data/magic_v0_3/magic_dsl_v0_3.schema.json) 的根验证配方。`$defs` 另提供 CompilationInput、CompilationOutput、TrainingRecord、Scene 等边界类型。操作签名、可用本性和模块词汇由[注册表](../../game/data/magic_v0_3/registry.json)生成。更新登记后运行 `python -m tools.magic_dsl_v0_3.schema` 重建当前离线版本的 Schema。已发布的旧版快照用于回放存档。
 
 ## 空间、实际作用与查询
 

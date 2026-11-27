@@ -23,6 +23,7 @@ def reading(recipe):
         "reservoir": "实存储备",
         "cone": "锥体",
         "sphere": "球域",
+        "bell": "钟形衰减",
         "sheet": "界面",
         "network": "连通网络",
         "mass": "实体",
@@ -96,8 +97,15 @@ def reading(recipe):
         ] + src.get("ref", "")
         angle = f"，半角 {g['half_angle_deg']}°" if "half_angle_deg" in g else ""
         ref = space["reference"]
+        distribution = space["distribution"]
+        if isinstance(distribution, dict):
+            distribution = f"径向{label(distribution['radial'])}、高度{label(distribution['axial'])}"
+        if g["shape"] == "column":
+            geometry = f"竖直柱域半径 {g['radius_m']} 米、高 {g['height_m']} 米"
+        else:
+            geometry = f"{label(g['shape'])}延伸 {g['extent_m']} 米{angle}"
         lines.append(
-            f"{sid} 为{('纯奥术' if recipe.nature[sid] == 'aether' else label(recipe.nature[sid]))}，{source}。{label(g['shape'])}延伸 {g['extent_m']} 米{angle}，{label(space['distribution'])}，{label(space.get('scope', 'within_field'))}。参照取{label(ref['anchor'])}，{label(ref['bind'])}绑定。"
+            f"{sid} 为{('纯奥术' if recipe.nature[sid] == 'aether' else label(recipe.nature[sid]))}，{source}。{geometry}，{label(distribution)}，{label(space.get('scope', 'within_field'))}。参照取{label(ref['anchor'])}，{label(ref['bind'])}绑定。"
         )
         if s.get("medium") == "ambient_air":
             lines.append("交付时需要现场有空气。")
@@ -121,6 +129,11 @@ def reading(recipe):
             details = []
             if "axis" in op:
                 details.append(label(op["axis"]))
+            if "field_vector" in op:
+                v = op["field_vector"]
+                details.append(
+                    f"外向径向 {v['radial']:+g}、切向 {v['tangential']:+g}、向上 {v['axial']:+g}，有效对象共享最多 {recipe.force_per_field_n:g} 牛顿"
+                )
             if "allocation" in op:
                 details.append(label(op["allocation"]))
             if "propagation" in op:
@@ -186,7 +199,7 @@ def check_input(data):
 
 def accept(data, candidate):
     refs = check_input(data)
-    structure(candidate, "CompilationOutput")
+    structure(candidate, "CompilationOutput", data["DSLVersion"])
     recipe = Recipe(candidate["MagicDSL"])
     capabilities = set(data["SupportedCapabilities"])
     ops = {p: list(operations(n)) for p, n in recipe.nodes.items()}
@@ -213,6 +226,18 @@ def accept(data, candidate):
     def targets(ref):
         return set().union(*(contrib[node] for node in refs[ref]))
 
+    def acts_along(op, axis):
+        if "field_vector" not in op:
+            return op.get("axis") == axis
+        v = op["field_vector"]
+        return {
+            "up": v["axial"] > 0,
+            "down": v["axial"] < 0,
+            "radial_in": v["radial"] < 0,
+            "radial_out": v["radial"] > 0,
+            "tangential": v["tangential"] != 0,
+        }.get(axis, False)
+
     def realized(anchor):
         evidence = targets(anchor["ref"])
         for pid, actions in ops.items():
@@ -229,8 +254,10 @@ def accept(data, candidate):
                 }
                 sid = recipe.relations.get(op["target"], {}).get("from", op["target"])
                 spatial = recipe.subjects.get(sid, {}).get("spatial", {})
-                actual.update(axis=op.get("axis"), anchor=spatial.get("reference", {}).get("anchor"))
-                if all(anchor.get(k, v) == v for k, v in actual.items()):
+                actual["anchor"] = spatial.get("reference", {}).get("anchor")
+                if all(anchor.get(k, v) == v for k, v in actual.items()) and (
+                    "axis" not in anchor or acts_along(op, anchor["axis"])
+                ):
                     return True
         return False
 
@@ -248,7 +275,7 @@ def accept(data, candidate):
                     continue
                 if phase != anchor.get("phase", phase) or op["ability"] != anchor["mechanism"]:
                     continue
-                if op.get("axis") == opposite:
+                if acts_along(op, opposite):
                     return True
         return False
 
@@ -330,8 +357,8 @@ def accept(data, candidate):
         "reading": reading(recipe),
         "quote": recipe.quote,
         "alternatives": deepcopy(candidate["AlternativeAnchors"]),
-        "knowledge_version": REG["knowledge"],
-        "profile": REG["profile"],
+        "knowledge_version": data["WorldKnowledgeVersion"],
+        "profile": data["CapabilityProfile"],
     }
 
 
@@ -354,10 +381,10 @@ def compile_at_altar(data, generate, *, prior_expectation=None, repair=False):
         "corrected": None,
         "diagnostics": [],
         "observations": [],
-        "observation_source": "offline-0.3.0",
+        "observation_source": data["CapabilityProfile"],
         "preference": None,
         "prior_expectation": prior_expectation,
-        "tariff_version": TARIFF["version"],
+        "tariff_version": TARIFF["edition_versions"].get(data["DSLVersion"], TARIFF["version"]),
     }
     try:
         accepted = accept(data, raw)

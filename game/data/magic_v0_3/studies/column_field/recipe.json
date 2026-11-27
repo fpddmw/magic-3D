@@ -1,0 +1,35 @@
+{
+  "version": "0.3.1",
+  "name": "有限气压柱",
+  "scale": "small",
+  "Concepts": [{"id": "air_nature", "nature": "air"}],
+  "Subjects": [{
+    "id": "flow", "kind": "Field", "concept": "air_nature",
+    "source": {"kind": "Manifest"}, "medium": "ambient_air",
+    "spatial": {
+      "carrier": "Region",
+      "reference": {"anchor": "caster", "bind": "enter"},
+      "geometry": {"shape": "column", "radius_m": 3, "height_m": 4},
+      "distribution": {"radial": "bell", "axial": "uniform"}
+    }
+  }],
+  "Relations": [],
+  "Contracts": [{
+    "id": "supply", "controller": "caster", "focus": "exclusive",
+    "provider": "@caster", "mobility": "slow_walk", "max_s": 2
+  }],
+  "Processes": {
+    "entry": ["sustain"],
+    "nodes": [{
+      "id": "sustain", "contract": "supply", "join": "any",
+      "enter": [{"op": "Establish", "ability": "form", "target": "flow"}],
+      "active": [{
+        "op": "Drive", "ability": "sustain_force", "target": "flow",
+        "field_vector": {"radial": -0.48, "tangential": 0.64, "axial": 0.60}
+      }],
+      "on": [{"event": "release", "when": "always", "to": []}],
+      "exit": [{"op": "Withdraw", "ability": "end", "target": "flow"}]
+    }]
+  },
+  "Expression": []
+}
