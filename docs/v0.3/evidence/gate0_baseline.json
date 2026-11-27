@@ -1,0 +1,74 @@
+{
+  "commit": "9b8a1374dc2057da9ba84c05c2492bb15c0fbb85",
+  "engine": "4.5.1.stable.official.f62fdbde1",
+  "warmup_frames": 75,
+  "command": "godot --path game --rendering-driver metal --resolution 1920x1080 --disable-vsync -- --hall-bench",
+  "runs": [
+    {
+      "driver": "metal",
+      "frames_over_16_67_ms": 18,
+      "gpu": "Apple M6 (Apple9)",
+      "max_ms": 32.849,
+      "method": "forward_plus",
+      "p50_ms": 5.002,
+      "p95_ms": 18.087,
+      "peak_video_mem_bytes": 179683328,
+      "physics": "Jolt Physics",
+      "samples": 300,
+      "slowest": {
+        "frame": 146,
+        "ms": 32.849
+      },
+      "texture_px": "(1920.0, 1080.0)",
+      "video_mem_bytes": 179683328,
+      "viewport": "(1920.0, 1080.0)",
+      "viewport_cpu_p95_ms": 0.757000029087067,
+      "viewport_gpu_p95_ms": 0.0
+    },
+    {
+      "driver": "metal",
+      "frames_over_16_67_ms": 15,
+      "gpu": "Apple M6 (Apple9)",
+      "max_ms": 30.958,
+      "method": "forward_plus",
+      "p50_ms": 5.969,
+      "p95_ms": 16.189,
+      "peak_video_mem_bytes": 179683328,
+      "physics": "Jolt Physics",
+      "samples": 300,
+      "slowest": {
+        "frame": 86,
+        "ms": 30.958
+      },
+      "texture_px": "(1920.0, 1080.0)",
+      "video_mem_bytes": 179683328,
+      "viewport": "(1920.0, 1080.0)",
+      "viewport_cpu_p95_ms": 0.828999996185303,
+      "viewport_gpu_p95_ms": 0.0
+    },
+    {
+      "driver": "metal",
+      "frames_over_16_67_ms": 15,
+      "gpu": "Apple M6 (Apple9)",
+      "max_ms": 32.933,
+      "method": "forward_plus",
+      "p50_ms": 5.284,
+      "p95_ms": 16.485,
+      "peak_video_mem_bytes": 179421184,
+      "physics": "Jolt Physics",
+      "samples": 300,
+      "slowest": {
+        "frame": 112,
+        "ms": 32.933
+      },
+      "texture_px": "(1920.0, 1080.0)",
+      "video_mem_bytes": 179421184,
+      "viewport": "(1920.0, 1080.0)",
+      "viewport_cpu_p95_ms": 0.77700001001358,
+      "viewport_gpu_p95_ms": 0.0
+    }
+  ],
+  "all_p95_within_16_67_ms": false,
+  "optimization_retest": null,
+  "bottleneck_attribution": null
+}
