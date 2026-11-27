@@ -194,7 +194,9 @@
             "anchor": {
               "enum": [
                 "caster",
-                "source"
+                "source",
+                "aim_point",
+                "target"
               ]
             },
             "bind": {
@@ -514,7 +516,10 @@
               "enum": [
                 "aim",
                 "up",
-                "down"
+                "down",
+                "radial_in",
+                "radial_out",
+                "tangential"
               ]
             },
             "allocation": {
@@ -561,8 +566,12 @@
             },
             "axis": {
               "enum": [
+                "aim",
                 "up",
-                "down"
+                "down",
+                "radial_in",
+                "radial_out",
+                "tangential"
               ]
             }
           },
@@ -782,6 +791,157 @@
             },
             "ability": {
               "const": "solidify"
+            },
+            "target": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9_]{0,39}$"
+                },
+                {
+                  "const": "@reserve"
+                }
+              ]
+            }
+          },
+          "required": [
+            "op",
+            "ability",
+            "target"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "const": "Drive"
+            },
+            "ability": {
+              "const": "project"
+            },
+            "target": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9_]{0,39}$"
+                },
+                {
+                  "const": "@reserve"
+                }
+              ]
+            },
+            "axis": {
+              "enum": [
+                "aim",
+                "up",
+                "down",
+                "radial_in",
+                "radial_out",
+                "tangential"
+              ]
+            }
+          },
+          "required": [
+            "op",
+            "ability",
+            "target",
+            "axis"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "const": "Transform"
+            },
+            "ability": {
+              "const": "grow"
+            },
+            "target": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9_]{0,39}$"
+                },
+                {
+                  "const": "@reserve"
+                }
+              ]
+            }
+          },
+          "required": [
+            "op",
+            "ability",
+            "target"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "const": "Transform"
+            },
+            "ability": {
+              "const": "melt"
+            },
+            "target": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9_]{0,39}$"
+                },
+                {
+                  "const": "@reserve"
+                }
+              ]
+            }
+          },
+          "required": [
+            "op",
+            "ability",
+            "target"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "const": "Transform"
+            },
+            "ability": {
+              "const": "fracture"
+            },
+            "target": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9_]{0,39}$"
+                },
+                {
+                  "const": "@reserve"
+                }
+              ]
+            }
+          },
+          "required": [
+            "op",
+            "ability",
+            "target"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "const": "Withdraw"
+            },
+            "ability": {
+              "const": "handoff_world"
             },
             "target": {
               "anyOf": [
@@ -1110,6 +1270,26 @@
           "enum": [
             "local_impact"
           ]
+        },
+        "material": {
+          "enum": [
+            "slate",
+            "crystal",
+            "silver_mist"
+          ]
+        },
+        "space_fx": {
+          "enum": [
+            "refraction",
+            "contour",
+            "compression"
+          ]
+        },
+        "focus": {
+          "enum": [
+            "primary",
+            "secondary"
+          ]
         }
       },
       "required": [
@@ -1155,7 +1335,11 @@
                   "light",
                   "water",
                   "site",
-                  "reservoir"
+                  "reservoir",
+                  "earth",
+                  "fire",
+                  "mist",
+                  "aether"
                 ]
               }
             },
@@ -1355,8 +1539,56 @@
             "attenuate",
             "notify",
             "illuminate",
-            "solidify"
+            "solidify",
+            "project",
+            "grow",
+            "melt",
+            "fracture",
+            "handoff_world"
           ]
+        },
+        "axis": {
+          "enum": [
+            "aim",
+            "up",
+            "down",
+            "radial_in",
+            "radial_out",
+            "tangential"
+          ]
+        },
+        "anchor": {
+          "enum": [
+            "target",
+            "caster",
+            "source",
+            "aim_point"
+          ]
+        },
+        "exclude": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "impulse",
+              "accelerate",
+              "freeze",
+              "warm",
+              "conduct",
+              "bear_load",
+              "attenuate",
+              "notify",
+              "illuminate",
+              "solidify",
+              "project",
+              "grow",
+              "melt",
+              "fracture",
+              "handoff_world"
+            ]
+          },
+          "minItems": 0,
+          "maxItems": 8,
+          "uniqueItems": true
         },
         "phase": {
           "enum": [
@@ -1479,7 +1711,12 @@
               "attenuate",
               "notify",
               "illuminate",
-              "solidify"
+              "solidify",
+              "project",
+              "grow",
+              "melt",
+              "fracture",
+              "handoff_world"
             ]
           },
           "minItems": 0,
@@ -1637,7 +1874,12 @@
                   "attenuate",
                   "notify",
                   "illuminate",
-                  "solidify"
+                  "solidify",
+                  "project",
+                  "grow",
+                  "melt",
+                  "fracture",
+                  "handoff_world"
                 ]
               },
               "world_object": {
@@ -1756,6 +1998,19 @@
         },
         "linked": {
           "type": "boolean"
+        },
+        "transmission": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "thermal_path": {
+          "enum": [
+            "contact",
+            "medium",
+            "radiation",
+            "insulated"
+          ]
         }
       },
       "required": [
@@ -1795,6 +2050,16 @@
           "maxItems": 3
         },
         "aim": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "minimum": -10000,
+            "maximum": 10000
+          },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "aim_point": {
           "type": "array",
           "items": {
             "type": "number",

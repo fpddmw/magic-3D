@@ -1,0 +1,49 @@
+{
+  "RuneGraph": {
+    "nodes": [
+      {
+        "id": "weight",
+        "rune": "重力"
+      },
+      {
+        "id": "reverse",
+        "rune": "逆"
+      }
+    ],
+    "links": [
+      {
+        "id": "whole",
+        "kind": "共同组织",
+        "members": [
+          "weight",
+          "reverse"
+        ]
+      }
+    ]
+  },
+  "SemanticAnchors": [
+    {
+      "ref": "whole",
+      "mechanism": "accelerate",
+      "axis": "up",
+      "meaning": "将重力改向上方"
+    }
+  ],
+  "CastingContext": {
+    "target": "world",
+    "timing": "open"
+  },
+  "PlayerKnowledge": [
+    "重力",
+    "逆"
+  ],
+  "DSLVersion": "0.3.0",
+  "WorldKnowledgeVersion": "world-0.3.0",
+  "CapabilityProfile": "offline-0.3.0",
+  "SupportedCapabilities": [
+    "form",
+    "end",
+    "accelerate"
+  ],
+  "ArtisticStyle": "ruined_city"
+}

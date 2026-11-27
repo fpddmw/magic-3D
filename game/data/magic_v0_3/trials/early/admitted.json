@@ -1,0 +1,116 @@
+{
+  "version": "0.3.0",
+  "name": "逆重力场",
+  "scale": "small",
+  "Concepts": [
+    {
+      "id": "gravity_nature",
+      "nature": "gravity"
+    }
+  ],
+  "Subjects": [
+    {
+      "id": "gravity_field",
+      "kind": "Field",
+      "concept": "gravity_nature",
+      "source": {
+        "kind": "Manifest"
+      },
+      "spatial": {
+        "carrier": "Region",
+        "geometry": {
+          "shape": "sphere",
+          "extent_m": 4
+        },
+        "reference": {
+          "anchor": "target",
+          "bind": "cast"
+        },
+        "distribution": "uniform",
+        "scope": "within_field"
+      }
+    }
+  ],
+  "Relations": [],
+  "Processes": {
+    "entry": [
+      "upward_drive"
+    ],
+    "nodes": [
+      {
+        "id": "upward_drive",
+        "contract": "gravity_control",
+        "join": "all",
+        "enter": [
+          {
+            "op": "Establish",
+            "ability": "form",
+            "target": "gravity_field"
+          }
+        ],
+        "active": [
+          {
+            "op": "Drive",
+            "ability": "accelerate",
+            "target": "gravity_field",
+            "axis": "up"
+          }
+        ],
+        "on": [
+          {
+            "event": "release",
+            "when": "always",
+            "to": []
+          },
+          {
+            "event": "interrupt",
+            "when": "always",
+            "to": []
+          },
+          {
+            "event": "timeout",
+            "when": "always",
+            "to": []
+          }
+        ],
+        "exit": [
+          {
+            "op": "Withdraw",
+            "ability": "end",
+            "target": "gravity_field"
+          }
+        ]
+      }
+    ]
+  },
+  "Contracts": [
+    {
+      "id": "gravity_control",
+      "controller": "caster",
+      "mobility": "free",
+      "focus": "exclusive",
+      "provider": "@caster",
+      "max_s": 6
+    }
+  ],
+  "Expression": [
+    {
+      "process": "upward_drive",
+      "cue": "active",
+      "bind": "geometry",
+      "subject": "gravity_field",
+      "visual": "gravity_rings",
+      "motion": "drift",
+      "focus": "primary"
+    },
+    {
+      "process": "upward_drive",
+      "cue": "active",
+      "bind": "geometry",
+      "subject": "gravity_field",
+      "visual": "stone_dust",
+      "motion": "drift",
+      "focus": "secondary"
+    }
+  ]
+}

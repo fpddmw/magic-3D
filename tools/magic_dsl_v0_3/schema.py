@@ -80,7 +80,7 @@ def build():
         {
             "carrier": enum(*set_order(REG["geometry"].values())),
             "geometry": {"oneOf": [obj({"shape": {"const": s}, **params}) for s, params in shapes.items()]},
-            "reference": obj({"anchor": enum("caster", "source"), "bind": enum("cast", "enter", "live")}),
+            "reference": obj({"anchor": enum("caster", "source", "aim_point", "target"), "bind": enum("cast", "enter", "live")}),
             "distribution": enum("uniform", "linear_falloff"),
             "scope": enum("within_field", "self"),
         },
@@ -218,11 +218,14 @@ def build():
             "ref": ident,
             "meaning": name,
             "mechanism": enum(*mechanisms),
+            "axis": enum(*REG["abilities"]["impulse"]["parameters"]["axis"]),
+            "anchor": enum("target","caster","source","aim_point"),
+            "exclude": {**arr(enum(*mechanisms), 8), "uniqueItems": True},
             "phase": enum("enter", "active", "repeat"),
             "controller": enum("caster", "autonomous"),
             "supply": enum("caster", "linked_reserve"),
         },
-        ["phase", "controller", "supply"],
+        ["phase", "controller", "supply","axis","anchor","exclude"],
     )
     d["CompilationInput"] = obj(
         {
@@ -291,8 +294,10 @@ def build():
             "phase": enum("liquid", "solid"),
             "mana": num(0, 10000),
             "linked": {"type": "boolean"},
+            "transmission": num(0,1),
+            "thermal_path": enum("contact","medium","radiation","insulated"),
         },
-        ["load", "contact", "occluded", "sight", "disturbance", "conductive", "phase", "mana", "linked"],
+        ["load", "contact", "occluded", "sight", "disturbance", "conductive", "phase", "mana", "linked","thermal_path","transmission"],
     )
     d["Scene"] = obj(
         {
@@ -300,6 +305,7 @@ def build():
             "media": {**arr(enum(*REG["required_media"].values()), 8), "uniqueItems": True},
             "position": vec,
             "aim": vec,
+            "aim_point": vec,
             "until_s": num(0, 30),
             "objects": arr(ref("WorldObject"), 16),
             "slots": {
@@ -336,7 +342,7 @@ def build():
                 64,
             ),
         },
-        ["media"],
+        ["media","aim_point"],
     )
     return {
         "$schema": "https://json-schema.org/draft/2020-12/schema",

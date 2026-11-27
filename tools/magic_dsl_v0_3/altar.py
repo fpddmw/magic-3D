@@ -57,7 +57,7 @@ def reading(recipe):
         "sight": "视线穿过",
         "disturbance": "出现可观测扰动",
         "aim": "瞄准方向",
-        "up": "世界向上",
+        "up": "世界向上", "aim_point":"瞄点","target":"目标位置","radial_in":"径向内收","radial_out":"径向外推","tangential":"绕世界上轴切向","earth":"土石","aether":"纯奥术","fire":"火","mist":"雾",
         "down": "世界向下",
         "distance_weighted": "近处权重较高",
         "equal": "按分布权重平分",
@@ -219,11 +219,15 @@ def accept(data, candidate):
                     "controller": contract["controller"],
                     "supply": supply,
                 }
+                sid = recipe.relations.get(op["target"], {}).get("from",op["target"])
+                spatial = recipe.subjects.get(sid, {}).get("spatial", {})
+                actual.update(axis=op.get("axis"),anchor=spatial.get("reference",{}).get("anchor"))
                 if all(anchor.get(k, v) == v for k, v in actual.items()):
                     return True
         return False
 
     for anchor in data["SemanticAnchors"]:
+        check(not (set(anchor.get("exclude",[])) & used), "SemanticAnchors","补全引入玩家排除的机制","ANCHOR_MISMATCH")
         check(realized(anchor), "SemanticAnchors", "配方未兑现所锚定局部的作用或责任", "ANCHOR_MISMATCH")
     for group in groups.values():
         if group["kind"] == "发生接续":
@@ -247,7 +251,7 @@ def accept(data, candidate):
         )
     if target == "aim":
         check(
-            any(s["geometry"]["shape"] == "cone" for s in spaces)
+            any(s["geometry"]["shape"] == "cone" or s["reference"]["anchor"] in ("aim_point","target") for s in spaces)
             or any(op.get("axis") == "aim" for rows in ops.values() for _, op in rows),
             "CastingContext",
             "缺少瞄准参照",

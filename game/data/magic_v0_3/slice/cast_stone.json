@@ -1,0 +1,99 @@
+{
+  "version": "0.3.0",
+  "name": "投石留形",
+  "scale": "medium",
+  "Concepts": [
+    {
+      "id": "earth",
+      "nature": "earth"
+    }
+  ],
+  "Subjects": [
+    {
+      "id": "stone",
+      "kind": "Material",
+      "concept": "earth",
+      "source": {
+        "kind": "Manifest"
+      },
+      "spatial": {
+        "carrier": "Body",
+        "geometry": {
+          "shape": "mass",
+          "bodies": 1,
+          "extent_m": 0.48
+        },
+        "reference": {
+          "anchor": "caster",
+          "bind": "enter"
+        },
+        "distribution": "uniform"
+      }
+    }
+  ],
+  "Relations": [],
+  "Processes": {
+    "entry": [
+      "work"
+    ],
+    "nodes": [
+      {
+        "id": "work",
+        "contract": "sustain",
+        "join": "any",
+        "enter": [
+          {
+            "op": "Establish",
+            "ability": "form",
+            "target": "stone"
+          },
+          {
+            "op": "Drive",
+            "ability": "project",
+            "axis": "aim",
+            "target": "stone"
+          }
+        ],
+        "active": [],
+        "exit": [
+          {
+            "op": "Withdraw",
+            "ability": "handoff_world",
+            "target": "stone"
+          }
+        ],
+        "on": [
+          {
+            "event": "release",
+            "when": "always",
+            "to": []
+          }
+        ]
+      }
+    ]
+  },
+  "Contracts": [
+    {
+      "id": "sustain",
+      "controller": "caster",
+      "mobility": "free",
+      "focus": "none",
+      "provider": "@caster",
+      "max_s": 3
+    }
+  ],
+  "Expression": [
+    {
+      "process": "work",
+      "cue": "enter",
+      "bind": "geometry",
+      "subject": "stone",
+      "visual": "stone_dust",
+      "material": "slate",
+      "space_fx": "contour",
+      "motion": "expand",
+      "audio": "stone_strain",
+      "focus": "primary"
+    }
+  ]
+}

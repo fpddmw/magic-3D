@@ -9,6 +9,9 @@ from .world import World
 EPS = 1e-9
 
 
+from .schema import REG
+
+
 class Simulation:
     def __init__(self, recipe, scene):
         self.r = recipe
@@ -23,6 +26,7 @@ class Simulation:
         self.cast_pose = {
             s: self.w.capture(recipe, s) for s, v in recipe.subjects.items() if "spatial" in v
         }
+        self.material_ids = {}
         self.frozen = defaultdict(set)
         self.layers = {}
         self.layer_abilities = {}
@@ -105,6 +109,8 @@ class Simulation:
         self.art(p, "exit")
         for op in self.r.nodes[p]["exit"]:
             if self.handles.get(op["target"]) == p:
+                if op["ability"] == "handoff_world":
+                    self.record("handoff_world", object=self.material_ids[op["target"]], handle=op["target"])
                 self.close(op["target"])
         for hand in (edge or {}).get("handoff", []):
             h = hand["handle"]
@@ -168,6 +174,16 @@ class Simulation:
                     if sub["spatial"]["reference"]["bind"] == "cast"
                     else self.w.capture(self.r, t)
                 )
+                if self.captured[t] is None:
+                    return False
+                if sub["kind"] == "Material":
+                    root = self.w.source(self.r,t)
+                    if sub["source"]["kind"] == "Manifest":
+                        root = "manifest_" + t
+                        if root in self.w.objects or len(self.w.objects) >= REG["limits"]["targets"]:
+                            return False
+                        self.w.objects[root] = dict(id=root, position=list(self.captured[t][0]), mass=self.scale, phase="solid")
+                    self.material_ids[t] = root
             else:
                 rel = self.r.relations[t]
                 if any(
@@ -184,7 +200,7 @@ class Simulation:
         sid = rel["from"] if rel else t
         space = self.r.subjects[sid]["spatial"]
         pose = self.pose(sid)
-        candidates = self.w.affected(space, pose)
+        candidates = self.w.affected(space, pose, REG["delivery"][a])
         objects = self.w.objects
         outcome = {}
         if a in ("impulse", "accelerate", "warm", "conduct"):
@@ -212,7 +228,7 @@ class Simulation:
                 o = objects[k]
                 outcome[k] = value
                 if a in ("impulse", "accelerate"):
-                    direction = {"aim": pose[1], "up": [0, 1, 0], "down": [0, -1, 0]}[op["axis"]]
+                    direction = self.w.axis(op["axis"],*pose,o["position"])
                     old = o.get("velocity", [0, 0, 0])
                     o["velocity"] = [x + y * value / o["mass"] for x, y in zip(old, direction)]
                 elif a == "warm":
@@ -221,16 +237,27 @@ class Simulation:
                     o["charge"] = o.get("charge", 0) + value
             if a == "impulse":
                 self.delivered += sum(outcome.values())
-        elif a == "solidify":
+        elif a in ("project","grow","fracture"):
+            key = self.material_ids[t]
+            o = objects[key]
+            if a == "project":
+                axis = self.w.axis(op["axis"],*pose,o["position"])
+                o["velocity"] = [v+d*self.scale*self.units["project_impulse"]/o["mass"] for v,d in zip(o.get("velocity",[0,0,0]),axis)]
+                outcome[key] = self.scale*self.units["project_impulse"]
+            if a == "grow":
+                value = min(self.units["max_growth"], o.get("growth",0) + self.units["growth_per_s"]*dt)
+                outcome[key] = o["growth"] = value
+            if a == "fracture":
+                outcome[key] = o["fragments"] = self.units["max_fragments"]
+        elif a in ("solidify","melt"):
             material = self.w.source(self.r, sid)
             if (
                 material not in candidates
-                or objects[material].get("phase") != "liquid"
+                or objects[material].get("phase") != ("liquid" if a == "solidify" else "solid")
                 or objects[material]["mass"] > self.scale * self.units["phase_mass"]
             ):
                 return False
-            objects[material]["phase"] = "solid"
-            outcome[material] = "solid"
+            outcome[material] = objects[material]["phase"] = "solid" if a == "solidify" else "liquid"
         elif a == "freeze":
             pol = op["propagation"]
             origin = self.w.source(self.r, sid)

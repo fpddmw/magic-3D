@@ -1,0 +1,213 @@
+{
+  "input": {
+    "RuneGraph": {
+      "nodes": [
+        {
+          "id": "weight",
+          "rune": "重力"
+        },
+        {
+          "id": "reverse",
+          "rune": "逆"
+        }
+      ],
+      "links": [
+        {
+          "id": "whole",
+          "kind": "共同组织",
+          "members": [
+            "weight",
+            "reverse"
+          ]
+        }
+      ]
+    },
+    "SemanticAnchors": [
+      {
+        "ref": "whole",
+        "mechanism": "accelerate",
+        "axis": "up",
+        "meaning": "将重力改向上方"
+      }
+    ],
+    "CastingContext": {
+      "target": "world",
+      "timing": "open"
+    },
+    "PlayerKnowledge": [
+      "重力",
+      "逆"
+    ],
+    "DSLVersion": "0.3.0",
+    "WorldKnowledgeVersion": "world-0.3.0",
+    "CapabilityProfile": "offline-0.3.0",
+    "SupportedCapabilities": [
+      "form",
+      "end",
+      "accelerate"
+    ],
+    "ArtisticStyle": "ruined_city"
+  },
+  "candidate": {
+    "Interpretation": "施法时以现场目标为中心建立局部重力域，使域内物体持续受到向上的重力作用，松手、中断或达到时限时撤去该作用。",
+    "RuneContributions": [
+      {
+        "node": "weight",
+        "meaning": "建立对域内物体施加加速度的局部重力场。",
+        "refs": [
+          "gravity_field"
+        ]
+      },
+      {
+        "node": "reverse",
+        "meaning": "将重力牵落的方向反转为向上。",
+        "refs": [
+          "upward_drive"
+        ]
+      }
+    ],
+    "MagicDSL": {
+      "version": "0.3.0",
+      "name": "逆重力场",
+      "scale": "small",
+      "Concepts": [
+        {
+          "id": "gravity_nature",
+          "nature": "gravity"
+        }
+      ],
+      "Subjects": [
+        {
+          "id": "gravity_field",
+          "kind": "Field",
+          "concept": "gravity_nature",
+          "source": {
+            "kind": "Manifest"
+          },
+          "spatial": {
+            "carrier": "Region",
+            "geometry": {
+              "shape": "sphere",
+              "extent_m": 4
+            },
+            "reference": {
+              "anchor": "target",
+              "bind": "cast"
+            },
+            "distribution": "uniform",
+            "scope": "within_field"
+          }
+        }
+      ],
+      "Relations": [],
+      "Processes": {
+        "entry": [
+          "upward_drive"
+        ],
+        "nodes": [
+          {
+            "id": "upward_drive",
+            "contract": "gravity_control",
+            "join": "all",
+            "enter": [
+              {
+                "op": "Establish",
+                "ability": "form",
+                "target": "gravity_field"
+              }
+            ],
+            "active": [
+              {
+                "op": "Drive",
+                "ability": "accelerate",
+                "target": "gravity_field",
+                "axis": "up"
+              }
+            ],
+            "on": [
+              {
+                "event": "release",
+                "when": "always",
+                "to": []
+              },
+              {
+                "event": "interrupt",
+                "when": "always",
+                "to": []
+              },
+              {
+                "event": "timeout",
+                "when": "always",
+                "to": []
+              }
+            ],
+            "exit": [
+              {
+                "op": "Withdraw",
+                "ability": "end",
+                "target": "gravity_field"
+              }
+            ]
+          }
+        ]
+      },
+      "Contracts": [
+        {
+          "id": "gravity_control",
+          "controller": "caster",
+          "mobility": "free",
+          "focus": "exclusive",
+          "provider": "@caster",
+          "max_s": 6
+        }
+      ],
+      "Expression": [
+        {
+          "process": "upward_drive",
+          "cue": "active",
+          "bind": "geometry",
+          "subject": "gravity_field",
+          "visual": "gravity_rings",
+          "motion": "drift",
+          "focus": "primary"
+        },
+        {
+          "process": "upward_drive",
+          "cue": "active",
+          "bind": "geometry",
+          "subject": "gravity_field",
+          "visual": "stone_dust",
+          "motion": "drift",
+          "focus": "secondary"
+        }
+      ]
+    },
+    "AlternativeAnchors": []
+  },
+  "corrected": null,
+  "diagnostics": [],
+  "observations": [
+    {
+      "ability": "accelerate",
+      "world_object": "bell",
+      "value": 0.3333333333333333,
+      "at_s": 1
+    },
+    {
+      "ability": "accelerate",
+      "world_object": "stone",
+      "value": 0.3333333333333333,
+      "at_s": 1
+    },
+    {
+      "ability": "accelerate",
+      "world_object": "window",
+      "value": 0.3333333333333333,
+      "at_s": 1
+    }
+  ],
+  "observation_source": "offline-0.3.0",
+  "preference": null,
+  "prior_expectation": "局部重力向上",
+  "tariff_version": "tariff-0.3.0"
+}

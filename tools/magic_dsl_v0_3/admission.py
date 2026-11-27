@@ -179,7 +179,7 @@ class Recipe:
         for rid, r in self.relations.items():
             sig = REG["channels"][r["channel"]]
             check(
-                self.nature.get(r["from"]) in sig["from"] and self.nature.get(r["to"]) in sig["to"],
+                all(set(REG["interfaces"].get(self.nature.get(r[k]), [])) & set(sig[k]) for k in ("from","to")),
                 rid,
                 "关系端点本性与通道不符",
             )
@@ -235,9 +235,25 @@ class Recipe:
             ("reserve_capacity", "reserve"),
         ):
             check(self.quote[k] <= REG["limits"][cap], k, "确定性计费超出硬顶", "OVER_BUDGET")
-        for tr in data["Expression"]:
+        kit = REG["artkit"]
+        tracks = data["Expression"]
+        self.budgets = {
+            "mana": self.quote,
+            "physics": quota,
+            "render": {"tracks": len(tracks), "layers": sum(sum(k in tr for k in REG["art"] if k != "focus") for tr in tracks)},
+        }
+        check(len(tracks) <= kit["max_tracks"] and self.budgets["render"]["layers"] <= kit["max_layers"], "Expression", "演出预算超限", "OVER_BUDGET")
+        primaries = set()
+        for tr in tracks:
+            if "material" in tr:
+                carrier = self.subjects.get(tr.get("subject"), {}).get("spatial", {}).get("carrier")
+                check(carrier in kit["adapters"][tr["material"]], "Expression", "材质需要已登记的载体适配")
+            if tr.get("focus") == "primary":
+                slot = (tr["process"],tr["cue"])
+                check(slot not in primaries,"Expression","同一过程事件出现两个主视觉")
+                primaries.add(slot)
             pid = tr["process"]
-            check(pid in self.nodes and any(k in tr for k in REG["art"]), pid, "演出缺少过程或媒介模块")
+            check(pid in self.nodes and any(k in tr for k in REG["art"] if k != "focus"), pid, "演出缺少过程或媒介模块")
             if tr["cue"] == "impact":
                 check(
                     any(op["ability"] in ("impulse", "bear_load") for _, op in operations(self.nodes[pid])),
@@ -292,11 +308,11 @@ class Recipe:
                         t in self.relations or t in self.subjects and self.subjects[t]["kind"] != "WorldRef"
                     )
                     check(
-                        handle and ("handle" in sig["targets"] or typ in sig["targets"]),
+                        handle and ("handle" in sig["targets"] or typ in sig["targets"] or set(REG["interfaces"].get(typ, [])) & set(sig["targets"])),
                         pid,
                         "操作目标与能力签名不符",
                     )
-                    if op["ability"] == "solidify":
+                    if op["ability"] in ("project","grow","fracture","handoff_world","solidify","melt"):
                         check(
                             self.subjects[t]["spatial"]["carrier"] == "Body",
                             pid,
@@ -418,7 +434,7 @@ class Recipe:
                             p,
                             "关系端点缺少有效句柄",
                         )
-                if a == "end":
+                if a in ("end","handoff_world"):
                     holds.remove(t)
                 if a == "impulse":
                     check(

@@ -1,0 +1,184 @@
+[
+  {
+    "path": "res://data/magic_v0_3/recipes/attenuate.json",
+    "sha256": "a6cd6bb3a48a77d53ae72c303cce4fa143956f22e70194b0693895645cc00119",
+    "quote": {
+      "tariff_version": "tariff-0.3.0",
+      "upfront_mana": 13.136,
+      "mana_per_s": 8.424,
+      "rates": {
+        "work": 8.424
+      },
+      "max_paid_mana": 38.408,
+      "reserve_capacity": 0,
+      "total_impulse_budget": 0
+    }
+  },
+  {
+    "path": "res://data/magic_v0_3/recipes/bear_load.json",
+    "sha256": "a79896add00783116319245ab9b8950e6fcad3b3db7ed9b0fb47aef118b0afa0",
+    "quote": {
+      "tariff_version": "tariff-0.3.0",
+      "upfront_mana": 13.136,
+      "mana_per_s": 16.848,
+      "rates": {
+        "work": 16.848
+      },
+      "max_paid_mana": 63.68,
+      "reserve_capacity": 0,
+      "total_impulse_budget": 0
+    }
+  },
+  {
+    "path": "res://data/magic_v0_3/recipes/electric.json",
+    "sha256": "195cdc4ffc6d5e8c17c7b0c7e382da20db8e8b47f3c4fee8eb74e272e323f1c8",
+    "quote": {
+      "tariff_version": "tariff-0.3.0",
+      "upfront_mana": 58.336,
+      "mana_per_s": 0.0,
+      "rates": {
+        "work": 0
+      },
+      "max_paid_mana": 58.336,
+      "reserve_capacity": 0,
+      "total_impulse_budget": 0
+    }
+  },
+  {
+    "path": "res://data/magic_v0_3/recipes/gravity.json",
+    "sha256": "713013633a5f89ecd83d5e801bfc7339cddee3c5dc15617ace0f41c18288b8d9",
+    "quote": {
+      "tariff_version": "tariff-0.3.0",
+      "upfront_mana": 7.856,
+      "mana_per_s": 7.856,
+      "rates": {
+        "work": 7.856
+      },
+      "max_paid_mana": 31.424,
+      "reserve_capacity": 0,
+      "total_impulse_budget": 0
+    }
+  },
+  {
+    "path": "res://data/magic_v0_3/recipes/heat.json",
+    "sha256": "538a4979799e6d488c1c5e725963116b3e541a5c20e125b50879a53d0483428f",
+    "quote": {
+      "tariff_version": "tariff-0.3.0",
+      "upfront_mana": 7.856,
+      "mana_per_s": 7.856,
+      "rates": {
+        "work": 7.856
+      },
+      "max_paid_mana": 31.424,
+      "reserve_capacity": 0,
+      "total_impulse_budget": 0
+    }
+  },
+  {
+    "path": "res://data/magic_v0_3/recipes/hosted_light.json",
+    "sha256": "a07fbf90b07996e026794ab8eda6b15457032e0619bc292646b730d14bc71a4b",
+    "quote": {
+      "tariff_version": "tariff-0.3.0",
+      "upfront_mana": 8.356,
+      "mana_per_s": 3.928,
+      "rates": {
+        "plant": 0,
+        "shine": 3.928
+      },
+      "max_paid_mana": 31.924,
+      "reserve_capacity": 0,
+      "total_impulse_budget": 0
+    }
+  },
+  {
+    "path": "res://data/magic_v0_3/recipes/ice_body.json",
+    "sha256": "ea5921846357a19640e55e10b7c9a0d6e93e924d0abb16656179e3e6585f6bbd",
+    "quote": {
+      "tariff_version": "tariff-0.3.0",
+      "upfront_mana": 22.32,
+      "mana_per_s": 0.0,
+      "rates": {
+        "work": 0
+      },
+      "max_paid_mana": 22.32,
+      "reserve_capacity": 0,
+      "total_impulse_budget": 0
+    }
+  },
+  {
+    "path": "res://data/magic_v0_3/recipes/notify.json",
+    "sha256": "d637def48d99098ccd8446f3daca6d72dc7eacd63b97d2830dcb6c8b773026c7",
+    "quote": {
+      "tariff_version": "tariff-0.3.0",
+      "upfront_mana": 13.136,
+      "mana_per_s": 6.318,
+      "rates": {
+        "work": 6.318
+      },
+      "max_paid_mana": 32.090001,
+      "reserve_capacity": 0,
+      "total_impulse_budget": 0
+    }
+  },
+  {
+    "path": "res://data/magic_v0_3/recipes/pressure_wind.json",
+    "sha256": "bae791003eae0e2b273998401e8fdd656f727695cb80e5d394829c590631d3c9",
+    "quote": {
+      "tariff_version": "tariff-0.3.0",
+      "upfront_mana": 19.309895,
+      "mana_per_s": 12.873264,
+      "rates": {
+        "charge": 12.87326301046166,
+        "deliver": 0
+      },
+      "max_paid_mana": 51.493053,
+      "reserve_capacity": 19.30989451569249,
+      "total_impulse_budget": 96.54947257846246
+    }
+  },
+  {
+    "path": "res://data/magic_v0_3/recipes/water_front.json",
+    "sha256": "ff57e1b7b5ddaa84ec017b8f4a3b2ec81b095874865ded0da4465dbf0da0a98f",
+    "quote": {
+      "tariff_version": "tariff-0.3.0",
+      "upfront_mana": 14.584,
+      "mana_per_s": 21.876,
+      "rates": {
+        "work": 21.875999999999998
+      },
+      "max_paid_mana": 80.212,
+      "reserve_capacity": 0,
+      "total_impulse_budget": 0
+    }
+  },
+  {
+    "path": "res://data/magic_v0_3/slice/cast_stone.json",
+    "sha256": "6ecd3fbed34dbd2ccc9aef526d8b7e0ded1d6589c0356a25032cd5c9d35c3b2b",
+    "quote": {
+      "tariff_version": "tariff-0.3.0",
+      "upfront_mana": 13.4112,
+      "mana_per_s": 0.0,
+      "rates": {
+        "work": 0
+      },
+      "max_paid_mana": 13.4112,
+      "reserve_capacity": 0,
+      "total_impulse_budget": 0
+    }
+  },
+  {
+    "path": "res://data/magic_v0_3/trials/early/admitted.json",
+    "sha256": "468f0d706ab68be7e28813158d5677061e76f0b3fff65be100f3a8c5008d46d5",
+    "quote": {
+      "tariff_version": "tariff-0.3.0",
+      "upfront_mana": 5.028,
+      "mana_per_s": 3.352,
+      "rates": {
+        "upward_drive": 3.352
+      },
+      "max_paid_mana": 25.14,
+      "reserve_capacity": 0,
+      "total_impulse_budget": 0
+    }
+  }
+]

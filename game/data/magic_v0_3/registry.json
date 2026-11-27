@@ -66,6 +66,25 @@
     ],
     "reservoir": [
       "WorldRef"
+    ],
+    "earth": [
+      "Material",
+      "Body",
+      "SurfacePatch"
+    ],
+    "fire": [
+      "Field",
+      "Region"
+    ],
+    "mist": [
+      "Field",
+      "Region",
+      "SurfacePatch"
+    ],
+    "aether": [
+      "Field",
+      "Region",
+      "SurfacePatch"
     ]
   },
   "geometry": {
@@ -78,45 +97,40 @@
   "channels": {
     "mechanical": {
       "from": [
-        "light"
+        "spatial"
       ],
       "to": [
-        "site"
+        "endpoint"
       ],
       "validity": "contact",
       "basis": "aether"
     },
     "optical": {
       "from": [
-        "light"
+        "spatial"
       ],
       "to": [
-        "site"
+        "endpoint"
       ],
       "validity": "sight",
       "basis": "nature"
     },
     "information": {
       "from": [
-        "light"
+        "spatial"
       ],
       "to": [
-        "site"
+        "endpoint"
       ],
       "validity": "disturbance",
       "basis": "aether"
     },
     "arcane_supply": {
       "from": [
-        "reservoir"
+        "storage"
       ],
       "to": [
-        "light",
-        "air",
-        "gravity",
-        "heat",
-        "water",
-        "electric"
+        "spatial"
       ],
       "validity": "linked",
       "basis": "aether"
@@ -159,7 +173,7 @@
     "impulse": {
       "op": "Drive",
       "targets": [
-        "air"
+        "pressure"
       ],
       "phases": [
         "enter"
@@ -169,7 +183,10 @@
         "axis": [
           "aim",
           "up",
-          "down"
+          "down",
+          "radial_in",
+          "radial_out",
+          "tangential"
         ],
         "allocation": [
           "distance_weighted",
@@ -183,7 +200,7 @@
     "accelerate": {
       "op": "Drive",
       "targets": [
-        "gravity"
+        "gravitation"
       ],
       "phases": [
         "active"
@@ -191,8 +208,12 @@
       "readout": "对域内物体施加局部加速度",
       "parameters": {
         "axis": [
+          "aim",
           "up",
-          "down"
+          "down",
+          "radial_in",
+          "radial_out",
+          "tangential"
         ]
       }
     },
@@ -212,7 +233,7 @@
     "warm": {
       "op": "Drive",
       "targets": [
-        "heat"
+        "thermal"
       ],
       "phases": [
         "active"
@@ -223,7 +244,7 @@
     "conduct": {
       "op": "Drive",
       "targets": [
-        "electric"
+        "conductor_field"
       ],
       "phases": [
         "enter",
@@ -268,7 +289,7 @@
     "illuminate": {
       "op": "Drive",
       "targets": [
-        "light"
+        "radiance"
       ],
       "phases": [
         "active"
@@ -286,6 +307,70 @@
       ],
       "readout": "使来源中的有限水体原位成冰",
       "parameters": {}
+    },
+    "project": {
+      "op": "Drive",
+      "targets": [
+        "material"
+      ],
+      "parameters": {
+        "axis": [
+          "aim",
+          "up",
+          "down",
+          "radial_in",
+          "radial_out",
+          "tangential"
+        ]
+      },
+      "phases": [
+        "enter"
+      ],
+      "readout": "向受控实体交付有限冲量"
+    },
+    "grow": {
+      "op": "Transform",
+      "targets": [
+        "material"
+      ],
+      "parameters": {},
+      "phases": [
+        "active"
+      ],
+      "readout": "按实付时间增加有限材料尺度"
+    },
+    "melt": {
+      "op": "Transform",
+      "targets": [
+        "water"
+      ],
+      "parameters": {},
+      "phases": [
+        "enter"
+      ],
+      "readout": "使有限固态水原位熔化"
+    },
+    "fracture": {
+      "op": "Transform",
+      "targets": [
+        "material"
+      ],
+      "parameters": {},
+      "phases": [
+        "enter"
+      ],
+      "readout": "使有限材料结构裂解并保留残余主体"
+    },
+    "handoff_world": {
+      "op": "Withdraw",
+      "targets": [
+        "material"
+      ],
+      "parameters": {},
+      "phases": [
+        "exit"
+      ],
+      "readout": "原位移交同一物理实体给世界"
     }
   },
   "art": {
@@ -330,6 +415,20 @@
     ],
     "camera": [
       "local_impact"
+    ],
+    "material": [
+      "slate",
+      "crystal",
+      "silver_mist"
+    ],
+    "space_fx": [
+      "refraction",
+      "contour",
+      "compression"
+    ],
+    "focus": [
+      "primary",
+      "secondary"
     ]
   },
   "limits": {
@@ -373,5 +472,97 @@
     "max_tick_cost_us_per_cast": 300,
     "max_deflect_iterations_per_node": 2,
     "evidence": "pending_engine"
+  },
+  "interfaces": {
+    "air": [
+      "pressure",
+      "spatial"
+    ],
+    "earth": [
+      "pressure",
+      "material",
+      "spatial"
+    ],
+    "aether": [
+      "pressure",
+      "spatial"
+    ],
+    "gravity": [
+      "gravitation",
+      "spatial"
+    ],
+    "light": [
+      "radiance",
+      "spatial"
+    ],
+    "heat": [
+      "thermal",
+      "spatial"
+    ],
+    "fire": [
+      "thermal",
+      "radiance",
+      "spatial"
+    ],
+    "mist": [
+      "optical_medium",
+      "spatial"
+    ],
+    "electric": [
+      "conductor_field",
+      "spatial"
+    ],
+    "water": [
+      "material",
+      "spatial"
+    ],
+    "site": [
+      "endpoint"
+    ],
+    "reservoir": [
+      "storage"
+    ]
+  },
+  "delivery": {
+    "impulse": "pressure",
+    "accelerate": "gravity",
+    "warm": "thermal",
+    "conduct": "conduction",
+    "freeze": "material_path",
+    "solidify": "material",
+    "melt": "material",
+    "project": "material",
+    "grow": "material",
+    "fracture": "material",
+    "bear_load": "contact",
+    "attenuate": "optical",
+    "illuminate": "optical",
+    "notify": "information"
+  },
+  "artkit": {
+    "adapters": {
+      "slate": {
+        "Body": "facet",
+        "PathGraph": "ridge",
+        "SurfacePatch": "seam",
+        "Region": "grain"
+      },
+      "crystal": {
+        "Body": "facet",
+        "PathGraph": "ridge",
+        "SurfacePatch": "film",
+        "Region": "halo"
+      },
+      "silver_mist": {
+        "Body": "rind",
+        "PathGraph": "thread",
+        "SurfacePatch": "film",
+        "Region": "halo"
+      }
+    },
+    "highlight_fraction": 0.09,
+    "focus_blend_s": 0.16,
+    "max_tracks": 16,
+    "max_layers": 64
   }
 }

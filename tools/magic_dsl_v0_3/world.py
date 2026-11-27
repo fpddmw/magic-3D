@@ -58,7 +58,17 @@ class World:
     def capture(self, recipe, sid):
         s = recipe.subjects[sid]
         origin = self.origin
-        if s["spatial"]["reference"]["anchor"] == "source":
+        anchor = s["spatial"]["reference"]["anchor"]
+        if anchor == "target":
+            key = self.slots.get("target")
+            if key not in self.objects:
+                return None
+            origin = self.objects[key]["position"]
+        if anchor == "aim_point":
+            if "aim_point" not in self.scene:
+                return None
+            origin = self.scene["aim_point"]
+        if anchor == "source":
             root = self.source(recipe, sid)
             if root in self.objects:
                 origin = self.objects[root]["position"]
@@ -70,7 +80,20 @@ class World:
             source = recipe.subjects[source["ref"]]["source"]
         return self.slots.get(source.get("slot"))
 
-    def affected(self, space, pose):
+    @staticmethod
+    def axis(name, origin, aim, position):
+        if name in ("aim","up","down"):
+            return {"aim":aim,"up":[0,1,0],"down":[0,-1,0]}[name]
+        v = [b-a for a,b in zip(origin,position)]
+        if name == "radial_in":
+            v = [-x for x in v]
+        if name == "tangential":
+            v = [v[2],0,-v[0]]
+        return World.direction(v) if hypot(*v) > 1e-9 else [0,0,0]
+
+    def affected(self, space, pose, channel):
+        if pose is None:
+            return {}
         g = space["geometry"]
         origin, aim = pose
         out = {}
@@ -78,7 +101,13 @@ class World:
             if space.get("scope") == "self" and key != self.slots.get("self"):
                 continue
             d = dist(o["position"], origin)
-            if d > g["extent_m"] or o.get("occluded"):
+            if d > g["extent_m"]:
+                continue
+            if channel == "pressure" and o.get("occluded"):
+                continue
+            if channel == "thermal" and o.get("thermal_path", "radiation") == "insulated":
+                continue
+            if channel == "thermal" and o.get("thermal_path","radiation") == "radiation" and o.get("occluded"):
                 continue
             delta = [x - y for x, y in zip(o["position"], origin)]
             axial = sum(x * y for x, y in zip(delta, aim))
@@ -86,6 +115,8 @@ class World:
                 continue
             # The sheet uses observed contact/sight at the interface, within its finite radius.
             weight = 1 if space["distribution"] == "uniform" else max(0, 1 - d / g["extent_m"])
+            if channel == "optical":
+                weight *= o.get("transmission", 0 if o.get("occluded") else 1)
             if weight > 0:
                 out[key] = (d, weight)
         return out
