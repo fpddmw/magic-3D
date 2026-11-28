@@ -1,0 +1,53 @@
+{
+  "pack": "P19",
+  "form": "FlatVeil",
+  "seconds": 6.0,
+  "clips": [
+    {
+      "at": 0,
+      "clip": "F08-02",
+      "duration": 4.4,
+      "curve": "rise_curve.tres"
+    },
+    {
+      "at": 3.55,
+      "clip": "F08-06",
+      "duration": 1.85,
+      "curve": ""
+    }
+  ],
+  "collision": {
+    "layer": 0,
+    "active_from": 2.0,
+    "active_to": 6.0
+  },
+  "stone": {},
+  "dust_window": [
+    0.48,
+    3.15
+  ],
+  "b03": [
+    {
+      "at": 0,
+      "pose": "gather",
+      "duration": 0.52,
+      "from_s": 0,
+      "to_s": 0.65
+    },
+    {
+      "at": 0.52,
+      "pose": "open",
+      "duration": 1.46,
+      "from_s": 0.65,
+      "to_s": 1.8
+    },
+    {
+      "at": 4.8,
+      "pose": "release",
+      "duration": 1.1,
+      "from_s": 2.5,
+      "to_s": 3.35
+    }
+  ],
+  "anchor_y_m": -0.012
+}

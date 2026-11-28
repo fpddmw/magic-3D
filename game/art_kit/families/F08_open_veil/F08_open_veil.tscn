@@ -1,0 +1,87 @@
+[gd_scene load_steps=14 format=3]
+
+[ext_resource type="Script" path="res://art_kit/families/F08_open_veil/veil.gd" id="logic"]
+[ext_resource type="PackedScene" path="res://art_kit/families/F08_open_veil/F08_open_veil.glb" id="mesh"]
+[ext_resource type="Shader" path="res://art_kit/families/F08_open_veil/veil.gdshader" id="shader"]
+[ext_resource type="Texture2D" path="res://art_kit/families/F08_open_veil/textures/veil_flow.png" id="silk"]
+[ext_resource type="Texture2D" path="res://art_kit/families/F08_open_veil/textures/veil_erosion.png" id="fray"]
+[ext_resource type="Texture2D" path="res://art_kit/families/F08_open_veil/textures/load_crack_mask.png" id="crack"]
+
+[sub_resource type="ShaderMaterial" id="Silk"]
+shader = ExtResource("shader")
+shader_parameter/silk = ExtResource("silk")
+shader_parameter/fray = ExtResource("fray")
+shader_parameter/crack = ExtResource("crack")
+
+[sub_resource type="Animation" id="A01"]
+resource_name = "F08-01"
+length = 1.0
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:progress")
+tracks/0/interp = 1
+tracks/0/keys = {"times": PackedFloat32Array(0, 0.25, 0.5, 0.75, 1), "transitions": PackedFloat32Array(1, 1, 1, 1, 1), "update": 0, "values": [0.0, 0.12, 0.51, 0.87, 1.0]}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:handling")
+tracks/1/interp = 1
+tracks/1/keys = {"times": PackedFloat32Array(0, 0.25, 0.5, 0.75, 1), "transitions": PackedFloat32Array(1, 1, 1, 1, 1), "update": 0, "values": [1.0, 1.0, 1.0, 1.0, 1.0]}
+
+[sub_resource type="Animation" id="A02"]
+resource_name = "F08-02"
+length = 1.0
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:progress")
+tracks/0/interp = 1
+tracks/0/keys = {"times": PackedFloat32Array(0, 0.25, 0.5, 0.75, 1), "transitions": PackedFloat32Array(1, 1, 1, 1, 1), "update": 0, "values": [0.0, 0.065, 0.38, 0.82, 1.0]}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:handling")
+tracks/1/interp = 1
+tracks/1/keys = {"times": PackedFloat32Array(0, 0.25, 0.5, 0.75, 1), "transitions": PackedFloat32Array(1, 1, 1, 1, 1), "update": 0, "values": [1.0, 1.0, 1.0, 1.0, 1.0]}
+
+[sub_resource type="Animation" id="A04"]
+resource_name = "F08-04"
+length = 1.0
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:progress")
+tracks/0/interp = 1
+tracks/0/keys = {"times": PackedFloat32Array(0, 0.25, 0.5, 0.75, 1), "transitions": PackedFloat32Array(1, 1, 1, 1, 1), "update": 0, "values": [0.0, 0.18, 0.55, 0.87, 1.0]}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:handling")
+tracks/1/interp = 1
+tracks/1/keys = {"times": PackedFloat32Array(0, 0.25, 0.5, 0.75, 1), "transitions": PackedFloat32Array(1, 1, 1, 1, 1), "update": 0, "values": [1.0, 0.81, 0.95, 0.88, 1.0]}
+
+[sub_resource type="Animation" id="A05"]
+resource_name = "F08-05"
+length = 1.0
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:progress")
+tracks/0/interp = 1
+tracks/0/keys = {"times": PackedFloat32Array(0, 0.25, 0.5, 0.75, 1), "transitions": PackedFloat32Array(1, 1, 1, 1, 1), "update": 0, "values": [0.0, 0.08, 0.45, 0.86, 1.0]}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:handling")
+tracks/1/interp = 1
+tracks/1/keys = {"times": PackedFloat32Array(0, 0.25, 0.5, 0.75, 1), "transitions": PackedFloat32Array(1, 1, 1, 1, 1), "update": 0, "values": [1.0, 1.0, 1.0, 1.0, 1.0]}
+
+[sub_resource type="Animation" id="A06"]
+resource_name = "F08-06"
+length = 1.0
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:progress")
+tracks/0/interp = 1
+tracks/0/keys = {"times": PackedFloat32Array(0, 0.25, 0.5, 0.75, 1), "transitions": PackedFloat32Array(1, 1, 1, 1, 1), "update": 0, "values": [0.0, 0.16, 0.59, 0.91, 1.0]}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:handling")
+tracks/1/interp = 1
+tracks/1/keys = {"times": PackedFloat32Array(0, 0.25, 0.5, 0.75, 1), "transitions": PackedFloat32Array(1, 1, 1, 1, 1), "update": 0, "values": [1.0, 1.0, 1.0, 1.0, 1.0]}
+
+[sub_resource type="AnimationLibrary" id="Clips"]
+_data = {&"F08-01": SubResource("A01"), &"F08-02": SubResource("A02"), &"F08-04": SubResource("A04"), &"F08-05": SubResource("A05"), &"F08-06": SubResource("A06")}
+
+[node name="F08_open_veil" type="Node3D"]
+script = ExtResource("logic")
+base_material = SubResource("Silk")
+
+[node name="Carrier" parent="." instance=ExtResource("mesh")]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+callback_mode_process = 2
+libraries = {&"": SubResource("Clips")}

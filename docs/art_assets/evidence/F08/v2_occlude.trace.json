@@ -1,0 +1,2763 @@
+{
+	"contact_ticks": 0,
+	"device": "Apple M6 (Apple9)",
+	"engine": "4.5.1-stable (official)",
+	"handoffs": [
+		{
+			"clip": "F08-01",
+			"entry": [
+				1.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"jump": 0.0,
+			"t": 0.0
+		},
+		{
+			"clip": "F08-04",
+			"entry": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"jump": 0.0,
+			"t": 1.95
+		}
+	],
+	"peak_load": 0.0,
+	"physics": "Jolt Physics",
+	"recipe": "res://art_lab/f08/recipes/v2_occlude.json",
+	"renderer": "forward_plus",
+	"samples": [
+		{
+			"clip": "F08-01",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "gather",
+			"hand_span_m": 0.779999971389771,
+			"load_ratio": 0.0,
+			"pose": [
+				0.99589741230011,
+				0.0,
+				0.0,
+				0.0
+			],
+			"tick": 0
+		},
+		{
+			"clip": "F08-01",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "gather",
+			"hand_span_m": 0.768866837024689,
+			"load_ratio": 0.0,
+			"pose": [
+				0.983589768409729,
+				0.0,
+				0.0,
+				0.0
+			],
+			"tick": 3
+		},
+		{
+			"clip": "F08-01",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "gather",
+			"hand_span_m": 0.736587166786194,
+			"load_ratio": 0.0,
+			"pose": [
+				0.971282064914703,
+				0.0,
+				0.0,
+				0.0
+			],
+			"tick": 6
+		},
+		{
+			"clip": "F08-01",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "gather",
+			"hand_span_m": 0.684531152248383,
+			"load_ratio": 0.0,
+			"pose": [
+				0.958974361419678,
+				0.0,
+				0.0,
+				0.0
+			],
+			"tick": 9
+		},
+		{
+			"clip": "F08-01",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "gather",
+			"hand_span_m": 0.616570472717285,
+			"load_ratio": 0.0,
+			"pose": [
+				0.946666657924652,
+				0.0,
+				0.0,
+				0.0
+			],
+			"tick": 12
+		},
+		{
+			"clip": "F08-01",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "gather",
+			"hand_span_m": 0.540585815906525,
+			"load_ratio": 0.0,
+			"pose": [
+				0.934358954429626,
+				0.0,
+				0.0,
+				0.0
+			],
+			"tick": 15
+		},
+		{
+			"clip": "F08-01",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "gather",
+			"hand_span_m": 0.466945230960846,
+			"load_ratio": 0.0,
+			"pose": [
+				0.922051310539246,
+				0.0,
+				0.0,
+				0.0
+			],
+			"tick": 18
+		},
+		{
+			"clip": "F08-01",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "gather",
+			"hand_span_m": 0.405020505189896,
+			"load_ratio": 0.0,
+			"pose": [
+				0.90974360704422,
+				0.0,
+				0.0,
+				0.0
+			],
+			"tick": 21
+		},
+		{
+			"clip": "F08-01",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "gather",
+			"hand_span_m": 0.360095888376236,
+			"load_ratio": 0.0,
+			"pose": [
+				0.897435903549194,
+				0.0,
+				0.0,
+				0.0
+			],
+			"tick": 24
+		},
+		{
+			"clip": "F08-01",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "gather",
+			"hand_span_m": 0.332655340433121,
+			"load_ratio": 0.0,
+			"pose": [
+				0.885128200054169,
+				0.0,
+				0.0,
+				0.0
+			],
+			"tick": 27
+		},
+		{
+			"clip": "F08-01",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "gather",
+			"hand_span_m": 0.320391893386841,
+			"load_ratio": 0.0,
+			"pose": [
+				0.856666684150696,
+				0.0,
+				0.0,
+				0.0
+			],
+			"tick": 30
+		},
+		{
+			"clip": "F08-01",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 0.320277661085129,
+			"load_ratio": 0.0,
+			"pose": [
+				0.816666662693024,
+				0.0,
+				0.0,
+				0.0
+			],
+			"tick": 33
+		},
+		{
+			"clip": "F08-01",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 0.326135963201523,
+			"load_ratio": 0.0,
+			"pose": [
+				0.776666641235352,
+				0.0,
+				0.0,
+				0.0
+			],
+			"tick": 36
+		},
+		{
+			"clip": "F08-01",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 0.337134510278702,
+			"load_ratio": 0.0,
+			"pose": [
+				0.736666679382324,
+				0.0,
+				0.0,
+				0.0
+			],
+			"tick": 39
+		},
+		{
+			"clip": "F08-01",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 0.353214979171753,
+			"load_ratio": 0.0,
+			"pose": [
+				0.696666657924652,
+				0.0,
+				0.0,
+				0.0
+			],
+			"tick": 42
+		},
+		{
+			"clip": "F08-01",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 0.374393820762634,
+			"load_ratio": 0.0,
+			"pose": [
+				0.65666663646698,
+				0.0,
+				0.0,
+				0.0
+			],
+			"tick": 45
+		},
+		{
+			"clip": "F08-01",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 0.400710493326187,
+			"load_ratio": 0.0,
+			"pose": [
+				0.616666674613953,
+				0.0,
+				0.0,
+				0.0
+			],
+			"tick": 48
+		},
+		{
+			"clip": "F08-01",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 0.432178258895874,
+			"load_ratio": 0.0,
+			"pose": [
+				0.576666653156281,
+				0.0,
+				0.0,
+				0.0
+			],
+			"tick": 51
+		},
+		{
+			"clip": "F08-01",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 0.468738883733749,
+			"load_ratio": 0.0,
+			"pose": [
+				0.536666631698608,
+				0.0,
+				0.0,
+				0.0
+			],
+			"tick": 54
+		},
+		{
+			"clip": "F08-01",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 0.510224044322968,
+			"load_ratio": 0.0,
+			"pose": [
+				0.496666669845581,
+				0.0,
+				0.0,
+				0.0
+			],
+			"tick": 57
+		},
+		{
+			"clip": "F08-01",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 0.556324660778046,
+			"load_ratio": 0.0,
+			"pose": [
+				0.459230780601501,
+				0.0,
+				0.0,
+				0.0
+			],
+			"tick": 60
+		},
+		{
+			"clip": "F08-01",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 0.606572449207306,
+			"load_ratio": 0.0,
+			"pose": [
+				0.422307670116425,
+				0.0,
+				0.0,
+				0.0
+			],
+			"tick": 63
+		},
+		{
+			"clip": "F08-01",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 0.660334229469299,
+			"load_ratio": 0.0,
+			"pose": [
+				0.385384619235992,
+				0.0,
+				0.0,
+				0.0
+			],
+			"tick": 66
+		},
+		{
+			"clip": "F08-01",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 0.716819584369659,
+			"load_ratio": 0.0,
+			"pose": [
+				0.348461508750916,
+				0.0,
+				0.0,
+				0.0
+			],
+			"tick": 69
+		},
+		{
+			"clip": "F08-01",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 0.775104999542236,
+			"load_ratio": 0.0,
+			"pose": [
+				0.311538457870483,
+				0.0,
+				0.0,
+				0.0
+			],
+			"tick": 72
+		},
+		{
+			"clip": "F08-01",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 0.834168553352356,
+			"load_ratio": 0.0,
+			"pose": [
+				0.274615347385406,
+				0.0,
+				0.0,
+				0.0
+			],
+			"tick": 75
+		},
+		{
+			"clip": "F08-01",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 0.892937302589417,
+			"load_ratio": 0.0,
+			"pose": [
+				0.237692296504974,
+				0.0,
+				0.0,
+				0.0
+			],
+			"tick": 78
+		},
+		{
+			"clip": "F08-01",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 0.950338959693909,
+			"load_ratio": 0.0,
+			"pose": [
+				0.200769245624542,
+				0.0,
+				0.0,
+				0.0
+			],
+			"tick": 81
+		},
+		{
+			"clip": "F08-01",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.00535702705383,
+			"load_ratio": 0.0,
+			"pose": [
+				0.163846135139465,
+				0.0,
+				0.0,
+				0.0
+			],
+			"tick": 84
+		},
+		{
+			"clip": "F08-01",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.05708169937134,
+			"load_ratio": 0.0,
+			"pose": [
+				0.12888890504837,
+				0.0,
+				0.0,
+				0.0
+			],
+			"tick": 87
+		},
+		{
+			"clip": "F08-01",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.10475301742554,
+			"load_ratio": 0.0,
+			"pose": [
+				0.115555584430695,
+				0.0,
+				0.0,
+				0.0
+			],
+			"tick": 90
+		},
+		{
+			"clip": "F08-01",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.14779198169708,
+			"load_ratio": 0.0,
+			"pose": [
+				0.102222204208374,
+				0.0,
+				0.0,
+				0.0
+			],
+			"tick": 93
+		},
+		{
+			"clip": "F08-01",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.1858161687851,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0888888835906982,
+				0.0,
+				0.0,
+				0.0
+			],
+			"tick": 96
+		},
+		{
+			"clip": "F08-01",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.21863901615143,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0755555629730225,
+				0.0,
+				0.0,
+				0.0
+			],
+			"tick": 99
+		},
+		{
+			"clip": "F08-01",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.24625205993652,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0622222423553467,
+				0.0,
+				0.0,
+				0.0
+			],
+			"tick": 102
+		},
+		{
+			"clip": "F08-01",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.26879191398621,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0488888621330261,
+				0.0,
+				0.0,
+				0.0
+			],
+			"tick": 105
+		},
+		{
+			"clip": "F08-01",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.28649127483368,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0355555415153503,
+				0.0,
+				0.0,
+				0.0
+			],
+			"tick": 108
+		},
+		{
+			"clip": "F08-01",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.29962277412415,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0222222208976746,
+				0.0,
+				0.0,
+				0.0
+			],
+			"tick": 111
+		},
+		{
+			"clip": "F08-01",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.30843079090118,
+			"load_ratio": 0.0,
+			"pose": [
+				0.00888890027999878,
+				0.0,
+				0.0,
+				0.0
+			],
+			"tick": 114
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31305944919586,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"tick": 117
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"tick": 120
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"tick": 123
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"tick": 126
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"tick": 129
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"tick": 132
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"tick": 135
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"tick": 138
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"tick": 141
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"tick": 144
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.769999980926514,
+				1.95000004768372,
+				3.15000009536743
+			],
+			"tick": 147,
+			"velocity": [
+				0.0,
+				0.0,
+				-3.5
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.769999980926514,
+				1.94559097290039,
+				2.97178435325623
+			],
+			"tick": 150,
+			"velocity": [
+				0.0,
+				-0.132255926728249,
+				-3.59646797180176
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.769999980926514,
+				1.93457353115082,
+				2.78874826431274
+			],
+			"tick": 153,
+			"velocity": [
+				0.0,
+				-0.264379650354385,
+				-3.69283938407898
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.769999980926514,
+				1.91695427894592,
+				2.60089683532715
+			],
+			"tick": 156,
+			"velocity": [
+				0.0,
+				-0.396371334791183,
+				-3.78911471366882
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.769999980926514,
+				1.89273989200592,
+				2.40823483467102
+			],
+			"tick": 159,
+			"velocity": [
+				0.0,
+				-0.528231084346771,
+				-3.88529372215271
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.769999980926514,
+				1.86193692684174,
+				2.21076726913452
+			],
+			"tick": 162,
+			"velocity": [
+				0.0,
+				-0.659958958625793,
+				-3.98137664794922
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.769999980926514,
+				1.82455193996429,
+				2.00849866867065
+			],
+			"tick": 165,
+			"velocity": [
+				0.0,
+				-0.791555166244507,
+				-4.07736349105835
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.769999980926514,
+				1.78059148788452,
+				1.801433801651
+			],
+			"tick": 168,
+			"velocity": [
+				0.0,
+				-0.923019766807556,
+				-4.17325448989868
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.769999980926514,
+				1.73006224632263,
+				1.58957755565643
+			],
+			"tick": 171,
+			"velocity": [
+				0.0,
+				-1.05435299873352,
+				-4.26904964447021
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.769999980926514,
+				1.67297065258026,
+				1.37293469905853
+			],
+			"tick": 174,
+			"velocity": [
+				0.0,
+				-1.18555510044098,
+				-4.36474895477295
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.769999980926514,
+				1.60932338237762,
+				1.15151000022888
+			],
+			"tick": 177,
+			"velocity": [
+				0.0,
+				-1.31662607192993,
+				-4.46035242080688
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.769999980926514,
+				1.53912699222565,
+				0.925308465957642
+			],
+			"tick": 180,
+			"velocity": [
+				0.0,
+				-1.44756615161896,
+				-4.55586051940918
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.769999980926514,
+				1.46238780021667,
+				0.69433468580246
+			],
+			"tick": 183,
+			"velocity": [
+				0.0,
+				-1.57837533950806,
+				-4.65127277374268
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.769999980926514,
+				1.37911260128021,
+				0.458593398332596
+			],
+			"tick": 186,
+			"velocity": [
+				0.0,
+				-1.70905363559723,
+				-4.74659013748169
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.769999980926514,
+				1.2893078327179,
+				0.21808947622776
+			],
+			"tick": 189,
+			"velocity": [
+				0.0,
+				-1.83960127830505,
+				-4.84181213378906
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.769999980926514,
+				1.19297993183136,
+				-0.0271724071353674
+			],
+			"tick": 192,
+			"velocity": [
+				0.0,
+				-1.97001838684082,
+				-4.93693876266479
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.769999980926514,
+				1.09013569355011,
+				-0.277187436819077
+			],
+			"tick": 195,
+			"velocity": [
+				0.0,
+				-2.10030508041382,
+				-5.03197050094604
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.769999980926514,
+				0.980781495571136,
+				-0.531950891017914
+			],
+			"tick": 198,
+			"velocity": [
+				0.0,
+				-2.23046159744263,
+				-5.12690734863281
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.769999980926514,
+				0.864923715591431,
+				-0.791458010673523
+			],
+			"tick": 201,
+			"velocity": [
+				0.0,
+				-2.36048817634583,
+				-5.22174882888794
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.769999980926514,
+				0.742568910121918,
+				-1.05570411682129
+			],
+			"tick": 204,
+			"velocity": [
+				0.0,
+				-2.49038457870483,
+				-5.31649589538574
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.769999980926514,
+				0.613723695278168,
+				-1.32468438148499
+			],
+			"tick": 207,
+			"velocity": [
+				0.0,
+				-2.62015104293823,
+				-5.41114854812622
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.769999980926514,
+				0.478394418954849,
+				-1.59839415550232
+			],
+			"tick": 210,
+			"velocity": [
+				0.0,
+				-2.74978804588318,
+				-5.50570678710938
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.769890069961548,
+				0.392959833145142,
+				-1.8272008895874
+			],
+			"tick": 213,
+			"velocity": [
+				-0.00706741912290454,
+				0.485725343227386,
+				-2.61359572410583
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.768922448158264,
+				0.441461980342865,
+				-1.95279264450073
+			],
+			"tick": 216,
+			"velocity": [
+				-0.0196035541594028,
+				0.912082970142365,
+				-2.53312659263611
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.767942130565643,
+				0.483094215393066,
+				-2.08343625068665
+			],
+			"tick": 219,
+			"velocity": [
+				-0.0195839572697878,
+				0.778915405273438,
+				-2.63056111335754
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.766949474811554,
+				0.517820656299591,
+				-2.21905207633972
+			],
+			"tick": 222,
+			"velocity": [
+				-0.0195643827319145,
+				0.645880877971649,
+				-2.72789812088013
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.76594603061676,
+				0.545630991458893,
+				-2.35955262184143
+			],
+			"tick": 225,
+			"velocity": [
+				-0.0195448249578476,
+				0.512979388237,
+				-2.82513785362244
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.764934420585632,
+				0.566540718078613,
+				-2.5048496723175
+			],
+			"tick": 228,
+			"velocity": [
+				-0.0195252895355225,
+				0.380210638046265,
+				-2.92228031158447
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.763918042182922,
+				0.580590069293976,
+				-2.65486407279968
+			],
+			"tick": 231,
+			"velocity": [
+				-0.0195057708770037,
+				0.247574642300606,
+				-3.01932573318481
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.76290088891983,
+				0.587839365005493,
+				-2.80953001976013
+			],
+			"tick": 234,
+			"velocity": [
+				-0.0194862745702267,
+				0.115071251988411,
+				-3.11627435684204
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.761886835098267,
+				0.588364005088806,
+				-2.96880269050598
+			],
+			"tick": 237,
+			"velocity": [
+				-0.019466795027256,
+				-0.0172996912151575,
+				-3.21312570571899
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.760879695415497,
+				0.582246959209442,
+				-3.13265919685364
+			],
+			"tick": 240,
+			"velocity": [
+				-0.0194473378360271,
+				-0.149538323283195,
+				-3.30988049507141
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.759882390499115,
+				0.5695720911026,
+				-3.301100730896
+			],
+			"tick": 243,
+			"velocity": [
+				-0.0194278974086046,
+				-0.281644761562347,
+				-3.40653872489929
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.758897125720978,
+				0.550416648387909,
+				-3.47415113449097
+			],
+			"tick": 246,
+			"velocity": [
+				-0.0194084774702787,
+				-0.413619190454483,
+				-3.50310039520264
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.757925033569336,
+				0.524845600128174,
+				-3.65185284614563
+			],
+			"tick": 249,
+			"velocity": [
+				-0.0193890761584044,
+				-0.545461595058441,
+				-3.59956550598145
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.756966173648834,
+				0.49290657043457,
+				-3.83426308631897
+			],
+			"tick": 252,
+			"velocity": [
+				-0.0193696953356266,
+				-0.677172243595123,
+				-3.69593405723572
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.756019473075867,
+				0.454626977443695,
+				-4.02144622802734
+			],
+			"tick": 255,
+			"velocity": [
+				-0.0193503331393003,
+				-0.808751225471497,
+				-3.79220604896545
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.755082905292511,
+				0.410012871026993,
+				-4.21346998214722
+			],
+			"tick": 258,
+			"velocity": [
+				-0.0193309914320707,
+				-0.940198600292206,
+				-3.88838195800781
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.754153788089752,
+				0.359049648046494,
+				-4.41039657592773
+			],
+			"tick": 261,
+			"velocity": [
+				-0.0193116683512926,
+				-1.07151472568512,
+				-3.98446154594421
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.723400771617889,
+				0.382868826389313,
+				-4.56813955307007
+			],
+			"tick": 264,
+			"velocity": [
+				-0.614829063415527,
+				0.411648273468018,
+				-3.20351719856262
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.692569196224213,
+				0.400283426046371,
+				-4.73120307922363
+			],
+			"tick": 267,
+			"velocity": [
+				-0.614214479923248,
+				0.278980821371078,
+				-3.30028128623962
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.661679446697235,
+				0.411082208156586,
+				-4.89963245391846
+			],
+			"tick": 270,
+			"velocity": [
+				-0.613600492477417,
+				0.146446034312248,
+				-3.39694881439209
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.630766630172729,
+				0.415056794881821,
+				-5.07338285446167
+			],
+			"tick": 273,
+			"velocity": [
+				-0.612987160682678,
+				0.0140437260270119,
+				-3.49351978302002
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.599873960018158,
+				0.412037968635559,
+				-5.25232791900635
+			],
+			"tick": 276,
+			"velocity": [
+				-0.612374365329742,
+				-0.118226245045662,
+				-3.58999419212341
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.569045305252075,
+				0.401923447847366,
+				-5.43628263473511
+			],
+			"tick": 279,
+			"velocity": [
+				-0.611762285232544,
+				-0.250364005565643,
+				-3.68637204170227
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.544280588626862,
+				0.402752220630646,
+				-5.61707162857056
+			],
+			"tick": 282,
+			"velocity": [
+				-0.254918217658997,
+				0.702949464321136,
+				-3.30203032493591
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.531517803668976,
+				0.432553291320801,
+				-5.78648614883423
+			],
+			"tick": 285,
+			"velocity": [
+				-0.254663407802582,
+				0.569990932941437,
+				-3.39869618415833
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "release",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.518813788890839,
+				0.455341756343842,
+				-5.96023893356323
+			],
+			"tick": 288,
+			"velocity": [
+				-0.254408866167068,
+				0.437165260314941,
+				-3.49526572227478
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "release",
+			"hand_span_m": 1.31400966644287,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.506164014339447,
+				0.47136864066124,
+				-6.1382212638855
+			],
+			"tick": 291,
+			"velocity": [
+				-0.254154592752457,
+				0.304472327232361,
+				-3.5917387008667
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "release",
+			"hand_span_m": 1.31435191631317,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.493556261062622,
+				0.480902254581451,
+				-6.32043552398682
+			],
+			"tick": 294,
+			"velocity": [
+				-0.253900527954102,
+				0.171912059187889,
+				-3.68811511993408
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "release",
+			"hand_span_m": 1.314337849617,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.480973452329636,
+				0.484179526567459,
+				-6.50699281692505
+			],
+			"tick": 297,
+			"velocity": [
+				-0.253646701574326,
+				0.0394843034446239,
+				-3.78439497947693
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "release",
+			"hand_span_m": 1.31326186656952,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.468396633863449,
+				0.481365263462067,
+				-6.69808626174927
+			],
+			"tick": 300,
+			"velocity": [
+				-0.253393143415451,
+				-0.0928110927343369,
+				-3.8805787563324
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "release",
+			"hand_span_m": 1.31032633781433,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.455808490514755,
+				0.472526252269745,
+				-6.89395475387573
+			],
+			"tick": 303,
+			"velocity": [
+				-0.253139853477478,
+				-0.224974229931831,
+				-3.97666621208191
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "release",
+			"hand_span_m": 1.3047342300415,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.443196326494217,
+				0.457623839378357,
+				-7.09483480453491
+			],
+			"tick": 306,
+			"velocity": [
+				-0.252886831760406,
+				-0.357005298137665,
+				-4.0726580619812
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "release",
+			"hand_span_m": 1.29576861858368,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.430554389953613,
+				0.4365254342556,
+				-7.30092239379883
+			],
+			"tick": 309,
+			"velocity": [
+				-0.252634078264236,
+				-0.488904386758804,
+				-4.16855382919312
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "release",
+			"hand_span_m": 1.28286337852478,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.417884200811386,
+				0.409031867980957,
+				-7.5123348236084
+			],
+			"tick": 312,
+			"velocity": [
+				-0.252381533384323,
+				-0.620671570301056,
+				-4.26435375213623
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "release",
+			"hand_span_m": 1.26566028594971,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.405194491147995,
+				0.374915391206741,
+				-7.72909545898438
+			],
+			"tick": 315,
+			"velocity": [
+				-0.252129226922989,
+				-0.752306997776031,
+				-4.36005783081055
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "release",
+			"hand_span_m": 1.24405097961426,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.371705532073975,
+				0.397127270698547,
+				-7.92108869552612
+			],
+			"tick": 318,
+			"velocity": [
+				-0.870534360408783,
+				1.0078456401825,
+				-3.5526134967804
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "release",
+			"hand_span_m": 1.21820068359375,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.327842354774475,
+				0.443718373775482,
+				-8.10329627990723
+			],
+			"tick": 321,
+			"velocity": [
+				-0.869664192199707,
+				0.874582350254059,
+				-3.64902901649475
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "release",
+			"hand_span_m": 1.18855369091034,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.284076035022736,
+				0.482950299978256,
+				-8.2904691696167
+			],
+			"tick": 324,
+			"velocity": [
+				-0.868794858455658,
+				0.741452276706696,
+				-3.74534821510315
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "release",
+			"hand_span_m": 1.15582239627838,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.240472108125687,
+				0.514852404594421,
+				-8.48227596282959
+			],
+			"tick": 327,
+			"velocity": [
+				-0.867926418781281,
+				0.608455300331116,
+				-3.84157085418701
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "release",
+			"hand_span_m": 1.12095832824707,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.19706954061985,
+				0.539596259593964,
+				-8.67843532562256
+			],
+			"tick": 330,
+			"velocity": [
+				-0.867058873176575,
+				0.475591212511063,
+				-3.9376974105835
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "release",
+			"hand_span_m": 1.08511185646057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.153873339295387,
+				0.55745667219162,
+				-8.87876796722412
+			],
+			"tick": 333,
+			"velocity": [
+				-0.866192162036896,
+				0.342859864234924,
+				-4.03372812271118
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "release",
+			"hand_span_m": 1.04958236217499,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.110854744911194,
+				0.568752408027649,
+				-9.08322429656982
+			],
+			"tick": 336,
+			"velocity": [
+				-0.865326285362244,
+				0.210261180996895,
+				-4.12966251373291
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "release",
+			"hand_span_m": 1.01576435565948,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.0679581388831139,
+				0.573781192302704,
+				-9.29189968109131
+			],
+			"tick": 339,
+			"velocity": [
+				-0.864461302757263,
+				0.0777950882911682,
+				-4.22550106048584
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "release",
+			"hand_span_m": 0.985095381736755,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				0.0251132678240538,
+				0.572760879993439,
+				-9.50499820709229
+			],
+			"tick": 342,
+			"velocity": [
+				-0.863597214221954,
+				-0.0545385964214802,
+				-4.32124376296997
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "release",
+			"hand_span_m": 0.959004402160645,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				-0.0177501123398542,
+				0.565789818763733,
+				-9.72279739379883
+			],
+			"tick": 345,
+			"velocity": [
+				-0.862733960151672,
+				-0.18673999607563,
+				-4.4168906211853
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "release",
+			"hand_span_m": 0.938867032527924,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				-0.0606883130967617,
+				0.552832722663879,
+				-9.94557952880859
+			],
+			"tick": 348,
+			"velocity": [
+				-0.861871600151062,
+				-0.318809270858765,
+				-4.51244211196899
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "release",
+			"hand_span_m": 0.925963938236237,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				-0.103733062744141,
+				0.533733308315277,
+				-10.173583984375
+			],
+			"tick": 351,
+			"velocity": [
+				-0.861010074615479,
+				-0.450746536254883,
+				-4.60789823532104
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "release",
+			"hand_span_m": 0.921437978744507,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				-0.146886169910431,
+				0.50825023651123,
+				-10.4069538116455
+			],
+			"tick": 354,
+			"velocity": [
+				-0.860149383544922,
+				-0.582551896572113,
+				-4.70325899124146
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "release",
+			"hand_span_m": 0.921437978744507,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				-0.190120175480843,
+				0.476107716560364,
+				-10.6457176208496
+			],
+			"tick": 357,
+			"velocity": [
+				-0.859289586544037,
+				-0.7142254114151,
+				-4.79852390289307
+			]
+		},
+		{
+			"clip": "F08-04",
+			"collision_layer": 0,
+			"contact_ticks": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "release",
+			"hand_span_m": 0.921437978744507,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"stone_xyz": [
+				-0.233384594321251,
+				0.43705090880394,
+				-10.8897790908813
+			],
+			"tick": 360,
+			"velocity": [
+				-0.858430624008179,
+				-0.845767378807068,
+				-4.8936939239502
+			]
+		}
+	]
+}

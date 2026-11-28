@@ -1,0 +1,22 @@
+{
+  "asset_id": "F08",
+  "name": "开放幕面",
+  "status": "isolated_lab_capture_pending_human_review",
+  "scale_tiers": ["T2"],
+  "scene": "F08_open_veil.tscn",
+  "carrier": "F08_open_veil.glb",
+  "axis": {"units": "m", "up": "+Y", "forward": "-Z", "origin": "ground centre"},
+  "configurations": ["ArcVeil", "FlatVeil"],
+  "uv0": "Warped thread and fray coordinates; contact-relative cracks follow the local UV0 tangent chart",
+  "uv1": {"x": "left-to-right selvage 0..1", "y": "root-to-crown height 0..1"},
+  "shape_keys": ["unfold_from_line", "rise_from_ground", "load_bulge", "fracture_open", "retract_to_root"],
+  "animations": {"F08-01": "沿线展开", "F08-02": "地面升幕", "F08-04": "持续驾驭受压回弹", "F08-05": "局部裂解", "F08-06": "收帷交接"},
+  "appearance_packs": ["P19", "P04", "P03"],
+  "body_pose": "B03_dual_open.tres",
+  "art_clock": "Visual seconds independent of animation seeking",
+  "time_curve_example": "rise_curve.tres",
+  "suitable_for": ["有限开放屏障", "承重或遮蔽的视觉对照", "根线接地升降"],
+  "reviewed_input_range": {"width_m": 6.0, "load_ratio": [0.0, 0.7], "configuration": ["P19/ArcVeil", "P04/ArcVeil", "P03/ArcVeil", "P19/FlatVeil"]},
+  "world_feedback_hooks": ["ReceiptEvent.contact_point + load_ratio -> X13", "P03 always suppresses X13"],
+  "lab_contract": "The caller owns collision and passes the current receipt every physics tick, including zero on separation. set_contact uses world coordinates."
+}

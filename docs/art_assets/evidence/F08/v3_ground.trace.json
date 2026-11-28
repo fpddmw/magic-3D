@@ -1,0 +1,1971 @@
+{
+	"contact_ticks": 0,
+	"device": "Apple M6 (Apple9)",
+	"engine": "4.5.1-stable (official)",
+	"handoffs": [
+		{
+			"clip": "F08-02",
+			"entry": [
+				0.0,
+				1.0,
+				0.0,
+				0.0
+			],
+			"jump": 0.0,
+			"t": 0.0
+		},
+		{
+			"clip": "F08-06",
+			"entry": [
+				0.0,
+				0.118216514587402,
+				0.0,
+				0.0
+			],
+			"jump": 0.0,
+			"t": 3.55
+		}
+	],
+	"peak_load": 0.0,
+	"physics": "Jolt Physics",
+	"recipe": "res://art_lab/f08/recipes/v3_ground.json",
+	"renderer": "forward_plus",
+	"samples": [
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "gather",
+			"hand_span_m": 0.779999971389771,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.999751627445221,
+				0.0,
+				0.0
+			],
+			"tick": 0
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "gather",
+			"hand_span_m": 0.768866837024689,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.998999834060669,
+				0.0,
+				0.0
+			],
+			"tick": 3
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "gather",
+			"hand_span_m": 0.736587166786194,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.99823009967804,
+				0.0,
+				0.0
+			],
+			"tick": 6
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "gather",
+			"hand_span_m": 0.684531152248383,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.99743914604187,
+				0.0,
+				0.0
+			],
+			"tick": 9
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "gather",
+			"hand_span_m": 0.616570472717285,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.996623694896698,
+				0.0,
+				0.0
+			],
+			"tick": 12
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "gather",
+			"hand_span_m": 0.540585815906525,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.995780527591705,
+				0.0,
+				0.0
+			],
+			"tick": 15
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "gather",
+			"hand_span_m": 0.466945230960846,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.994902968406677,
+				0.0,
+				0.0
+			],
+			"tick": 18
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "gather",
+			"hand_span_m": 0.405020505189896,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.9939906001091,
+				0.0,
+				0.0
+			],
+			"tick": 21
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "gather",
+			"hand_span_m": 0.360095888376236,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.993040144443512,
+				0.0,
+				0.0
+			],
+			"tick": 24
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "gather",
+			"hand_span_m": 0.332655340433121,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.992048382759094,
+				0.0,
+				0.0
+			],
+			"tick": 27
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "gather",
+			"hand_span_m": 0.320391893386841,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.99101197719574,
+				0.0,
+				0.0
+			],
+			"tick": 30
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 0.320277661085129,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.989927768707275,
+				0.0,
+				0.0
+			],
+			"tick": 33
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 0.326135963201523,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.988792479038239,
+				0.0,
+				0.0
+			],
+			"tick": 36
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 0.337134510278702,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.987602889537811,
+				0.0,
+				0.0
+			],
+			"tick": 39
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 0.353214979171753,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.986349582672119,
+				0.0,
+				0.0
+			],
+			"tick": 42
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 0.374393820762634,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.985034883022308,
+				0.0,
+				0.0
+			],
+			"tick": 45
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 0.400710493326187,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.983655452728271,
+				0.0,
+				0.0
+			],
+			"tick": 48
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 0.432178258895874,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.982208073139191,
+				0.0,
+				0.0
+			],
+			"tick": 51
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 0.468738883733749,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.980689525604248,
+				0.0,
+				0.0
+			],
+			"tick": 54
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 0.510224044322968,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.979096531867981,
+				0.0,
+				0.0
+			],
+			"tick": 57
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 0.556324660778046,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.977425873279572,
+				0.0,
+				0.0
+			],
+			"tick": 60
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 0.606572449207306,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.975674271583557,
+				0.0,
+				0.0
+			],
+			"tick": 63
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 0.660334229469299,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.973829686641693,
+				0.0,
+				0.0
+			],
+			"tick": 66
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 0.716819584369659,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.971897065639496,
+				0.0,
+				0.0
+			],
+			"tick": 69
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 0.775104999542236,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.969873130321503,
+				0.0,
+				0.0
+			],
+			"tick": 72
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 0.834168553352356,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.967754662036896,
+				0.0,
+				0.0
+			],
+			"tick": 75
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 0.892937302589417,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.965538382530212,
+				0.0,
+				0.0
+			],
+			"tick": 78
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 0.950338959693909,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.963221073150635,
+				0.0,
+				0.0
+			],
+			"tick": 81
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.00535702705383,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.9607994556427,
+				0.0,
+				0.0
+			],
+			"tick": 84
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.05708169937134,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.958270311355591,
+				0.0,
+				0.0
+			],
+			"tick": 87
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.10475301742554,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.955618917942047,
+				0.0,
+				0.0
+			],
+			"tick": 90
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.14779198169708,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.952852845191956,
+				0.0,
+				0.0
+			],
+			"tick": 93
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.1858161687851,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.949968934059143,
+				0.0,
+				0.0
+			],
+			"tick": 96
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.21863901615143,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.946963787078857,
+				0.0,
+				0.0
+			],
+			"tick": 99
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.24625205993652,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.943834245204926,
+				0.0,
+				0.0
+			],
+			"tick": 102
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.26879191398621,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.94057708978653,
+				0.0,
+				0.0
+			],
+			"tick": 105
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.28649127483368,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.937188982963562,
+				0.0,
+				0.0
+			],
+			"tick": 108
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.29962277412415,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.928537666797638,
+				0.0,
+				0.0
+			],
+			"tick": 111
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.30843079090118,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.910742163658142,
+				0.0,
+				0.0
+			],
+			"tick": 114
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31305944919586,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.892318665981293,
+				0.0,
+				0.0
+			],
+			"tick": 117
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.873303532600403,
+				0.0,
+				0.0
+			],
+			"tick": 120
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.853732824325562,
+				0.0,
+				0.0
+			],
+			"tick": 123
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.833642780780792,
+				0.0,
+				0.0
+			],
+			"tick": 126
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.813069522380829,
+				0.0,
+				0.0
+			],
+			"tick": 129
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.79204934835434,
+				0.0,
+				0.0
+			],
+			"tick": 132
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.770618319511414,
+				0.0,
+				0.0
+			],
+			"tick": 135
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.748778879642487,
+				0.0,
+				0.0
+			],
+			"tick": 138
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.726607322692871,
+				0.0,
+				0.0
+			],
+			"tick": 141
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.704140365123749,
+				0.0,
+				0.0
+			],
+			"tick": 144
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.681413948535919,
+				0.0,
+				0.0
+			],
+			"tick": 147
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.658464133739471,
+				0.0,
+				0.0
+			],
+			"tick": 150
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.635327160358429,
+				0.0,
+				0.0
+			],
+			"tick": 153
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.608880043029785,
+				0.0,
+				0.0
+			],
+			"tick": 156
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.576190948486328,
+				0.0,
+				0.0
+			],
+			"tick": 159
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.543385982513428,
+				0.0,
+				0.0
+			],
+			"tick": 162
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.510531067848206,
+				0.0,
+				0.0
+			],
+			"tick": 165
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.477676510810852,
+				0.0,
+				0.0
+			],
+			"tick": 168
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.444872975349426,
+				0.0,
+				0.0
+			],
+			"tick": 171
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.412171185016632,
+				0.0,
+				0.0
+			],
+			"tick": 174
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.379621624946594,
+				0.0,
+				0.0
+			],
+			"tick": 177
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.347274720668793,
+				0.0,
+				0.0
+			],
+			"tick": 180
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.315181076526642,
+				0.0,
+				0.0
+			],
+			"tick": 183
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": true,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.283426403999329,
+				0.0,
+				0.0
+			],
+			"tick": 186
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.252035617828369,
+				0.0,
+				0.0
+			],
+			"tick": 189
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.22105884552002,
+				0.0,
+				0.0
+			],
+			"tick": 192
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.190546631813049,
+				0.0,
+				0.0
+			],
+			"tick": 195
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.172042965888977,
+				0.0,
+				0.0
+			],
+			"tick": 198
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.160002827644348,
+				0.0,
+				0.0
+			],
+			"tick": 201
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.148214817047119,
+				0.0,
+				0.0
+			],
+			"tick": 204
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.136699616909027,
+				0.0,
+				0.0
+			],
+			"tick": 207
+		},
+		{
+			"clip": "F08-02",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.125509262084961,
+				0.0,
+				0.0
+			],
+			"tick": 210
+		},
+		{
+			"clip": "F08-06",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.117534905672073,
+				0.0,
+				0.00576576590538025
+			],
+			"tick": 213
+		},
+		{
+			"clip": "F08-06",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.115490078926086,
+				0.0,
+				0.023063063621521
+			],
+			"tick": 216
+		},
+		{
+			"clip": "F08-06",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.113445252180099,
+				0.0,
+				0.0403603613376617
+			],
+			"tick": 219
+		},
+		{
+			"clip": "F08-06",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.111400425434113,
+				0.0,
+				0.0576576553285122
+			],
+			"tick": 222
+		},
+		{
+			"clip": "F08-06",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.109355598688126,
+				0.0,
+				0.0749549567699432
+			],
+			"tick": 225
+		},
+		{
+			"clip": "F08-06",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.107310771942139,
+				0.0,
+				0.092252254486084
+			],
+			"tick": 228
+		},
+		{
+			"clip": "F08-06",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.105265945196152,
+				0.0,
+				0.109549552202225
+			],
+			"tick": 231
+		},
+		{
+			"clip": "F08-06",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.103221118450165,
+				0.0,
+				0.126846849918365
+			],
+			"tick": 234
+		},
+		{
+			"clip": "F08-06",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.101176291704178,
+				0.0,
+				0.144144147634506
+			],
+			"tick": 237
+		},
+		{
+			"clip": "F08-06",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0988439172506332,
+				0.0,
+				0.163873881101608
+			],
+			"tick": 240
+		},
+		{
+			"clip": "F08-06",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0933484435081482,
+				0.0,
+				0.210360363125801
+			],
+			"tick": 243
+		},
+		{
+			"clip": "F08-06",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0878529772162437,
+				0.0,
+				0.256846845149994
+			],
+			"tick": 246
+		},
+		{
+			"clip": "F08-06",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0823575034737587,
+				0.0,
+				0.303333342075348
+			],
+			"tick": 249
+		},
+		{
+			"clip": "F08-06",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0768620371818542,
+				0.0,
+				0.34981980919838
+			],
+			"tick": 252
+		},
+		{
+			"clip": "F08-06",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0713665634393692,
+				0.0,
+				0.396306306123734
+			],
+			"tick": 255
+		},
+		{
+			"clip": "F08-06",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0658710896968842,
+				0.0,
+				0.442792803049088
+			],
+			"tick": 258
+		},
+		{
+			"clip": "F08-06",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0603756196796894,
+				0.0,
+				0.489279299974442
+			],
+			"tick": 261
+		},
+		{
+			"clip": "F08-06",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0548801496624947,
+				0.0,
+				0.535765767097473
+			],
+			"tick": 264
+		},
+		{
+			"clip": "F08-06",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0493846833705902,
+				0.0,
+				0.582252264022827
+			],
+			"tick": 267
+		},
+		{
+			"clip": "F08-06",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0450607240200043,
+				0.0,
+				0.61882883310318
+			],
+			"tick": 270
+		},
+		{
+			"clip": "F08-06",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.040971077978611,
+				0.0,
+				0.653423428535461
+			],
+			"tick": 273
+		},
+		{
+			"clip": "F08-06",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0368814244866371,
+				0.0,
+				0.688018023967743
+			],
+			"tick": 276
+		},
+		{
+			"clip": "F08-06",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0327917709946632,
+				0.0,
+				0.722612619400024
+			],
+			"tick": 279
+		},
+		{
+			"clip": "F08-06",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0287021175026894,
+				0.0,
+				0.757207214832306
+			],
+			"tick": 282
+		},
+		{
+			"clip": "F08-06",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "open",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0246124640107155,
+				0.0,
+				0.791801810264587
+			],
+			"tick": 285
+		},
+		{
+			"clip": "F08-06",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "release",
+			"hand_span_m": 1.31382715702057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0205228105187416,
+				0.0,
+				0.826396405696869
+			],
+			"tick": 288
+		},
+		{
+			"clip": "F08-06",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "release",
+			"hand_span_m": 1.31400966644287,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0164331570267677,
+				0.0,
+				0.86099100112915
+			],
+			"tick": 291
+		},
+		{
+			"clip": "F08-06",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "release",
+			"hand_span_m": 1.31435191631317,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0123435035347939,
+				0.0,
+				0.895585596561432
+			],
+			"tick": 294
+		},
+		{
+			"clip": "F08-06",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "release",
+			"hand_span_m": 1.314337849617,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.00996852666139603,
+				0.0,
+				0.915675699710846
+			],
+			"tick": 297
+		},
+		{
+			"clip": "F08-06",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "release",
+			"hand_span_m": 1.31326186656952,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.00881831347942352,
+				0.0,
+				0.925405383110046
+			],
+			"tick": 300
+		},
+		{
+			"clip": "F08-06",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "release",
+			"hand_span_m": 1.31032633781433,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.00766810029745102,
+				0.0,
+				0.935135126113892
+			],
+			"tick": 303
+		},
+		{
+			"clip": "F08-06",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "release",
+			"hand_span_m": 1.3047342300415,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.00651787966489792,
+				0.0,
+				0.944864869117737
+			],
+			"tick": 306
+		},
+		{
+			"clip": "F08-06",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "release",
+			"hand_span_m": 1.29576861858368,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.00536766648292542,
+				0.0,
+				0.954594612121582
+			],
+			"tick": 309
+		},
+		{
+			"clip": "F08-06",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "release",
+			"hand_span_m": 1.28286337852478,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.00421746075153351,
+				0.0,
+				0.964324295520782
+			],
+			"tick": 312
+		},
+		{
+			"clip": "F08-06",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "release",
+			"hand_span_m": 1.26566028594971,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.00306724011898041,
+				0.0,
+				0.974054038524628
+			],
+			"tick": 315
+		},
+		{
+			"clip": "F08-06",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "release",
+			"hand_span_m": 1.24405097961426,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0019170269370079,
+				0.0,
+				0.983783781528473
+			],
+			"tick": 318
+		},
+		{
+			"clip": "F08-06",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "release",
+			"hand_span_m": 1.21820068359375,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.000766806304454803,
+				0.0,
+				0.993513524532318
+			],
+			"tick": 321
+		},
+		{
+			"clip": "F08-06",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "release",
+			"hand_span_m": 1.18855369091034,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				1.0
+			],
+			"tick": 324
+		},
+		{
+			"clip": "F08-06",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "release",
+			"hand_span_m": 1.15582239627838,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				1.0
+			],
+			"tick": 327
+		},
+		{
+			"clip": "F08-06",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "release",
+			"hand_span_m": 1.12095832824707,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				1.0
+			],
+			"tick": 330
+		},
+		{
+			"clip": "F08-06",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "release",
+			"hand_span_m": 1.08511185646057,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				1.0
+			],
+			"tick": 333
+		},
+		{
+			"clip": "F08-06",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "release",
+			"hand_span_m": 1.04958236217499,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				1.0
+			],
+			"tick": 336
+		},
+		{
+			"clip": "F08-06",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "release",
+			"hand_span_m": 1.01576435565948,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				1.0
+			],
+			"tick": 339
+		},
+		{
+			"clip": "F08-06",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "release",
+			"hand_span_m": 0.985095381736755,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				1.0
+			],
+			"tick": 342
+		},
+		{
+			"clip": "F08-06",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "release",
+			"hand_span_m": 0.959004402160645,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				1.0
+			],
+			"tick": 345
+		},
+		{
+			"clip": "F08-06",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "release",
+			"hand_span_m": 0.938867032527924,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				1.0
+			],
+			"tick": 348
+		},
+		{
+			"clip": "F08-06",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "release",
+			"hand_span_m": 0.925963938236237,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				1.0
+			],
+			"tick": 351
+		},
+		{
+			"clip": "F08-06",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "release",
+			"hand_span_m": 0.921437978744507,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				1.0
+			],
+			"tick": 354
+		},
+		{
+			"clip": "F08-06",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "release",
+			"hand_span_m": 0.921437978744507,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				1.0
+			],
+			"tick": 357
+		},
+		{
+			"clip": "F08-06",
+			"collision_layer": 0,
+			"dust": false,
+			"flex": 0.0,
+			"gesture": "release",
+			"hand_span_m": 0.921437978744507,
+			"load_ratio": 0.0,
+			"pose": [
+				0.0,
+				0.0,
+				0.0,
+				1.0
+			],
+			"tick": 360
+		}
+	]
+}
