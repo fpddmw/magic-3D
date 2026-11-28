@@ -134,7 +134,15 @@ func candidates(sp: Dictionary, origin: Vector3, aim: Vector3, channel: String) 
 	return out
 
 
-func deliver(b: PhysicsBody3D, j: Vector3) -> bool:
+func surface_contact(origin: Vector3, target: PhysicsBody3D) -> Dictionary:
+	var ray := PhysicsRayQueryParameters3D.create(origin,target.global_position)
+	if slots.has("caster"):
+		ray.exclude = [slots.caster.get_rid()]
+	var hit := get_world_3d().direct_space_state.intersect_ray(ray)
+	return hit if hit.get("collider") == target else {}
+
+
+func deliver(b: PhysicsBody3D, j: Vector3, contact = null) -> bool:
 	if j.is_zero_approx():
 		return false
 	if b.has_meta("integrity"):
@@ -144,11 +152,15 @@ func deliver(b: PhysicsBody3D, j: Vector3) -> bool:
 		if residual <= 0 and b.freeze:
 			b.freeze = false
 			b.set_meta("broken", true)
-			director.play_at("stone_strain", b.global_position, 1.)
+			if contact == null:
+				director.play_at("stone_strain", b.global_position, 1.)
 	if b.has_meta("poise"):
 		b.set_meta("poise", maxf(0., float(b.get_meta("poise")) - j.length()))
 	b.set_meta("disturbed_until", Engine.get_physics_frames() + 12)
-	b.apply_central_impulse(j)
+	if contact != null and b is RigidBody3D:
+		b.apply_impulse(j, contact - b.global_position)
+	else:
+		b.apply_central_impulse(j)
 	return true
 
 

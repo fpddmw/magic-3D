@@ -1,5 +1,7 @@
 extends RefCounted
 
+signal process_ended(pid: String, reason: String, continuing: bool)
+
 var arena
 var d: Dictionary
 var quote: Dictionary
@@ -165,6 +167,10 @@ func finish(pid: String, edge: Dictionary, reason: String) -> void:
 		if holds[h] == pid:
 			close(h)
 	active.erase(pid)
+	var exit_kind: String = {"timeout":"completed", "contact":"completed", "release":"released",
+		"interrupt":"interrupted", "supply_exhausted":"depleted", "supply_unavailable":"source_lost"
+	}.get(reason,reason)
+	process_ended.emit(pid, exit_kind, not edge.get("to", []).is_empty())
 	events.append({"event": "exit", "reason": reason})
 	for dest in edge.get("to", []):
 		if not arrived.has(dest):
@@ -239,6 +245,9 @@ func step(dt: float) -> void:
 				break
 		if not active.has(pid):
 			continue
+		paid_step(pid, t)
+		if not active.has(pid):
+			continue
 		art(pid, "active")
 		if n.has("repeat"):
 			while (
@@ -252,6 +261,10 @@ func step(dt: float) -> void:
 			finish(pid, {}, "supply_exhausted")
 		elif state.time + .000001 >= c.max_s:
 			event(pid, "timeout")
+
+
+func paid_step(_pid: String, _dt: float) -> void:
+	pass
 
 
 func action(pid: String, op: Dictionary, dt: float) -> bool:
@@ -412,7 +425,7 @@ func action(pid: String, op: Dictionary, dt: float) -> bool:
 		if a == "sustain_force":
 			total = maxf(1., total)
 		var hit = false
-		var impact = p
+		var impact = null
 		for b in targets:
 			var value = (
 				budget * targets[b] * b.mass if a == "accelerate" else budget * targets[b] / total
@@ -423,14 +436,16 @@ func action(pid: String, op: Dictionary, dt: float) -> bool:
 				var j = law.axis(op.axis, p, at.aim, b.global_position) * value
 				if law.deliver(b, j):
 					hit = true
-					impact = b.global_position
+					var surface: Dictionary = law.surface_contact(p,b)
+					if not surface.is_empty():
+						impact = surface.position
 			elif a == "warm":
 				b.set_meta(
 					"temperature_delta", b.get_meta("temperature_delta", 0.) + value / b.mass
 				)
 			else:
 				b.set_meta("charge", b.get_meta("charge", 0.) + value)
-		if hit and a == "impulse":
+		if hit and impact != null and a == "impulse":
 			art(pid, "impact", impact)
 		return true
 	if a in ["attenuate", "notify", "illuminate"]:

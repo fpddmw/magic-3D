@@ -1,0 +1,81 @@
+{
+  "asset_id": "F03",
+  "name": "开口弧刃",
+  "status": "实机原型，G1 已确认；G3 待负责人验收",
+  "scene": "F03_arc_blade.tscn",
+  "forms": [
+    "narrow_edge",
+    "wide_crescent"
+  ],
+  "palettes": [
+    "P01",
+    "P04/P03"
+  ],
+  "formations": [
+    "沿刃展锋",
+    "原位聚弧"
+  ],
+  "motions": [
+    "挥扫甩出",
+    "平移掠行"
+  ],
+  "endings": {
+    "completed": "分段溃散",
+    "released": "回卷收锋",
+    "interrupted": "中断侵蚀"
+  },
+  "editable": {
+    "front": [
+      "width_m",
+      "span_deg",
+      "bank_deg",
+      "speed_m_s",
+      "range_m"
+    ],
+    "art": [
+      "form",
+      "formation",
+      "palette",
+      "curve_id",
+      "hold_s",
+      "tail_s",
+      "flow_speed",
+      "edge_gain",
+      "density",
+      "distortion",
+      "weight",
+      "env_weight",
+      "air_db",
+      "air_pitch"
+    ]
+  },
+  "editor_controls": [
+    "form",
+    "palette",
+    "width_m",
+    "span_deg",
+    "flow_speed",
+    "edge_gain",
+    "density",
+    "distortion"
+  ],
+  "span_deg": [
+    45,
+    160
+  ],
+  "curves": "res://art_kit/curves/",
+  "recipes": [
+    "recipes/v1.json",
+    "recipes/v2.json",
+    "recipes/v3.json"
+  ],
+  "placement": "独立 Node3D，可放到任意 3D 场景；-Z 为前向，宽度按米。",
+  "world_inputs": [
+    "刃根及刃尖世界变换",
+    "物理步已实现的前沿位姿",
+    "接触点、法向和弧长位置",
+    "过程退出原因"
+  ],
+  "audio_source": "仓库 observatory 合成音层",
+  "pricing": "art 和 front 可直接改；改变五面 contract 后以 python -m tools.asset_pipeline.seal_f03 重新生成确定性报价。"
+}

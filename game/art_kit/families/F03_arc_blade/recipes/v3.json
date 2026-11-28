@@ -1,0 +1,183 @@
+{
+  "contract": {
+    "version": "0.3.0",
+    "name": "缓行折光空间断缘",
+    "scale": "medium",
+    "Concepts": [
+      {
+        "id": "nature",
+        "nature": "light"
+      },
+      {
+        "id": "hall_nature",
+        "nature": "site"
+      }
+    ],
+    "Subjects": [
+      {
+        "id": "field",
+        "concept": "nature",
+        "kind": "Field",
+        "source": {
+          "kind": "Manifest"
+        },
+        "spatial": {
+          "carrier": "SurfacePatch",
+          "geometry": {
+            "shape": "sheet",
+            "extent_m": 8,
+            "quads": 4
+          },
+          "reference": {
+            "anchor": "caster",
+            "bind": "enter"
+          },
+          "distribution": "uniform"
+        },
+        "properties": [
+          {
+            "aspect": "screening",
+            "via": "boundary"
+          }
+        ]
+      },
+      {
+        "id": "hall",
+        "concept": "hall_nature",
+        "kind": "WorldRef",
+        "source": {
+          "kind": "Reference",
+          "slot": "observed_site"
+        }
+      }
+    ],
+    "Relations": [
+      {
+        "id": "boundary",
+        "from": "field",
+        "to": "hall",
+        "channel": "optical",
+        "validity": "sight",
+        "basis": "nature"
+      }
+    ],
+    "Processes": {
+      "entry": [
+        "prepare"
+      ],
+      "nodes": [
+        {
+          "id": "prepare",
+          "contract": "gather",
+          "join": "any",
+          "enter": [],
+          "active": [],
+          "exit": [],
+          "on": [
+            {
+              "event": "timeout",
+              "when": "always",
+              "to": [
+                "work"
+              ]
+            },
+            {
+              "event": "release",
+              "when": "always",
+              "to": []
+            }
+          ]
+        },
+        {
+          "id": "work",
+          "contract": "sustain",
+          "join": "any",
+          "enter": [
+            {
+              "op": "Establish",
+              "ability": "form",
+              "target": "field"
+            },
+            {
+              "op": "Establish",
+              "ability": "form",
+              "target": "boundary"
+            }
+          ],
+          "active": [
+            {
+              "op": "Drive",
+              "ability": "attenuate",
+              "target": "boundary"
+            }
+          ],
+          "exit": [
+            {
+              "op": "Withdraw",
+              "ability": "end",
+              "target": "boundary"
+            },
+            {
+              "op": "Withdraw",
+              "ability": "end",
+              "target": "field"
+            }
+          ],
+          "on": [
+            {
+              "event": "release",
+              "when": "always",
+              "to": []
+            }
+          ]
+        }
+      ]
+    },
+    "Contracts": [
+      {
+        "id": "gather",
+        "controller": "caster",
+        "mobility": "slow_walk",
+        "focus": "exclusive",
+        "provider": "@caster",
+        "max_s": 0.78
+      },
+      {
+        "id": "sustain",
+        "controller": "caster",
+        "mobility": "free",
+        "focus": "none",
+        "provider": "@caster",
+        "max_s": 8
+      }
+    ],
+    "Expression": []
+  },
+  "front": {
+    "width_m": 4.1,
+    "span_deg": 150,
+    "bank_deg": -14,
+    "range_m": 8,
+    "speed_m_s": 1.1
+  },
+  "binding": {
+    "prepare": "prepare",
+    "flight": "work"
+  },
+  "art": {
+    "form": "wide_crescent",
+    "palette": "P04/P03",
+    "curve_id": "C03",
+    "hold_s": 0,
+    "tail_s": 1.02,
+    "flow_speed": 0.46,
+    "edge_gain": 0.0,
+    "distortion": 0.031,
+    "weight": 0.3,
+    "env_weight": 0.0,
+    "air_db": -13,
+    "air_pitch": 0.57,
+    "formation": "gather_in_place",
+    "density": 1.0
+  }
+}

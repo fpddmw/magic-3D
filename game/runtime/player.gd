@@ -10,6 +10,13 @@ var remaining := 0.
 var guarded := false
 var facing := Vector3.FORWARD
 var figure: Node3D
+var blade_root: Marker3D
+var blade_tip: Marker3D
+var sword_arm: Array[MeshInstance3D] = []
+var grip: Node3D
+var drawing := false
+var stance := 0.
+var recovery := 0.
 var hit_done := false
 var gesture_until := -1
 var lean := 0.
@@ -59,8 +66,62 @@ func _ready() -> void:
 		shoulder.height = .28
 		mesh(figure, shoulder, Vector3(x, 1.38, 0), Color("#697078"))
 	var sword = BoxMesh.new()
-	sword.size = Vector3(.065, .85, .055)
-	mesh(figure, sword, Vector3(.49, .71, -.21), Color("#a4acb0")).rotation.x = -.46
+	sword.size = Vector3(.055, .035, .85)
+	grip = Node3D.new()
+	figure.add_child(grip)
+	grip.position = Vector3(.37, .79, -.09)
+	grip.rotation.x = -.65
+	blade_root = Marker3D.new()
+	blade_tip = Marker3D.new()
+	grip.add_child(blade_root)
+	grip.add_child(blade_tip)
+	blade_root.position.z = -.09
+	blade_tip.position.z = blade_root.position.z - sword.size.z
+	mesh(grip, sword, (blade_root.position+blade_tip.position)*.5, Color("#9aa4ac"))
+	var guard := BoxMesh.new()
+	guard.size = Vector3(.22,.045,.055)
+	mesh(grip, guard, blade_root.position, Color("#766d5d"))
+
+
+func blade_socket() -> Transform3D:
+	var direction := blade_root.global_position.direction_to(blade_tip.global_position)
+	return Transform3D(Basis.looking_at(direction,Vector3.UP),blade_root.global_position)
+
+
+func pose_weapon(fraction: float, weight: float) -> void:
+	drawing = true
+	stance = weight*sin(fraction*PI*.88)
+	facing = Vector3(-sin(arena.yaw),0,-cos(arena.yaw))
+	figure.rotation.y = arena.yaw
+	figure.rotation.x = -.17*stance
+	figure.rotation.z = -.12*stance
+	var windup := (1.-fraction)*(.26+.69*weight)
+	var axis: Vector3 = arena.aim().rotated(Vector3.UP,windup)
+	axis = axis.rotated(figure.global_basis.x, windup*.45)
+	grip.position = Vector3(.37+.22*stance,.82+.36*stance,-.10-.31*fraction)
+	grip.look_at(grip.global_position+axis)
+	figure.position = Vector3(-.12*stance,-.115*stance,.13*stance)
+	place_sword_arm()
+
+
+func place_sword_arm() -> void:
+	var shoulder := Vector3(.33,1.38,0.)
+	var hand := grip.position
+	var elbow := shoulder.lerp(hand,.48)+Vector3(.095,-.055,.095)
+	var joints := [shoulder,elbow,hand]
+	for i in 2:
+		var start: Vector3 = joints[i]
+		var end: Vector3 = joints[i+1]
+		var part := sword_arm[i]
+		part.position = (start+end)*.5
+		part.basis = Basis(Quaternion(Vector3.UP,end.direction_to(start)))
+		part.scale.y = start.distance_to(end)/part.mesh.height
+
+
+func release_weapon() -> void:
+	if drawing:
+		drawing = false
+		recovery = .34
 
 
 func apply_central_impulse(impulse: Vector3) -> void:
@@ -130,6 +191,14 @@ func _physics_process(dt: float) -> void:
 	move_and_slide()
 	velocity -= kick
 	kick = kick.move_toward(Vector3.ZERO, dt * 6.)
+	if drawing:
+		return
+	recovery = maxf(0.,recovery-dt)
+	grip.rotation = grip.rotation.lerp(Vector3(-.65,0,0),minf(1.,dt*7.))
+	grip.position = grip.position.lerp(Vector3(.37,.79,-.09),minf(1.,dt*7.))
+	figure.position = figure.position.lerp(Vector3.ZERO,minf(1.,dt*7.))
+	place_sword_arm()
+	figure.rotation.z = -.10*sin(PI*recovery/.34)
 	figure.rotation.y = atan2(-facing.x, -facing.z)
 	figure.rotation.x = (
 		-TAU * (.60 - remaining) / .6

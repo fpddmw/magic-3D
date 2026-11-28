@@ -4,6 +4,7 @@ const STONE = preload("res://art_kit/stone.gdshader")
 var batches := {}
 var meshes := {}
 var mats := {}
+var sconces: Array[OmniLight3D] = []
 var rng := RandomNumberGenerator.new()
 
 
@@ -157,6 +158,7 @@ func _ready() -> void:
 			l.light_energy = 2.3
 			l.omni_range = 6.4
 			add_child(l)
+			sconces.append(l)
 			column(l.position - Vector3.UP * .22, .27, .38, "bronze")
 			var coal = SphereMesh.new()
 			coal.radius = .13

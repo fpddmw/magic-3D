@@ -1,0 +1,41 @@
+Godot Engine v4.5.1.stable.official.f62fdbde1 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M6 (Apple9)
+
+Movie Maker mode enabled, recording movie at 30 FPS...
+Movie Maker mode using project viewport size: 1920x1080
+F03 ENGINE 4.5.1-stable (official) physics=Jolt Physics recipe=res://art_kit/families/F03_arc_blade/recipes/v1.json sha256=3ae4d4d9cb9206071f2365e6408a64d469421369760f6970c54756888a5807a0
+WARNING: Metal does not support LOD bias for samplers.
+     at: sampler_create (drivers/metal/rendering_device_driver_metal.mm:771)
+F03 {"age":0.0,"cast":1,"curve":"C01","event":"prepare","form":"narrow_edge","mana_after_entry":278.857137,"root":"(0.087412, 0.839204, 6.818585)","tick":49,"width_m":3.8}
+F03 {"age":0.15,"axis":"(0.0, 0.044985, -0.998988)","budget":10.5714314352001,"cast":1,"distance_limit":7.8,"event":"launch","root":"(0.121111, 0.824925, 6.500091)","tick":57,"tip":"(0.121111, 0.863162, 5.650952)"}
+F03 {"age":0.2,"cast":1,"distance_m":0.48,"event":"front","position":"(0.121111, 0.846517, 6.020576)","tick":60}
+F03 {"age":0.3,"cast":1,"distance_m":1.44,"event":"front","position":"(0.121111, 0.889703, 5.061547)","tick":66}
+F03 {"age":0.4,"cast":1,"distance_m":2.4,"event":"front","position":"(0.121111, 0.932888, 4.102518)","tick":72}
+F03 {"age":0.5,"cast":1,"distance_m":3.36,"event":"front","position":"(0.121111, 0.976074, 3.14349)","tick":78}
+F03 {"age":0.5667,"cast":1,"distance_m":3.859375,"event":"front","position":"(0.121111, 0.998538, 2.644621)","tick":82}
+F03 {"age":0.5667,"body_origin":"(1.55, 1.4, 1.5)","cast":1,"collider":"CrackedPier","distance_m":3.859375,"event":"contact","impulse":10.5714314352001,"normal":"(-0.496917, -0.0, 0.867798)","point":"(1.175696, 1.827575, 1.915875)","tick":82,"u":0.770833333333333}
+F03 {"age":0.5667,"cast":1,"event":"contact_feedback","flash_origin":"(1.169733, 1.827575, 1.926289)","stone_audio":true,"tick":82}
+F03 {"age":0.5667,"cast":1,"distance_m":3.859375,"ending":"erosion","event":"exit","mana":276.74285071296,"process":"deliver","reason":"completed","receipts":1,"tick":82}
+F03 CHECK single pier receipt true
+F03 CHECK wing contact and unit normal true
+F03 {"age":0.0,"cast":2,"curve":"C01","event":"prepare","form":"narrow_edge","mana_after_entry":255.59998771296,"root":"(0.016391, 0.858358, 6.727638)","tick":199,"width_m":3.8}
+F03 {"age":0.15,"axis":"(-0.30317, 0.266731, -0.914846)","budget":10.5714314352001,"cast":2,"distance_limit":7.8,"event":"launch","root":"(-0.053929, 0.844882, 6.412088)","tick":207,"tip":"(-0.311624, 1.071604, 5.634469)"}
+F03 {"age":0.2,"cast":2,"distance_m":0.48,"event":"front","position":"(-0.199451, 0.972913, 5.972962)","tick":210}
+F03 {"age":0.3,"cast":2,"distance_m":1.44,"event":"front","position":"(-0.490494, 1.228975, 5.094711)","tick":216}
+F03 {"age":0.4,"cast":2,"distance_m":2.4,"event":"front","position":"(-0.781537, 1.485038, 4.21646)","tick":222}
+F03 {"age":0.5,"cast":2,"distance_m":3.36,"event":"front","position":"(-1.072581, 1.7411, 3.338209)","tick":228}
+F03 {"age":0.6,"cast":2,"distance_m":4.32,"event":"front","position":"(-1.363624, 1.997162, 2.459958)","tick":234}
+F03 {"age":0.7,"cast":2,"distance_m":5.28,"event":"front","position":"(-1.654667, 2.253224, 1.581707)","tick":240}
+F03 {"age":0.8,"cast":2,"distance_m":6.24,"event":"front","position":"(-1.94571, 2.509285, 0.703455)","tick":246}
+F03 {"age":0.9,"cast":2,"distance_m":7.2,"event":"front","position":"(-2.236754, 2.765347, -0.174797)","tick":252}
+F03 {"age":0.9667,"cast":2,"distance_m":7.8,"ending":"erosion","event":"exit","mana":253.48570142592,"process":"deliver","reason":"completed","receipts":0,"tick":256}
+F03 CHECK empty flight completes without impact true
+F03 CHECK cast ledger closed true
+F03 RESULT {"failures":[],"take":"v1"}
+--------------------------------------------------------------------------------
+Done recording movie at path: /Users/a17919/Documents/ChatGPT/city-fates-3d/.local/f03/delivery_v1.avi
+173 frames at 30 FPS (movie length: 00:00:05:23), recorded in 00:00:05 (100% of real-time speed).
+CPU render time: 1.45 seconds (average: 8.36 ms/frame)
+GPU render time: 0.00 seconds (average: 0.00 ms/frame)
+Encoding time: 1.30 seconds (average: 7.49 ms/frame)
+--------------------------------------------------------------------------------

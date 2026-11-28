@@ -3,10 +3,13 @@ extends Node3D
 const Architecture = preload("res://runtime/architecture.gd")
 const Law = preload("res://world_law/hall_world.gd")
 const Director = preload("res://art_kit/director.gd")
+const ArcCast = preload("res://runtime/arc_cast.gd")
 const Actor = preload("res://runtime/player.gd")
 const Cast = preload("res://runtime/cast.gd")
 var registry: Dictionary
 var tariff: Dictionary
+const F03_RECIPES = "res://art_kit/families/F03_arc_blade/recipes/"
+var f03_review := ""
 var catalog: Array = []
 var selected := 0
 var casts: Array = []
@@ -28,6 +31,7 @@ var status := ""
 var charge_bar: ProgressBar
 var latest_cast
 var rain: GPUParticles3D
+var last_pressure := 0.
 
 
 func data(path: String):
@@ -54,6 +58,18 @@ func _ready() -> void:
 		catalog.append(entry)
 		if entry.path.ends_with("/pressure_wind.json"):
 			selected = catalog.size() - 1
+	for row in data(F03_RECIPES + "catalog.json"):
+		var path: String = F03_RECIPES + row.file
+		var trial: Dictionary = data(path)
+		if trial.contract != row.admitted_contract:
+			push_error("F03 contract changed; regenerate its tariff with tools.asset_pipeline.seal_f03: " + path)
+			continue
+		catalog.append({"path":path,"recipe":trial.contract,"trial":trial,"quote":row.quote,
+			"display_name":trial.contract.name})
+	for arg in OS.get_cmdline_user_args():
+		if arg.begins_with("--f03-review="):
+			f03_review = arg.trim_prefix("--f03-review=")
+			testing = true
 	hall = Architecture.new()
 	add_child(hall)
 	director = Director.new()
@@ -149,7 +165,9 @@ func _ready() -> void:
 			world.slots.spring = b
 		last = b
 	ui()
-	if Array(OS.get_cmdline_user_args()).any(func(arg): return arg.begins_with("--field-case=")):
+	if not f03_review.is_empty():
+		call_deferred("review_arc")
+	elif Array(OS.get_cmdline_user_args()).any(func(arg): return arg.begins_with("--field-case=")):
 		call_deferred("open_field_court")
 	elif "--aim-study" in OS.get_cmdline_user_args():
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
@@ -275,7 +293,7 @@ func aim() -> Vector3:
 
 
 func cast_origin() -> Vector3:
-	return player.global_position + Vector3.UP * 1.20 + Vector3(-sin(yaw), 0, -cos(yaw)) * .87
+	return player.blade_root.global_position
 
 
 func aim_point() -> Vector3:
@@ -304,6 +322,18 @@ func place_camera() -> void:
 	var arm = Vector3(1.25, 1.92, 4.0).rotated(Vector3.UP, yaw)
 	camera.position = player.position + arm
 	camera.look_at(camera.position + aim())
+	var load_weight := 0.
+	var pressure := 0.
+	for c in casts:
+		if c is ArcCast:
+			load_weight = maxf(load_weight,c.effect.camera_weight)
+			pressure = maxf(pressure,c.effect.pressure)
+	if pressure > 0. or last_pressure > 0.:
+		for lamp: OmniLight3D in hall.sconces:
+			var weight := 1.-smoothstep(1.,8.,lamp.global_position.distance_to(player.global_position))
+			lamp.light_energy = 2.3*(1.-clampf(pressure*weight,0.,.85))
+	last_pressure = pressure
+	camera.fov = lerpf(camera.fov,61.-load_weight*6.5,.15)
 	if director.last_impact > 0 and director.clock_s - director.last_impact < .13:
 		camera.h_offset = .03 * sin((director.clock_s - director.last_impact) * 80)
 	else:
@@ -317,7 +347,13 @@ func cast_entry(entry: Dictionary):
 		for pid in other.active:
 			if other.contracts[other.nodes[pid].contract].focus == "exclusive":
 				return null
-	var c = Cast.new()
+	var c
+	if entry.has("trial"):
+		c = ArcCast.new()
+		c.trial = entry.trial
+		c.trace = not f03_review.is_empty()
+	else:
+		c = Cast.new()
 	serial += 1
 	if not c.setup(self, entry.recipe, entry.quote, serial):
 		status = "供给不足"
@@ -373,6 +409,9 @@ func _unhandled_input(e: InputEvent) -> void:
 		return
 	if e is InputEventKey and e.pressed and not e.echo:
 		match e.keycode:
+			KEY_1, KEY_2, KEY_3:
+				selected = catalog.size()-3+int(e.keycode-KEY_1)
+				status = "右键施放 · 持续折光松开撤法"
 			KEY_F9:
 				open_field_court()
 			KEY_F8:
@@ -473,6 +512,10 @@ func _physics_process(dt: float) -> void:
 	charge_bar.value = (
 		100. * latest_cast.ratio() if latest_cast and not latest_cast.active.is_empty() else 0.
 	)
+
+
+func review_arc() -> void:
+	await preload("res://art_lab/f03/review.gd").new().run(self,f03_review)
 
 
 func run_aim_study() -> void:

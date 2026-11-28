@@ -62,9 +62,10 @@ static func harness(actor, parent: Node3D, armored: bool) -> void:
 			guard.top_radius = part[0]
 			guard.bottom_radius = part[0] * .83
 			guard.height = part[1]
-			actor.mesh(parent, guard, Vector3(side * .36, part[2], -.07), iron).rotation.z = (
-				side * .08
-			)
+			var arm = actor.mesh(parent, guard, Vector3(side * .36, part[2], -.07), iron)
+			arm.rotation.z = side * .08
+			if not armored and side == 1:
+				actor.sword_arm.append(arm)
 	for j in 4:
 		var collar = CylinderMesh.new()
 		collar.radial_segments = 12

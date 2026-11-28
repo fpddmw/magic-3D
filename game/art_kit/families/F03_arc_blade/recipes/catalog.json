@@ -1,0 +1,447 @@
+[
+  {
+    "file": "v1.json",
+    "admitted_contract": {
+      "version": "0.3.0",
+      "name": "\u77ac\u53d1\u950b\u9510\u5251\u6ce2",
+      "scale": "medium",
+      "Concepts": [
+        {
+          "id": "nature",
+          "nature": "air"
+        }
+      ],
+      "Subjects": [
+        {
+          "id": "field",
+          "concept": "nature",
+          "kind": "Field",
+          "source": {
+            "kind": "Manifest"
+          },
+          "spatial": {
+            "carrier": "Region",
+            "geometry": {
+              "shape": "cone",
+              "extent_m": 7.8,
+              "half_angle_deg": 25
+            },
+            "reference": {
+              "anchor": "caster",
+              "bind": "enter"
+            },
+            "distribution": "linear_falloff"
+          },
+          "medium": "ambient_air"
+        }
+      ],
+      "Relations": [],
+      "Processes": {
+        "entry": [
+          "charge"
+        ],
+        "nodes": [
+          {
+            "id": "charge",
+            "contract": "gather",
+            "join": "any",
+            "enter": [],
+            "active": [
+              {
+                "op": "Transfer",
+                "ability": "charge",
+                "target": "@reserve"
+              }
+            ],
+            "exit": [],
+            "on": [
+              {
+                "event": "timeout",
+                "when": "reserve_ready",
+                "to": [
+                  "deliver"
+                ]
+              },
+              {
+                "event": "interrupt",
+                "when": "always",
+                "to": []
+              }
+            ]
+          },
+          {
+            "id": "deliver",
+            "contract": "burst",
+            "join": "any",
+            "enter": [
+              {
+                "op": "Establish",
+                "ability": "form",
+                "target": "field"
+              },
+              {
+                "op": "Drive",
+                "ability": "impulse",
+                "target": "field",
+                "axis": "aim",
+                "allocation": "distance_weighted",
+                "budget": "paid_reserve"
+              }
+            ],
+            "active": [],
+            "exit": [
+              {
+                "op": "Withdraw",
+                "ability": "end",
+                "target": "field"
+              }
+            ],
+            "on": []
+          }
+        ]
+      },
+      "Contracts": [
+        {
+          "id": "gather",
+          "controller": "caster",
+          "mobility": "slow_walk",
+          "focus": "exclusive",
+          "provider": "@caster",
+          "max_s": 0.15,
+          "reserve": {
+            "full_charge_s": 0.15,
+            "min_release_ratio": 0.9
+          }
+        },
+        {
+          "id": "burst",
+          "controller": "autonomous",
+          "mobility": "free",
+          "focus": "none",
+          "provider": "@caster",
+          "max_s": 1.8
+        }
+      ],
+      "Expression": []
+    },
+    "quote": {
+      "tariff_version": "tariff-0.3.0",
+      "upfront_mana": 21.142863,
+      "mana_per_s": 14.095242,
+      "rates": {
+        "charge": 14.095241913600159,
+        "deliver": 0
+      },
+      "max_paid_mana": 23.25715,
+      "reserve_capacity": 2.1142862870400236,
+      "total_impulse_budget": 10.571431435200118
+    }
+  },
+  {
+    "file": "v2.json",
+    "admitted_contract": {
+      "version": "0.3.0",
+      "name": "\u6c89\u91cd\u84c4\u52bf\u5927\u5f27\u65a9",
+      "scale": "medium",
+      "Concepts": [
+        {
+          "id": "nature",
+          "nature": "air"
+        }
+      ],
+      "Subjects": [
+        {
+          "id": "field",
+          "concept": "nature",
+          "kind": "Field",
+          "source": {
+            "kind": "Manifest"
+          },
+          "spatial": {
+            "carrier": "Region",
+            "geometry": {
+              "shape": "cone",
+              "extent_m": 8.8,
+              "half_angle_deg": 25
+            },
+            "reference": {
+              "anchor": "caster",
+              "bind": "enter"
+            },
+            "distribution": "linear_falloff"
+          },
+          "medium": "ambient_air"
+        }
+      ],
+      "Relations": [],
+      "Processes": {
+        "entry": [
+          "charge"
+        ],
+        "nodes": [
+          {
+            "id": "charge",
+            "contract": "gather",
+            "join": "any",
+            "enter": [],
+            "active": [
+              {
+                "op": "Transfer",
+                "ability": "charge",
+                "target": "@reserve"
+              }
+            ],
+            "exit": [],
+            "on": [
+              {
+                "event": "timeout",
+                "when": "reserve_ready",
+                "to": [
+                  "deliver"
+                ]
+              },
+              {
+                "event": "interrupt",
+                "when": "always",
+                "to": []
+              }
+            ]
+          },
+          {
+            "id": "deliver",
+            "contract": "burst",
+            "join": "any",
+            "enter": [
+              {
+                "op": "Establish",
+                "ability": "form",
+                "target": "field"
+              },
+              {
+                "op": "Drive",
+                "ability": "impulse",
+                "target": "field",
+                "axis": "aim",
+                "allocation": "distance_weighted",
+                "budget": "paid_reserve"
+              }
+            ],
+            "active": [],
+            "exit": [
+              {
+                "op": "Withdraw",
+                "ability": "end",
+                "target": "field"
+              }
+            ],
+            "on": []
+          }
+        ]
+      },
+      "Contracts": [
+        {
+          "id": "gather",
+          "controller": "caster",
+          "mobility": "slow_walk",
+          "focus": "exclusive",
+          "provider": "@caster",
+          "max_s": 2.4000000000000004,
+          "reserve": {
+            "full_charge_s": 2.2,
+            "min_release_ratio": 0.9
+          }
+        },
+        {
+          "id": "burst",
+          "controller": "autonomous",
+          "mobility": "free",
+          "focus": "none",
+          "provider": "@caster",
+          "max_s": 1.8
+        }
+      ],
+      "Expression": []
+    },
+    "quote": {
+      "tariff_version": "tariff-0.3.0",
+      "upfront_mana": 22.161179,
+      "mana_per_s": 14.77412,
+      "rates": {
+        "charge": 14.774119082010435,
+        "deliver": 0
+      },
+      "max_paid_mana": 57.619065,
+      "reserve_capacity": 32.503061980422956,
+      "total_impulse_budget": 162.51530990211478
+    }
+  },
+  {
+    "file": "v3.json",
+    "admitted_contract": {
+      "version": "0.3.0",
+      "name": "\u7f13\u884c\u6298\u5149\u7a7a\u95f4\u65ad\u7f18",
+      "scale": "medium",
+      "Concepts": [
+        {
+          "id": "nature",
+          "nature": "light"
+        },
+        {
+          "id": "hall_nature",
+          "nature": "site"
+        }
+      ],
+      "Subjects": [
+        {
+          "id": "field",
+          "concept": "nature",
+          "kind": "Field",
+          "source": {
+            "kind": "Manifest"
+          },
+          "spatial": {
+            "carrier": "SurfacePatch",
+            "geometry": {
+              "shape": "sheet",
+              "extent_m": 8,
+              "quads": 4
+            },
+            "reference": {
+              "anchor": "caster",
+              "bind": "enter"
+            },
+            "distribution": "uniform"
+          },
+          "properties": [
+            {
+              "aspect": "screening",
+              "via": "boundary"
+            }
+          ]
+        },
+        {
+          "id": "hall",
+          "concept": "hall_nature",
+          "kind": "WorldRef",
+          "source": {
+            "kind": "Reference",
+            "slot": "observed_site"
+          }
+        }
+      ],
+      "Relations": [
+        {
+          "id": "boundary",
+          "from": "field",
+          "to": "hall",
+          "channel": "optical",
+          "validity": "sight",
+          "basis": "nature"
+        }
+      ],
+      "Processes": {
+        "entry": [
+          "prepare"
+        ],
+        "nodes": [
+          {
+            "id": "prepare",
+            "contract": "gather",
+            "join": "any",
+            "enter": [],
+            "active": [],
+            "exit": [],
+            "on": [
+              {
+                "event": "timeout",
+                "when": "always",
+                "to": [
+                  "work"
+                ]
+              },
+              {
+                "event": "release",
+                "when": "always",
+                "to": []
+              }
+            ]
+          },
+          {
+            "id": "work",
+            "contract": "sustain",
+            "join": "any",
+            "enter": [
+              {
+                "op": "Establish",
+                "ability": "form",
+                "target": "field"
+              },
+              {
+                "op": "Establish",
+                "ability": "form",
+                "target": "boundary"
+              }
+            ],
+            "active": [
+              {
+                "op": "Drive",
+                "ability": "attenuate",
+                "target": "boundary"
+              }
+            ],
+            "exit": [
+              {
+                "op": "Withdraw",
+                "ability": "end",
+                "target": "boundary"
+              },
+              {
+                "op": "Withdraw",
+                "ability": "end",
+                "target": "field"
+              }
+            ],
+            "on": [
+              {
+                "event": "release",
+                "when": "always",
+                "to": []
+              }
+            ]
+          }
+        ]
+      },
+      "Contracts": [
+        {
+          "id": "gather",
+          "controller": "caster",
+          "mobility": "slow_walk",
+          "focus": "exclusive",
+          "provider": "@caster",
+          "max_s": 0.78
+        },
+        {
+          "id": "sustain",
+          "controller": "caster",
+          "mobility": "free",
+          "focus": "none",
+          "provider": "@caster",
+          "max_s": 8
+        }
+      ],
+      "Expression": []
+    },
+    "quote": {
+      "tariff_version": "tariff-0.3.0",
+      "upfront_mana": 14.72,
+      "mana_per_s": 9.48,
+      "rates": {
+        "prepare": 0,
+        "work": 9.48
+      },
+      "max_paid_mana": 90.56,
+      "reserve_capacity": 0,
+      "total_impulse_budget": 0
+    }
+  }
+]
