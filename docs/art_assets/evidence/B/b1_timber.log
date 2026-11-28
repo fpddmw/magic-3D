@@ -1,0 +1,19 @@
+Godot Engine v4.5.1.stable.official.f62fdbde1 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M6 (Apple9)
+
+Movie Maker mode enabled, recording movie at 30 FPS...
+Movie Maker mode using project viewport size: 1920x1080
+B1 RUN {"engine":"4.5.1-stable (official)","fixture":"timber","members":8,"physics":"Jolt Physics","recipe_sha256":"d5b8e0250b1afd9eb903ba6bcfb12fd85dfc7d3e350a4113e30504a32e1edb3a"}
+WARNING: Metal does not support LOD bias for samplers.
+     at: sampler_create (drivers/metal/rendering_device_driver_metal.mm:771)
+B1 PICK_ORDER [{"distance":1.88878631591797,"mass":9.0,"rid":44342183593,"slot":0},{"distance":2.39680361747742,"mass":7.0,"rid":45516588734,"slot":1},{"distance":2.71349740028381,"mass":9.0,"rid":46204454611,"slot":2},{"distance":2.89832782745361,"mass":7.0,"rid":46674216673,"slot":3},{"distance":3.10624575614929,"mass":9.0,"rid":47143978735,"slot":4},{"distance":3.35771608352661,"mass":7.0,"rid":47613740797,"slot":5},{"distance":3.47602391242981,"mass":9.0,"rid":48083502859,"slot":6},{"distance":3.58080458641052,"mass":7.0,"rid":48553264921,"slot":7}]
+B1 SLOTS [{"event":"pickup","id":"scarf_beam","slot":0,"t":0.0166666666666667},{"event":"pickup","id":"tenon_rail","slot":1,"t":0.1},{"event":"pickup","id":"scarf_beam","slot":2,"t":0.183333333333333},{"event":"pickup","id":"tenon_rail","slot":3,"t":0.266666666666667},{"event":"pickup","id":"scarf_beam","slot":4,"t":0.35},{"event":"pickup","id":"tenon_rail","slot":5,"t":0.433333333333333},{"event":"pickup","id":"scarf_beam","slot":6,"t":0.516666666666667},{"event":"pickup","id":"tenon_rail","slot":7,"t":0.6},{"event":"dispatch","id":"scarf_beam","slot":0,"t":5.78333333333332},{"event":"dispatch","id":"tenon_rail","slot":1,"t":6.28333333333332},{"event":"dispatch","id":"scarf_beam","slot":2,"t":6.81666666666665},{"event":"release","id":"tenon_rail","slot":3,"t":7.24999999999998},{"event":"release","id":"scarf_beam","slot":4,"t":7.24999999999998},{"event":"release","id":"tenon_rail","slot":5,"t":7.24999999999998},{"event":"release","id":"scarf_beam","slot":6,"t":7.24999999999998},{"event":"release","id":"tenon_rail","slot":7,"t":7.24999999999998}]
+B1 HOSTS [{"first_rise_s":0.117,"host":"Host_00","id":"scarf_beam","kg":9.0,"rise_m":2.54},{"first_rise_s":0.2,"host":"Host_01","id":"tenon_rail","kg":7.0,"rise_m":2.72},{"first_rise_s":0.283,"host":"Host_02","id":"scarf_beam","kg":9.0,"rise_m":2.84},{"first_rise_s":0.367,"host":"Host_03","id":"tenon_rail","kg":7.0,"rise_m":2.93},{"first_rise_s":0.45,"host":"Host_04","id":"scarf_beam","kg":9.0,"rise_m":2.89},{"first_rise_s":0.533,"host":"Host_05","id":"tenon_rail","kg":7.0,"rise_m":2.97},{"first_rise_s":0.617,"host":"Host_06","id":"scarf_beam","kg":9.0,"rise_m":2.57},{"first_rise_s":0.7,"host":"Host_07","id":"tenon_rail","kg":7.0,"rise_m":2.69}]
+B1 RESULT {"all_slots_empty":true,"base_material_retained":true,"contact_events":39,"control_impulse_Ns":5043.1132748286,"count":8,"dispatched":3,"fell":5,"identity_retained":true,"lifted":8,"mana_spent":5.83548525626588,"max_rise_m":2.96715115010738,"ok":true,"peak_applied_up_m_s2":47.7710789271763,"peak_observed_up_m_s2":37.9710817337036,"released":5,"support_marks":8,"thrown_with_contact":3}
+--------------------------------------------------------------------------------
+Done recording movie at path: /Users/a17919/Documents/ChatGPT/city-fates-3d/.local/ab/film/b1_timber.avi
+328 frames at 30 FPS (movie length: 00:00:10:28), recorded in 00:00:05 (200% of real-time speed).
+CPU render time: 0.05 seconds (average: 0.15 ms/frame)
+GPU render time: 0.00 seconds (average: 0.00 ms/frame)
+Encoding time: 2.77 seconds (average: 8.44 ms/frame)
+--------------------------------------------------------------------------------

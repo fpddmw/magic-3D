@@ -13,7 +13,7 @@ const FILES = [
 var host
 var session = Instance.new()
 var art
-var set_piece = Stage.new()
+var set_piece: Stage
 var compiled: Dictionary
 var commands: Array = []
 var camera: Camera3D
@@ -47,9 +47,13 @@ func open(arena, opts: Dictionary) -> void:
 	index = 2 if test_case == "passage" else (1 if test_case == "transfer" else 0)
 	old_mix = AudioServer.generate_bus_layout()
 	AudioServer.set_bus_layout(Art.Layout)
-	host.hall.hide()
-	for body in host.hall.find_children("*", "StaticBody3D", true, false):
-		body.collision_layer = 0
+	if host.ruin_stage:
+		set_piece = host.ruin_stage
+	else:
+		set_piece = Stage.new()
+		host.hall.hide()
+		for body in host.hall.find_children("*", "StaticBody3D", true, false):
+			body.collision_layer = 0
 	for n in host.get_children():
 		if n is DirectionalLight3D:
 			n.hide()
@@ -62,16 +66,22 @@ func open(arena, opts: Dictionary) -> void:
 		b.freeze = true
 		b.collision_layer = 0
 		b.collision_mask = 0
-	host.rain.hide()
-	host.rain.emitting = false
+	if host.rain:
+		host.rain.hide()
+		host.rain.emitting = false
 	for node in get_tree().get_nodes_in_group("hall_audio"):
 		node.stop()
-	add_child(set_piece)
+	if not set_piece.is_inside_tree():
+		add_child(set_piece)
 	set_piece.set_space(alt_space)
 	host.player.name = "Caster"
 	host.player.position = Vector3(-.2, .08, 5.5)
 	host.pitch = -.23
 	host.yaw = 0.
+	if host.player.artist:
+		host.player.artist.hide()
+		host.player.grip.hide()
+		host.player.figure.show()
 	for piece in host.player.figure.get_children():
 		if piece is Node3D:
 			piece.hide()

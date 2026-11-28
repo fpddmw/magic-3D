@@ -1,7 +1,7 @@
 {
   "asset_id": "F03",
   "name": "开口弧刃",
-  "status": "实机原型，G1 已确认；G3 待负责人验收",
+  "status": "G1 概念与 G2 灰模由负责人确认；新版大殿与独立验货台实机观测已留档，待集中审美验收",
   "scene": "F03_arc_blade.tscn",
   "forms": [
     "narrow_edge",
@@ -9,7 +9,8 @@
   ],
   "palettes": [
     "P01",
-    "P04/P03"
+    "P04",
+    "P15"
   ],
   "formations": [
     "沿刃展锋",
@@ -28,7 +29,8 @@
     "front": [
       "width_m",
       "span_deg",
-      "bank_deg",
+      "roll_deg",
+      "face_pitch_deg",
       "speed_m_s",
       "range_m"
     ],
@@ -46,7 +48,9 @@
       "weight",
       "env_weight",
       "air_db",
-      "air_pitch"
+      "air_pitch",
+      "pose",
+      "launch_pose"
     ]
   },
   "editor_controls": [

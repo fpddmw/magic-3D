@@ -24,6 +24,7 @@ func setup(host, recipe: Dictionary, receipt: Dictionary, id: int) -> bool:
 	effect = EFFECT.instantiate()
 	host.add_child(effect)
 	effect.configure(trial.art,front.half_width,front.arc_mix)
+	host.player.intent=trial.art.get("pose","B07")
 	host.player.pose_weapon(0.,trial.art.weight)
 	front.attach(host.player.blade_socket())
 	effect.global_transform = front.pose
@@ -82,7 +83,7 @@ func paid_step(pid: String, dt: float) -> void:
 		var body = result.body
 		var applied := 0.
 		if body is RigidBody3D and impulse > 0.:
-			arena.world.deliver(body,-front.pose.basis.z*impulse,result.point)
+			arena.world.deliver(body,front.heading*impulse,result.point)
 			applied = impulse
 		receipts.append(result)
 		record("contact",{"collider":body.name,"point":str(result.point),"normal":str(result.normal),
@@ -102,9 +103,9 @@ func launch() -> void:
 	effect.global_transform = front.pose
 	effect.launch()
 	record("launch",{"root":str(arena.player.blade_root.global_position),
-		"tip":str(arena.player.blade_tip.global_position),"axis":str(-front.pose.basis.z),
+		"tip":str(arena.player.blade_tip.global_position),"axis":str(front.heading),
 		"budget":impulse,"distance_limit":front.limit})
-	arena.player.release_weapon()
+	arena.player.release_weapon(trial.art.get("launch_pose",arena.player.intent))
 
 func on_process_ended(pid: String, reason: String, continuing: bool) -> void:
 	if continuing:

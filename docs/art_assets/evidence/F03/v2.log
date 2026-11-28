@@ -3,31 +3,31 @@ Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M6 (Apple9)
 
 Movie Maker mode enabled, recording movie at 30 FPS...
 Movie Maker mode using project viewport size: 1920x1080
-F03 ENGINE 4.5.1-stable (official) physics=Jolt Physics recipe=res://art_kit/families/F03_arc_blade/recipes/v2.json sha256=4843730c20c6e0d5d7ca6ab55929332974d43a08501a03ea293c5e1e54be8484
+F03 ENGINE 4.5.1-stable (official) physics=Jolt Physics recipe=res://art_kit/families/F03_arc_blade/recipes/v2.json sha256=ea7a1fb1c128ab122694e663b441f9bf5391f2d448ca0a8d4ba3b1e7dbd2aced
 WARNING: Metal does not support LOD bias for samplers.
      at: sampler_create (drivers/metal/rendering_device_driver_metal.mm:771)
-F03 {"age":0.0,"cast":1,"curve":"C02","event":"prepare","form":"wide_crescent","mana_after_entry":277.838821,"root":"(-2.4498, 0.859558, 6.856394)","tick":49,"width_m":5.8}
+F03 {"age":0.0,"cast":1,"curve":"C02","event":"prepare","form":"wide_crescent","mana_after_entry":277.838821,"root":"(-2.235903, 1.044671, 6.8026)","tick":49,"width_m":5.8}
 F03 {"age":2.2,"cast":1,"event":"apex","hold_s":0.2,"tick":180}
-F03 {"age":2.4,"axis":"(-0.043997, 0.20846, -0.977041)","budget":162.515309902115,"cast":1,"distance_limit":8.8,"event":"launch","root":"(-2.396111, 0.839649, 6.497233)","tick":192,"tip":"(-2.433509, 1.01684, 5.666749)"}
-F03 {"age":2.5,"cast":1,"distance_m":0.77,"event":"front","position":"(-2.429989, 1.000163, 5.744913)","tick":198}
-F03 {"age":2.6,"cast":1,"distance_m":1.54,"event":"front","position":"(-2.463866, 1.160677, 4.992593)","tick":204}
-F03 {"age":2.7,"cast":1,"distance_m":2.31,"event":"front","position":"(-2.497744, 1.321191, 4.240273)","tick":210}
-F03 {"age":2.8,"cast":1,"distance_m":3.08,"event":"front","position":"(-2.531621, 1.481705, 3.487951)","tick":216}
-F03 {"age":2.9,"cast":1,"distance_m":3.85,"event":"front","position":"(-2.565498, 1.642219, 2.735629)","tick":222}
-F03 {"age":3.0,"cast":1,"distance_m":4.62,"event":"front","position":"(-2.599376, 1.802734, 1.983308)","tick":228}
-F03 {"age":3.1,"cast":1,"distance_m":5.39,"event":"front","position":"(-2.633253, 1.963248, 1.230986)","tick":234}
-F03 {"age":3.2,"cast":1,"distance_m":6.16,"event":"front","position":"(-2.66713, 2.123761, 0.478664)","tick":240}
-F03 {"age":3.3,"cast":1,"distance_m":6.92999999999999,"event":"front","position":"(-2.701008, 2.284275, -0.273657)","tick":246}
-F03 {"age":3.4,"cast":1,"distance_m":7.69999999999999,"event":"front","position":"(-2.734885, 2.444788, -1.025978)","tick":252}
-F03 {"age":3.5,"cast":1,"distance_m":8.46999999999999,"event":"front","position":"(-2.768763, 2.605301, -1.7783)","tick":258}
+F03 {"age":2.4,"axis":"(-0.043997, 0.20846, -0.977041)","budget":162.515309902115,"cast":1,"distance_limit":8.8,"event":"launch","root":"(-2.27278, 1.65455, 6.792646)","tick":192,"tip":"(-2.310177, 1.831741, 5.962162)"}
+F03 {"age":2.5,"cast":1,"distance_m":0.77,"event":"front","position":"(-2.306658, 1.815065, 6.040326)","tick":198}
+F03 {"age":2.6,"cast":1,"distance_m":1.54,"event":"front","position":"(-2.340535, 1.975579, 5.288005)","tick":204}
+F03 {"age":2.7,"cast":1,"distance_m":2.31,"event":"front","position":"(-2.374412, 2.136093, 4.535685)","tick":210}
+F03 {"age":2.8,"cast":1,"distance_m":3.08,"event":"front","position":"(-2.40829, 2.296608, 3.783364)","tick":216}
+F03 {"age":2.9,"cast":1,"distance_m":3.85,"event":"front","position":"(-2.442167, 2.457123, 3.031043)","tick":222}
+F03 {"age":3.0,"cast":1,"distance_m":4.62,"event":"front","position":"(-2.476044, 2.617638, 2.278721)","tick":228}
+F03 {"age":3.1,"cast":1,"distance_m":5.39,"event":"front","position":"(-2.509922, 2.778153, 1.526399)","tick":234}
+F03 {"age":3.2,"cast":1,"distance_m":6.16,"event":"front","position":"(-2.543799, 2.938668, 0.774078)","tick":240}
+F03 {"age":3.3,"cast":1,"distance_m":6.92999999999999,"event":"front","position":"(-2.577677, 3.099182, 0.021756)","tick":246}
+F03 {"age":3.4,"cast":1,"distance_m":7.69999999999999,"event":"front","position":"(-2.611554, 3.259697, -0.730565)","tick":252}
+F03 {"age":3.5,"cast":1,"distance_m":8.46999999999999,"event":"front","position":"(-2.645431, 3.420212, -1.482887)","tick":258}
 F03 {"age":3.55,"cast":1,"distance_m":8.8,"ending":"erosion","event":"exit","mana":245.335759019579,"process":"deliver","reason":"completed","receipts":0,"tick":261}
 F03 CHECK heavy full range erosion true
 F03 CHECK cast ledger closed true
 F03 RESULT {"failures":[],"take":"v2"}
 --------------------------------------------------------------------------------
-Done recording movie at path: /Users/a17919/Documents/ChatGPT/city-fates-3d/.local/f03/delivery_v2.avi
-60 frames at 30 FPS (movie length: 00:00:02:00), recorded in 00:00:03 (66% of real-time speed).
-CPU render time: 0.03 seconds (average: 0.49 ms/frame)
+Done recording movie at path: /Users/a17919/Documents/ChatGPT/city-fates-3d/.local/ab/film/v2.avi
+190 frames at 30 FPS (movie length: 00:00:06:10), recorded in 00:00:04 (150% of real-time speed).
+CPU render time: 0.03 seconds (average: 0.18 ms/frame)
 GPU render time: 0.00 seconds (average: 0.00 ms/frame)
-Encoding time: 1.51 seconds (average: 25.10 ms/frame)
+Encoding time: 1.56 seconds (average: 8.22 ms/frame)
 --------------------------------------------------------------------------------

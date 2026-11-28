@@ -125,9 +125,10 @@
   "front": {
     "width_m": 3.8,
     "span_deg": 134,
-    "bank_deg": 12,
     "range_m": 7.8,
-    "speed_m_s": 9.6
+    "speed_m_s": 9.6,
+    "roll_deg": 26,
+    "face_pitch_deg": 23
   },
   "binding": {
     "prepare": "charge",
@@ -141,12 +142,13 @@
     "tail_s": 0.74,
     "flow_speed": 1.75,
     "edge_gain": 1.75,
-    "distortion": 0,
+    "distortion": 0.0,
     "weight": 0.18,
     "env_weight": 0,
     "air_db": -2,
     "air_pitch": 1.32,
     "formation": "edge_draw",
-    "density": 1.0
+    "density": 1.0,
+    "pose": "B07"
   }
 }

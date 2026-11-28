@@ -1,0 +1,68 @@
+[
+  {
+    "id": "shale_fan",
+    "label": "岩片扇",
+    "medium": "stone",
+    "mass_kg": 8
+  },
+  {
+    "id": "veined_flint",
+    "label": "裂脉燧石",
+    "medium": "stone",
+    "mass_kg": 13
+  },
+  {
+    "id": "limestone_spall",
+    "label": "灰岩崩片",
+    "medium": "stone",
+    "mass_kg": 15
+  },
+  {
+    "id": "granite_erratic",
+    "label": "花岗岩角砾",
+    "medium": "stone",
+    "mass_kg": 28
+  },
+  {
+    "id": "voussoir",
+    "label": "拱券楔石",
+    "medium": "stone",
+    "mass_kg": 24
+  },
+  {
+    "id": "sill_fragment",
+    "label": "滴水线断梁",
+    "medium": "stone",
+    "mass_kg": 27
+  },
+  {
+    "id": "cornice",
+    "label": "檐口残块",
+    "medium": "stone",
+    "mass_kg": 25
+  },
+  {
+    "id": "fluted_drum",
+    "label": "断槽柱鼓",
+    "medium": "stone",
+    "mass_kg": 32
+  },
+  {
+    "id": "leaf_capital",
+    "label": "叶纹柱头",
+    "medium": "stone",
+    "mass_kg": 30
+  },
+  {
+    "id": "scarf_beam",
+    "label": "斜接断木梁",
+    "medium": "timber",
+    "mass_kg": 9
+  },
+  {
+    "id": "tenon_rail",
+    "label": "榫接梁头",
+    "medium": "timber",
+    "mass_kg": 7
+  }
+]

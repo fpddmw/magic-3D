@@ -1,0 +1,19 @@
+Godot Engine v4.5.1.stable.official.f62fdbde1 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M6 (Apple9)
+
+Movie Maker mode enabled, recording movie at 30 FPS...
+Movie Maker mode using project viewport size: 1920x1080
+B1 RUN {"engine":"4.5.1-stable (official)","fixture":"stone","members":8,"physics":"Jolt Physics","recipe_sha256":"d5b8e0250b1afd9eb903ba6bcfb12fd85dfc7d3e350a4113e30504a32e1edb3a"}
+WARNING: Metal does not support LOD bias for samplers.
+     at: sampler_create (drivers/metal/rendering_device_driver_metal.mm:771)
+B1 PICK_ORDER [{"distance":1.90265607833862,"mass":8.0,"rid":44342183593,"slot":0},{"distance":2.48408389091492,"mass":32.0,"rid":45516588734,"slot":1},{"distance":2.65915250778198,"mass":15.0,"rid":46204454611,"slot":2},{"distance":2.89089298248291,"mass":27.0,"rid":46892320488,"slot":3},{"distance":3.10298609733582,"mass":30.0,"rid":47580186365,"slot":4},{"distance":3.4013204574585,"mass":13.0,"rid":48268052242,"slot":5},{"distance":3.4835741519928,"mass":24.0,"rid":48955918119,"slot":6},{"distance":3.49126124382019,"mass":28.0,"rid":49643783996,"slot":7}]
+B1 SLOTS [{"event":"pickup","id":"shale_fan","slot":0,"t":0.0166666666666667},{"event":"pickup","id":"fluted_drum","slot":1,"t":0.1},{"event":"pickup","id":"limestone_spall","slot":2,"t":0.183333333333333},{"event":"pickup","id":"sill_fragment","slot":3,"t":0.266666666666667},{"event":"pickup","id":"leaf_capital","slot":4,"t":0.35},{"event":"pickup","id":"veined_flint","slot":5,"t":0.433333333333333},{"event":"pickup","id":"voussoir","slot":6,"t":0.516666666666667},{"event":"pickup","id":"granite_erratic","slot":7,"t":0.6},{"event":"dispatch","id":"shale_fan","slot":0,"t":5.78333333333332},{"event":"dispatch","id":"fluted_drum","slot":1,"t":6.28333333333332},{"event":"dispatch","id":"limestone_spall","slot":2,"t":6.81666666666665},{"event":"release","id":"sill_fragment","slot":3,"t":7.24999999999998},{"event":"release","id":"leaf_capital","slot":4,"t":7.24999999999998},{"event":"release","id":"veined_flint","slot":5,"t":7.24999999999998},{"event":"release","id":"voussoir","slot":6,"t":7.24999999999998},{"event":"release","id":"granite_erratic","slot":7,"t":7.24999999999998}]
+B1 HOSTS [{"first_rise_s":0.117,"host":"Host_00","id":"shale_fan","kg":8.0,"rise_m":2.55},{"first_rise_s":0.217,"host":"Host_01","id":"fluted_drum","kg":32.0,"rise_m":2.49},{"first_rise_s":0.283,"host":"Host_02","id":"limestone_spall","kg":15.0,"rise_m":2.9},{"first_rise_s":0.383,"host":"Host_03","id":"sill_fragment","kg":27.0,"rise_m":3.02},{"first_rise_s":0.5,"host":"Host_04","id":"leaf_capital","kg":30.0,"rise_m":2.75},{"first_rise_s":0.533,"host":"Host_05","id":"veined_flint","kg":13.0,"rise_m":2.91},{"first_rise_s":0.633,"host":"Host_06","id":"voussoir","kg":24.0,"rise_m":2.6},{"first_rise_s":0.783,"host":"Host_07","id":"granite_erratic","kg":28.0,"rise_m":2.54}]
+B1 RESULT {"all_slots_empty":true,"base_material_retained":true,"contact_events":32,"control_impulse_Ns":13530.0735595703,"count":8,"dispatched":3,"fell":5,"identity_retained":true,"lifted":8,"mana_spent":15.5430705396864,"max_rise_m":3.01812282204628,"ok":true,"peak_applied_up_m_s2":46.2956026517428,"peak_observed_up_m_s2":36.4956057071686,"released":5,"support_marks":8,"thrown_with_contact":3}
+--------------------------------------------------------------------------------
+Done recording movie at path: /Users/a17919/Documents/ChatGPT/city-fates-3d/.local/ab/film/b1_stone.avi
+328 frames at 30 FPS (movie length: 00:00:10:28), recorded in 00:00:05 (200% of real-time speed).
+CPU render time: 0.05 seconds (average: 0.16 ms/frame)
+GPU render time: 0.00 seconds (average: 0.00 ms/frame)
+Encoding time: 2.80 seconds (average: 8.55 ms/frame)
+--------------------------------------------------------------------------------

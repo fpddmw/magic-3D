@@ -1,14 +1,14 @@
 id,ledger_kind,category,name,priority,batch,stage,scale_tiers,status,paper_refs,merged_note,asset_path
 F01,art_asset,主体母体,凝聚核·天体,P0,B,主体,T2|T3,todo,6,,
 F02,art_asset,主体母体,矢锋·细长投射体,P0,B,主体,T1|T2|T3,todo,2,,
-F03,art_asset,主体母体,开口弧刃·弧锋,P0,A,主体,T1|T2|T3,pilot_01,4,,game/art_kit/families/F03_arc_blade/
-F04,art_asset,主体母体,闭合波前·环潮,P0,A,主体,T2|T3,todo,6,,
+F03,art_asset,主体母体,开口弧刃·弧锋,P0,A,主体,T1|T2|T3,g2_approved_runtime_observed,4,,game/art_kit/families/F03_arc_blade/
+F04,art_asset,主体母体,闭合波前·环潮,P0,A,主体,T2|T3,runtime_observed,6,,game/art_kit/families/F04_wave/
 F05,art_asset,主体母体,连续流带·绳索,P0,B,主体,T1|T2|T3,todo,6,,
 F06,art_asset,主体母体,束流·光束,P1,C,主体,T1|T2|T3,todo,1,,
 F07,art_asset,主体母体,喷流·扇形羽流,P1,C,主体,T1|T2|T3,todo,1,,
 F08,art_asset,主体母体,开放幕面·柔性界面,P0,A,主体,T1|T2|T3,todo,5,,
 F09,art_asset,主体母体,封闭壳界·穹顶,P1,C,主体,T1|T2|T3,todo,2,,
-F10,runtime_protocol,阵列控制器,有序离散阵列,P0,A,主体,T1|T2|T3,todo,8,从美术母体划入运行时账本 B（有序槽位布局与派发控制器）,
+F10,runtime_protocol,阵列控制器,有序离散阵列,P0,A,主体,T1|T2|T3,runtime_observed,8,从美术母体划入运行时账本 B（有序槽位布局与派发控制器）,game/world_law/host_array.gd
 F11,art_asset,主体母体,柱峰·结晶生长体,P1,C,主体,T1|T2|T3,todo,3,,
 F12,art_asset,主体母体,构件·板桥墙,P1,C,主体,T1|T2|T3,todo,4,,
 F13,art_asset,主体母体,线结·分支网络,P0,A,主体,T1|T2|T3,todo,15,,
@@ -28,17 +28,17 @@ F02-02,art_asset,族内动画,悬矢待发,P0,B,活动·待发,T1|T2|T3,todo,1,,
 F02-03,art_asset,族内动画,冲刺与尾迹接续,P0,B,交付·活动,T1|T2|T3,todo,2,,
 F02-04,art_asset,族内动画,命中碎解,P0,B,接触·退出,T1|T2|T3,todo,2,,
 F02-05,art_asset,族内动画,无命中收尾,P0,B,退出,T1|T2|T3,todo,1,,
-F03-01,art_asset,族内动画,沿刃展锋,P0,A,形成,T1|T2|T3,pilot_01,2,,game/art_kit/families/F03_arc_blade/
-F03-02,art_asset,族内动画,原位聚弧,P0,A,形成,T1|T2|T3,pilot_01,2,,game/art_kit/families/F03_arc_blade/
-F03-03,art_asset,族内动画,挥扫·甩出,P0,A,交付·活动,T1|T2|T3,pilot_01,2,,game/art_kit/families/F03_arc_blade/
-F03-04,art_asset,族内动画,平移掠行,P0,A,活动,T1|T2|T3,pilot_01,3,,game/art_kit/families/F03_arc_blade/
-F03-05,art_asset,族内动画,沿锋分段溃散,P0,A,退出,T1|T2|T3,pilot_01,4,,game/art_kit/families/F03_arc_blade/
-F03-06,art_asset,族内动画,回卷收锋,P1,C,退出,T1|T2|T3,pilot_01,0,,game/art_kit/families/F03_arc_blade/
-F04-01,art_asset,族内动画,中心压缩起波,P0,A,形成,T1|T2|T3,todo,5,,
-F04-02,art_asset,族内动画,环潮外翻,P0,A,交付·活动,T1|T2|T3,todo,6,,
+F03-01,art_asset,族内动画,沿刃展锋,P0,A,形成,T1|T2|T3,runtime_observed,2,,game/art_kit/families/F03_arc_blade/
+F03-02,art_asset,族内动画,原位聚弧,P0,A,形成,T1|T2|T3,runtime_observed,2,,game/art_kit/families/F03_arc_blade/
+F03-03,art_asset,族内动画,挥扫·甩出,P0,A,交付·活动,T1|T2|T3,runtime_observed,2,,game/art_kit/families/F03_arc_blade/
+F03-04,art_asset,族内动画,平移掠行,P0,A,活动,T1|T2|T3,runtime_observed,3,,game/art_kit/families/F03_arc_blade/
+F03-05,art_asset,族内动画,沿锋分段溃散,P0,A,退出,T1|T2|T3,runtime_observed,4,,game/art_kit/families/F03_arc_blade/
+F03-06,art_asset,族内动画,回卷收锋,P1,C,退出,T1|T2|T3,runtime_observed,0,,game/art_kit/families/F03_arc_blade/
+F04-01,art_asset,族内动画,中心压缩起波,P0,A,形成,T1|T2|T3,runtime_observed,5,,game/art_kit/families/F04_wave/
+F04-02,art_asset,族内动画,环潮外翻,P0,A,交付·活动,T1|T2|T3,runtime_observed,6,,game/art_kit/families/F04_wave/
 F04-03,art_asset,族内动画,穹顶鼓出,P1,C,活动,T1|T2|T3,todo,0,,
 F04-04,art_asset,族内动画,多重波峰派发,P1,C,交付·活动,T1|T2|T3,todo,0,,
-F04-05,art_asset,族内动画,边缘耗散与回落,P0,A,退出,T1|T2|T3,todo,6,,
+F04-05,art_asset,族内动画,边缘耗散与回落,P0,A,退出,T1|T2|T3,runtime_observed,6,,game/art_kit/families/F04_wave/
 F05-01,art_asset,族内动画,端口引流成带,P0,B,形成,T1|T2|T3,todo,3,,
 F05-02,art_asset,族内动画,多源合流,P0,B,形成·转化,T1|T2|T3,todo,2,,
 F05-03,art_asset,族内动画,卷曲与舒展,P0,B,活动,T1|T2|T3,todo,1,,
@@ -63,11 +63,11 @@ F09-01,art_asset,族内动画,壳面逐圈闭合,P1,C,形成,T1|T2|T3,todo,2,,
 F09-02,art_asset,族内动画,内压呼吸,P1,C,活动,T1|T2|T3,todo,2,,
 F09-03,art_asset,族内动画,开孔与局部破损,P1,C,转化·反馈,T1|T2|T3,todo,2,,
 F09-04,art_asset,族内动画,壳面剥落,P1,C,退出,T1|T2|T3,todo,2,,
-F10-01,runtime_protocol,阵列控制器,逐件成列,P0,A,形成,T1|T2|T3,todo,8,,
-F10-02,runtime_protocol,阵列控制器,阵形悬置·转向,P0,A,活动,T1|T2|T3,todo,4,,
-F10-03,runtime_protocol,阵列控制器,有条件派发,P0,A,交付,T1|T2|T3,todo,5,,
-F10-04,runtime_protocol,阵列控制器,阵列重排,P1,C,转化,T1|T2|T3,todo,1,,
-F10-05,runtime_protocol,阵列控制器,整体卸载·余件归还,P0,A,退出,T1|T2|T3,todo,2,,
+F10-01,runtime_protocol,阵列控制器,逐件成列,P0,A,形成,T1|T2|T3,runtime_observed,8,,game/world_law/host_array.gd
+F10-02,runtime_protocol,阵列控制器,阵形悬置·转向,P0,A,活动,T1|T2|T3,runtime_observed,4,,game/world_law/host_array.gd
+F10-03,runtime_protocol,阵列控制器,有条件派发,P0,A,交付,T1|T2|T3,runtime_observed,5,,game/world_law/host_array.gd
+F10-04,runtime_protocol,阵列控制器,阵列重排,P1,C,转化,T1|T2|T3,runtime_observed,1,,game/world_law/host_array.gd
+F10-05,runtime_protocol,阵列控制器,整体卸载·余件归还,P0,A,退出,T1|T2|T3,runtime_observed,2,,game/world_law/host_array.gd
 F11-01,art_asset,族内动画,地表晶峰萌生,P1,C,形成,T1|T2|T3,todo,2,,
 F11-02,art_asset,族内动画,分支攀附,P1,C,活动·生长,T1|T2|T3,todo,2,,
 F11-03,art_asset,族内动画,受力裂纹与断峰,P1,C,反馈·退出,T1|T2|T3,todo,1,,
@@ -101,7 +101,7 @@ F18-01,art_asset,族内动画,轮廓析出,P2,D,形成,T1|T2|T3,todo,3,,
 F18-02,art_asset,族内动画,拟态随动与错相,P2,D,活动,T1|T2|T3,todo,3,,
 F18-03,art_asset,族内动画,分影与回合,P2,D,转化,T1|T2|T3,todo,1,,
 F18-04,art_asset,族内动画,剥影·幻象退去,P2,D,退出,T1|T2|T3,todo,3,,
-H01,art_asset,现实及非实体宿主,真实刚体宿主套件,P0,A,宿主,T1|T2|T3,todo,15,,
+H01,art_asset,现实及非实体宿主,真实刚体宿主套件,P0,A,宿主,T1|T2|T3,runtime_observed,15,,game/art_kit/hosts/H01/
 H02,art_asset,现实及非实体宿主,真实表面与建筑宿主,P0,B,宿主,T1|T2|T3,todo,6,,
 H03,art_asset,现实及非实体宿主,现存材料与介质宿主,P1,C,宿主,T1|T2|T3,todo,9,,
 H04,art_asset,现实及非实体宿主,活体宿主,P1,C,宿主,T1|T2|T3,todo,9,,
@@ -109,9 +109,9 @@ H05,art_asset,现实及非实体宿主,武器与持有器物宿主,P0,A,宿主,T
 H06,runtime_protocol,非实体信号绑定协议,外术与关系宿主,P0,A,宿主,T1|T2|T3,todo,9,,
 H07,runtime_protocol,非实体信号绑定协议,场域·非实体异常宿主,P0,A,宿主,T1|T2|T3,todo,12,,
 H08,runtime_protocol,非实体信号绑定协议,感知·无实体主形象,P0,B,宿主,T1|T2,todo,9,,
-H01-01,art_asset,宿主演出,接管提拉·受力显现,P0,A,形成·接管,T1|T2|T3,todo,9,,
-H01-02,art_asset,宿主演出,悬置·应力维持,P0,A,活动,T1|T2|T3,todo,7,,
-H01-03,art_asset,宿主演出,脱手·坠落余迹,P0,A,交付·退出,T1|T2|T3,todo,10,,
+H01-01,art_asset,宿主演出,接管提拉·受力显现,P0,A,形成·接管,T1|T2|T3,runtime_observed,9,,game/art_kit/hosts/H01/
+H01-02,art_asset,宿主演出,悬置·应力维持,P0,A,活动,T1|T2|T3,runtime_observed,7,,game/art_kit/hosts/H01/
+H01-03,art_asset,宿主演出,脱手·坠落余迹,P0,A,交付·退出,T1|T2|T3,runtime_observed,10,,game/art_kit/hosts/H01/
 H01-04,art_asset,宿主演出,真实碎裂·接合反馈,P1,C,转化·反馈,T1|T2|T3,todo,1,,
 H02-01,art_asset,宿主演出,沿表面蔓延,P0,B,形成·活动,T1|T2|T3,todo,3,,
 H02-02,art_asset,宿主演出,接缝压裂·修合,P1,C,反馈·转化,T1|T2|T3,todo,1,,
@@ -134,10 +134,10 @@ H07-03,runtime_protocol,非实体信号绑定协议,作用解除·恢复秩序,P
 H08-01,runtime_protocol,非实体信号绑定协议,合法方向提示,P0,B,活动·感知,T1|T2,todo,4,,
 H08-02,runtime_protocol,非实体信号绑定协议,静默·失联,P0,B,活动·退出,T1|T2,todo,6,,
 H08-03,runtime_protocol,非实体信号绑定协议,隐匿·识破反馈,P1,C,活动·反馈,T1|T2,todo,6,,
-P01,art_asset,表现资源包,冷银刃光,P0,A,表现,T1|T2|T3,pilot_01,9,,
+P01,art_asset,表现资源包,冷银刃光,P0,A,表现,T1|T2|T3,runtime_observed,9,,game/art_kit/families/F03_arc_blade/arc_blade.gdshader
 P02,art_asset,表现资源包,古金刻蚀,P0,B,表现,T1|T2|T3,todo,11,,
 P03,art_asset,表现资源包,幽暗吸光意象,P0,B,表现,T1|T2|T3,todo,4,标配地面暗蚀/阴影印记 Decal 槽,
-P04,art_asset,表现资源包,透明折光界面,P0,A,表现,T1|T2|T3,pilot_01,11,,
+P04,art_asset,表现资源包,透明折光界面,P0,A,表现,T1|T2|T3,runtime_observed,11,,game/art_kit/families/F03_arc_blade/arc_blade.gdshader
 P05,art_asset,表现资源包,深蓝天体表面,P1,C,表现,T1|T2|T3,todo,1,,
 P06,art_asset,表现资源包,流体·厚浪,P0,B,表现,T1|T2|T3,todo,7,合并原 P07（流体·薄膜作为厚度/透射变体）；标配地表湿痕 Decal 槽,
 P09,art_asset,表现资源包,石材·层理粗面,P0,A,表现,T1|T2|T3,todo,6,标配地面受压碎裂/石屑印记 Decal 槽,
@@ -146,7 +146,7 @@ P11,art_asset,表现资源包,霜晶·薄沉积,P1,C,表现,T1|T2|T3,todo,5,标�
 P12,art_asset,表现资源包,炽热·暗壳余烬,P0,B,表现,T1|T2|T3,todo,3,标配地面焦痕/余烬印记 Decal 槽,
 P13,art_asset,表现资源包,火焰·卷舌,P1,C,表现,T1|T2|T3,todo,1,,
 P14,art_asset,表现资源包,蒸汽·冷凝雾,P1,C,表现,T1|T2|T3,todo,2,,
-P15,art_asset,表现资源包,气压·薄扰动,P0,A,表现,T1|T2|T3,todo,6,,
+P15,art_asset,表现资源包,气压·薄扰动,P0,A,表现,T1|T2|T3,runtime_observed,6,,game/art_kit/families/F03_arc_blade/arc_blade.gdshader
 P16,art_asset,表现资源包,电性·分叉亮脉,P0,B,表现,T1|T2|T3,todo,3,,
 P18,art_asset,表现资源包,奥术·细丝与符纹,P0,A,表现,T1|T2|T3,todo,12,,
 P19,art_asset,表现资源包,丝绸·辉光薄幕,P0,A,表现,T1|T2|T3,todo,6,,
@@ -173,11 +173,11 @@ TR15,art_asset,特殊承接,幻形分离→归位,P2,D,转化·承接,T1|T2|T3,t
 TR16,runtime_protocol,状态移交协议,作用结束→自然余留,P0,B,转化·承接,T1|T2|T3,todo,11,,
 X01,art_asset,跨族伴随演出,入势细光与源点呼吸,P0,B,伴随·反馈,T1|T2|T3,todo,0,,
 X02,art_asset,跨族伴随演出,多源汇入流迹,P0,B,伴随·反馈,T1|T2|T3,todo,0,,
-X03,art_asset,跨族伴随演出,破地尘屑与接地裂口,P0,A,伴随·反馈,T1|T2|T3,todo,0,,
+X03,art_asset,跨族伴随演出,破地尘屑与接地裂口,P0,A,伴随·反馈,T1|T2|T3,runtime_observed,0,,game/art_kit/hosts/H01/host.gd
 X04,art_asset,跨族伴随演出,端口喷出余气,P0,B,伴随·反馈,T1|T2|T3,todo,0,,
 X05,art_asset,跨族伴随演出,方向性连续运动尾迹,P0,A,伴随·反馈,T1|T2|T3,pilot_01,0,,
-X06,art_asset,跨族伴随演出,接触短促闪击,P0,A,伴随·反馈,T1|T2|T3,pilot_01,0,,
-X07,art_asset,跨族伴随演出,重压尘环与地面震纹,P0,A,伴随·反馈,T1|T2|T3,todo,1,,
+X06,art_asset,跨族伴随演出,接触短促闪击,P0,A,伴随·反馈,T1|T2|T3,runtime_observed,0,,game/art_kit/families/F03_arc_blade/arc_blade.gd
+X07,art_asset,跨族伴随演出,重压尘环与地面震纹,P0,A,伴随·反馈,T1|T2|T3,runtime_observed,1,,game/art_kit/families/F04_wave/dust.gdshader
 X08,art_asset,跨族伴随演出,飞沫溅射,P1,C,伴随·反馈,T1|T2|T3,todo,1,合并原 P08（流体·液滴雾化与飞沫溅射去重）,
 X09,art_asset,跨族伴随演出,碎屑·短寿命微片,P0,B,伴随·反馈,T1|T2|T3,todo,1,,
 X10,art_asset,跨族伴随演出,冰晶尖边细节,P1,C,伴随·反馈,T1|T2|T3,todo,0,,
@@ -193,11 +193,11 @@ X19,art_asset,跨族伴随演出,远端响应点,P1,C,伴随·反馈,T1|T2|T3,to
 X20,art_asset,跨族伴随演出,无实体感知脉息,P0,B,伴随·反馈,T1|T2,todo,0,,
 X21,art_asset,跨族伴随演出,装饰碎光的内聚/解体,P0,B,伴随·反馈,T1|T2|T3,todo,0,,
 X22,runtime_protocol,共享着色器库,媒介交界软边,P1,C,伴随·反馈,T1|T2|T3,todo,0,划入运行时账本 B（共享深度软边着色器头文件，非独立粒子资产）,
-C01,runtime_protocol,共享时间曲线资源,瞬发·迅疾显形,P0,A,编排,T1|T2|T3,pilot_01,0,,
-C02,runtime_protocol,共享时间曲线资源,迟起渐强,P0,A,编排,T1|T2|T3,pilot_01,0,,
-C03,runtime_protocol,共享时间曲线资源,稳定推进,P0,A,编排,T1|T2|T3,pilot_01,0,,
+C01,runtime_protocol,共享时间曲线资源,瞬发·迅疾显形,P0,A,编排,T1|T2|T3,runtime_observed,0,,game/art_kit/curves/C01.tres
+C02,runtime_protocol,共享时间曲线资源,迟起渐强,P0,A,编排,T1|T2|T3,runtime_observed,0,,game/art_kit/curves/C02.tres
+C03,runtime_protocol,共享时间曲线资源,稳定推进,P0,A,编排,T1|T2|T3,runtime_observed,0,,game/art_kit/curves/C03.tres
 C04,runtime_protocol,共享时间曲线资源,反拉·骤放,P0,A,编排,T1|T2|T3,todo,0,,
-C05,runtime_protocol,共享时间曲线资源,顶点停顿,P0,B,编排,T1|T2|T3,pilot_01,0,,
+C05,runtime_protocol,共享时间曲线资源,顶点停顿,P0,B,编排,T1|T2|T3,runtime_observed,0,,game/art_kit/curves/C05.tres
 C06,runtime_protocol,共享时间曲线资源,分层错峰,P0,B,编排,T1|T2|T3,todo,0,,
 C07,runtime_protocol,共享时间曲线资源,空间推进相位,P0,A,编排,T1|T2|T3,todo,0,,
 C08,runtime_protocol,共享时间曲线资源,持续脉息,P0,B,编排,T1|T2|T3,todo,0,,
@@ -206,13 +206,13 @@ C10,runtime_protocol,共享时间曲线资源,逐段卸载,P0,A,编排,T1|T2|T3,
 C11,runtime_protocol,共享时间曲线资源,自然稀释与尾音,P0,B,编排,T1|T2|T3,todo,0,,
 C12,runtime_protocol,共享时间曲线资源,反复张弛·有限拍点,P1,C,编排,T1|T2|T3,todo,0,,
 B01,art_asset,身体动作,短促指向·腕部交付,P0,A,角色,T1|T2|T3,todo,0,实做按 Enter/Loop/Release/Recovery 四段拆分并区分站桩与移步分离,
-B02,art_asset,身体动作,重压聚势,P0,A,角色,T1|T2|T3,pilot_01,0,实做按 Enter/Loop/Release/Recovery 四段拆分并区分站桩与移步分离,
+B02,art_asset,身体动作,重压聚势,P0,A,角色,T1|T2|T3,procedural_skeleton_observed,0,实做按 Enter/Loop/Release/Recovery 四段拆分并区分站桩与移步分离,game/art_kit/choreography/ruin_actor.gd
 B03,art_asset,身体动作,双臂开帷,P0,A,角色,T1|T2|T3,todo,0,实做按 Enter/Loop/Release/Recovery 四段拆分并区分站桩与移步分离,
 B04,art_asset,身体动作,单手牵引·持续引导,P0,A,角色,T1|T2|T3,todo,0,实做按 Enter/Loop/Release/Recovery 四段拆分并区分站桩与移步分离,
-B05,art_asset,身体动作,重物拔升·提拉,P0,A,角色,T1|T2|T3,todo,0,实做按 Enter/Loop/Release/Recovery 四段拆分并区分站桩与移步分离,
+B05,art_asset,身体动作,重物拔升·提拉,P0,A,角色,T1|T2|T3,procedural_skeleton_observed,0,实做按 Enter/Loop/Release/Recovery 四段拆分并区分站桩与移步分离,game/art_kit/choreography/ruin_actor.gd
 B06,art_asset,身体动作,悬置·蓄势维持,P0,B,角色,T1|T2|T3,todo,0,实做按 Enter/Loop/Release/Recovery 四段拆分并区分站桩与移步分离,
-B07,art_asset,身体动作,挥击·离刃,P0,A,角色,T1|T2|T3,pilot_01,0,实做按 Enter/Loop/Release/Recovery 四段拆分并区分站桩与移步分离,
-B08,art_asset,身体动作,向外推送·爆震,P0,A,角色,T1|T2|T3,todo,0,实做按 Enter/Loop/Release/Recovery 四段拆分并区分站桩与移步分离,
+B07,art_asset,身体动作,挥击·离刃,P0,A,角色,T1|T2|T3,procedural_skeleton_observed,0,实做按 Enter/Loop/Release/Recovery 四段拆分并区分站桩与移步分离,game/art_kit/choreography/ruin_actor.gd
+B08,art_asset,身体动作,向外推送·爆震,P0,A,角色,T1|T2|T3,procedural_skeleton_observed,0,实做按 Enter/Loop/Release/Recovery 四段拆分并区分站桩与移步分离,game/art_kit/choreography/ruin_actor.gd
 B09,art_asset,身体动作,杖端连续喷流,P1,C,角色,T1|T2|T3,todo,0,实做按 Enter/Loop/Release/Recovery 四段拆分并区分站桩与移步分离,
 B10,art_asset,身体动作,落地·触地仪式,P1,C,角色,T1|T2|T3,todo,0,实做按 Enter/Loop/Release/Recovery 四段拆分并区分站桩与移步分离,
 B11,art_asset,身体动作,浮空·沉降,P1,C,角色,T1|T2|T3,todo,1,实做按 Enter/Loop/Release/Recovery 四段拆分并区分站桩与移步分离,
@@ -229,7 +229,7 @@ S05,art_asset,声音资产,锐刃空气切割,P0,A,声音,T1|T2|T3,pilot_01,0,,
 S06,art_asset,声音资产,水体翻卷流声,P1,C,声音,T1|T2|T3,todo,0,,
 S07,art_asset,声音资产,风压与旋流,P0,B,声音,T1|T2|T3,todo,0,,
 S08,art_asset,声音资产,放电·裂响,P0,B,声音,T1|T2|T3,todo,0,,
-S09,art_asset,声音资产,岩石摩擦与断裂,P0,A,声音,T1|T2|T3,todo,0,,
+S09,art_asset,声音资产,岩石摩擦与断裂,P0,A,声音,T1|T2|T3,synth_runtime_observed,0,,game/art_kit/hosts/H01/S09_stone_drag.wav
 S10,art_asset,声音资产,晶质形成与破碎,P1,C,声音,T1|T2|T3,todo,0,,
 S11,art_asset,声音资产,火舌与余烬,P1,C,声音,T1|T2|T3,todo,0,,
 S12,art_asset,声音资产,奥术脉冲与回执,P0,B,声音,T1|T2|T3,todo,0,,

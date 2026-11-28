@@ -156,9 +156,10 @@
   "front": {
     "width_m": 4.1,
     "span_deg": 150,
-    "bank_deg": -14,
     "range_m": 8,
-    "speed_m_s": 1.1
+    "speed_m_s": 1.1,
+    "roll_deg": -23,
+    "face_pitch_deg": 27
   },
   "binding": {
     "prepare": "prepare",
@@ -166,18 +167,19 @@
   },
   "art": {
     "form": "wide_crescent",
-    "palette": "P04/P03",
+    "palette": "P04",
     "curve_id": "C03",
     "hold_s": 0,
     "tail_s": 1.02,
     "flow_speed": 0.46,
     "edge_gain": 0.0,
-    "distortion": 0.031,
+    "distortion": 0.074,
     "weight": 0.3,
     "env_weight": 0.0,
     "air_db": -13,
     "air_pitch": 0.57,
     "formation": "gather_in_place",
-    "density": 1.0
+    "density": 1.0,
+    "pose": "B08"
   }
 }

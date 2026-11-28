@@ -1,10 +1,13 @@
 """Validate each embedded five-facet contract and seal its deterministic quote."""
+
 import json
 from pathlib import Path
 
 from tools.magic_dsl_v0_3.admission import Recipe
 
-HERE = Path(__file__).resolve().parents[2] / "game/art_kit/families/F03_arc_blade/recipes"
+HERE = (
+    Path(__file__).resolve().parents[2] / "game/art_kit/families/F03_arc_blade/recipes"
+)
 
 
 def main():
@@ -15,10 +18,25 @@ def main():
         contract = Recipe(trial["contract"])
         law = trial["front"]
         assert 45 <= law["span_deg"] <= 160 and 0 < law["width_m"] <= 7
-        assert 0 < law["range_m"] <= contract.subjects["field"]["spatial"]["geometry"]["extent_m"]
-        entries.append(dict(file=path.name, admitted_contract=contract.data, quote=contract.quote))
+        assert (
+            0
+            < law["range_m"]
+            <= contract.subjects["field"]["spatial"]["geometry"]["extent_m"]
+        )
+        entries.append(
+            dict(file=path.name, admitted_contract=contract.data, quote=contract.quote)
+        )
     (HERE / "catalog.json").write_text(json.dumps(entries, indent=2) + "\n")
+
+
+def seal_wave():
+    folder = HERE.parents[1] / "F04_wave" / "recipes"
+    path = folder / "a4.json"
+    contract = Recipe(json.loads(path.read_bytes())["contract"])
+    entry = dict(file=path.name, admitted_contract=contract.data, quote=contract.quote)
+    (folder / "catalog.json").write_text(json.dumps([entry], indent=2) + "\n")
 
 
 if __name__ == "__main__":
     main()
+    seal_wave()

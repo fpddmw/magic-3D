@@ -1,0 +1,139 @@
+[
+  {
+    "file": "a4.json",
+    "admitted_contract": {
+      "version": "0.3.0",
+      "name": "A4 \u6c89\u91cd\u84c4\u52bf\u5f84\u5411\u7206\u9707",
+      "scale": "medium",
+      "Concepts": [
+        {
+          "id": "nature",
+          "nature": "air"
+        }
+      ],
+      "Subjects": [
+        {
+          "id": "field",
+          "concept": "nature",
+          "kind": "Field",
+          "source": {
+            "kind": "Manifest"
+          },
+          "spatial": {
+            "carrier": "Region",
+            "geometry": {
+              "shape": "sphere",
+              "extent_m": 6.5
+            },
+            "reference": {
+              "anchor": "caster",
+              "bind": "enter"
+            },
+            "distribution": "linear_falloff"
+          },
+          "medium": "ambient_air"
+        }
+      ],
+      "Relations": [],
+      "Processes": {
+        "entry": [
+          "charge"
+        ],
+        "nodes": [
+          {
+            "id": "charge",
+            "contract": "gather",
+            "join": "any",
+            "enter": [],
+            "active": [
+              {
+                "op": "Transfer",
+                "ability": "charge",
+                "target": "@reserve"
+              }
+            ],
+            "exit": [],
+            "on": [
+              {
+                "event": "timeout",
+                "when": "reserve_ready",
+                "to": [
+                  "deliver"
+                ]
+              },
+              {
+                "event": "interrupt",
+                "when": "always",
+                "to": []
+              }
+            ]
+          },
+          {
+            "id": "deliver",
+            "contract": "burst",
+            "join": "any",
+            "enter": [
+              {
+                "op": "Establish",
+                "ability": "form",
+                "target": "field"
+              },
+              {
+                "op": "Drive",
+                "ability": "impulse",
+                "target": "field",
+                "axis": "radial_out",
+                "allocation": "distance_weighted",
+                "budget": "paid_reserve"
+              }
+            ],
+            "active": [],
+            "exit": [
+              {
+                "op": "Withdraw",
+                "ability": "end",
+                "target": "field"
+              }
+            ],
+            "on": []
+          }
+        ]
+      },
+      "Contracts": [
+        {
+          "id": "gather",
+          "controller": "caster",
+          "mobility": "slow_walk",
+          "focus": "exclusive",
+          "provider": "@caster",
+          "max_s": 2.7,
+          "reserve": {
+            "full_charge_s": 2.5,
+            "min_release_ratio": 0.9
+          }
+        },
+        {
+          "id": "burst",
+          "controller": "autonomous",
+          "mobility": "free",
+          "focus": "none",
+          "provider": "@caster",
+          "max_s": 1.8
+        }
+      ],
+      "Expression": []
+    },
+    "quote": {
+      "tariff_version": "tariff-0.3.0",
+      "upfront_mana": 24.432001,
+      "mana_per_s": 16.288,
+      "rates": {
+        "charge": 16.288,
+        "deliver": 0
+      },
+      "max_paid_mana": 68.409601,
+      "reserve_capacity": 40.72,
+      "total_impulse_budget": 203.6
+    }
+  }
+]

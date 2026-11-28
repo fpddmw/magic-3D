@@ -1,0 +1,6 @@
+[gd_scene load_steps=3 format=3]
+[ext_resource type="PackedScene" path="res://art_kit/families/F04_wave/F04_wave.glb" id="1"]
+[ext_resource type="Script" path="res://art_kit/families/F04_wave/wave.gd" id="2"]
+[node name="F04" type="Node3D"]
+script = ExtResource("2")
+[node name="Carrier" parent="." instance=ExtResource("1")]

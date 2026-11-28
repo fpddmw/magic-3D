@@ -1,0 +1,25 @@
+Godot Engine v4.5.1.stable.official.f62fdbde1 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M6 (Apple9)
+
+Movie Maker mode enabled, recording movie at 30 FPS...
+Movie Maker mode using project viewport size: 1920x1080
+WARNING: Metal does not support LOD bias for samplers.
+     at: sampler_create (drivers/metal/rendering_device_driver_metal.mm:771)
+A4 COMMIT age=2.7 paid_Ns=203.6
+A4 HIT {"body":"PierStone0","j_Ns":9.09999984502792,"point":"(1.779789, 0.189733, 7.484937)","r":1.9}
+A4 HIT {"body":"PierStone3","j_Ns":19.0450004339218,"point":"(-1.631943, 0.220371, 7.864108)","r":1.9}
+A4 HIT {"body":"PierStone6","j_Ns":28.9900002479553,"point":"(0.493212, 0.254344, 5.163793)","r":1.9}
+A4 HIT {"body":"PierStone7","j_Ns":32.3049986362457,"point":"(2.105884, 0.255605, 5.81011)","r":2.4}
+A4 HIT {"body":"PierStone4","j_Ns":22.360000371933,"point":"(-2.358706, 0.234294, 6.350646)","r":2.5}
+A4 HIT {"body":"PierStone1","j_Ns":12.4149997830391,"point":"(1.226743, 0.207633, 9.22061)","r":2.6}
+A4 HIT {"body":"PierStone2","j_Ns":15.7300004959106,"point":"(-0.848823, 0.233424, 10.06394)","r":3.2}
+A4 HIT {"body":"PierStone5","j_Ns":25.6750003099442,"point":"(-1.499572, 0.247176, 4.240672)","r":3.2}
+A4 EXIT completed radius=6.5 contacts=8 delivered_Ns=165.620000123978
+A4 RESULT {"bodies":8,"contacts":8,"mana_end":234.847999000002,"max_rise_m":1.61360120773315,"max_travel_m":10.2053308486938,"ok":true}
+--------------------------------------------------------------------------------
+Done recording movie at path: /Users/a17919/Documents/ChatGPT/city-fates-3d/.local/ab/film/a4.avi
+201 frames at 30 FPS (movie length: 00:00:06:21), recorded in 00:00:05 (120% of real-time speed).
+CPU render time: 0.05 seconds (average: 0.24 ms/frame)
+GPU render time: 0.00 seconds (average: 0.00 ms/frame)
+Encoding time: 2.09 seconds (average: 10.39 ms/frame)
+--------------------------------------------------------------------------------

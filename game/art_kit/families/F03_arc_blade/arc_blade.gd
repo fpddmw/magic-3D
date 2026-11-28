@@ -9,7 +9,7 @@ const AIR = preload("res://assets/audio/observatory/release.wav")
 const CHARGE = preload("res://assets/audio/observatory/foundation.wav")
 const CONTACT = preload("res://assets/audio/observatory/stone_contact.wav")
 @export_enum("narrow_edge","wide_crescent") var form := "narrow_edge"
-@export_enum("P01","P04/P03") var palette := "P01"
+@export_enum("P01","P04","P15") var palette := "P01"
 @export_range(.2,7.,.05,"suffix:m") var width_m := 3.8
 @export_range(45.,160.,1.,"degrees") var span_deg := 134.
 @export_range(0.,3.,.01) var flow_speed := 1.
@@ -26,6 +26,8 @@ var art_clock := 0.
 var exit_clock := -1.
 var flash_clock := -1.
 var ending := ""
+var erosion_at_exit := -.035
+var retract_at_exit := 0.
 var shape_indices := {}
 var camera_weight := 0.
 var pressure := 0.
@@ -59,14 +61,17 @@ func configure(profile: Dictionary, radius: float, arc_mix: float) -> void:
 		shape_indices[blade.mesh.get_blend_shape_name(i)] = i
 	skin.shader = SHADER
 	blade.material_override = skin
+	skin.set_shader_parameter("gray_preview",cfg.palette=="Gray")
 	skin.set_shader_parameter("flow_map", FLOW)
 	skin.set_shader_parameter("erosion_map", MASK)
-	skin.set_shader_parameter("distortion", cfg.distortion if cfg.palette == "P04/P03" else 0.)
+	skin.set_shader_parameter("optical_pack", 0 if cfg.palette=="P01" else (2 if cfg.palette=="P15" else 1))
+	skin.set_shader_parameter("distortion",cfg.distortion)
 	skin.set_shader_parameter("edge_gain", cfg.edge_gain)
 	skin.set_shader_parameter("flow_speed", cfg.flow_speed)
 	skin.set_shader_parameter("mist_density",cfg.get("density",1.))
 	skin.set_shader_parameter("central_gather",cfg.get("formation","edge_draw")=="gather_in_place")
 	blade.set_blend_shape_value(shape_indices.arc_open, arc_mix)
+	skin.set_shader_parameter("erosion",-.035)
 	prepare(0., 0.)
 	if cfg.weight > .65:
 		voice(CHARGE, -6., .88)
@@ -115,6 +120,8 @@ func finish(reason: String) -> void:
 	if exit_clock >= 0.:
 		return
 	ending = reason
+	erosion_at_exit = skin.get_shader_parameter("erosion")
+	retract_at_exit = blade.get_blend_shape_value(shape_indices.edge_retract)
 	exit_clock = 0.
 	camera_weight = 0.
 	pressure = 0.
@@ -136,14 +143,17 @@ func _process(dt: float) -> void:
 		return
 	exit_clock += dt
 	var t := clampf(exit_clock/cfg.tail_s, 0., 1.)
-	if ending == "released":
-		var retract := smoothstep(0.,1.,t)
-		skin.set_shader_parameter("retreat", retract)
-		blade.set_blend_shape_value(shape_indices.edge_retract, retract)
-	else:
-		var erosion := lerpf(-.035, 1.05, pow(t,.80 if ending=="interrupted" else 1.15))
-		skin.set_shader_parameter("erosion",erosion)
+	sample_tail(t)
 	if t >= 1.:
 		blade.visible = false
 		if not $Contact/Stone.playing and not $Voice.playing and not $Contact.emitting:
 			queue_free()
+
+func sample_tail(t: float) -> void:
+	if ending == "released":
+		var retract := lerpf(retract_at_exit,1.,smoothstep(0.,1.,t))
+		skin.set_shader_parameter("retreat", retract)
+		blade.set_blend_shape_value(shape_indices.edge_retract, retract)
+	else:
+		var erosion := lerpf(erosion_at_exit, 1.05, pow(t,.80 if ending=="interrupted" else 1.15))
+		skin.set_shader_parameter("erosion",erosion)

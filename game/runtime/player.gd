@@ -14,6 +14,9 @@ var blade_root: Marker3D
 var blade_tip: Marker3D
 var sword_arm: Array[MeshInstance3D] = []
 var grip: Node3D
+var artist
+var intent := "B07"
+var release_from:=PackedVector4Array()
 var drawing := false
 var stance := 0.
 var recovery := 0.
@@ -83,6 +86,18 @@ func _ready() -> void:
 	mesh(grip, guard, blade_root.position, Color("#766d5d"))
 
 
+func wear_astronomer() -> void:
+	figure.hide()
+	grip.reparent(self,false)
+	artist=preload("res://art_kit/choreography/ruin_actor.gd").new()
+	add_child(artist)
+	align_grip(arena.aim())
+
+func align_grip(axis: Vector3) -> void:
+	grip.global_position=artist.joint("HandL")
+	grip.look_at(grip.global_position+axis)
+
+
 func blade_socket() -> Transform3D:
 	var direction := blade_root.global_position.direction_to(blade_tip.global_position)
 	return Transform3D(Basis.looking_at(direction,Vector3.UP),blade_root.global_position)
@@ -92,6 +107,12 @@ func pose_weapon(fraction: float, weight: float) -> void:
 	drawing = true
 	stance = weight*sin(fraction*PI*.88)
 	facing = Vector3(-sin(arena.yaw),0,-cos(arena.yaw))
+	if artist:
+		artist.rotation.y = arena.yaw
+		artist.pose(intent, fraction*.76,1.)
+		var wind := (1.-fraction)*(.27+.85*weight)
+		align_grip(arena.aim().rotated(Vector3.UP,wind))
+		return
 	figure.rotation.y = arena.yaw
 	figure.rotation.x = -.17*stance
 	figure.rotation.z = -.12*stance
@@ -118,7 +139,13 @@ func place_sword_arm() -> void:
 		part.scale.y = start.distance_to(end)/part.mesh.height
 
 
-func release_weapon() -> void:
+func release_weapon(next_intent: String = "") -> void:
+	if drawing and artist and next_intent!="" and next_intent!=intent:
+		release_from.clear()
+		for joint in artist.skeleton.get_bone_count():
+			var q:Quaternion=artist.skeleton.get_bone_pose_rotation(joint)
+			release_from.append(Vector4(q.x,q.y,q.z,q.w))
+		intent=next_intent
 	if drawing:
 		drawing = false
 		recovery = .34
@@ -194,6 +221,19 @@ func _physics_process(dt: float) -> void:
 	if drawing:
 		return
 	recovery = maxf(0.,recovery-dt)
+	if artist:
+		artist.rotation.y=atan2(-facing.x,-facing.z)
+		artist.pose(intent,1.-.24*recovery/.34,smoothstep(0.,.27,recovery))
+		if not release_from.is_empty():
+			var blend:=smoothstep(0.,.095,.34-recovery)
+			for joint in release_from.size():
+				var v:=release_from[joint]
+				var q:=Quaternion(v.x,v.y,v.z,v.w)
+				artist.skeleton.set_bone_pose_rotation(joint,q.slerp(artist.skeleton.get_bone_pose_rotation(joint),blend))
+			artist.skeleton.force_update_all_bone_transforms()
+			if blend>=1.:release_from.clear()
+		align_grip(arena.aim().rotated(Vector3.RIGHT,-.74*(1.-recovery/.34)))
+		return
 	grip.rotation = grip.rotation.lerp(Vector3(-.65,0,0),minf(1.,dt*7.))
 	grip.position = grip.position.lerp(Vector3(.37,.79,-.09),minf(1.,dt*7.))
 	figure.position = figure.position.lerp(Vector3.ZERO,minf(1.,dt*7.))

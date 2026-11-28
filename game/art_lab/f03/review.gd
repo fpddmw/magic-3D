@@ -25,6 +25,13 @@ func run(h, take: String) -> void:
 	h.yaw = [0.,.045,-.055][variant-1]
 	if variant == 2:
 		h.player.position.x = -2.65
+	# Witness camera belongs to the replay. Player input, sockets and hit tests remain live.
+	var witness:=Camera3D.new()
+	h.add_child(witness)
+	witness.fov=53.
+	witness.position=h.player.position+Vector3(3.1,2.45,3.45)
+	witness.look_at(h.player.position+Vector3(.2,1.42,-2.65))
+	witness.current=true
 	await ticks(h,48)
 	var cast = h.cast_entry(entry)
 	if not cast:

@@ -9,6 +9,7 @@ const Cast = preload("res://runtime/cast.gd")
 var registry: Dictionary
 var tariff: Dictionary
 const F03_RECIPES = "res://art_kit/families/F03_arc_blade/recipes/"
+var experiment := ""
 var f03_review := ""
 var catalog: Array = []
 var selected := 0
@@ -19,6 +20,7 @@ var world
 var director
 var player
 var hall
+var ruin_stage
 var camera: Camera3D
 var info: Label
 var yaw := 0.
@@ -58,20 +60,30 @@ func _ready() -> void:
 		catalog.append(entry)
 		if entry.path.ends_with("/pressure_wind.json"):
 			selected = catalog.size() - 1
-	for row in data(F03_RECIPES + "catalog.json"):
-		var path: String = F03_RECIPES + row.file
-		var trial: Dictionary = data(path)
-		if trial.contract != row.admitted_contract:
-			push_error("F03 contract changed; regenerate its tariff with tools.asset_pipeline.seal_f03: " + path)
-			continue
-		catalog.append({"path":path,"recipe":trial.contract,"trial":trial,"quote":row.quote,
-			"display_name":trial.contract.name})
+	for folder in ["res://art_kit/families/F04_wave/recipes/", F03_RECIPES]:
+		for row in data(folder + "catalog.json"):
+			var path: String = folder + row.file
+			var trial: Dictionary = data(path)
+			if trial.contract != row.admitted_contract:
+				push_error("F03 contract changed; regenerate its tariff with tools.asset_pipeline.seal_f03: " + path)
+				continue
+			catalog.append({"path":path,"recipe":trial.contract,"trial":trial,"quote":row.quote,
+				"display_name":trial.contract.name})
 	for arg in OS.get_cmdline_user_args():
+		if arg.begins_with("--ab-review="):
+			experiment=arg.trim_prefix("--ab-review=")
+			testing=true
 		if arg.begins_with("--f03-review="):
 			f03_review = arg.trim_prefix("--f03-review=")
 			testing = true
-	hall = Architecture.new()
-	add_child(hall)
+	var historic_study := Array(OS.get_cmdline_user_args()).any(func(arg): return arg.begins_with("--field-") or arg=="--aim-study")
+	if (not testing and not historic_study) or not f03_review.is_empty() or not experiment.is_empty():
+		ruin_stage = preload("res://art_lab/scenes/stage.gd").new()
+		add_child(ruin_stage)
+		hall = ruin_stage.hall
+	else:
+		hall = Architecture.new()
+		add_child(hall)
 	director = Director.new()
 	director.kit = registry.artkit
 	add_child(director)
@@ -89,11 +101,14 @@ func _ready() -> void:
 						c.observe(c.holds[handle], "contact")
 	)
 	add_child(world)
-	environment()
+	if not ruin_stage:
+		environment()
 	player = Actor.new()
 	player.arena = self
 	player.position = Vector3(0, .12, 7)
 	add_child(player)
+	if ruin_stage:
+		player.wear_astronomer()
 	world.slots.caster = player
 	camera = Camera3D.new()
 	camera.fov = 61
@@ -165,7 +180,9 @@ func _ready() -> void:
 			world.slots.spring = b
 		last = b
 	ui()
-	if not f03_review.is_empty():
+	if experiment=="a4":
+		call_deferred("review_wave")
+	elif not f03_review.is_empty():
 		call_deferred("review_arc")
 	elif Array(OS.get_cmdline_user_args()).any(func(arg): return arg.begins_with("--field-case=")):
 		call_deferred("open_field_court")
@@ -349,9 +366,9 @@ func cast_entry(entry: Dictionary):
 				return null
 	var c
 	if entry.has("trial"):
-		c = ArcCast.new()
+		c = preload("res://runtime/wave_cast.gd").new() if entry.trial.get("family","F03")=="F04" else ArcCast.new()
 		c.trial = entry.trial
-		c.trace = not f03_review.is_empty()
+		c.trace = not f03_review.is_empty() or not experiment.is_empty()
 	else:
 		c = Cast.new()
 	serial += 1
@@ -512,6 +529,10 @@ func _physics_process(dt: float) -> void:
 	charge_bar.value = (
 		100. * latest_cast.ratio() if latest_cast and not latest_cast.active.is_empty() else 0.
 	)
+
+
+func review_wave() -> void:
+	await preload("res://art_lab/experiments/radial_review.gd").new().run(self)
 
 
 func review_arc() -> void:

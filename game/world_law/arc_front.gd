@@ -8,6 +8,8 @@ var speed: float
 var limit: float
 var half_width: float
 var arc_mix: float
+var heading := Vector3.FORWARD
+var slant: float
 var bank: float
 var strips: Array[PhysicsShapeQueryParameters3D] = []
 var local_frames: Array[Transform3D] = []
@@ -23,7 +25,8 @@ func configure(arena, law: Dictionary, max_distance: float) -> void:
 	limit = clampf(law.range_m,0.,max_distance)
 	half_width = clampf(law.width_m,.2,7.)*.5
 	arc_mix = inverse_lerp(45.,160.,clampf(law.span_deg,45.,160.))
-	bank = deg_to_rad(law.bank_deg)
+	bank = deg_to_rad(law.get("roll_deg",law.get("bank_deg",0.)))
+	slant = deg_to_rad(law.get("face_pitch_deg",0.))
 	space = arena.get_world_3d().direct_space_state
 	var points := PackedVector3Array()
 	for i in SEGMENTS+1:
@@ -43,11 +46,12 @@ func configure(arena, law: Dictionary, max_distance: float) -> void:
 		local_frames.append(Transform3D(Basis(Quaternion(Vector3.UP,(b-a).normalized())),(a+b)*.5))
 
 func attach(socket: Transform3D) -> void:
-	pose = Transform3D(socket.basis * Basis(Vector3.BACK, bank),socket.origin)
+	heading = -socket.basis.z
+	pose = Transform3D(socket.basis * Basis(Vector3.BACK,bank)*Basis(Vector3.RIGHT,slant),socket.origin)
 
 func advance(dt: float) -> Dictionary:
 	var length := minf(speed*dt,limit-distance)
-	var motion := -pose.basis.z*length
+	var motion := heading*length
 	var first := 1.
 	var receipt := {}
 	for i in strips.size():
@@ -65,7 +69,7 @@ func advance(dt: float) -> Dictionary:
 			safe = swept[0]
 			# Rest info reports a point on the collider at the unsafe end of the sweep.
 			query.motion = Vector3.ZERO
-			query.transform = Transform3D(start.basis,start.origin+motion*swept[1]-pose.basis.z*.0015)
+			query.transform = Transform3D(start.basis,start.origin+motion*swept[1]+heading*.0015)
 			rest = space.get_rest_info(query)
 			if rest.is_empty():
 				# Thin or grazing hits: evaluate the moving shape via Jolt's rest query.

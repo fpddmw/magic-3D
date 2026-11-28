@@ -1,0 +1,44 @@
+{
+  "id": "B1",
+  "name": "浮岩王冠",
+  "Subjects": {
+    "carrier": "H01",
+    "range_m": 8.7
+  },
+  "Contracts": {
+    "anchor": "caster",
+    "force_cap_N": 1040,
+    "force_sum_N": 24500,
+    "gather_spacing_s": 0.085,
+    "max_control_s": 12,
+    "dispatch_speed_m_s": 8.6,
+    "dispatch_interval_s": 0.34
+  },
+  "Processes": {
+    "layouts": [
+      {
+        "at": 0,
+        "layout": "arc"
+      },
+      {
+        "at": 2.35,
+        "layout": "ring"
+      },
+      {
+        "at": 4.35,
+        "layout": "layers"
+      }
+    ],
+    "blend_s": 0.88,
+    "geometry": {
+      "radius_m": 2.8,
+      "height_m": 2.45,
+      "turn_rad_s": 0.34
+    }
+  },
+  "Expression": {
+    "pose": "B05",
+    "lift_dust": "X03",
+    "stone_audio": "S09"
+  }
+}
