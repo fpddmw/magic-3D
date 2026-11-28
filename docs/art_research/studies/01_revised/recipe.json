@@ -1,0 +1,366 @@
+{
+  "version": "r1.design.0.1",
+  "status": "design_candidate",
+  "authorship": "Astra authored for review",
+  "input": {
+    "RuneGraph": {
+      "nodes": [
+        {
+          "id": "g",
+          "rune": "重力"
+        },
+        {
+          "id": "c",
+          "rune": "聚"
+        },
+        {
+          "id": "a",
+          "rune": "引"
+        }
+      ],
+      "links": [
+        {
+          "id": "gc",
+          "kind": "共同组织",
+          "members": [
+            "g",
+            "c"
+          ]
+        },
+        {
+          "id": "pilot",
+          "kind": "局部关联",
+          "members": [
+            "gc",
+            "a"
+          ]
+        }
+      ]
+    },
+    "CastingContext": {
+      "view": "third_person",
+      "input": [
+        "hold",
+        "aim",
+        "release",
+        "interrupt"
+      ],
+      "scale_tier": "medium"
+    },
+    "anchor": "只在成功交付后，使受影响质量体的运动朝选定中心汇聚。准备时可微调；交付后中心沿已定轨迹沉降。",
+    "excludes": [
+      "implicit_tangential_acceleration",
+      "ambient_downward_acceleration",
+      "projectile_mass",
+      "visibility_suppression",
+      "heat_transfer",
+      "dispel",
+      "contact_blast"
+    ],
+    "RuneContributions": {
+      "g": [
+        "Concepts.gravity",
+        "Relations.pull"
+      ],
+      "c": [
+        "Relations.pull.direction",
+        "Relations.pull.profile"
+      ],
+      "gc": [
+        "Subjects.field",
+        "Processes.active"
+      ],
+      "a": [
+        "Contracts.steer",
+        "Processes.prepare"
+      ],
+      "pilot": [
+        "Contracts.descent"
+      ]
+    },
+    "PlayerKnowledge": [
+      "重力",
+      "聚",
+      "引"
+    ],
+    "version_context": {
+      "world": "v0.3 metaphysics",
+      "language": "A–D at b06de8c plus r1.design.0.1 candidate delta",
+      "capabilities": "r1.design.0.1 candidate signatures",
+      "art": "r1.design.0.1 study asset descriptions"
+    }
+  },
+  "Concepts": {
+    "gravity": {
+      "intervention": "局部干涉",
+      "property": "mass_response",
+      "basis": "以太允许有界异常加速度；需有限供给与反作用端"
+    },
+    "space": "合法瞄点；实际域由已提交中心与半径确定",
+    "stage": "visual_only"
+  },
+  "Subjects": {
+    "field": {
+      "carrier": "Region",
+      "source": "manifest",
+      "shape": "sphere",
+      "radius_m": 4,
+      "location": "realized.center",
+      "collision": "none",
+      "lifetime": "active"
+    },
+    "receiver": {
+      "source": "world_query",
+      "requires": [
+        "mass_port",
+        "external_acceleration_allowed"
+      ],
+      "within": "field",
+      "include_caster_if_eligible": true,
+      "max": 12,
+      "ordering": [
+        "distance",
+        "stable_world_key"
+      ]
+    }
+  },
+  "Relations": {
+    "pull": {
+      "channel": "gravity",
+      "from": "field",
+      "to": "receiver",
+      "direction": "radial_in_3d",
+      "profile": "compact_quartic_soft_center",
+      "center_softening_m": 0.25,
+      "peak_m_s2": 6,
+      "amplitude": "reserve_ratio_latched_at_commit",
+      "occlusion": "none_by_ordinary_walls",
+      "requires": [
+        "Contracts.account",
+        "Contracts.basis"
+      ],
+      "output": "delivered_impulse_by_recipient"
+    }
+  },
+  "Processes": {
+    "prepare": {
+      "entry": "hold_with_valid_aim",
+      "deadline_s": 2.5,
+      "while": [
+        "reserve_from_caster_up_to_quote",
+        "steer_desired_center_within_contract"
+      ],
+      "external_effects": [],
+      "edges": [
+        {
+          "on": [
+            "interrupt",
+            "source_lost",
+            "timeout",
+            "release_below_quote",
+            "release_at_invalid_center"
+          ],
+          "to": "close"
+        },
+        {
+          "on": "release_with_valid_center_and_funded_threshold",
+          "atomic": [
+            "capture_realized_legal_center",
+            "lock_reserve_ratio",
+            "activate_field_and_support",
+            "emit_commit"
+          ],
+          "to": "active"
+        }
+      ]
+    },
+    "active": {
+      "deadline_s": 1.25,
+      "tick": [
+        "advance_realized_center_with_clearance",
+        "query_receiver_at_realized_center",
+        "allocate_pull_and_submit",
+        "publish_snapshot_and_receipts"
+      ],
+      "edges": [
+        {
+          "on": [
+            "timeout",
+            "depleted",
+            "basis_lost",
+            "interrupt"
+          ],
+          "to": "close"
+        }
+      ]
+    },
+    "close": {
+      "once": [
+        "withdraw_extra_acceleration",
+        "settle_used_and_release_unspent_reservations",
+        "release_control",
+        "publish_exit"
+      ],
+      "persistence": "previous_velocities_contacts_and_committed_world_changes"
+    }
+  },
+  "Contracts": {
+    "steer": {
+      "writer": "caster",
+      "bind": "live_aim_during_prepare",
+      "max_reach_m": 9,
+      "max_speed_m_s": 4,
+      "invalid_new_aim": "retain_last_legal_preview_and_mark_release_invalid"
+    },
+    "descent": {
+      "bind": "capture_on_commit",
+      "axis": "world_down",
+      "travel_m": 1.2,
+      "duration_s": 0.9,
+      "ease": "smoothstep",
+      "clearance_m": 0.3,
+      "at_limit": "clamp_center_keep_field",
+      "reference_lost": "close"
+    },
+    "account": {
+      "payer": "caster",
+      "version": "research_quote_proposed_0.1",
+      "capacity": "quote_by_user_scale_geometry_duration",
+      "gate": "quoted_min_release",
+      "settlement": "reserve_then_charge_committed_cost_only",
+      "step_limit": "quoted_remaining_impulse",
+      "allocation": "proportional_to_requested_magnitude_same_snapshot",
+      "out_of_funds": "close"
+    },
+    "basis": {
+      "provider": "finite_arcane_support",
+      "reaction": "accept_equal_opposite_impulse_within_capacity",
+      "energy": "finite_work_allowance_from_quoted_reserve",
+      "no_sink": "deny_commit_or_close"
+    },
+    "input_priority": [
+      "interrupt_or_source_lost",
+      "timeout",
+      "release",
+      "hold"
+    ],
+    "clocks": {
+      "physics_hz": 60,
+      "history_samples": 16,
+      "receipt_key": [
+        "instance",
+        "generation",
+        "sequence"
+      ]
+    }
+  },
+  "Expression": {
+    "frame": {
+      "preview": "Contracts.steer.legal_preview",
+      "active": "Subjects.field.realized.center"
+    },
+    "composition": {
+      "domain": "open_fan_in_local_frame",
+      "foreground": "grounded_caster_left",
+      "midground": "off_axis_empty_center",
+      "background": "keep_arch_open",
+      "azimuth_deg": [
+        -66,
+        28,
+        117
+      ],
+      "length_m": [
+        2.2,
+        1.3,
+        2.8
+      ],
+      "half_width_m": [
+        0.06,
+        0.04,
+        0.08
+      ],
+      "art_direction": "broken_low_silver_filaments_over_slate",
+      "opaque_core": false
+    },
+    "tracks": [
+      {
+        "id": "anticipation",
+        "role": "secondary",
+        "space": "visual",
+        "frame": "preview",
+        "start": "enter.prepare",
+        "bind": "funded_progress",
+        "appearance": "three_sparse_edge_folds",
+        "alpha_max": 0.18,
+        "stop": "exit.prepare",
+        "handoff_on_commit": "carry_local_s_and_width_into_convergence",
+        "cancel_tail_s": 0.12,
+        "material_basis": "authored_visual_wisps"
+      },
+      {
+        "id": "convergence",
+        "role": "primary",
+        "space": "visual",
+        "frame": "active",
+        "start": "commit",
+        "geometry": "variable_section_sweep",
+        "drive": "art_flow_from_radial_direction",
+        "speed_m_s": [
+          0.35,
+          1.7
+        ],
+        "domain": "s=0_outer_to_1_inner",
+        "delay_s": [
+          0,
+          0.31
+        ],
+        "local_duration_s": 0.22,
+        "inner_width_ratio": 0.12,
+        "stop": "exit.active",
+        "tail_s": 0.24
+      },
+      {
+        "id": "extent",
+        "required": true,
+        "space": "visual",
+        "read": "field.realized_boundary",
+        "start": "commit",
+        "appearance": "broken_low_contrast_ground_marks_only_where_observable",
+        "stop": "exit.active",
+        "tail_s": 0
+      },
+      {
+        "id": "trace",
+        "space": "visual",
+        "read": "committed_center_history",
+        "samples": 16,
+        "break_on_generation_change": true,
+        "stop": "exit.active",
+        "tail_s": 0.2
+      },
+      {
+        "id": "body",
+        "space": "visual",
+        "prepare": "plant_rear_foot_and_brace",
+        "commit": "release_shoulder_keep_feet",
+        "interrupt": "recover_from_current_pose",
+        "allow_root_world_write": false
+      },
+      {
+        "id": "sound",
+        "space": "visual",
+        "prepare": "low_bow_pressure",
+        "commit": "single_muted_low_attack",
+        "contact": "only_audible_actual_contact",
+        "dedup": "receipt_key",
+        "exit": "release_stems_allow_reverb_tail"
+      },
+      {
+        "id": "camera",
+        "space": "visual",
+        "mode": "normal_third_person",
+        "forced_cut": false
+      }
+    ]
+  }
+}
