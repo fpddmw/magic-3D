@@ -2,7 +2,7 @@
 
 玩家用符文说清希望发生什么，魔法在同一个世界里留下可被他人继续利用的后果。两道外形相同的光幕，一道接住落石并可能压裂，另一道遮住视线，石块仍会穿过。区别写在配方的作用、成立条件和责任里。
 
-当前按[联合演进总计划](docs/v0.3/演进与切片计划.md)推进。每次创作同时研究意向、世界作用、玩家输入、整体构图、DSL、编译知识和技术兑现。当前待审的是首轮天体研究的[三种方向与概念分镜](docs/art_research/studies/01_revised/design.md)，可对读[候选源配方](docs/art_research/studies/01_revised/recipe.json)和[技术映射与迁移](docs/art_research/studies/01_revised/mapping.md)。
+当前按[联合演进总计划](docs/v0.3/演进与切片计划.md)推进。每次创作同时研究意向、世界作用、玩家输入、整体构图、DSL、编译知识和技术兑现。负责人从[三种天体方向](docs/art_research/studies/01_revised/design.md)中选择了重力案，随后退回了第一次交互实机呈现。研究已暂停。[实机录像、受力记录与退回原因](docs/art_research/studies/01_revised/gravity-review.md)可与[原设计谱](docs/art_research/studies/01_revised/recipe.json)和[预期技术映射](docs/art_research/studies/01_revised/mapping.md)对读。
 
 | 查什么 | 入口 |
 |---|---|

@@ -22,6 +22,7 @@ var yaw := 0.
 var pitch := -.13
 var enemy: RigidBody3D
 var enemy_clock := 0.
+var field_court
 var testing := false
 var status := ""
 var charge_bar: ProgressBar
@@ -148,7 +149,9 @@ func _ready() -> void:
 			world.slots.spring = b
 		last = b
 	ui()
-	if "--aim-study" in OS.get_cmdline_user_args():
+	if Array(OS.get_cmdline_user_args()).any(func(arg): return arg.begins_with("--field-case=")):
+		call_deferred("open_field_court")
+	elif "--aim-study" in OS.get_cmdline_user_args():
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 		call_deferred("run_aim_study")
 	elif not testing:
@@ -325,6 +328,8 @@ func cast_entry(entry: Dictionary):
 
 
 func mobility() -> float:
+	if field_court and field_court.session.phase == "prepare":
+		return .42
 	var limit = 1.
 	for c in casts:
 		for pid in c.active:
@@ -334,15 +339,42 @@ func mobility() -> float:
 
 
 func send_event(kind: String) -> void:
+	if field_court and kind == "interrupt":
+		field_court.commands.append(kind)
 	for c in casts:
 		c.input_event(kind)
 
 
+func open_field_court() -> void:
+	if field_court:
+		return
+	var opts: Dictionary = {}
+	for arg in OS.get_cmdline_user_args():
+		if arg.begins_with("--field-case="):
+			opts["case"] = arg.trim_prefix("--field-case=")
+		if arg.begins_with("--field-replay-record="):
+			opts["case"] = "realtime_replay"
+			opts["output"] = arg.trim_prefix("--field-replay-record=")
+		if arg.begins_with("--field-record="):
+			opts["case"] = "live"
+			opts["output"] = arg.trim_prefix("--field-record=")
+		if arg.begins_with("--field-output="):
+			opts["output"] = arg.trim_prefix("--field-output=")
+	field_court = preload("res://art_lab/field_study/court.gd").new()
+	add_child(field_court)
+	field_court.open(self, opts)
+
+
 func _unhandled_input(e: InputEvent) -> void:
+	if field_court:
+		field_court.input_event(e)
+		return
 	if testing:
 		return
 	if e is InputEventKey and e.pressed and not e.echo:
 		match e.keycode:
+			KEY_F9:
+				open_field_court()
 			KEY_F8:
 				get_tree().change_scene_to_file("res://art_lab/workbench.tscn")
 			KEY_ESCAPE:
@@ -404,6 +436,9 @@ func _physics_process(dt: float) -> void:
 		c.step(dt)
 		if c.active.is_empty():
 			casts.erase(c)
+	if field_court:
+		field_court.step(dt)
+		return
 	if (not testing or "--hall-bench" in OS.get_cmdline_user_args()) and is_instance_valid(enemy):
 		var delta: Vector3 = player.position - enemy.position
 		delta.y = 0.

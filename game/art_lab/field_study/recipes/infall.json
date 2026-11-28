@@ -1,0 +1,118 @@
+{
+  "version": "field-study.1",
+  "title": "沉星",
+  "Concepts": [
+    "local_gravity",
+    "finite_arcane_support"
+  ],
+  "Subjects": {
+    "carrier": "Region",
+    "shape": "sphere",
+    "radius_m": 4,
+    "receiver": "mass_port",
+    "max_receivers": 12
+  },
+  "Relations": {
+    "channel": "gravity",
+    "direction": "radial_in",
+    "distribution": "quartic",
+    "softening_m": 0.25,
+    "peak_m_s2": 6
+  },
+  "Processes": {
+    "prepare": {
+      "on": "hold",
+      "until": "funded_release",
+      "timeout_s": 2.5
+    },
+    "active": {
+      "on": "commit",
+      "duration_s": 1.25
+    },
+    "cancel_on": [
+      "interrupt",
+      "invalid_release",
+      "unfunded_release",
+      "timeout",
+      "source_lost"
+    ]
+  },
+  "Contracts": {
+    "aim": "live_then_capture",
+    "reach_m": 9,
+    "steer_m_s": 4,
+    "drop_m": 1.2,
+    "drop_s": 0.9,
+    "clearance_m": 0.3,
+    "history": 16,
+    "rule": "finite_lab.1"
+  },
+  "Expression": {
+    "surface": "slate_folds",
+    "color": [
+      0.52,
+      0.7,
+      0.83
+    ],
+    "edge": [
+      0.9,
+      0.8,
+      0.61
+    ],
+    "sectors": [
+      [
+        -66,
+        2.65,
+        1.05,
+        0.41
+      ],
+      [
+        28,
+        1.95,
+        0.7,
+        0.27
+      ],
+      [
+        117,
+        3.05,
+        1.31,
+        0.38
+      ]
+    ],
+    "ribs": 8,
+    "fan_deg": 30,
+    "rise_m": 1.14,
+    "inner_m": 0.16,
+    "bank_deg": 32,
+    "flow_m_s": 1.53,
+    "front_s": 0.31,
+    "fold_s": 0.22,
+    "tail_s": 0.3,
+    "preview_alpha": 0.19,
+    "history_alpha": 0.61,
+    "projection": "volume",
+    "boundary": "terrain_breaks",
+    "body": [
+      "brace",
+      "unload"
+    ],
+    "sound": [
+      "foundation",
+      "breath",
+      "release",
+      "stone_contact"
+    ]
+  },
+  "intent": {
+    "runes": [
+      "重力",
+      "聚",
+      "引"
+    ],
+    "anchor": "选定一处空间，松手后让附近质量体向它汇集。",
+    "connections": [
+      "共同组织",
+      "局部关联"
+    ]
+  }
+}

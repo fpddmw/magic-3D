@@ -1,0 +1,124 @@
+{
+  "version": "field-study.1",
+  "title": "分砂径",
+  "Concepts": [
+    "local_gravity",
+    "finite_arcane_support"
+  ],
+  "Subjects": {
+    "carrier": "Region",
+    "shape": "sphere",
+    "radius_m": 4,
+    "receiver": "mass_port",
+    "max_receivers": 12
+  },
+  "Relations": {
+    "channel": "gravity",
+    "direction": "radial_out",
+    "distribution": "quartic",
+    "softening_m": 0.25,
+    "peak_m_s2": 6
+  },
+  "Processes": {
+    "prepare": {
+      "on": "hold",
+      "until": "funded_release",
+      "timeout_s": 2.5
+    },
+    "active": {
+      "on": "commit",
+      "duration_s": 1.25
+    },
+    "cancel_on": [
+      "interrupt",
+      "invalid_release",
+      "unfunded_release",
+      "timeout",
+      "source_lost"
+    ]
+  },
+  "Contracts": {
+    "aim": "live_then_capture",
+    "reach_m": 9,
+    "steer_m_s": 4,
+    "drop_m": 0.0,
+    "drop_s": 0.9,
+    "clearance_m": 0.3,
+    "history": 16,
+    "rule": "finite_lab.1"
+  },
+  "Expression": {
+    "surface": "ochre_grain",
+    "color": [
+      0.52,
+      0.34,
+      0.16
+    ],
+    "edge": [
+      0.95,
+      0.76,
+      0.46
+    ],
+    "sectors": [
+      [
+        -95,
+        2.55,
+        0.3,
+        0.36
+      ],
+      [
+        -35,
+        2.35,
+        0.39,
+        0.34
+      ],
+      [
+        65,
+        2.7,
+        0.39,
+        0.3
+      ],
+      [
+        133,
+        2.92,
+        0.32,
+        0.33
+      ]
+    ],
+    "ribs": 14,
+    "fan_deg": 46,
+    "rise_m": 0.18,
+    "inner_m": 0.4,
+    "bank_deg": 5,
+    "flow_m_s": 0.88,
+    "front_s": 0.48,
+    "fold_s": 0.34,
+    "tail_s": 0.53,
+    "preview_alpha": 0.14,
+    "history_alpha": 0.12,
+    "projection": "ground",
+    "boundary": "terrain_breaks",
+    "body": [
+      "brace",
+      "unload"
+    ],
+    "sound": [
+      "foundation",
+      "breath",
+      "release",
+      "stone_contact"
+    ]
+  },
+  "intent": {
+    "runes": [
+      "重力",
+      "散",
+      "引"
+    ],
+    "anchor": "让出脚下一处空地，把附近松散物向外排开。",
+    "connections": [
+      "共同组织",
+      "局部关联"
+    ]
+  }
+}
