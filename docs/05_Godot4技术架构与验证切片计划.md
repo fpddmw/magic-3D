@@ -26,6 +26,6 @@
 
 ---
 
-## 三、工程推进
+## 三、工程推进与资产管线
 
-[联合演进总计划](v0.3/演进与切片计划.md)规定每轮由一份配方派生 WorldPlan 和 StagePlan。技术选型随自然意向、作用合同、艺术分镜与真实观测共同修订。当前先审[天体三案](art_research/studies/01_revised/design.md)。[技术美术实验室](art_research/技术美术实验室与升级计划.md)提供方法与实验证据，[A–D](magic_language/README.md)记录语言候选差分。旧雨殿和工程门禁可分别查阅[既有验收](v0.3/验收.md)与[历史技术附录](../archive/pre-v0.3/docs/06_附录_v0.2.2执行门禁.md)。
+[研发演进与验证切片主线计划](v0.3/演进与切片计划.md)规定保留 `v0.3` 世界法则五面语义，将演出表达层重置为[原子资产族与薄编排契约](art_assets/README.md)。美术资产采用 **ImageGen 原创概念与 2D 纹理 → 离线通道加工 → Blender Python `.glb` 载体 → Godot 4.5 封装** 的混合生产方式，当前以 [Pilot 01 · F03 开口弧刃](art_assets/pilot_F03_arc_blade.md) 验证可塑性与管线闭环。[技术美术实验室](art_research/技术美术实验室与升级计划.md)提供实机录屏与质量否决方法，旧雨殿和工程门禁可分别查阅[既有验收](v0.3/验收.md)与[历史技术附录](../archive/pre-v0.3/docs/06_附录_v0.2.2执行门禁.md)。
