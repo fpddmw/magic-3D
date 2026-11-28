@@ -1,0 +1,5 @@
+{
+  "times": [0.58, 1.64, 2.98, 3.93, 5.26, 7.24],
+  "phases": ["Intake", "Gather", "Crown", "Release", "Transit", "Afterglow"],
+  "cameras": ["Three-quarter", "Surface", "Architecture"]
+}

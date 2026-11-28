@@ -1,0 +1,100 @@
+{
+	"continuity": {
+		"contact_s": 5.98671875,
+		"cut_prevents_departure": true,
+		"passed": true,
+		"post_turn_delta_m": 0.0,
+		"same_core": true,
+		"transfer_jump_m": 0.0
+	},
+	"device": "Apple M6 (Apple9)",
+	"driver": "metal",
+	"engine": "4.5.1-stable (official)",
+	"method": "forward_plus",
+	"records": [
+		{
+			"center": "(0.303585, 1.160146, 0.329025)",
+			"contact": -1.0,
+			"phase": "Intake",
+			"released": false,
+			"t": 0.58
+		},
+		{
+			"center": "(-0.568391, 2.660278, 0.069892)",
+			"contact": -1.0,
+			"phase": "Gather",
+			"released": false,
+			"t": 1.64
+		},
+		{
+			"center": "(-0.79872, 3.318752, -0.023372)",
+			"contact": -1.0,
+			"phase": "Crown",
+			"released": false,
+			"t": 2.98
+		},
+		{
+			"center": "(-0.944432, 3.368783, -0.172094)",
+			"contact": -1.0,
+			"phase": "Release",
+			"released": true,
+			"t": 3.93
+		},
+		{
+			"center": "(-3.275827, 2.431536, -2.551643)",
+			"contact": -1.0,
+			"phase": "Transit",
+			"released": true,
+			"t": 5.26
+		},
+		{
+			"center": "(-4.534869, 0.831229, -3.836694)",
+			"contact": 5.98671875,
+			"phase": "Afterglow",
+			"released": true,
+			"t": 7.24
+		},
+		{
+			"case": "Reverse view",
+			"instances": 1,
+			"launched": false,
+			"open": false,
+			"t": 2.9
+		},
+		{
+			"case": "Profile",
+			"instances": 1,
+			"launched": true,
+			"open": false,
+			"t": 3.96
+		},
+		{
+			"case": "Open sky",
+			"instances": 1,
+			"launched": false,
+			"open": true,
+			"t": 3.16
+		},
+		{
+			"case": "Turn after release",
+			"instances": 1,
+			"launched": true,
+			"open": false,
+			"t": 4.6
+		},
+		{
+			"case": "Interrupted before release",
+			"instances": 1,
+			"launched": false,
+			"open": false,
+			"t": 3.05
+		},
+		{
+			"case": "Two independent casts",
+			"instances": 2,
+			"launched": false,
+			"open": false,
+			"t": 3.35
+		}
+	]
+}

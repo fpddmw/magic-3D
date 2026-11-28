@@ -1,0 +1,8 @@
+[
+  {"name":"Reverse view","view":4,"time":2.9},
+  {"name":"Profile","view":3,"time":3.96},
+  {"name":"Open sky","open":true,"view":0,"time":3.16},
+  {"name":"Turn after release","turn":true,"view":0,"time":4.6},
+  {"name":"Interrupted before release","interrupt":2.5,"view":0,"time":3.05},
+  {"name":"Two independent casts","double":true,"view":0,"time":3.35}
+]

@@ -6,6 +6,7 @@
 
 | 查什么 | 入口 |
 |---|---|
+| ArtLab 样本 01「天体降临」首版 · 三项均退回待重审 | [给审阅者的说明与时间点](docs/art_research/reference_breakdowns/01_celestial_descent.md) · [带声录屏](docs/art_research/evidence/01/celestial-descent.mp4) · [三机位图板](docs/art_research/evidence/01/contact-sheet.png) |
 | 五阶段改造路线、Godot 技术方法、质量否决表与样本 01 任务书 | [技术美术实验室与升级计划](docs/art_research/技术美术实验室与升级计划.md) · [五阶段升级总计划](docs/v0.3/演进与切片计划.md) |
 | 性质与以太公理、世界许可、20 枚符文、三种连接和语义锚定 | [魔法形而上学](docs/v0.3/魔法形而上学.md) · [符文与法坛契约](docs/v0.3/符文与编译契约.md) |
 | 现行程序能读的格式和已经观察到的作用 | [v0.3.0 规范](docs/v0.3/Magic_DSL.md) · [机器契约与配方](game/data/magic_v0_3) · [离线验收](docs/v0.3/验收.md) |

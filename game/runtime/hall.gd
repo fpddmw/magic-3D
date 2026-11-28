@@ -343,6 +343,8 @@ func _unhandled_input(e: InputEvent) -> void:
 		return
 	if e is InputEventKey and e.pressed and not e.echo:
 		match e.keycode:
+			KEY_F8:
+				get_tree().change_scene_to_file("res://art_lab/workbench.tscn")
 			KEY_ESCAPE:
 				Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 			KEY_Q:
